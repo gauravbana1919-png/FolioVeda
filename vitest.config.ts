@@ -7,6 +7,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./vitest-setup.ts'],
     globals: true,
-    pool: 'threads', // Fix Windows worker timeout
+    pool: 'forks', // Try forks again but with single thread or just false
+    poolOptions: { forks: { singleFork: true } }
   },
 });
