@@ -93,10 +93,11 @@ model Resume {
 model Portfolio {
   id          String   @id @default(cuid())
   userId      String   @unique
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  templateId  String
-  theme       String   @default("system") // light, dark, system
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  templateId   String
+  theme        String   @default("system") // light, dark, system
   customDomain String?
-  isPublished Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  designPrefs  Json?    // Stores reference URL, specific info, custom colors/fonts
+  isPublished  Boolean  @default(false)
+  createdAt    DateTime @default(now())
 }
