@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Code } from "lucide-react";
 
 export function ProjectsSection({ projects = [] }: { projects?: any[] }) {
   const defaultProjects = [
@@ -56,7 +56,7 @@ export function ProjectsSection({ projects = [] }: { projects?: any[] }) {
                 )}
                 {project.githubUrl && (
                   <a href={project.githubUrl} className="flex items-center gap-2 text-sm font-medium hover:text-purple-500 transition-colors">
-                    <Github size={16} /> Source Code
+                    <Code size={16} /> Source Code
                   </a>
                 )}
               </div>
