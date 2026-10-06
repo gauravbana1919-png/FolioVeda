@@ -1,67 +1,67 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+    <div className="min-h-screen p-8 pb-20 sm:p-20 font-sans">
+      <main className="max-w-4xl mx-auto flex flex-col gap-8">
+        <h1 className="text-4xl font-bold tracking-tight mb-2">PortfolioForge Hub</h1>
+        <p className="text-muted-foreground text-lg mb-8">
+          Welcome to Phase 1. You can preview all completed stages from this central hub.
+        </p>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          
+          <Link href="/onboarding" className="block p-6 border-2 border-primary/50 bg-primary/5 rounded-xl hover:bg-primary/10 transition-all group col-span-1 md:col-span-2">
+            <h2 className="text-2xl font-bold mb-2 group-hover:text-primary transition-colors flex items-center gap-2">
+              ✨ Start Here: The Onboarding Wizard (Phase 2)
+            </h2>
+            <p className="text-muted-foreground">
+              A smooth, animated multi-step flow that connects GitHub, asks for the user's profession, and lets them pick a starting template.
+            </p>
+          </Link>
+
+          <Link href="/portfolio/preview" className="block p-6 border border-border rounded-xl hover:border-primary hover:bg-secondary/50 transition-all group">
+            <h2 className="text-2xl font-semibold mb-2 group-hover:text-primary transition-colors">1. Template #1 (Engineer)</h2>
+            <p className="text-muted-foreground">
+              Preview the premium, fully responsive developer portfolio template with dark mode and smooth Framer Motion animations (Stage 2).
+            </p>
+          </Link>
+
+          <Link href="/portfolio/designer" className="block p-6 border border-border rounded-xl hover:border-primary hover:bg-secondary/50 transition-all group">
+            <h2 className="text-2xl font-semibold mb-2 group-hover:text-primary transition-colors">2. Template #2 (Designer)</h2>
+            <p className="text-muted-foreground">
+              Preview the Creative template built for designers featuring a beautiful Masonry gallery layout and bold typography (Stage 7).
+            </p>
+          </Link>
+
+          <Link href="/portfolio/business" className="block p-6 border border-border rounded-xl hover:border-primary hover:bg-secondary/50 transition-all group">
+            <h2 className="text-2xl font-semibold mb-2 group-hover:text-primary transition-colors">3. Template #3 (Business)</h2>
+            <p className="text-muted-foreground">
+              Preview the BBA/Business template focusing on a clean, corporate layout, metric-driven cards, and a timeline experience section (Stage 7).
+            </p>
+          </Link>
+
+          <Link href="/resume" className="block p-6 border border-border rounded-xl hover:border-primary hover:bg-secondary/50 transition-all group">
+            <h2 className="text-2xl font-semibold mb-2 group-hover:text-primary transition-colors">4. AI Resume Tailor</h2>
+            <p className="text-muted-foreground">
+              Test the AI feature that tailors resumes to a job description with strict anti-fabrication rules and visual diffs (Stage 4).
+            </p>
+          </Link>
+
+          <div className="block p-6 border border-border rounded-xl bg-secondary/20">
+            <h2 className="text-2xl font-semibold mb-2 text-foreground/70">3. GitHub Webhook Sync</h2>
+            <p className="text-muted-foreground text-sm">
+              Backend API Route (<code>/api/webhooks/github</code>). Automatically syncs GitHub pushes and filters by the "pf-" prefix (Stage 3).
+            </p>
+          </div>
+
+          <Link href="/security" className="block p-6 border border-border rounded-xl hover:border-primary hover:bg-secondary/50 transition-all group">
+            <h2 className="text-2xl font-semibold mb-2 group-hover:text-primary transition-colors">4. Security Report</h2>
+            <p className="text-muted-foreground">
+              View the security status of the generated sites, including XSS sanitization (DOMPurify), CSP headers, and Privacy compliance (Stage 5).
+            </p>
+          </Link>
+
         </div>
       </main>
     </div>

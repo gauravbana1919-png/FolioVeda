@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import * as Diff from "diff";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import { Download, FileText, Palette } from "lucide-react";
 
 export default function ResumeTailorPage() {
   const [jobDescription, setJobDescription] = useState("");
@@ -11,6 +14,30 @@ export default function ResumeTailorPage() {
   const [score, setScore] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  
+  const [exportFormat, setExportFormat] = useState<"ats" | "visual">("ats");
+  const [exporting, setExporting] = useState(false);
+  const resumeRef = useRef<HTMLDivElement>(null);
+
+  const handleExportPDF = async () => {
+    if (!resumeRef.current) return;
+    setExporting(true);
+    
+    try {
+      const canvas = await html2canvas(resumeRef.current, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`tailored_resume_${exportFormat}.pdf`);
+    } catch (err) {
+      console.error("PDF Export failed", err);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const handleTailor = async () => {
     setLoading(true);
@@ -131,9 +158,55 @@ export default function ResumeTailorPage() {
           )}
           
           {tailoredResume && (
-            <button className="mt-4 w-full py-3 px-4 border border-border bg-background text-foreground font-medium rounded-md hover:bg-secondary transition-colors">
-              Looks Good, Save & Export to PDF
-            </button>
+            <div className="mt-6 space-y-4">
+              
+              <div className="flex flex-col sm:flex-row gap-4 p-4 border border-border rounded-lg bg-secondary/20">
+                <div className="flex-1 space-y-2">
+                  <h4 className="font-semibold text-sm flex items-center gap-2"><FileText size={16}/> ATS Format (Recommended)</h4>
+                  <p className="text-xs text-muted-foreground">Plain text, perfect for passing automated bot screeners.</p>
+                  <button 
+                    onClick={() => setExportFormat("ats")}
+                    className={`w-full py-2 text-xs font-semibold rounded-md transition-colors ${exportFormat === 'ats' ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'}`}
+                  >
+                    Select ATS
+                  </button>
+                </div>
+                
+                <div className="flex-1 space-y-2">
+                  <h4 className="font-semibold text-sm flex items-center gap-2"><Palette size={16}/> Visual Format</h4>
+                  <p className="text-xs text-muted-foreground">Highly designed, perfect for emailing to human recruiters.</p>
+                  <button 
+                    onClick={() => setExportFormat("visual")}
+                    className={`w-full py-2 text-xs font-semibold rounded-md transition-colors ${exportFormat === 'visual' ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'}`}
+                  >
+                    Select Visual
+                  </button>
+                </div>
+              </div>
+
+              <button 
+                onClick={handleExportPDF}
+                disabled={exporting}
+                className="w-full py-3 px-4 bg-foreground text-background font-medium rounded-md hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+              >
+                <Download size={18} /> {exporting ? "Generating PDF..." : `Download ${exportFormat === 'ats' ? 'ATS' : 'Visual'} PDF`}
+              </button>
+            </div>
+          )}
+
+          {/* Hidden PDF Render Target */}
+          {tailoredResume && (
+            <div className="absolute left-[-9999px] top-0">
+              <div ref={resumeRef} className={`w-[800px] bg-white text-black p-10 ${exportFormat === 'visual' ? 'font-sans' : 'font-serif'}`}>
+                {exportFormat === 'visual' && (
+                  <div className="w-full h-4 bg-blue-600 mb-6 rounded-full" />
+                )}
+                <h1 className="text-3xl font-bold mb-6 border-b pb-2">Tailored Resume</h1>
+                <div className="whitespace-pre-wrap leading-relaxed text-sm">
+                  {tailoredResume}
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>
