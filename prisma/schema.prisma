@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
@@ -30,12 +30,12 @@ model Account {
   type               String
   provider           String
   providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
+  refresh_token      String?
+  access_token       String?
   expires_at         Int?
   token_type         String?
   scope              String?
-  id_token           String?  @db.Text
+  id_token           String?
   session_state      String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -56,10 +56,10 @@ model Profile {
   userId    String   @unique
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   bio       String?
-  skills    String[]
+  skills    String?
   location  String?
   phone     String?
-  socials   Json?    // e.g., LinkedIn, Twitter
+  socials   String?  // JSON string
 }
 
 model Project {
@@ -69,7 +69,7 @@ model Project {
   repoName    String
   title       String
   description String?
-  techStack   String[]
+  techStack   String?
   imageUrl    String?
   githubUrl   String
   liveUrl     String?
@@ -82,8 +82,8 @@ model Resume {
   id                 String   @id @default(cuid())
   userId             String
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  baseData           Json     // Original profile/experience
-  tailoredData       Json     // AI-tailored output
+  baseData           String   // Original profile/experience
+  tailoredData       String   // AI-tailored output
   targetJobDesc      String
   matchScore         Int?
   isConfirmed        Boolean  @default(false)
@@ -97,7 +97,7 @@ model Portfolio {
   templateId   String
   theme        String   @default("system") // light, dark, system
   customDomain String?
-  designPrefs  Json?    // Stores reference URL, specific info, custom colors/fonts
+  designPrefs  String?    // Stores reference URL, specific info, custom colors/fonts
   isPublished  Boolean  @default(false)
   createdAt    DateTime @default(now())
 }

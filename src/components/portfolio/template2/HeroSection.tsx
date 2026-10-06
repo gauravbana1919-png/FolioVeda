@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Sparkles, Dribbble, Instagram, Twitter } from "lucide-react";
+import { Sparkles, Palette, Camera, MessageCircle } from "lucide-react";
 
 export function HeroSection({ user }: { user: any }) {
   return (
@@ -36,9 +36,9 @@ export function HeroSection({ user }: { user: any }) {
         </div>
 
         <div className="flex gap-6 mt-12 text-zinc-400">
-          <a href="#" className="hover:text-pink-500 transition-colors"><Dribbble size={24} /></a>
-          <a href="#" className="hover:text-pink-500 transition-colors"><Instagram size={24} /></a>
-          <a href="#" className="hover:text-pink-500 transition-colors"><Twitter size={24} /></a>
+          <a href="#" className="hover:text-pink-500 transition-colors"><Palette size={24} /></a>
+          <a href="#" className="hover:text-pink-500 transition-colors"><Camera size={24} /></a>
+          <a href="#" className="hover:text-pink-500 transition-colors"><MessageCircle size={24} /></a>
         </div>
       </motion.div>
     </section>

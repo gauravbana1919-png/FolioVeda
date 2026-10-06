@@ -21,19 +21,25 @@ export function ChatEditor({ onUpdate }: { onUpdate: (data: any) => void }) {
     setLoading(true);
 
     try {
-      // Mocking an AI function call response for now
-      setTimeout(() => {
-        // Here, the AI would normally call a function to update the DB, and return the new state
-        onUpdate({ 
-          bio: "Updated by AI based on your request!" 
-        });
-        
-        setMessages(prev => [...prev, { role: 'ai', text: 'I have updated your portfolio! How does it look?' }]);
-        setLoading(false);
-      }, 1500);
+      const response = await fetch('/api/chat/portfolio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          message: userMessage,
+          currentProfile: {} // we would pass real profile state here
+        })
+      });
+
+      const data = await response.json();
       
+      if (data.updates) {
+        onUpdate(data.updates);
+      }
+      
+      setMessages(prev => [...prev, { role: 'ai', text: data.reply || 'Updated!' }]);
     } catch (e) {
       setMessages(prev => [...prev, { role: 'ai', text: 'Sorry, I encountered an error.' }]);
+    } finally {
       setLoading(false);
     }
   };

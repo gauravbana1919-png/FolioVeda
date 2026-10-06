@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, Code, Layout, Palette, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Code2, Code, Layout, Palette, ArrowRight, CheckCircle2 } from "lucide-react";
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -43,7 +43,7 @@ export default function OnboardingWizard() {
                 className="flex flex-col items-center text-center space-y-6"
               >
                 <div className="w-16 h-16 bg-secondary rounded-full flex items-center justify-center text-primary mb-2">
-                  <Github size={32} />
+                  <Code2 size={32} />
                 </div>
                 <h2 className="text-3xl font-bold">Connect your GitHub</h2>
                 <p className="text-muted-foreground max-w-md">

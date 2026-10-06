@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Code, Linkedin, Mail } from "lucide-react";
+import { ArrowRight, Code, Briefcase, Mail } from "lucide-react";
 
 export function HeroSection({ user }: { user: any }) {
   return (
@@ -41,7 +41,7 @@ export function HeroSection({ user }: { user: any }) {
               <Code size={20} />
             </a>
             <a href="#" className="p-3 bg-secondary rounded-full hover:bg-secondary/80 transition-colors">
-              <Linkedin size={20} />
+              <Briefcase size={20} />
             </a>
             <a href="#" className="p-3 bg-secondary rounded-full hover:bg-secondary/80 transition-colors">
               <Mail size={20} />
