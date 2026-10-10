@@ -67,8 +67,8 @@ export async function POST(req: Request) {
       const resume = await prisma.resume.create({
         data: {
           userId,
-          baseData: { content: originalResume },
-          tailoredData: { content: tailoredContent },
+          baseData: originalResume,
+          tailoredData: tailoredContent,
           targetJobDesc: jobDescription,
           matchScore: keywordMatchScore,
         }

@@ -11,12 +11,21 @@ export default function Home() {
 
         <div className="grid gap-6 md:grid-cols-2">
           
-          <Link href="/onboarding" className="block p-6 border-2 border-primary/50 bg-primary/5 rounded-xl hover:bg-primary/10 transition-all group col-span-1 md:col-span-2">
+          <Link href="/onboarding" className="block p-6 border-2 border-primary/50 bg-primary/5 rounded-xl hover:bg-primary/10 transition-all group col-span-1 md:col-span-1">
             <h2 className="text-2xl font-bold mb-2 group-hover:text-primary transition-colors flex items-center gap-2">
-              ✨ Start Here: The Onboarding Wizard (Phase 2)
+              ✨ 1. The Onboarding Wizard
             </h2>
             <p className="text-muted-foreground">
-              A smooth, animated multi-step flow that connects GitHub, asks for the user's profession, and lets them pick a starting template.
+              A smooth multi-step flow that connects GitHub and lets you pick a template.
+            </p>
+          </Link>
+
+          <Link href="/dashboard" className="block p-6 border-2 border-green-500/50 bg-green-500/5 rounded-xl hover:bg-green-500/10 transition-all group col-span-1 md:col-span-1">
+            <h2 className="text-2xl font-bold mb-2 group-hover:text-green-500 transition-colors flex items-center gap-2">
+              🔒 2. User Dashboard
+            </h2>
+            <p className="text-muted-foreground">
+              The authenticated hub where users manage their synced projects, view AI limits, and edit their live portfolio.
             </p>
           </Link>
 
