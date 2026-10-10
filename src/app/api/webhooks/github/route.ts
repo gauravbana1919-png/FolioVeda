@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Webhooks } from '@octokit/webhooks';
 import crypto from 'crypto';
+import prisma from '@/lib/db';
 
 // Initialize the webhooks instance with the secret from environment
 const webhooks = new Webhooks({
@@ -53,11 +54,50 @@ export async function POST(req: Request) {
         // const readme = await octokit.rest.repos.getReadme({ ... })
         // const decodedReadme = Buffer.from(readme.data.content, 'base64').toString()
         
-        // Mock extraction
         const details = extractDetailsFromReadme("# Mock Readme Content");
         
-        // Here we would save/update the Project in Prisma
-        // await prisma.project.upsert({ ... })
+        // Find the user by their GitHub account ID
+        const githubAccountId = String(payload.sender.id);
+        
+        const account = await prisma.account.findUnique({
+          where: {
+            provider_providerAccountId: {
+              provider: 'github',
+              providerAccountId: githubAccountId
+            }
+          }
+        });
+
+        if (account) {
+          // Check if project exists, then update or create
+          const existingProject = await prisma.project.findFirst({
+            where: {
+              userId: account.userId,
+              repoName: repoName,
+            }
+          });
+
+          if (existingProject) {
+            await prisma.project.update({
+              where: { id: existingProject.id },
+              data: {
+                description: details.description,
+                techStack: details.techStack.join(','),
+              }
+            });
+          } else {
+            await prisma.project.create({
+              data: {
+                userId: account.userId,
+                repoName: repoName,
+                title: repoName.replace('pf-', '').replace(/-/g, ' '),
+                description: details.description,
+                techStack: details.techStack.join(','),
+                githubUrl: payload.repository.html_url,
+              }
+            });
+          }
+        }
         
         return NextResponse.json({ 
           message: 'Project sync processed',
