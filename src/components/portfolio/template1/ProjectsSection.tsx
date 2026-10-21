@@ -41,7 +41,12 @@ export function ProjectsSection({ projects = [] }: { projects?: any[] }) {
               <p className="text-muted-foreground mb-6 line-clamp-3">{project.description}</p>
               
               <div className="flex flex-wrap gap-2 mb-8">
-                {project.techStack?.map((tech: string, i: number) => (
+                {(Array.isArray(project.techStack)
+                  ? project.techStack
+                  : typeof project.techStack === "string"
+                  ? project.techStack.split(",").map((t: string) => t.trim()).filter(Boolean)
+                  : []
+                ).map((tech: string, i: number) => (
                   <span key={i} className="px-3 py-1 bg-background text-xs font-medium rounded-full border border-border">
                     {tech}
                   </span>
