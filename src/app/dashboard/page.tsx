@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/db";
 import { Briefcase, FileText, Settings, Sparkles, ExternalLink, Activity } from "lucide-react";
 import Link from "next/link";
+import { SimulateWebhookButton } from "@/components/dashboard/SimulateWebhookButton";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -81,6 +82,7 @@ export default async function DashboardPage() {
           <div className="p-6 border-b border-border flex justify-between items-center flex-wrap gap-2">
             <h2 className="text-xl font-bold flex items-center gap-2"><Briefcase size={20}/> Synced GitHub Projects</h2>
             <div className="flex items-center gap-3">
+              <SimulateWebhookButton />
               <Link href="/portfolio/preview" className="text-sm text-primary hover:underline flex items-center gap-1 font-medium">
                 <Sparkles size={14}/> Edit Studio
               </Link>
@@ -175,6 +177,7 @@ function MockDashboard() {
           <div className="p-6 border-b border-border flex justify-between items-center flex-wrap gap-2">
             <h2 className="text-xl font-bold flex items-center gap-2"><Briefcase size={20}/> Synced GitHub Projects (Mock Data)</h2>
             <div className="flex items-center gap-3">
+              <SimulateWebhookButton />
               <Link href="/portfolio/preview" className="text-sm text-primary hover:underline flex items-center gap-1 font-medium">
                 <Sparkles size={14}/> Edit Studio
               </Link>
