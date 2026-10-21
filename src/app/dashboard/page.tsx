@@ -78,9 +78,16 @@ export default async function DashboardPage() {
 
         {/* Projects List */}
         <div className="bg-white dark:bg-zinc-900 border border-border rounded-2xl overflow-hidden">
-          <div className="p-6 border-b border-border flex justify-between items-center">
+          <div className="p-6 border-b border-border flex justify-between items-center flex-wrap gap-2">
             <h2 className="text-xl font-bold flex items-center gap-2"><Briefcase size={20}/> Synced GitHub Projects</h2>
-            <Link href="/portfolio/preview" className="text-sm text-primary hover:underline">View Live Portfolio</Link>
+            <div className="flex items-center gap-3">
+              <Link href="/portfolio/preview" className="text-sm text-primary hover:underline flex items-center gap-1 font-medium">
+                <Sparkles size={14}/> Edit Studio
+              </Link>
+              <Link href={`/p/${encodeURIComponent(user.name || "alex")}`} target="_blank" className="text-sm px-3 py-1 bg-secondary rounded-lg hover:bg-secondary/80 font-medium inline-flex items-center gap-1.5 transition-colors">
+                <ExternalLink size={13}/> Public Link
+              </Link>
+            </div>
           </div>
           
           {user.projects.length === 0 ? (
@@ -165,9 +172,16 @@ function MockDashboard() {
 
         {/* Projects List */}
         <div className="bg-white dark:bg-zinc-900 border border-border rounded-2xl overflow-hidden">
-          <div className="p-6 border-b border-border flex justify-between items-center">
+          <div className="p-6 border-b border-border flex justify-between items-center flex-wrap gap-2">
             <h2 className="text-xl font-bold flex items-center gap-2"><Briefcase size={20}/> Synced GitHub Projects (Mock Data)</h2>
-            <Link href="/portfolio/preview" className="text-sm text-primary hover:underline flex items-center gap-1"><Sparkles size={14}/> Edit Portfolio</Link>
+            <div className="flex items-center gap-3">
+              <Link href="/portfolio/preview" className="text-sm text-primary hover:underline flex items-center gap-1 font-medium">
+                <Sparkles size={14}/> Edit Studio
+              </Link>
+              <Link href="/p/alex" target="_blank" className="text-sm px-3 py-1 bg-secondary rounded-lg hover:bg-secondary/80 font-medium inline-flex items-center gap-1.5 transition-colors">
+                <ExternalLink size={13}/> Public Link
+              </Link>
+            </div>
           </div>
           
           <div className="divide-y divide-border">

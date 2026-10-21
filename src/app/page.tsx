@@ -30,9 +30,18 @@ export default function Home() {
           </Link>
 
           <Link href="/portfolio/preview" className="block p-6 border border-border rounded-xl hover:border-primary hover:bg-secondary/50 transition-all group">
-            <h2 className="text-2xl font-semibold mb-2 group-hover:text-primary transition-colors">1. Template #1 (Engineer)</h2>
+            <h2 className="text-2xl font-semibold mb-2 group-hover:text-primary transition-colors">🎨 AI Portfolio Studio</h2>
             <p className="text-muted-foreground">
-              Preview the premium, fully responsive developer portfolio template with dark mode and smooth Framer Motion animations (Stage 2).
+              Customize your live portfolio with the AI editor, template switcher, and instant color palette adjustments.
+            </p>
+          </Link>
+
+          <Link href="/p/alex" target="_blank" className="block p-6 border-2 border-indigo-500/50 bg-indigo-500/5 rounded-xl hover:bg-indigo-500/10 transition-all group">
+            <h2 className="text-2xl font-bold mb-2 group-hover:text-indigo-500 transition-colors flex items-center gap-2">
+              🌐 3. Public Shareable Portfolio
+            </h2>
+            <p className="text-muted-foreground">
+              Test the clean public URL (<code>/p/[username]</code>) with OpenGraph previews and zero editor clutter.
             </p>
           </Link>
 

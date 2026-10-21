@@ -14,7 +14,9 @@ import {
   Layout, 
   Code2, 
   Palette, 
-  Briefcase 
+  Briefcase,
+  ExternalLink,
+  Share2
 } from "lucide-react";
 import { ChatEditor } from "@/components/ui/ChatEditor";
 
@@ -276,6 +278,17 @@ export default function PortfolioStudio() {
                 </>
               )}
             </button>
+
+            {/* Public Share Link */}
+            <Link
+              href={`/p/${encodeURIComponent(userData.name || "alex")}`}
+              target="_blank"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-secondary hover:bg-secondary/80 text-foreground text-xs font-medium transition-colors border border-border"
+              title="Open public portfolio"
+            >
+              <ExternalLink size={13} />
+              <span className="hidden sm:inline">Public Page</span>
+            </Link>
           </div>
 
         </div>
