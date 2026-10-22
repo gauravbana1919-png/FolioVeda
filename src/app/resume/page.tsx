@@ -4,7 +4,9 @@ import { useState, useRef } from "react";
 import * as Diff from "diff";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { Download, FileText, Palette } from "lucide-react";
+import { Download, FileText, Palette, ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { FolioVedaLogo } from "@/components/ui/Logo";
 
 export default function ResumeTailorPage() {
   const [jobDescription, setJobDescription] = useState("");
@@ -88,12 +90,25 @@ export default function ResumeTailorPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6 pt-24">
-      <h1 className="text-3xl font-bold tracking-tight mb-2">Tailor Your Resume</h1>
-      <p className="text-muted-foreground mb-8">
-        Paste a job description below. Our AI will reorganize and emphasize your existing experience to match the role. 
-        <strong className="text-foreground ml-1">It will never invent fake skills or experience.</strong>
-      </p>
+    <div className="max-w-5xl mx-auto p-6 pt-12 space-y-6">
+      <div className="flex items-center justify-between pb-4 border-b border-border">
+        <FolioVedaLogo size="sm" showBadge={true} />
+        <Link 
+          href="/" 
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-2.5 py-1 rounded-lg bg-secondary/60 hover:bg-secondary"
+        >
+          <ArrowLeft size={13} />
+          <span>Back to Master Studio</span>
+        </Link>
+      </div>
+
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight mb-2">Tailor Your Resume</h1>
+        <p className="text-muted-foreground">
+          Paste a job description below. Our AI will reorganize and emphasize your existing experience to match the role. 
+          <strong className="text-foreground ml-1">It will never invent fake skills or experience.</strong>
+        </p>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Input Section */}

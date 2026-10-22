@@ -15,6 +15,7 @@ import { GallerySection as DesignerGallery } from "@/components/portfolio/templa
 // Template 3 (Business)
 import { HeroSection as BusinessHero } from "@/components/portfolio/template3/HeroSection";
 import { ExperienceSection as BusinessExp } from "@/components/portfolio/template3/ExperienceSection";
+import { LotusIcon } from "@/components/ui/Logo";
 
 interface PageProps {
   params: Promise<{ username: string }>;
@@ -149,10 +150,10 @@ export default async function PublicPortfolioPage({ params }: PageProps) {
       <footer className="fixed bottom-4 right-4 z-40">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-background/90 hover:bg-background border border-border shadow-lg text-xs font-medium backdrop-blur-md transition-all hover:scale-105"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/90 hover:bg-background border border-border shadow-lg text-xs font-medium backdrop-blur-md transition-all hover:scale-105"
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Built with <strong>FolioVeda</strong></span>
+          <LotusIcon size={16} glow={false} />
+          <span>Built with <strong className="font-semibold text-foreground">Folio<span className="text-blue-500">Veda</span></strong></span>
         </Link>
       </footer>
     </div>

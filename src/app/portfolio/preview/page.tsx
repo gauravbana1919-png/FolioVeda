@@ -19,6 +19,7 @@ import {
   Share2
 } from "lucide-react";
 import { ChatEditor } from "@/components/ui/ChatEditor";
+import { FolioVedaLogo } from "@/components/ui/Logo";
 
 // Template 1 (Developer)
 import { HeroSection as DevHero } from "@/components/portfolio/template1/HeroSection";
@@ -178,15 +179,14 @@ export default function PortfolioStudio() {
           {/* Left: Navigation & Branding */}
           <div className="flex items-center gap-3">
             <Link 
-              href="/dashboard"
+              href="/"
               className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
+              title="Return to Master Studio Hub"
             >
-              <ArrowLeft size={14} /> Dashboard
+              <ArrowLeft size={14} /> Hub
             </Link>
             <div className="h-4 w-[1px] bg-border hidden sm:block" />
-            <span className="font-semibold text-sm hidden sm:inline-flex items-center gap-1.5">
-              <Sparkles size={14} className="text-blue-500" /> Live Studio
-            </span>
+            <FolioVedaLogo size="xs" showBadge={false} />
           </div>
 
           {/* Center: Template Switcher */}

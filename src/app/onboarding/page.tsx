@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Code2, Code, Layout, Palette, ArrowRight, CheckCircle2 } from "lucide-react";
+import { FolioVedaLogo } from "@/components/ui/Logo";
+import Link from "next/link";
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -21,7 +23,13 @@ export default function OnboardingWizard() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-zinc-50 dark:bg-black font-sans">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-zinc-50 dark:bg-black font-sans">
+      <div className="mb-6">
+        <Link href="/">
+          <FolioVedaLogo size="lg" showBadge={true} />
+        </Link>
+      </div>
+
       <div className="w-full max-w-2xl bg-white dark:bg-zinc-950 border border-border rounded-2xl shadow-xl overflow-hidden">
         
         {/* Progress Bar */}

@@ -1,8 +1,10 @@
 "use client";
 
-import { CheckCircle, AlertTriangle, ShieldCheck } from "lucide-react";
+import { CheckCircle, AlertTriangle, ShieldCheck, ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import DOMPurify from 'isomorphic-dompurify';
+import Link from "next/link";
+import { FolioVedaLogo } from "@/components/ui/Logo";
 
 export default function SecurityReportPage() {
   const [loading, setLoading] = useState(true);
@@ -20,8 +22,19 @@ export default function SecurityReportPage() {
   const cleanInput = DOMPurify.sanitize(rawInput);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 pt-24 font-sans text-foreground">
-      <div className="flex items-center gap-3 mb-6">
+    <div className="max-w-4xl mx-auto p-6 pt-12 font-sans text-foreground space-y-6">
+      <div className="flex items-center justify-between pb-4 border-b border-border">
+        <FolioVedaLogo size="sm" showBadge={true} />
+        <Link 
+          href="/" 
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-2.5 py-1 rounded-lg bg-secondary/60 hover:bg-secondary"
+        >
+          <ArrowLeft size={13} />
+          <span>Back to Master Studio</span>
+        </Link>
+      </div>
+
+      <div className="flex items-center gap-3">
         <ShieldCheck className="text-primary w-10 h-10" />
         <h1 className="text-3xl font-bold tracking-tight">Security & Privacy Report</h1>
       </div>

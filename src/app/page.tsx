@@ -14,8 +14,10 @@ import {
   Compass, 
   Layers, 
   CheckCircle2,
-  RefreshCw
+  RefreshCw,
+  Palette
 } from "lucide-react";
+import { FolioVedaLogo } from "@/components/ui/Logo";
 
 interface ViewTab {
   id: string;
@@ -27,6 +29,14 @@ interface ViewTab {
 }
 
 const TABS: ViewTab[] = [
+  {
+    id: "brand",
+    name: "Brand & Logo",
+    path: "/brand",
+    icon: Palette,
+    badge: "Vector IP",
+    description: "Explore 3 original SVG brand marks (Lotus, Monogram, Quill) and set the global logo.",
+  },
   {
     id: "studio",
     name: "AI Portfolio Studio",
@@ -95,12 +105,13 @@ export default function MasterAllInOneHub() {
         <div className="flex items-center gap-3">
           <button 
             onClick={() => setShowDirectory(!showDirectory)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs shadow-md hover:opacity-95 transition-all"
+            className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-800 border border-slate-700/60 shadow-sm transition-all"
             title="Toggle All-in-One Navigation Overview"
           >
-            <Layers size={15} />
-            <span className="hidden sm:inline">FolioVeda</span>
-            <span className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded-full font-medium">All-in-One</span>
+            <FolioVedaLogo size="xs" showText={true} />
+            <span className="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-1.5 py-0.5 rounded-full font-semibold hidden sm:inline">
+              Hub
+            </span>
           </button>
 
           <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-400">

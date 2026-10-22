@@ -2,9 +2,10 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/db";
-import { Briefcase, FileText, Settings, Sparkles, ExternalLink, Activity } from "lucide-react";
+import { Briefcase, FileText, Settings, Sparkles, ExternalLink, Activity, Palette } from "lucide-react";
 import Link from "next/link";
 import { SimulateWebhookButton } from "@/components/dashboard/SimulateWebhookButton";
+import { FolioVedaLogo } from "@/components/ui/Logo";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -30,18 +31,28 @@ export default async function DashboardPage() {
       <div className="max-w-6xl mx-auto space-y-8">
         
         {/* Header */}
-        <header className="flex justify-between items-center bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-border shadow-sm">
-          <div>
-            <h1 className="text-3xl font-bold">Welcome back, {user.name}</h1>
-            <p className="text-muted-foreground mt-1">Here is the status of your FolioVeda assets.</p>
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-border shadow-sm">
+          <div className="flex items-center gap-4">
+            <FolioVedaLogo size="lg" showBadge={true} />
+            <div className="border-l border-border pl-4 hidden sm:block">
+              <h1 className="text-xl font-bold">Welcome back, {user.name}</h1>
+              <p className="text-muted-foreground text-xs mt-0.5">Status of your live FolioVeda assets.</p>
+            </div>
           </div>
           <div className="flex items-center gap-4">
+            <Link 
+              href="/brand" 
+              className="text-xs px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/60 font-semibold inline-flex items-center gap-1.5 hover:opacity-90 transition-opacity"
+            >
+              <Palette size={13} />
+              <span>Brand Studio</span>
+            </Link>
             <div className="text-right hidden sm:block">
               <div className="text-sm font-semibold">AI Credits</div>
               <div className="text-xs text-muted-foreground">{5 - user.dailyAiCalls} remaining today</div>
             </div>
             {user.image && (
-              <img src={user.image} alt="Profile" className="w-12 h-12 rounded-full border-2 border-primary/20" />
+              <img src={user.image} alt="Profile" className="w-10 h-10 rounded-full border-2 border-primary/20" />
             )}
           </div>
         </header>
@@ -125,17 +136,27 @@ function MockDashboard() {
       <div className="max-w-6xl mx-auto space-y-8">
         
         {/* Header */}
-        <header className="flex justify-between items-center bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-border shadow-sm">
-          <div>
-            <h1 className="text-3xl font-bold">Welcome back, Developer!</h1>
-            <p className="text-muted-foreground mt-1">Here is the status of your FolioVeda assets.</p>
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-border shadow-sm">
+          <div className="flex items-center gap-4">
+            <FolioVedaLogo size="lg" showBadge={true} />
+            <div className="border-l border-border pl-4 hidden sm:block">
+              <h1 className="text-xl font-bold">Welcome back, Developer!</h1>
+              <p className="text-muted-foreground text-xs mt-0.5">Status of your live FolioVeda assets.</p>
+            </div>
           </div>
           <div className="flex items-center gap-4">
+            <Link 
+              href="/brand" 
+              className="text-xs px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/60 font-semibold inline-flex items-center gap-1.5 hover:opacity-90 transition-opacity"
+            >
+              <Palette size={13} />
+              <span>Brand Studio</span>
+            </Link>
             <div className="text-right hidden sm:block">
               <div className="text-sm font-semibold">AI Credits</div>
               <div className="text-xs text-muted-foreground">5 remaining today</div>
             </div>
-            <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">
               DEV
             </div>
           </div>
