@@ -9,7 +9,12 @@ import {
   useLogoVariant, 
   LogoVariant 
 } from "./Logo";
-import { Check, Download, Sparkles, Moon, Sun, Shield, Eye, Layers } from "lucide-react";
+import { 
+  SiliconProcessorIcon, 
+  LinearMonolithIcon, 
+  LogicCircuitIcon 
+} from "./TechStartupLogos";
+import { Check, Download, Sparkles, Moon, Sun, Shield, Eye, Layers, Cpu, Box, GitBranch } from "lucide-react";
 
 export function LogoShowcase() {
   const { activeVariant, setActiveVariant } = useLogoVariant();
@@ -166,8 +171,155 @@ export function LogoShowcase() {
         </div>
       </div>
 
+      {/* NEW: High-Tech Startup & Processor Edition (Clean, No Glow, Silicon Valley Minimalist) */}
+      <div className="space-y-4 pt-2">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/15 text-blue-400 text-xs font-bold border border-blue-500/30 mb-2">
+              <Cpu size={13} />
+              <span>High-Tech Startup &bull; Processor Edition</span>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+              Clean Engineering &amp; Silicon Architecture Concepts
+            </h2>
+            <p className="text-sm text-slate-300 mt-1">
+              Engineered with clean mathematical precision. No neon glow, no AI-style lightning halos, and zero fluff.
+            </p>
+          </div>
+          <span className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-700/50 px-3 py-1.5 rounded-xl font-semibold">
+            Feedback Preview (Not yet applied globally)
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Concept A: Silicon Processor Core */}
+          <div className="bg-slate-900 border-2 border-slate-800 hover:border-blue-500/60 rounded-3xl overflow-hidden flex flex-col justify-between transition-all">
+            <div
+              className={`p-8 flex flex-col items-center justify-center transition-colors duration-300 min-h-[200px] ${
+                previewTheme === "dark" ? "bg-slate-950 text-white" : "bg-slate-100 text-slate-900"
+              }`}
+            >
+              <SiliconProcessorIcon size={88} dark={previewTheme === "dark"} />
+              <div className="mt-4 text-center">
+                <span className="text-lg font-black tracking-tight">
+                  Folio<span className="text-blue-500">Veda</span>
+                </span>
+                <span className="block text-[10px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
+                  CORE SILICON ARCHITECTURE
+                </span>
+              </div>
+            </div>
+
+            <div className="p-6 bg-slate-900/95 flex-1 flex flex-col justify-between space-y-4 border-t border-slate-800">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-base">Candidate A: The Silicon Processor</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-mono">CHIP DIE</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Square microprocessor packaging with 12 micro-bus pins and a central silicon die. The copper interconnects form the letters <strong>F</strong> and <strong>V</strong> with 90&deg; circuit routing.
+                </p>
+                <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-1">
+                  <span className="font-semibold text-slate-200">Vibe:</span> Intel, Apple Silicon M-series, Scale AI, Nvidia.
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                <span>Flat Vector &bull; 0 Glow</span>
+                <span className="text-emerald-400 font-medium">&check; Pixel-Perfect</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Concept B: The Linear Monolith */}
+          <div className="bg-slate-900 border-2 border-slate-800 hover:border-blue-500/60 rounded-3xl overflow-hidden flex flex-col justify-between transition-all">
+            <div
+              className={`p-8 flex flex-col items-center justify-center transition-colors duration-300 min-h-[200px] ${
+                previewTheme === "dark" ? "bg-slate-950 text-white" : "bg-slate-100 text-slate-900"
+              }`}
+            >
+              <LinearMonolithIcon size={88} dark={previewTheme === "dark"} />
+              <div className="mt-4 text-center">
+                <span className="text-lg font-black tracking-tight">
+                  Folio<span className="text-blue-500">Veda</span>
+                </span>
+                <span className="block text-[10px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
+                  SAAS MONOLITH MARK
+                </span>
+              </div>
+            </div>
+
+            <div className="p-6 bg-slate-900/95 flex-1 flex flex-col justify-between space-y-4 border-t border-slate-800">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-base">Candidate B: The Linear Monolith</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-mono">MINIMALIST</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Interlocking solid geometric slabs. The monolithic vertical spine and horizontal tiers form <strong>F</strong> (Folio), while a 45&deg; high-speed wedge forms <strong>V</strong> (Veda).
+                </p>
+                <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-1">
+                  <span className="font-semibold text-slate-200">Vibe:</span> Linear.app, Vercel, Supabase, Stripe.
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                <span>Negative Space &bull; Pure Minimal</span>
+                <span className="text-emerald-400 font-medium">&check; Scalable to 12px</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Concept C: The Logic Circuit Folio */}
+          <div className="bg-slate-900 border-2 border-slate-800 hover:border-blue-500/60 rounded-3xl overflow-hidden flex flex-col justify-between transition-all">
+            <div
+              className={`p-8 flex flex-col items-center justify-center transition-colors duration-300 min-h-[200px] ${
+                previewTheme === "dark" ? "bg-slate-950 text-white" : "bg-slate-100 text-slate-900"
+              }`}
+            >
+              <LogicCircuitIcon size={88} dark={previewTheme === "dark"} />
+              <div className="mt-4 text-center">
+                <span className="text-lg font-black tracking-tight">
+                  Folio<span className="text-blue-500">Veda</span>
+                </span>
+                <span className="block text-[10px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
+                  CIRCUIT DATA MATRIX
+                </span>
+              </div>
+            </div>
+
+            <div className="p-6 bg-slate-900/95 flex-1 flex flex-col justify-between space-y-4 border-t border-slate-800">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-base">Candidate C: The Logic Circuit Folio</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono">SCHEMATIC</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  An open folio schematic formed by printed circuit board (PCB) traces with solid logic node terminals. Represents developer intelligence and structured data routing.
+                </p>
+                <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-1">
+                  <span className="font-semibold text-slate-200">Vibe:</span> ARM, Cloudflare, Cursor, GitHub.
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                <span>Engineering Schematic &bull; Clean Lines</span>
+                <span className="text-emerald-400 font-medium">&check; High Contrast</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-slate-800/80 my-4" />
+
       {/* 3 Core Concepts Showcase Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="space-y-4">
+        <div>
+          <h3 className="text-lg font-bold text-slate-300">Previous Design Direction Archive (Graduated / Stylized)</h3>
+          <p className="text-xs text-slate-400">For comparison reference.</p>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {concepts.map((concept) => {
           const isSelected = activeVariant === concept.id;
           const { Component } = concept;
@@ -276,6 +428,7 @@ export function LogoShowcase() {
             </div>
           );
         })}
+        </div>
       </div>
 
       {/* Scale & Context Responsive Audit */}
