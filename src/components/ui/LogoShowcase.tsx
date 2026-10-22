@@ -32,11 +32,18 @@ import {
   IsometricStageLogo, 
   UniqueFolioVedaWordmark 
 } from "./UniqueLogos";
-import { Check, Download, Sparkles, Moon, Sun, Shield, Eye, Layers, Cpu, Box, GitBranch, Zap, Star, RefreshCw, Palette, Compass, Feather } from "lucide-react";
+import { 
+  OrigamiFolioMark, 
+  OrigamiFolioWordmark, 
+  ORIGAMI_PALETTES, 
+  OrigamiPalette 
+} from "./OrigamiLogos";
+import { Check, Download, Sparkles, Moon, Sun, Shield, Eye, Layers, Cpu, Box, GitBranch, Zap, Star, RefreshCw, Palette, Compass, Feather, CheckCircle2 } from "lucide-react";
 
 export function LogoShowcase() {
   const { activeVariant, setActiveVariant } = useLogoVariant();
   const [previewTheme, setPreviewTheme] = useState<"dark" | "light">("dark");
+  const [selectedOrigamiPalette, setSelectedOrigamiPalette] = useState<OrigamiPalette>("iris");
   const [iconicStyle, setIconicStyle] = useState<"gradient" | "monochrome">("gradient");
   const [downloadSuccess, setDownloadSuccess] = useState<string | null>(null);
 
@@ -189,6 +196,107 @@ export function LogoShowcase() {
           </div>
         </div>
       </div>
+
+      {/* SELECTED CONCEPT: THE ORIGAMI FOLIO FOLD - COLORWAY STUDIO */}
+      <div className="space-y-6 pt-2">
+        <div className="bg-gradient-to-r from-indigo-950/60 via-slate-900 to-emerald-950/40 border-2 border-indigo-500/40 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-2xl">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/40 mb-2">
+                <CheckCircle2 size={13} />
+                <span>Selected Direction: The Origami Folio Fold</span>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+                Pick Your Favorite Colorway for FolioVeda
+              </h2>
+              <p className="text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
+                You liked the <strong>Origami Folio Fold</strong>! Here are 5 completely different, premium color systems designed specifically for this mark. None of them use Google colors or generic AI gradients.
+              </p>
+            </div>
+
+            <div className="bg-slate-950/90 border border-slate-800 p-4 rounded-2xl flex flex-col items-center justify-center shrink-0 min-w-[200px]">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2">Active Colorway Preview</span>
+              <OrigamiFolioWordmark palette={selectedOrigamiPalette} size="md" />
+              <span className="text-[10px] text-indigo-400 font-semibold mt-1">
+                {ORIGAMI_PALETTES[selectedOrigamiPalette].name}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 5 Colorway Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {(Object.keys(ORIGAMI_PALETTES) as OrigamiPalette[]).map((paletteKey) => {
+            const p = ORIGAMI_PALETTES[paletteKey];
+            const isSelected = selectedOrigamiPalette === paletteKey;
+
+            return (
+              <div
+                key={paletteKey}
+                onClick={() => setSelectedOrigamiPalette(paletteKey)}
+                className={`cursor-pointer rounded-3xl border-2 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-xl ${
+                  isSelected
+                    ? "border-indigo-500 ring-4 ring-indigo-500/20 shadow-indigo-500/10"
+                    : "border-slate-800 hover:border-slate-700 bg-slate-900/80"
+                }`}
+              >
+                {/* Visual Stage */}
+                <div
+                  className={`p-8 flex flex-col items-center justify-center transition-colors duration-300 min-h-[200px] ${
+                    previewTheme === "dark" ? "bg-slate-950 text-white" : "bg-white text-slate-900"
+                  }`}
+                >
+                  <OrigamiFolioMark palette={paletteKey} size={88} className="transition-transform duration-300 hover:scale-105" />
+                  <div className="mt-4 text-center">
+                    <OrigamiFolioWordmark palette={paletteKey} size="sm" />
+                  </div>
+                </div>
+
+                {/* Info & Swatches */}
+                <div className="p-5 bg-slate-900/95 flex-1 flex flex-col justify-between space-y-3 border-t border-slate-800">
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-bold text-white text-base">{p.name}</h3>
+                      {isSelected && (
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500 text-white font-bold">
+                          Selected
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-slate-400">{p.tagline}</p>
+                  </div>
+
+                  {/* Swatches breakdown */}
+                  <div>
+                    <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1.5">
+                      Facet Palette
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-md border border-white/20" style={{ backgroundColor: p.spine }} title={`Spine: ${p.spine}`} />
+                      <span className="w-5 h-5 rounded-md border border-white/20" style={{ backgroundColor: p.topFlap }} title={`Top Flap: ${p.topFlap}`} />
+                      <span className="w-5 h-5 rounded-md border border-white/20" style={{ backgroundColor: p.midLayer }} title={`Mid Layer: ${p.midLayer}`} />
+                      <span className="w-5 h-5 rounded-md border border-white/20" style={{ backgroundColor: p.vCrease }} title={`V-Crease: ${p.vCrease}`} />
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setSelectedOrigamiPalette(paletteKey)}
+                    className={`w-full py-2 px-3 rounded-xl text-xs font-bold transition-all ${
+                      isSelected
+                        ? "bg-indigo-600 text-white"
+                        : "bg-slate-800 hover:bg-slate-700 text-slate-300"
+                    }`}
+                  >
+                    {isSelected ? "Current Selection" : "Preview This Colorway"}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="border-t border-slate-800/80 my-4" />
 
       {/* 100% UNIQUE & ORIGINAL CREATIONS (Custom Palette & Non-Cliche Geometry) */}
       <div className="space-y-6 pt-2">
