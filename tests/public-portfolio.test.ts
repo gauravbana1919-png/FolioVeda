@@ -6,7 +6,7 @@ describe('Public Portfolio Metadata', () => {
     const params = Promise.resolve({ username: 'alex-developer' });
     const metadata = await generateMetadata({ params });
 
-    expect(metadata.title).toBe("alex-developer's Portfolio | Built with PortfolioForge");
+    expect(metadata.title).toBe("alex-developer's Portfolio | Built with FolioVeda");
     expect(metadata.description).toContain('alex-developer');
     expect(metadata.openGraph?.title).toBe('alex-developer - Professional Portfolio');
   });
@@ -15,7 +15,7 @@ describe('Public Portfolio Metadata', () => {
     const params = Promise.resolve({ username: 'Jane%20Doe' });
     const metadata = await generateMetadata({ params });
 
-    expect(metadata.title).toBe("Jane Doe's Portfolio | Built with PortfolioForge");
+    expect(metadata.title).toBe("Jane Doe's Portfolio | Built with FolioVeda");
     expect(metadata.description).toContain('Jane Doe');
     expect(metadata.openGraph?.title).toBe('Jane Doe - Professional Portfolio');
   });

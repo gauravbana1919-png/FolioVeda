@@ -33,7 +33,7 @@ export default async function DashboardPage() {
         <header className="flex justify-between items-center bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-border shadow-sm">
           <div>
             <h1 className="text-3xl font-bold">Welcome back, {user.name}</h1>
-            <p className="text-muted-foreground mt-1">Here is the status of your PortfolioForge assets.</p>
+            <p className="text-muted-foreground mt-1">Here is the status of your FolioVeda assets.</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right hidden sm:block">
@@ -128,7 +128,7 @@ function MockDashboard() {
         <header className="flex justify-between items-center bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-border shadow-sm">
           <div>
             <h1 className="text-3xl font-bold">Welcome back, Developer!</h1>
-            <p className="text-muted-foreground mt-1">Here is the status of your PortfolioForge assets.</p>
+            <p className="text-muted-foreground mt-1">Here is the status of your FolioVeda assets.</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right hidden sm:block">

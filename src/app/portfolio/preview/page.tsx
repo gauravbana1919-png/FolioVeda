@@ -332,7 +332,7 @@ export default function PortfolioStudio() {
       {/* Platform Branding Badge */}
       <div className="fixed bottom-4 left-4 z-30">
         <span className="px-3 py-1.5 bg-background/90 backdrop-blur-md border border-border text-foreground text-[11px] font-medium rounded-md shadow-md">
-          ⚡ PortfolioForge Studio
+          ⚡ FolioVeda Studio
         </span>
       </div>
 

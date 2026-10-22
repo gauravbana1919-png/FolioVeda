@@ -99,7 +99,7 @@ export default function MasterAllInOneHub() {
             title="Toggle All-in-One Navigation Overview"
           >
             <Layers size={15} />
-            <span className="hidden sm:inline">PortfolioForge</span>
+            <span className="hidden sm:inline">FolioVeda</span>
             <span className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded-full font-medium">All-in-One</span>
           </button>
 
@@ -200,7 +200,7 @@ export default function MasterAllInOneHub() {
           <div className="w-full h-full max-w-5xl overflow-y-auto p-6 md:p-10 space-y-8 animate-fade-in">
             <div className="text-center max-w-xl mx-auto space-y-2">
               <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">
-                PortfolioForge Master Directory
+                FolioVeda Master Directory
               </h1>
               <p className="text-sm text-slate-400">
                 Click any workspace card below to load it into the live master viewer or test its features.

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-console.log('🚀 PortfolioForge Vercel Pre-Flight Readiness Check');
+console.log('🚀 FolioVeda Vercel Pre-Flight Readiness Check');
 console.log('--------------------------------------------------');
 
 let allPassed = true;
@@ -46,7 +46,7 @@ if (fs.existsSync(path.join(__dirname, '..', 'prisma', 'schema.postgresql.prisma
 
 console.log('--------------------------------------------------');
 if (allPassed) {
-  console.log('🎉 ALL CHECKS PASSED! PortfolioForge is 100% ready for Vercel deployment.');
+  console.log('🎉 ALL CHECKS PASSED! FolioVeda is 100% ready for Vercel deployment.');
   process.exit(0);
 } else {
   console.log('⚠️ Some pre-flight checks failed. Please review the items above.');

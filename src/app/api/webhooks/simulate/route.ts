@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     if (!targetUserId) {
       // Find or create a demo user for local simulation
       let demoUser = await prisma.user.findFirst({
-        where: { email: 'demo@portfolioforge.dev' },
+        where: { email: 'demo@folioveda.dev' },
         include: { accounts: true },
       });
 
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
         demoUser = await prisma.user.create({
           data: {
             name: 'Alex Developer',
-            email: 'demo@portfolioforge.dev',
+            email: 'demo@folioveda.dev',
             accounts: {
               create: {
                 type: 'oauth',

@@ -96,7 +96,7 @@ export async function POST(req: Request) {
         required: ["reply", "updates"]
       };
 
-      const systemPrompt = `You are an expert AI Portfolio Designer and Copywriter for PortfolioForge.
+      const systemPrompt = `You are an expert AI Portfolio Designer and Copywriter for FolioVeda.
 You help developers and creators customize their portfolio websites in real-time.
 
 HARD RULE: You must NEVER invent, assume, or hallucinate past companies, university degrees, dates, employment history, metrics, or factual work experience that the user did not explicitly provide.

@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const decoded = decodeURIComponent(username);
 
   return {
-    title: `${decoded}'s Portfolio | Built with PortfolioForge`,
+    title: `${decoded}'s Portfolio | Built with FolioVeda`,
     description: `Check out ${decoded}'s verified professional portfolio, projects, and work experience.`,
     openGraph: {
       title: `${decoded} - Professional Portfolio`,
@@ -152,7 +152,7 @@ export default async function PublicPortfolioPage({ params }: PageProps) {
           className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-background/90 hover:bg-background border border-border shadow-lg text-xs font-medium backdrop-blur-md transition-all hover:scale-105"
         >
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Built with <strong>PortfolioForge</strong></span>
+          <span>Built with <strong>FolioVeda</strong></span>
         </Link>
       </footer>
     </div>
