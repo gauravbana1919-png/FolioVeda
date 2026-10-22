@@ -42,7 +42,7 @@ export default async function DashboardPage() {
           <div className="flex items-center gap-4">
             <Link 
               href="/brand" 
-              className="text-xs px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/60 font-semibold inline-flex items-center gap-1.5 hover:opacity-90 transition-opacity"
+              className="text-xs px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 font-semibold inline-flex items-center gap-1.5 hover:opacity-90 transition-opacity"
             >
               <Palette size={13} />
               <span>Brand Studio</span>
@@ -147,7 +147,7 @@ function MockDashboard() {
           <div className="flex items-center gap-4">
             <Link 
               href="/brand" 
-              className="text-xs px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/60 font-semibold inline-flex items-center gap-1.5 hover:opacity-90 transition-opacity"
+              className="text-xs px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 font-semibold inline-flex items-center gap-1.5 hover:opacity-90 transition-opacity"
             >
               <Palette size={13} />
               <span>Brand Studio</span>

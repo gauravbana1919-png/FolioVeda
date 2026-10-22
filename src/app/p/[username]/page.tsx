@@ -152,8 +152,8 @@ export default async function PublicPortfolioPage({ params }: PageProps) {
           href="/"
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/90 hover:bg-background border border-border shadow-lg text-xs font-medium backdrop-blur-md transition-all hover:scale-105"
         >
-          <LotusIcon size={16} glow={false} />
-          <span>Built with <strong className="font-semibold text-foreground">Folio<span className="text-blue-500">Veda</span></strong></span>
+          <LotusIcon size={18} />
+          <span>Built with <strong className="font-semibold text-foreground">Folio<span className="text-[#10B981]">Veda</span></strong></span>
         </Link>
       </footer>
     </div>

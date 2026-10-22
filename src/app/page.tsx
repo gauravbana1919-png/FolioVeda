@@ -109,7 +109,7 @@ export default function MasterAllInOneHub() {
             title="Toggle All-in-One Navigation Overview"
           >
             <FolioVedaLogo size="xs" showText={true} />
-            <span className="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-1.5 py-0.5 rounded-full font-semibold hidden sm:inline">
+            <span className="text-[10px] bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded-full font-semibold hidden sm:inline">
               Hub
             </span>
           </button>
