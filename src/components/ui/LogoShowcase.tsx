@@ -14,11 +14,18 @@ import {
   LinearMonolithIcon, 
   LogicCircuitIcon 
 } from "./TechStartupLogos";
-import { Check, Download, Sparkles, Moon, Sun, Shield, Eye, Layers, Cpu, Box, GitBranch } from "lucide-react";
+import { 
+  InfinityLoopIcon, 
+  GeminiSparkIcon, 
+  RosetteKnotIcon, 
+  AntigravityAscentIcon 
+} from "./IconicLogos";
+import { Check, Download, Sparkles, Moon, Sun, Shield, Eye, Layers, Cpu, Box, GitBranch, Zap, Star, RefreshCw } from "lucide-react";
 
 export function LogoShowcase() {
   const { activeVariant, setActiveVariant } = useLogoVariant();
   const [previewTheme, setPreviewTheme] = useState<"dark" | "light">("dark");
+  const [iconicStyle, setIconicStyle] = useState<"gradient" | "monochrome">("gradient");
   const [downloadSuccess, setDownloadSuccess] = useState<string | null>(null);
 
   const concepts: {
@@ -170,6 +177,210 @@ export function LogoShowcase() {
           </div>
         </div>
       </div>
+
+      {/* TIER 1 AI PLATFORM ICONS (ChatGPT, Meta, Gemini, Antigravity Style) */}
+      <div className="space-y-4 pt-2">
+        <div className="flex items-center justify-between flex-wrap gap-3 bg-gradient-to-r from-blue-950/60 via-slate-900 to-indigo-950/60 p-6 rounded-3xl border border-blue-800/40 shadow-xl">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 text-xs font-bold border border-cyan-500/30 mb-2">
+              <Star size={13} />
+              <span>Iconic AI Simplicity &bull; Single Continuous Silhouette</span>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+              ChatGPT, Meta, Gemini &amp; Antigravity Style
+            </h2>
+            <p className="text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+              Pure iconic geometry. No micro-circuits, no glowing lightning. One single bold silhouette that can be drawn from memory in 3 seconds and is recognizable at 16px favicon scale.
+            </p>
+          </div>
+
+          {/* Color Mode Switcher: Gradient vs Solid Monochrome */}
+          <div className="flex items-center gap-2 bg-slate-950/80 p-1.5 rounded-2xl border border-slate-800 shrink-0">
+            <span className="text-xs text-slate-400 px-2 font-medium">Style:</span>
+            <button
+              onClick={() => setIconicStyle("gradient")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                iconicStyle === "gradient"
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : "text-slate-400 hover:text-white"
+              }`}
+            >
+              <span>Fluid Gradient (Gemini)</span>
+            </button>
+            <button
+              onClick={() => setIconicStyle("monochrome")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                iconicStyle === "monochrome"
+                  ? "bg-white text-slate-900 shadow-sm"
+                  : "text-slate-400 hover:text-white"
+              }`}
+            >
+              <span>Solid Stamp (OpenAI/Meta)</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 4 Iconic Showcase Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {/* 1. Meta / Infinity Loop */}
+          <div className="bg-slate-900 border-2 border-slate-800 hover:border-blue-500/70 rounded-3xl overflow-hidden flex flex-col justify-between transition-all group">
+            <div
+              className={`p-8 flex flex-col items-center justify-center transition-colors duration-300 min-h-[190px] ${
+                previewTheme === "dark" ? "bg-slate-950 text-white" : "bg-slate-100 text-slate-900"
+              }`}
+            >
+              <InfinityLoopIcon
+                size={84}
+                dark={previewTheme === "dark"}
+                variant={iconicStyle}
+                className="transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="mt-4 text-center">
+                <span className="text-base font-black tracking-tight">
+                  Folio<span className="text-blue-500">Veda</span>
+                </span>
+                <span className="block text-[9px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
+                  THE INFINITE M&Ouml;BIUS
+                </span>
+              </div>
+            </div>
+
+            <div className="p-5 bg-slate-900/95 flex-1 flex flex-col justify-between space-y-3 border-t border-slate-800">
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-sm">1. The Infinity Loop</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-mono">META STYLE</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Continuous aerodynamic ribbon looping through infinity (&infin; for Veda/Wisdom) while shaping the dynamic flow of an <strong>F</strong> and <strong>V</strong>.
+                </p>
+              </div>
+              <div className="pt-2 border-t border-slate-800 text-[11px] text-emerald-400 font-medium">
+                &check; 1-Line Continuous Path
+              </div>
+            </div>
+          </div>
+
+          {/* 2. Gemini Spark */}
+          <div className="bg-slate-900 border-2 border-slate-800 hover:border-blue-500/70 rounded-3xl overflow-hidden flex flex-col justify-between transition-all group">
+            <div
+              className={`p-8 flex flex-col items-center justify-center transition-colors duration-300 min-h-[190px] ${
+                previewTheme === "dark" ? "bg-slate-950 text-white" : "bg-slate-100 text-slate-900"
+              }`}
+            >
+              <GeminiSparkIcon
+                size={84}
+                dark={previewTheme === "dark"}
+                variant={iconicStyle}
+                className="transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="mt-4 text-center">
+                <span className="text-base font-black tracking-tight">
+                  Folio<span className="text-blue-500">Veda</span>
+                </span>
+                <span className="block text-[9px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
+                  4-POINT CELESTIAL SPARK
+                </span>
+              </div>
+            </div>
+
+            <div className="p-5 bg-slate-900/95 flex-1 flex flex-col justify-between space-y-3 border-t border-slate-800">
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-sm">2. The Veda Spark</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-mono">GEMINI STYLE</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  A 4-pointed hypocycloid celestial spark (enlightened star of knowledge) with a subtle curved folio fold for spatial elegance.
+                </p>
+              </div>
+              <div className="pt-2 border-t border-slate-800 text-[11px] text-emerald-400 font-medium">
+                &check; Pure Curved Astroid
+              </div>
+            </div>
+          </div>
+
+          {/* 3. ChatGPT Rosette Knot */}
+          <div className="bg-slate-900 border-2 border-slate-800 hover:border-blue-500/70 rounded-3xl overflow-hidden flex flex-col justify-between transition-all group">
+            <div
+              className={`p-8 flex flex-col items-center justify-center transition-colors duration-300 min-h-[190px] ${
+                previewTheme === "dark" ? "bg-slate-950 text-white" : "bg-slate-100 text-slate-900"
+              }`}
+            >
+              <RosetteKnotIcon
+                size={84}
+                dark={previewTheme === "dark"}
+                variant={iconicStyle}
+                className="transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="mt-4 text-center">
+                <span className="text-base font-black tracking-tight">
+                  Folio<span className="text-blue-500">Veda</span>
+                </span>
+                <span className="block text-[9px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
+                  ROTATIONAL HARMONY
+                </span>
+              </div>
+            </div>
+
+            <div className="p-5 bg-slate-900/95 flex-1 flex flex-col justify-between space-y-3 border-t border-slate-800">
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-sm">3. The Rosette Knot</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono">CHATGPT STYLE</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Mathematically perfect 60&deg; rotational symmetry. 6 continuous rounded loops forming an interlocking open lotus and folio flower.
+                </p>
+              </div>
+              <div className="pt-2 border-t border-slate-800 text-[11px] text-emerald-400 font-medium">
+                &check; Hexagonal Sacred Geometry
+              </div>
+            </div>
+          </div>
+
+          {/* 4. Antigravity Ascent */}
+          <div className="bg-slate-900 border-2 border-slate-800 hover:border-blue-500/70 rounded-3xl overflow-hidden flex flex-col justify-between transition-all group">
+            <div
+              className={`p-8 flex flex-col items-center justify-center transition-colors duration-300 min-h-[190px] ${
+                previewTheme === "dark" ? "bg-slate-950 text-white" : "bg-slate-100 text-slate-900"
+              }`}
+            >
+              <AntigravityAscentIcon
+                size={84}
+                dark={previewTheme === "dark"}
+                variant={iconicStyle}
+                className="transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="mt-4 text-center">
+                <span className="text-base font-black tracking-tight">
+                  Folio<span className="text-blue-500">Veda</span>
+                </span>
+                <span className="block text-[9px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
+                  CHIRAL ASCENT ORBIT
+                </span>
+              </div>
+            </div>
+
+            <div className="p-5 bg-slate-900/95 flex-1 flex flex-col justify-between space-y-3 border-t border-slate-800">
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-sm">4. The Ascent Orbit</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono">ANTIGRAVITY STYLE</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Weightless, levitating upward spiral with a celestial focal point. Modern AI aerodynamics with effortless motion and clean space.
+                </p>
+              </div>
+              <div className="pt-2 border-t border-slate-800 text-[11px] text-emerald-400 font-medium">
+                &check; Weightless Chiral Loop
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-slate-800/80 my-4" />
 
       {/* NEW: High-Tech Startup & Processor Edition (Clean, No Glow, Silicon Valley Minimalist) */}
       <div className="space-y-4 pt-2">
