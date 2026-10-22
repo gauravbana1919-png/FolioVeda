@@ -20,7 +20,13 @@ import {
   RosetteKnotIcon, 
   AntigravityAscentIcon 
 } from "./IconicLogos";
-import { Check, Download, Sparkles, Moon, Sun, Shield, Eye, Layers, Cpu, Box, GitBranch, Zap, Star, RefreshCw } from "lucide-react";
+import { 
+  GoogleStyleFLogo, 
+  GoogleWorkspaceFoldLogo, 
+  ColorLoopMonogramLogo, 
+  GoogleStyleFolioVedaLogo 
+} from "./GoogleStyleLogos";
+import { Check, Download, Sparkles, Moon, Sun, Shield, Eye, Layers, Cpu, Box, GitBranch, Zap, Star, RefreshCw, Palette } from "lucide-react";
 
 export function LogoShowcase() {
   const { activeVariant, setActiveVariant } = useLogoVariant();
@@ -177,6 +183,151 @@ export function LogoShowcase() {
           </div>
         </div>
       </div>
+
+      {/* GOOGLE-STYLE EDITION: Clean, Friendly, Multi-Colored Monograms */}
+      <div className="space-y-6 pt-2">
+        <div className="bg-gradient-to-r from-red-950/30 via-slate-900 to-blue-950/30 border border-slate-700/60 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-2xl">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold border border-emerald-500/30 mb-2">
+                <Palette size={13} />
+                <span>Google-Inspired System &bull; Clean, Simple &amp; Multi-Colored</span>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+                Simple &amp; Attractive Lettermarks for FolioVeda
+              </h2>
+              <p className="text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
+                Like Google&apos;s iconic multi-color &apos;G&apos;, these marks are built on <strong>pure simplicity, friendly curved geometry, and cheerful vibrant primary colors</strong> (Red, Yellow, Green, Blue) — zero boring gradients, zero direct AI clones.
+              </p>
+            </div>
+
+            <div className="bg-slate-950/80 border border-slate-800 p-4 rounded-2xl flex flex-col items-center justify-center shrink-0">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2">Wordmark Preview</span>
+              <GoogleStyleFolioVedaLogo size="md" variant={1} />
+            </div>
+          </div>
+        </div>
+
+        {/* 3 Google-Style Concepts */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Concept 1: The Multi-Color 'F' Mark */}
+          <div className="bg-slate-900 border-2 border-slate-800 hover:border-blue-500/70 rounded-3xl overflow-hidden flex flex-col justify-between transition-all group shadow-lg">
+            <div
+              className={`p-10 flex flex-col items-center justify-center transition-colors duration-300 min-h-[220px] ${
+                previewTheme === "dark" ? "bg-slate-950 text-white" : "bg-white text-slate-900"
+              }`}
+            >
+              <GoogleStyleFLogo size={96} className="transition-transform duration-300 group-hover:scale-105" />
+              <div className="mt-5 text-center">
+                <GoogleStyleFolioVedaLogo size="sm" variant={1} />
+                <span className="block text-[10px] text-slate-400 tracking-widest uppercase font-mono mt-1">
+                  CONCEPT 1 &bull; THE GOOGLE &apos;G&apos; EQUIVALENT
+                </span>
+              </div>
+            </div>
+
+            <div className="p-6 bg-slate-900/95 flex-1 flex flex-col justify-between space-y-4 border-t border-slate-800">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-base">1. The Multi-Color Geometric &apos;F&apos;</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-mono">PRIMARY</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  A clean, rounded lettermark <strong>&apos;F&apos;</strong> built directly with the 4 Google colors:
+                  <span className="text-[#EA4335] font-semibold"> Red top bar</span>, 
+                  <span className="text-[#FBBC05] font-semibold"> Yellow middle wing</span>, 
+                  <span className="text-[#34A853] font-semibold"> Green lower base</span>, and 
+                  <span className="text-[#4285F4] font-semibold"> Blue spine</span>.
+                </p>
+                <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-1">
+                  <span className="font-semibold text-slate-200">Why it works:</span> Friendly, memorable, child-simple, instant brand recall.
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                <span>Vibrant &bull; Non-cluttered</span>
+                <span className="text-emerald-400 font-medium">&check; 100% Original</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Concept 2: The Google Workspace 'FV' Fold */}
+          <div className="bg-slate-900 border-2 border-slate-800 hover:border-emerald-500/70 rounded-3xl overflow-hidden flex flex-col justify-between transition-all group shadow-lg">
+            <div
+              className={`p-10 flex flex-col items-center justify-center transition-colors duration-300 min-h-[220px] ${
+                previewTheme === "dark" ? "bg-slate-950 text-white" : "bg-white text-slate-900"
+              }`}
+            >
+              <GoogleWorkspaceFoldLogo size={96} className="transition-transform duration-300 group-hover:scale-105" />
+              <div className="mt-5 text-center">
+                <GoogleStyleFolioVedaLogo size="sm" variant={2} />
+                <span className="block text-[10px] text-slate-400 tracking-widest uppercase font-mono mt-1">
+                  CONCEPT 2 &bull; WORKSPACE ORIGAMI FOLD
+                </span>
+              </div>
+            </div>
+
+            <div className="p-6 bg-slate-900/95 flex-1 flex flex-col justify-between space-y-4 border-t border-slate-800">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-base">2. The Multi-Color &apos;FV&apos; Fold</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono">WORKSPACE</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Inspired by Google Drive and Docs. Geometric ribbons folding into both the letter <strong>F</strong> (Folio) and an angled <strong>V</strong> (Veda) with crisp color-blocking.
+                </p>
+                <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-1">
+                  <span className="font-semibold text-slate-200">Why it works:</span> Tactile, dynamic, modern productivity SaaS feel.
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                <span>Color-Blocked Geometry</span>
+                <span className="text-emerald-400 font-medium">&check; Scalable to 16px</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Concept 3: The Fresh Color-Loop Monogram */}
+          <div className="bg-slate-900 border-2 border-slate-800 hover:border-amber-500/70 rounded-3xl overflow-hidden flex flex-col justify-between transition-all group shadow-lg">
+            <div
+              className={`p-10 flex flex-col items-center justify-center transition-colors duration-300 min-h-[220px] ${
+                previewTheme === "dark" ? "bg-slate-950 text-white" : "bg-white text-slate-900"
+              }`}
+            >
+              <ColorLoopMonogramLogo size={96} className="transition-transform duration-300 group-hover:scale-105" />
+              <div className="mt-5 text-center">
+                <GoogleStyleFolioVedaLogo size="sm" variant={3} />
+                <span className="block text-[10px] text-slate-400 tracking-widest uppercase font-mono mt-1">
+                  CONCEPT 3 &bull; FRESH STARTUP PALETTE
+                </span>
+              </div>
+            </div>
+
+            <div className="p-6 bg-slate-900/95 flex-1 flex flex-col justify-between space-y-4 border-t border-slate-800">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-base">3. The Fresh Color-Loop</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono">FRESH</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  An alternative energetic palette: <strong className="text-violet-400">Electric Violet</strong>, <strong className="text-orange-400">Tangerine</strong>, <strong className="text-emerald-400">Lime Green</strong>, and <strong className="text-cyan-400">Cyan</strong>.
+                </p>
+                <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-1">
+                  <span className="font-semibold text-slate-200">Why it works:</span> Distinctive, cheerful, creative, not a copy of anything else.
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                <span>Playful &bull; High Contrast</span>
+                <span className="text-emerald-400 font-medium">&check; Eye-Catching</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-slate-800/80 my-4" />
 
       {/* TIER 1 AI PLATFORM ICONS (ChatGPT, Meta, Gemini, Antigravity Style) */}
       <div className="space-y-4 pt-2">
