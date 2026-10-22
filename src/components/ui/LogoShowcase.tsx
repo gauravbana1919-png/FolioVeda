@@ -26,7 +26,13 @@ import {
   ColorLoopMonogramLogo, 
   GoogleStyleFolioVedaLogo 
 } from "./GoogleStyleLogos";
-import { Check, Download, Sparkles, Moon, Sun, Shield, Eye, Layers, Cpu, Box, GitBranch, Zap, Star, RefreshCw, Palette } from "lucide-react";
+import { 
+  OrigamiFolioLogo, 
+  AcidPageTurnLogo, 
+  IsometricStageLogo, 
+  UniqueFolioVedaWordmark 
+} from "./UniqueLogos";
+import { Check, Download, Sparkles, Moon, Sun, Shield, Eye, Layers, Cpu, Box, GitBranch, Zap, Star, RefreshCw, Palette, Compass, Feather } from "lucide-react";
 
 export function LogoShowcase() {
   const { activeVariant, setActiveVariant } = useLogoVariant();
@@ -183,6 +189,169 @@ export function LogoShowcase() {
           </div>
         </div>
       </div>
+
+      {/* 100% UNIQUE & ORIGINAL CREATIONS (Custom Palette & Non-Cliche Geometry) */}
+      <div className="space-y-6 pt-2">
+        <div className="bg-gradient-to-r from-amber-950/40 via-stone-900 to-rose-950/40 border border-amber-800/40 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-2xl">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 text-xs font-bold border border-amber-500/30 mb-2">
+                <Compass size={13} />
+                <span>100% Original Intellectual Property &bull; Custom Color Systems</span>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+                Unique &amp; Interesting Identity Concepts
+              </h2>
+              <p className="text-sm text-stone-300 mt-2 max-w-2xl leading-relaxed">
+                Zero clones of Google, Meta, or Gemini. Crafted around original creative metaphors — tactile Japanese origami, editorial creative-tech page turns, and architectural stages with thoughtful, bespoke palettes.
+              </p>
+            </div>
+
+            <div className="bg-stone-950/90 border border-stone-800 p-4 rounded-2xl flex flex-col items-center justify-center shrink-0">
+              <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider mb-2">Signature Brand Lockup</span>
+              <UniqueFolioVedaWordmark variant={1} size="sm" />
+            </div>
+          </div>
+        </div>
+
+        {/* 3 Unique Concepts Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Unique 1: The Origami Folio Fold */}
+          <div className="bg-stone-900/90 border-2 border-stone-800 hover:border-amber-600/70 rounded-3xl overflow-hidden flex flex-col justify-between transition-all group shadow-xl">
+            <div
+              className={`p-10 flex flex-col items-center justify-center transition-colors duration-300 min-h-[220px] ${
+                previewTheme === "dark" ? "bg-stone-950 text-white" : "bg-stone-50 text-stone-900"
+              }`}
+            >
+              <OrigamiFolioLogo size={96} className="transition-transform duration-300 group-hover:scale-105" />
+              <div className="mt-5 text-center">
+                <UniqueFolioVedaWordmark variant={1} size="sm" />
+                <span className="block text-[10px] text-stone-400 tracking-widest uppercase font-mono mt-1">
+                  TACTILE ORIGAMI FOLD (F &amp; V)
+                </span>
+              </div>
+            </div>
+
+            <div className="p-6 bg-stone-900 flex-1 flex flex-col justify-between space-y-4 border-t border-stone-800">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-base">1. The Origami Folio Fold</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono">PAPER CRAFT</span>
+                </div>
+                <p className="text-xs text-stone-300 leading-relaxed">
+                  A Japanese paper-fold sculpture where a single digital sheet creates both the vertical spine/shelves of <strong>&apos;F&apos;</strong> and the downward origami angle of <strong>&apos;V&apos;</strong>.
+                </p>
+                <div className="pt-1">
+                  <div className="text-[10px] uppercase font-bold text-stone-400 tracking-wider mb-1.5">
+                    Bespoke Palette (Warm Earth &amp; Terracotta)
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-md bg-[#E2583E] border border-white/20" title="Warm Terracotta #E2583E" />
+                    <span className="w-5 h-5 rounded-md bg-[#F5A623] border border-white/20" title="Amber Gold #F5A623" />
+                    <span className="w-5 h-5 rounded-md bg-[#E5C396] border border-white/20" title="Sandstone #E5C396" />
+                    <span className="w-5 h-5 rounded-md bg-[#B93822] border border-white/20" title="Crimson Umber #B93822" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-stone-800 flex items-center justify-between text-xs text-stone-400">
+                <span>Tactile &bull; Meaningful</span>
+                <span className="text-amber-400 font-medium">&check; Completely Original</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Unique 2: The Acid Page-Turn */}
+          <div className="bg-stone-900/90 border-2 border-stone-800 hover:border-lime-500/70 rounded-3xl overflow-hidden flex flex-col justify-between transition-all group shadow-xl">
+            <div
+              className={`p-10 flex flex-col items-center justify-center transition-colors duration-300 min-h-[220px] ${
+                previewTheme === "dark" ? "bg-stone-950 text-white" : "bg-stone-100 text-stone-900"
+              }`}
+            >
+              <AcidPageTurnLogo size={96} dark={previewTheme === "dark"} className="transition-transform duration-300 group-hover:scale-105" />
+              <div className="mt-5 text-center">
+                <UniqueFolioVedaWordmark variant={2} size="sm" />
+                <span className="block text-[10px] text-stone-400 tracking-widest uppercase font-mono mt-1">
+                  EDITORIAL CREATIVE-TECH
+                </span>
+              </div>
+            </div>
+
+            <div className="p-6 bg-stone-900 flex-1 flex flex-col justify-between space-y-4 border-t border-stone-800">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-base">2. The Acid Page-Turn</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-lime-500/20 text-lime-300 font-mono">CREATIVE</span>
+                </div>
+                <p className="text-xs text-stone-300 leading-relaxed">
+                  High-fashion creative tech aesthetic (like Teenage Engineering or Nothing). Two dynamic geometric sheets in motion, evoking the physical turning of a portfolio page.
+                </p>
+                <div className="pt-1">
+                  <div className="text-[10px] uppercase font-bold text-stone-400 tracking-wider mb-1.5">
+                    Bespoke Palette (Acid Electric &amp; Charcoal)
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-md bg-[#CCFF00] border border-white/20" title="Acid Lime #CCFF00" />
+                    <span className="w-5 h-5 rounded-md bg-[#14191C] border border-white/20" title="Petroleum Charcoal #14191C" />
+                    <span className="w-5 h-5 rounded-md bg-[#FAF8F5] border border-white/20" title="Chalk Milk #FAF8F5" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-stone-800 flex items-center justify-between text-xs text-stone-400">
+                <span>High-Fashion &bull; Bold</span>
+                <span className="text-lime-400 font-medium">&check; Eye-Catching</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Unique 3: The Isometric Folio Stage */}
+          <div className="bg-stone-900/90 border-2 border-stone-800 hover:border-rose-500/70 rounded-3xl overflow-hidden flex flex-col justify-between transition-all group shadow-xl">
+            <div
+              className={`p-10 flex flex-col items-center justify-center transition-colors duration-300 min-h-[220px] ${
+                previewTheme === "dark" ? "bg-stone-950 text-white" : "bg-stone-50 text-stone-900"
+              }`}
+            >
+              <IsometricStageLogo size={96} className="transition-transform duration-300 group-hover:scale-105" />
+              <div className="mt-5 text-center">
+                <UniqueFolioVedaWordmark variant={3} size="sm" />
+                <span className="block text-[10px] text-stone-400 tracking-widest uppercase font-mono mt-1">
+                  ARCHITECTURAL MONOLITH
+                </span>
+              </div>
+            </div>
+
+            <div className="p-6 bg-stone-900 flex-1 flex flex-col justify-between space-y-4 border-t border-stone-800">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-base">3. The Isometric Stage</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-mono">ARCHITECTURAL</span>
+                </div>
+                <p className="text-xs text-stone-300 leading-relaxed">
+                  An architectural presentation plinth carved into the letters <strong>F</strong> and <strong>V</strong>. Represents elevating your career onto a physical stage.
+                </p>
+                <div className="pt-1">
+                  <div className="text-[10px] uppercase font-bold text-stone-400 tracking-wider mb-1.5">
+                    Bespoke Palette (Midnight Fig &amp; Coral Oat)
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-md bg-[#E8D5B5] border border-white/20" title="Warm Oat #E8D5B5" />
+                    <span className="w-5 h-5 rounded-md bg-[#FF6B6B] border border-white/20" title="Coral Blossom #FF6B6B" />
+                    <span className="w-5 h-5 rounded-md bg-[#1F142B] border border-white/20" title="Midnight Blackberry #1F142B" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-stone-800 flex items-center justify-between text-xs text-stone-400">
+                <span>Architectural &bull; Luxury</span>
+                <span className="text-rose-400 font-medium">&check; Distinctive</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-slate-800/80 my-4" />
 
       {/* GOOGLE-STYLE EDITION: Clean, Friendly, Multi-Colored Monograms */}
       <div className="space-y-6 pt-2">
