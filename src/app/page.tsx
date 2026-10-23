@@ -38,6 +38,14 @@ const TABS: ViewTab[] = [
     description: "Browse distinct live theme packages with real-data previews, smart recommendations, and 1-click apply.",
   },
   {
+    id: "inspiration",
+    name: "Inspiration Engine",
+    path: "/inspiration",
+    icon: Sparkles,
+    badge: "Feel-Like-This",
+    description: "Paste any portfolio URL you love. Extract abstract mood & typography into an original, copyright-safe theme with a closeness slider.",
+  },
+  {
     id: "brand",
     name: "Brand & Logo",
     path: "/brand",
