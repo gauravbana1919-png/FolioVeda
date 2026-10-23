@@ -39,7 +39,7 @@ export const ClosenessLevelSchema = z.enum(["loose", "medium", "close"]);
 export const InspirationAnalyzeInputSchema = z.object({
   url: z.string().url("Please provide a valid URL"),
   userConsent: z.literal(true, {
-    errorMap: () => ({ message: "You must confirm you are using this solely as inspiration" }),
+    message: "You must confirm you are using this solely as inspiration",
   }),
 });
 

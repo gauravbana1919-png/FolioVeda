@@ -7,36 +7,22 @@ import {
   ArrowLeft, 
   Check, 
   Cloud, 
-  CloudOff, 
   Sparkles, 
   Sun, 
   Moon, 
-  Layout, 
-  Code2, 
-  Palette, 
-  Briefcase,
+  Terminal, 
+  BookOpen, 
+  Flame,
   ExternalLink,
-  Share2
 } from "lucide-react";
 import { ChatEditor } from "@/components/ui/ChatEditor";
 import { FolioVedaLogo } from "@/components/ui/Logo";
-
-// Template 1 (Developer)
-import { HeroSection as DevHero } from "@/components/portfolio/template1/HeroSection";
-import { Navbar as DevNavbar } from "@/components/portfolio/template1/Navbar";
-import { ProjectsSection as DevProjects } from "@/components/portfolio/template1/ProjectsSection";
-
-// Template 2 (Designer)
-import { HeroSection as DesignerHero } from "@/components/portfolio/template2/HeroSection";
-import { GallerySection as DesignerGallery } from "@/components/portfolio/template2/GallerySection";
-
-// Template 3 (Business)
-import { HeroSection as BusinessHero } from "@/components/portfolio/template3/HeroSection";
-import { ExperienceSection as BusinessExp } from "@/components/portfolio/template3/ExperienceSection";
+import { getThemeById, getAllSystemThemes, mapUserToPortfolioContent } from "@/lib/themes/registry";
+import { ThemeRenderer } from "@/components/portfolio/engine/ThemeRenderer";
 
 const ACCENT_COLORS = [
+  { id: "emerald", label: "Cyber Mint", bg: "bg-emerald-500", ring: "ring-emerald-500" },
   { id: "blue", label: "Blue", bg: "bg-blue-500", ring: "ring-blue-500" },
-  { id: "emerald", label: "Emerald", bg: "bg-emerald-500", ring: "ring-emerald-500" },
   { id: "purple", label: "Purple", bg: "bg-purple-500", ring: "ring-purple-500" },
   { id: "amber", label: "Amber", bg: "bg-amber-500", ring: "ring-amber-500" },
   { id: "rose", label: "Rose", bg: "bg-rose-500", ring: "ring-rose-500" },
@@ -48,8 +34,8 @@ export default function PortfolioStudio() {
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "unsaved">("saved");
   const [aiNotice, setAiNotice] = useState<string | null>(null);
 
-  const [templateId, setTemplateId] = useState<string>("template1");
-  const [accentColor, setAccentColor] = useState<string>("blue");
+  const [activeThemeId, setActiveThemeId] = useState<string>("developer-terminal");
+  const [accentColor, setAccentColor] = useState<string>("emerald");
 
   const [userData, setUserData] = useState({
     name: "Alex Developer",
@@ -93,8 +79,9 @@ export default function PortfolioStudio() {
               },
               projects: data.user.projects?.length > 0 ? data.user.projects : prev.projects,
             }));
-            if (data.user.portfolio?.templateId) {
-              setTemplateId(data.user.portfolio.templateId);
+            const loadedTheme = data.user.portfolio?.themeId || data.user.portfolio?.templateId;
+            if (loadedTheme) {
+              setActiveThemeId(loadedTheme);
             }
             if (data.user.portfolio?.designPrefs) {
               try {
@@ -118,7 +105,7 @@ export default function PortfolioStudio() {
       name: overrides?.name || userData.name,
       bio: overrides?.bio || userData.profile.bio,
       skills: overrides?.skills || userData.profile.skills,
-      templateId: overrides?.templateId || templateId,
+      templateId: overrides?.themeId || activeThemeId,
       theme: overrides?.theme || theme,
       accentColor: overrides?.accentColor || accentColor,
     };
@@ -151,8 +138,8 @@ export default function PortfolioStudio() {
       },
     }));
 
-    if (updates.templateId) {
-      setTemplateId(updates.templateId);
+    if (updates.templateId || updates.themeId) {
+      setActiveThemeId(updates.themeId || updates.templateId);
     }
 
     if (updates.accentColor) {
@@ -170,10 +157,13 @@ export default function PortfolioStudio() {
     handleSave(updates);
   };
 
+  const selectedThemePackage = getThemeById(activeThemeId);
+  const normalizedContent = mapUserToPortfolioContent(userData);
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* Studio Top Control Bar */}
-      <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/95 backdrop-blur-md px-4 py-2.5">
+      <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/95 backdrop-blur-md px-4 py-2.5">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
           
           {/* Left: Navigation & Branding */}
@@ -189,37 +179,37 @@ export default function PortfolioStudio() {
             <FolioVedaLogo size="xs" showBadge={false} />
           </div>
 
-          {/* Center: Template Switcher */}
+          {/* Center: Stage 2 Distinct Style Switcher */}
           <div className="flex items-center bg-muted/80 p-1 rounded-xl border border-border text-xs font-medium">
             <button
-              onClick={() => { setTemplateId("template1"); handleSave({ templateId: "template1" }); }}
+              onClick={() => { setActiveThemeId("developer-terminal"); handleSave({ themeId: "developer-terminal" }); }}
               className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
-                templateId === "template1" 
-                  ? "bg-background text-foreground shadow-sm font-semibold" 
+                activeThemeId === "developer-terminal" || activeThemeId === "template1"
+                  ? "bg-emerald-600 text-white shadow-sm font-semibold" 
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Code2 size={13} /> Dev
+              <Terminal size={13} /> Dev Terminal
             </button>
             <button
-              onClick={() => { setTemplateId("template2"); handleSave({ templateId: "template2" }); }}
+              onClick={() => { setActiveThemeId("minimal-editorial"); handleSave({ themeId: "minimal-editorial" }); }}
               className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
-                templateId === "template2" 
-                  ? "bg-background text-foreground shadow-sm font-semibold" 
+                activeThemeId === "minimal-editorial" || activeThemeId === "template2"
+                  ? "bg-amber-600 text-white shadow-sm font-semibold" 
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Palette size={13} /> Designer
+              <BookOpen size={13} /> Minimal Editorial
             </button>
             <button
-              onClick={() => { setTemplateId("template3"); handleSave({ templateId: "template3" }); }}
+              onClick={() => { setActiveThemeId("bold-poster"); handleSave({ themeId: "bold-poster" }); }}
               className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
-                templateId === "template3" 
-                  ? "bg-background text-foreground shadow-sm font-semibold" 
+                activeThemeId === "bold-poster" || activeThemeId === "template3"
+                  ? "bg-emerald-500 text-slate-950 shadow-sm font-bold" 
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Briefcase size={13} /> Business
+              <Flame size={13} /> Bold Poster
             </button>
           </div>
 
@@ -259,7 +249,7 @@ export default function PortfolioStudio() {
             <button
               onClick={() => handleSave()}
               disabled={saveStatus === "saving"}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-primary text-primary-foreground text-xs font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-600 text-white text-xs font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50"
             >
               {saveStatus === "saving" ? (
                 <>
@@ -268,7 +258,7 @@ export default function PortfolioStudio() {
                 </>
               ) : saveStatus === "saved" ? (
                 <>
-                  <Check size={13} className="text-emerald-400" />
+                  <Check size={13} className="text-emerald-300" />
                   <span>Saved</span>
                 </>
               ) : (
@@ -302,37 +292,20 @@ export default function PortfolioStudio() {
         </div>
       )}
 
-      {/* Main Dynamic Portfolio Canvas */}
+      {/* Main Dynamic Style Engine Canvas */}
       <main className="flex-1">
-        {templateId === "template1" && (
-          <div className="min-h-screen">
-            <DevNavbar user={userData} />
-            <div className="pt-20">
-              <DevHero user={userData} />
-              <DevProjects projects={userData.projects} />
-            </div>
-          </div>
-        )}
-
-        {templateId === "template2" && (
-          <div className="min-h-screen">
-            <DesignerHero user={userData} />
-            <DesignerGallery />
-          </div>
-        )}
-
-        {templateId === "template3" && (
-          <div className="min-h-screen">
-            <BusinessHero user={userData} />
-            <BusinessExp />
-          </div>
-        )}
+        <ThemeRenderer
+          theme={selectedThemePackage}
+          content={normalizedContent}
+          isDemo={false}
+          hideBadge={true}
+        />
       </main>
 
       {/* Platform Branding Badge */}
       <div className="fixed bottom-4 left-4 z-30">
         <span className="px-3 py-1.5 bg-background/90 backdrop-blur-md border border-border text-foreground text-[11px] font-medium rounded-md shadow-md">
-          ⚡ FolioVeda Studio
+          ⚡ FolioVeda Style Engine • {selectedThemePackage.name}
         </span>
       </div>
 
@@ -340,7 +313,7 @@ export default function PortfolioStudio() {
       <ChatEditor 
         onUpdate={handleAiUpdate}
         currentProfile={userData}
-        templateId={templateId}
+        templateId={activeThemeId}
       />
     </div>
   );
