@@ -30,6 +30,14 @@ interface ViewTab {
 
 const TABS: ViewTab[] = [
   {
+    id: "styles",
+    name: "Style Gallery",
+    path: "/styles",
+    icon: Layers,
+    badge: "Personalisation",
+    description: "Browse distinct live theme packages with real-data previews, smart recommendations, and 1-click apply.",
+  },
+  {
     id: "brand",
     name: "Brand & Logo",
     path: "/brand",
