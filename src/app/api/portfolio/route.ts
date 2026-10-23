@@ -93,25 +93,36 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { name, bio, skills, templateId, theme, accentColor } = body;
 
-    if (!session?.user?.email) {
-      // Return simulated success for unauthenticated local development
-      return NextResponse.json({
-        success: true,
-        savedLocally: true,
-        message: "Saved to local session (Log in with GitHub to save permanently to cloud DB)",
+    let user = null;
+    if (session?.user?.email) {
+      user = await prisma.user.findUnique({
+        where: { email: session.user.email },
       });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
+    if (!user) {
+      // Find or create user by name so live portfolio URL works immediately in development & onboarding
+      const targetName = name || "Alex Developer";
+      user = await prisma.user.findFirst({
+        where: { name: targetName },
+      });
+
+      if (!user) {
+        user = await prisma.user.create({
+          data: {
+            name: targetName,
+            email: `${targetName.toLowerCase().replace(/[^a-z0-9]/g, '')}_${Date.now()}@folioveda.local`,
+          },
+        });
+      }
+    }
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ error: 'User could not be initialized' }, { status: 500 });
     }
 
     // Update user name if changed
-    if (name) {
+    if (name && user.name !== name) {
       await prisma.user.update({
         where: { id: user.id },
         data: { name },
@@ -137,11 +148,12 @@ export async function POST(req: Request) {
     }
 
     // Update or create Portfolio
+    const finalTemplateId = templateId || "template1";
     await prisma.portfolio.upsert({
       where: { userId: user.id },
       create: {
         userId: user.id,
-        templateId: templateId || "template1",
+        templateId: finalTemplateId,
         theme: theme || "system",
         designPrefs: JSON.stringify({ accentColor: accentColor || "blue" }),
       },
@@ -154,10 +166,13 @@ export async function POST(req: Request) {
       },
     });
 
+    const publicSlug = encodeURIComponent(user.name || "alex");
+
     return NextResponse.json({
       success: true,
-      savedLocally: false,
-      message: "Portfolio successfully saved to database!",
+      liveUrl: `/p/${publicSlug}`,
+      templateId: finalTemplateId,
+      message: "Portfolio successfully forged and live!",
     });
   } catch (error: any) {
     console.error('Portfolio POST Error:', error);

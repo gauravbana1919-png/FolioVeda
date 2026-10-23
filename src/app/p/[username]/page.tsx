@@ -134,7 +134,7 @@ export default async function PublicPortfolioPage({ params }: PageProps) {
         {templateId === "template2" && (
           <div>
             <DesignerHero user={userData} />
-            <DesignerGallery />
+            <DesignerGallery projects={userData.projects} />
           </div>
         )}
 
