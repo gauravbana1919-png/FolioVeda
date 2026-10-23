@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import { HangingResumesGallery } from "@/components/portfolio/HangingResumesGallery";
-import { AnimatedCareerStory } from "@/components/portfolio/AnimatedCareerStory";
+import { RedBullStyleCommercial } from "@/components/portfolio/RedBullStyleCommercial";
 
 type TemplateCategory = "all" | "creative" | "engineering" | "architecture" | "product";
 
@@ -311,10 +311,10 @@ export default function ColorfulEditorialHomePage() {
 
 
       {/* =========================================================================
-          ANIMATED CAREER STORY: The Tale of Two Applicants (Video-style comparison)
-          Why a Live Portfolio & ATS-Friendly Resume Changes Everything
+          RED BULL STYLE ANIMATED COMMERCIAL: Hand-Drawn Cartoon Video
+          Why a Live Portfolio & ATS-Friendly Resume Gives Your Career Wiiings!
           ========================================================================= */}
-      <AnimatedCareerStory />
+      <RedBullStyleCommercial />
 
 
       {/* =========================================================================
