@@ -15,7 +15,8 @@ import {
   Check, 
   Eye, 
   RefreshCw,
-  Info
+  Info,
+  ArrowRight
 } from "lucide-react";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import { StyleProfile, ClosenessLevel } from "@/types/inspiration";
@@ -59,39 +60,38 @@ export default function InspirationPage() {
 
   const normalizedContent = mapUserToPortfolioContent(userData);
 
-  // 1. Analyze Inspiration URL
+  // 1. Analyze External URL
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userConsent) {
-      setErrorMsg("You must confirm you are using this site solely for design inspiration.");
+      setErrorMsg("Please accept the originality confirmation checkbox.");
       return;
     }
 
     setErrorMsg(null);
     setIsAnalyzing(true);
+    setGeneratedTheme(null);
+    setExtractedProfile(null);
 
     try {
       const res = await fetch("/api/inspiration/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          url: inputUrl,
-          userConsent: true,
-        }),
+        body: JSON.stringify({ url: inputUrl }),
       });
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "Failed to analyze inspiration URL.");
+        throw new Error(data.error || "Analysis failed.");
       }
 
       setRequestId(data.requestId);
-      setExtractedProfile(data.styleProfile);
+      setExtractedProfile(data.profile);
 
-      // Immediately trigger theme generation with current closeness
-      await handleGenerateTheme(data.requestId, closeness);
+      // Automatically synthesize medium closeness theme
+      await handleGenerateTheme(data.requestId, "medium");
     } catch (err: any) {
-      setErrorMsg(err.message || "An error occurred while analyzing the target site.");
+      setErrorMsg(err.message || "Failed to analyze URL.");
     } finally {
       setIsAnalyzing(false);
     }
@@ -157,33 +157,34 @@ export default function InspirationPage() {
   const usernameSlug = encodeURIComponent(normalizedContent.name || "alex");
 
   return (
-    <div className="min-h-screen bg-[#0A0F1D] text-slate-100 selection:bg-emerald-500/30 font-sans">
-      {/* Top Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#0A0F1D]/90 backdrop-blur-md px-6 py-4">
+    <div className="min-h-screen bg-[#F8F9FA] text-[#1E293B] selection:bg-[#991B1B] selection:text-white font-sans antialiased">
+      
+      {/* Top Header: Clean & consistent with Main Landing */}
+      <header className="sticky top-0 z-50 w-full border-b border-[#1E293B]/10 bg-[#F8F9FA]/90 backdrop-blur-xl px-6 py-4 transition-all">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-slate-900 border border-white/[0.08] text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white border border-[#1E293B]/10 text-slate-700 hover:text-[#991B1B] hover:border-[#991B1B]/40 transition-colors shadow-2xs"
             >
-              <ArrowLeft size={14} /> Hub
+              <ArrowLeft size={14} /> Back to Home
             </Link>
-            <div className="h-4 w-[1px] bg-white/[0.1] hidden sm:block" />
+            <div className="h-4 w-[1px] bg-slate-200 hidden sm:block" />
             <FolioVedaLogo size="sm" showBadge={false} />
-            <span className="text-xs font-mono text-slate-400 hidden md:inline">/ Inspiration Engine</span>
+            <span className="font-extrabold text-sm text-[#1E293B] hidden md:inline">Inspiration Engine</span>
           </div>
 
           <div className="flex items-center gap-3">
             <Link
               href="/styles"
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-900 border border-white/[0.08] text-slate-300 hover:text-white transition-colors"
+              className="text-xs font-bold px-3.5 py-1.5 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-[#991B1B] transition-colors"
             >
               Style Gallery
             </Link>
             <Link
               href={`/p/${usernameSlug}`}
               target="_blank"
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all shadow-md shadow-emerald-500/20"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white transition-all shadow-md shadow-[#991B1B]/20"
             >
               <ExternalLink size={13} /> My Live Site
             </Link>
@@ -193,18 +194,18 @@ export default function InspirationPage() {
 
       {/* Applied Toast */}
       {appliedToast && (
-        <div className="fixed top-20 right-6 z-50 bg-slate-900 border border-emerald-500/50 shadow-2xl rounded-xl p-4 flex items-center gap-3 animate-in slide-in-from-top-4 duration-300">
-          <CheckCircle2 size={20} className="text-emerald-400" />
+        <div className="fixed top-20 right-6 z-50 bg-[#1E293B] text-white border-2 border-[#991B1B] shadow-2xl rounded-2xl p-4 flex items-center gap-3 animate-in slide-in-from-top-4 duration-300">
+          <CheckCircle2 size={20} className="text-[#991B1B]" />
           <div className="text-xs">
             <p className="font-bold text-white">Inspired Theme Applied!</p>
-            <p className="text-slate-400">
+            <p className="text-slate-300">
               Live on your portfolio under an original, copyright-compliant theme package.
             </p>
           </div>
           <Link
             href={appliedToast.url}
             target="_blank"
-            className="ml-2 px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 font-bold text-xs transition-colors"
+            className="ml-2 px-3 py-1 rounded-full bg-[#991B1B] text-white font-bold text-xs hover:bg-[#7F1D1D] transition-colors"
           >
             Visit ↗
           </Link>
@@ -215,57 +216,57 @@ export default function InspirationPage() {
       <main className="max-w-7xl mx-auto px-6 py-12">
         {/* Hero Explainer & Non-Negotiable Copyright Disclaimer */}
         <div className="max-w-3xl mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-medium mb-3">
-            <Sparkles size={13} /> "Make Mine Feel Like This" Engine
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-50 border border-red-200 text-[#991B1B] text-xs font-bold tracking-wide uppercase mb-3">
+            <Sparkles size={13} /> &quot;MAKE MINE FEEL LIKE THIS&quot; ENGINE
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-3">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1E293B] mb-3">
             Extract Aesthetic DNA. Keep 100% Originality.
           </h1>
-          <p className="text-sm sm:text-base text-slate-400 leading-relaxed mb-4">
-            Paste any public portfolio or website you love. Our system extracts the abstract layout rhythm, typography category, and color mood into a custom theme package filled with <strong>your own verified data</strong>.
+          <p className="text-base text-slate-600 font-normal leading-relaxed mb-4">
+            Paste any public portfolio or website you love. Our system extracts the abstract layout rhythm, typography category, and color mood into a custom theme package filled with <strong className="text-slate-900 font-bold">your own verified data</strong>.
           </p>
 
-          <div className="p-3.5 rounded-xl bg-slate-900/90 border border-emerald-500/30 flex items-start gap-3 text-xs text-slate-300">
-            <ShieldCheck size={18} className="text-emerald-400 mt-0.5 shrink-0" />
+          <div className="p-4 rounded-2xl bg-white border border-[#1E293B]/10 shadow-xs flex items-start gap-3 text-xs text-slate-700">
+            <ShieldCheck size={20} className="text-[#991B1B] mt-0.5 shrink-0" />
             <p className="leading-relaxed">
-              <strong className="text-white">Copyright & Legal Safety Promise:</strong> We never copy HTML, CSS, JavaScript, text, images, or proprietary font files. Fonts are matched to licensed Google Fonts, and components are rendered strictly from our own modular engine.
+              <strong className="text-[#1E293B] font-bold">Copyright &amp; Legal Safety Promise:</strong> We never copy HTML, CSS, JavaScript, text, images, or proprietary font files. Fonts are matched to licensed Google Fonts, and components are rendered strictly from our own modular engine.
             </p>
           </div>
         </div>
 
         {/* Input & URL Form */}
-        <div className="rounded-2xl border border-white/[0.08] bg-slate-900/80 p-6 mb-10 shadow-lg">
+        <div className="rounded-3xl border border-slate-200 bg-white p-8 mb-10 shadow-lg">
           <form onSubmit={handleAnalyze} className="space-y-4">
             <div>
-              <label className="text-xs font-mono uppercase text-slate-400 block mb-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">
                 Public Portfolio or Inspiration URL
               </label>
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1">
-                  <Globe size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <Globe size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     type="url"
                     value={inputUrl}
                     onChange={(e) => setInputUrl(e.target.value)}
                     placeholder="https://pattin.design or https://leerob.io"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-950 border border-white/[0.08] text-white text-sm font-mono focus:border-emerald-500 focus:outline-none"
+                    className="w-full pl-10 pr-4 py-3.5 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-sm font-medium focus:border-[#991B1B] focus:outline-none focus:ring-1 focus:ring-[#991B1B]"
                     required
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={isAnalyzing || !userConsent}
-                  className="px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="px-7 py-3.5 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-[#991B1B]/20 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isAnalyzing ? (
                     <>
-                      <div className="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                      <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       <span>Analyzing Traits...</span>
                     </>
                   ) : (
                     <>
                       <Sparkles size={14} />
-                      <span>Extract & Synthesize Theme</span>
+                      <span>Extract &amp; Synthesize Theme</span>
                     </>
                   )}
                 </button>
@@ -279,15 +280,15 @@ export default function InspirationPage() {
                 id="consentCheck"
                 checked={userConsent}
                 onChange={(e) => setUserConsent(e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded text-emerald-500 focus:ring-emerald-500 bg-slate-950 border-white/20"
+                className="mt-0.5 w-4 h-4 rounded text-[#991B1B] focus:ring-[#991B1B] border-slate-300"
               />
-              <label htmlFor="consentCheck" className="text-xs text-slate-400 cursor-pointer leading-relaxed">
-                I confirm: <strong className="text-slate-200">"I'm using this site only as design inspiration and I will not publish anyone else's content as mine."</strong>
+              <label htmlFor="consentCheck" className="text-xs text-slate-600 cursor-pointer leading-relaxed">
+                I confirm: <strong className="text-slate-900 font-bold">&quot;I&apos;m using this site only as design inspiration and I will not publish anyone else&apos;s content as mine.&quot;</strong>
               </label>
             </div>
 
             {errorMsg && (
-              <div className="p-3 rounded-lg bg-red-950/60 border border-red-500/40 text-xs text-red-300">
+              <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-medium">
                 {errorMsg}
               </div>
             )}
@@ -298,30 +299,30 @@ export default function InspirationPage() {
         {extractedProfile && (
           <div className="space-y-8 animate-in fade-in-50 duration-500">
             {/* Closeness Slider Controls */}
-            <div className="p-6 rounded-2xl border border-white/[0.08] bg-slate-900/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div className="p-6 sm:p-8 rounded-3xl border border-slate-200 bg-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
               <div>
-                <span className="text-xs font-mono uppercase text-emerald-400 font-bold tracking-wider">
-                  Originality & Closeness Slider
+                <span className="text-xs font-bold uppercase text-[#991B1B] tracking-wider">
+                  Originality &amp; Closeness Slider
                 </span>
-                <h3 className="text-base font-bold text-white mt-0.5">
+                <h3 className="text-lg font-extrabold text-[#1E293B] mt-0.5 font-sans">
                   How close should the inspired feeling be?
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
-                  Even at "Close", our Similarity Guard guarantees the layout remains 100% original code.
+                <p className="text-xs text-slate-500 mt-1 font-normal">
+                  Even at &quot;Close&quot;, our Similarity Guard guarantees the layout remains 100% original code.
                 </p>
               </div>
 
               {/* 3-Step Slider Toggle */}
-              <div className="flex items-center p-1 rounded-xl bg-slate-950 border border-white/[0.08] text-xs font-semibold">
+              <div className="flex items-center p-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold">
                 {(["loose", "medium", "close"] as ClosenessLevel[]).map((level) => (
                   <button
                     key={level}
                     onClick={() => requestId && handleGenerateTheme(requestId, level)}
                     disabled={isGenerating}
-                    className={`px-4 py-2 rounded-lg capitalize transition-all ${
+                    className={`px-4 py-2 rounded-full capitalize transition-all ${
                       closeness === level
-                        ? "bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20"
-                        : "text-slate-400 hover:text-white"
+                        ? "bg-[#991B1B] text-white shadow-xs"
+                        : "text-slate-600 hover:text-slate-900"
                     }`}
                   >
                     {level}
@@ -333,77 +334,77 @@ export default function InspirationPage() {
             {/* SIDE-BY-SIDE CONTAINER */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               {/* LEFT PANE: EXTRACTED ABSTRACT TRAITS BREAKDOWN */}
-              <div className="lg:col-span-4 rounded-2xl border border-white/[0.08] bg-slate-900 p-6 space-y-6">
+              <div className="lg:col-span-4 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 space-y-6 shadow-md">
                 <div>
-                  <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-400 font-bold">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#991B1B]">
                     Abstract Trait Extraction
                   </span>
-                  <h3 className="text-lg font-bold text-white mt-1">
+                  <h3 className="text-lg font-extrabold text-[#1E293B] mt-1 font-sans">
                     Inspiration Profile Breakdown
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1">
-                    Extracted from <span className="font-mono text-slate-300">{inputUrl}</span>
+                  <p className="text-xs text-slate-500 mt-1">
+                    Extracted from <span className="font-mono text-slate-700 font-bold">{inputUrl}</span>
                   </p>
                 </div>
 
-                <div className="space-y-3 text-xs divide-y divide-white/[0.08]">
+                <div className="space-y-3 text-xs divide-y divide-slate-100 font-medium">
                   <div className="pt-2 flex items-center justify-between">
-                    <span className="text-slate-400">Detected Mood:</span>
-                    <span className="font-mono font-bold uppercase text-emerald-400">
+                    <span className="text-slate-500">Detected Mood:</span>
+                    <span className="font-bold uppercase text-[#991B1B]">
                       {extractedProfile.detectedMood}
                     </span>
                   </div>
 
                   <div className="pt-3 flex items-center justify-between">
-                    <span className="text-slate-400">Layout Pattern:</span>
-                    <span className="font-mono text-slate-200">
+                    <span className="text-slate-500">Layout Pattern:</span>
+                    <span className="font-mono text-slate-800 font-bold">
                       {extractedProfile.layoutPattern}
                     </span>
                   </div>
 
                   <div className="pt-3 flex items-center justify-between">
-                    <span className="text-slate-400">Typography Category:</span>
-                    <span className="font-mono text-slate-200">
+                    <span className="text-slate-500">Typography Category:</span>
+                    <span className="font-mono text-slate-800 font-bold">
                       {extractedProfile.fontCategory}
                     </span>
                   </div>
 
                   <div className="pt-3 flex items-center justify-between">
-                    <span className="text-slate-400">Surface Luminance:</span>
-                    <span className="font-mono capitalize text-slate-200">
+                    <span className="text-slate-500">Surface Luminance:</span>
+                    <span className="capitalize text-slate-800 font-bold">
                       {extractedProfile.surfaceBrightness}
                     </span>
                   </div>
 
                   <div className="pt-3 flex items-center justify-between">
-                    <span className="text-slate-400">Density & Spacing:</span>
-                    <span className="font-mono capitalize text-slate-200">
+                    <span className="text-slate-500">Density &amp; Spacing:</span>
+                    <span className="capitalize text-slate-800 font-bold">
                       {extractedProfile.density}
                     </span>
                   </div>
 
                   <div className="pt-3 flex items-center justify-between">
-                    <span className="text-slate-400">Inspired Accent:</span>
+                    <span className="text-slate-500">Inspired Accent:</span>
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-4 h-4 rounded-full border border-white/20"
+                        className="w-4 h-4 rounded-full border border-slate-300"
                         style={{ backgroundColor: extractedProfile.accentColor }}
                       />
-                      <span className="font-mono text-slate-300">{extractedProfile.accentColor}</span>
+                      <span className="font-mono text-slate-800 font-bold">{extractedProfile.accentColor}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Safety Checklist */}
-                <div className="p-4 rounded-xl bg-slate-950 border border-white/[0.08] space-y-2 text-xs">
-                  <span className="font-bold text-slate-300 block mb-1">Copyright Compliance Guard:</span>
-                  <div className="flex items-center gap-2 text-emerald-400 text-[11px]">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+                  <span className="font-bold text-slate-800 block mb-1">Copyright Compliance Guard:</span>
+                  <div className="flex items-center gap-2 text-emerald-700 text-[11px] font-semibold">
                     <Check size={12} /> Zero proprietary HTML/CSS copied
                   </div>
-                  <div className="flex items-center gap-2 text-emerald-400 text-[11px]">
+                  <div className="flex items-center gap-2 text-emerald-700 text-[11px] font-semibold">
                     <Check size={12} /> Open-source Google Fonts substituted
                   </div>
-                  <div className="flex items-center gap-2 text-emerald-400 text-[11px]">
+                  <div className="flex items-center gap-2 text-emerald-700 text-[11px] font-semibold">
                     <Check size={12} /> Filled with your verified career data
                   </div>
                 </div>
@@ -412,34 +413,34 @@ export default function InspirationPage() {
                 <button
                   onClick={handleApplyTheme}
                   disabled={!generatedTheme || isApplying}
-                  className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#991B1B]/20 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isApplying ? "Applying to Portfolio..." : "Apply Theme to My Live Portfolio"}
                 </button>
               </div>
 
               {/* RIGHT PANE: LIVE GENERATED RESULT WITH USER'S REAL CONTENT */}
-              <div className="lg:col-span-8 rounded-2xl border border-white/[0.08] bg-slate-900 overflow-hidden shadow-2xl">
+              <div className="lg:col-span-8 rounded-3xl border border-slate-200 bg-white overflow-hidden shadow-2xl">
                 {/* Browser Viewport Chrome */}
-                <div className="bg-slate-950 px-4 py-3 border-b border-white/[0.08] flex items-center justify-between text-xs font-mono text-slate-400">
+                <div className="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center justify-between text-xs font-mono text-slate-400">
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
-                      <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                     </div>
-                    <span className="ml-2 text-slate-300">
+                    <span className="ml-2 text-slate-200">
                       folioveda.me/{normalizedContent.name.toLowerCase().replace(/\s+/g, "")}
                     </span>
                   </div>
 
-                  <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">
+                  <span className="px-2.5 py-0.5 rounded-full bg-red-950 text-red-300 border border-red-800 text-[10px] font-bold">
                     Original Theme • {closeness.toUpperCase()}
                   </span>
                 </div>
 
                 {/* Live Sandboxed Theme Canvas */}
-                <div className="max-h-[640px] overflow-y-auto">
+                <div className="max-h-[640px] overflow-y-auto bg-slate-50">
                   {generatedTheme ? (
                     <ThemeRenderer
                       theme={generatedTheme}
@@ -448,7 +449,7 @@ export default function InspirationPage() {
                       hideBadge={true}
                     />
                   ) : (
-                    <div className="py-24 text-center text-slate-500 text-xs">
+                    <div className="py-24 text-center text-slate-500 text-xs font-medium">
                       Synthesizing inspired theme...
                     </div>
                   )}

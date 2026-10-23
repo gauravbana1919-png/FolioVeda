@@ -14,7 +14,8 @@ import {
   Flame, 
   Layers,
   CheckCircle2,
-  Share2
+  Share2,
+  ArrowRight
 } from "lucide-react";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import { getAllSystemThemes, mapUserToPortfolioContent } from "@/lib/themes/registry";
@@ -58,19 +59,19 @@ export default function StyleGalleryPage() {
   // Recommendations
   const recommendations = getThemeRecommendations({
     profileType: userData?.profile?.skills?.toLowerCase().includes("design") ? "designer" : "tech",
-    skills: normalizedContent.skills,
+    targetGoal: "job",
+    mood: "formal",
   });
 
-  const topPick = recommendations.find((r) => r.isTopPick);
+  const topPick = recommendations[0];
 
-  // Filtered themes
+  // Filter themes
   const filteredThemes = allThemes.filter((theme) => {
-    const matchesCategory = selectedCategory === "all" || theme.category === selectedCategory;
-    const matchesMood = selectedMood === "all" || theme.mood === selectedMood;
-    return matchesCategory && matchesMood;
+    if (selectedCategory !== "all" && theme.category !== selectedCategory) return false;
+    if (selectedMood !== "all" && theme.mood !== selectedMood) return false;
+    return true;
   });
 
-  // Apply theme to live portfolio
   const handleApplyTheme = async (theme: ThemePackage) => {
     setApplyingThemeId(theme.id);
     try {
@@ -103,34 +104,36 @@ export default function StyleGalleryPage() {
   const usernameSlug = encodeURIComponent(normalizedContent.name || "alex");
 
   return (
-    <div className="min-h-screen bg-[#0A0F1D] text-slate-100 selection:bg-emerald-500/30 font-sans">
-      {/* Top Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#0A0F1D]/90 backdrop-blur-md px-6 py-4">
+    <div className="min-h-screen bg-[#F8F9FA] text-[#1E293B] selection:bg-[#991B1B] selection:text-white font-sans antialiased">
+      
+      {/* Top Navigation: Clean, matching the main landing page */}
+      <header className="sticky top-0 z-50 w-full border-b border-[#1E293B]/10 bg-[#F8F9FA]/90 backdrop-blur-xl px-6 py-4 transition-all">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-slate-900 border border-white/[0.08] text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white border border-[#1E293B]/10 text-slate-700 hover:text-[#991B1B] hover:border-[#991B1B]/40 transition-colors shadow-2xs"
             >
-              <ArrowLeft size={14} /> Hub
+              <ArrowLeft size={14} /> Back to Home
             </Link>
-            <div className="h-4 w-[1px] bg-white/[0.1] hidden sm:block" />
+            <div className="h-4 w-[1px] bg-slate-200 hidden sm:block" />
             <FolioVedaLogo size="sm" showBadge={false} />
+            <span className="font-extrabold text-sm text-[#1E293B] hidden md:inline">Style Gallery</span>
           </div>
 
           <div className="flex items-center gap-3">
             <Link
-              href="/portfolio/preview"
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-white/[0.08] text-slate-300 hover:text-white transition-colors"
+              href="/hub"
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white hover:bg-slate-50 border border-[#1E293B]/10 text-slate-700 hover:text-[#991B1B] transition-colors"
             >
-              <Sliders size={13} /> Open Studio
+              Master Hub ↗
             </Link>
             <Link
               href={`/p/${usernameSlug}`}
               target="_blank"
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all shadow-lg shadow-emerald-500/20"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white transition-all shadow-md shadow-[#991B1B]/20"
             >
-              <ExternalLink size={13} /> View My Live Site
+              <ExternalLink size={13} /> View Live Profile
             </Link>
           </div>
         </div>
@@ -138,18 +141,18 @@ export default function StyleGalleryPage() {
 
       {/* Toast Notification */}
       {appliedToast && (
-        <div className="fixed top-20 right-6 z-50 bg-slate-900 border border-emerald-500/50 shadow-2xl rounded-xl p-4 flex items-center gap-3 animate-in slide-in-from-top-4 duration-300">
-          <CheckCircle2 size={20} className="text-emerald-400" />
+        <div className="fixed top-20 right-6 z-50 bg-[#1E293B] text-white border-2 border-[#991B1B] shadow-2xl rounded-2xl p-4 flex items-center gap-3 animate-in slide-in-from-top-4 duration-300">
+          <CheckCircle2 size={20} className="text-[#991B1B]" />
           <div className="text-xs">
             <p className="font-bold text-white">Theme Applied Successfully!</p>
-            <p className="text-slate-400">
-              <span className="text-emerald-400 font-semibold">{appliedToast.name}</span> is now live on your portfolio.
+            <p className="text-slate-300">
+              <span className="text-red-300 font-bold">{appliedToast.name}</span> is now active on your portfolio.
             </p>
           </div>
           <Link
             href={appliedToast.url}
             target="_blank"
-            className="ml-2 px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 font-bold text-xs transition-colors"
+            className="ml-2 px-3 py-1 rounded-full bg-[#991B1B] text-white font-bold text-xs hover:bg-[#7F1D1D] transition-colors"
           >
             Visit ↗
           </Link>
@@ -158,39 +161,41 @@ export default function StyleGalleryPage() {
 
       {/* Main Gallery Container */}
       <main className="max-w-7xl mx-auto px-6 py-12">
-        {/* Title & Explainer */}
+        {/* Title & Explainer (Bold, attractive, zero italic) */}
         <div className="max-w-3xl mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-medium mb-4">
-            <Sparkles size={13} /> Live Style Architecture
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-50 border border-red-200 text-[#991B1B] text-xs font-bold tracking-wide uppercase mb-4">
+            <Sparkles size={13} /> LIVE ARCHITECTURAL STYLES
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1E293B] mb-4">
             Choose Your Presentation DNA.
           </h1>
-          <p className="text-base text-slate-400 leading-relaxed">
-            All themes render your verified data—projects, skills, bio, and experience—with zero data loss. Switch anytime; your content stays permanently intact while the layout, typography, and motion completely transform.
+          <p className="text-base text-slate-600 font-normal leading-relaxed">
+            All 8 system themes render your verified data—projects, skills, bio, and experience—with zero data loss. Switch anytime; your content stays permanently intact while the layout, typography, and motion completely transform.
           </p>
         </div>
 
         {/* Recommendation Callout */}
         {topPick && (
-          <div className="mb-10 rounded-2xl bg-gradient-to-r from-emerald-950/60 via-slate-900 to-slate-900 border border-emerald-500/30 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex items-start gap-3">
-              <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mt-0.5">
-                <Sparkles size={20} />
+          <div className="mb-10 rounded-3xl bg-white border border-[#1E293B]/10 shadow-lg p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-red-500/5 rounded-full blur-2xl pointer-events-none" />
+
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-2xl bg-red-50 border border-red-200 text-[#991B1B] mt-0.5">
+                <Sparkles size={24} />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
-                    Recommended For You
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#991B1B]">
+                    Recommended Match
                   </span>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-slate-950">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#991B1B] text-white">
                     TOP MATCH ({topPick.score}%)
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-white mt-1">
+                <h3 className="text-xl font-extrabold text-[#1E293B] mt-1 font-sans">
                   {topPick.theme.name}
                 </h3>
-                <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
+                <p className="text-xs text-slate-600 mt-1 max-w-2xl leading-relaxed font-normal">
                   {topPick.reason}
                 </p>
               </div>
@@ -200,7 +205,7 @@ export default function StyleGalleryPage() {
               <button
                 onClick={() => handleApplyTheme(topPick.theme)}
                 disabled={activeThemeId === topPick.theme.id || applyingThemeId === topPick.theme.id}
-                className="w-full md:w-auto px-5 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 disabled:bg-slate-800 disabled:text-slate-500 text-slate-950 font-bold text-xs transition-all shadow-md"
+                className="w-full md:w-auto px-6 py-3 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] disabled:bg-slate-200 disabled:text-slate-500 text-white font-bold text-xs transition-all shadow-md shadow-[#991B1B]/20"
               >
                 {activeThemeId === topPick.theme.id
                   ? "✓ Currently Active"
@@ -213,10 +218,10 @@ export default function StyleGalleryPage() {
         )}
 
         {/* Filter Controls Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-8 mb-8 border-b border-white/[0.08]">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-slate-200">
           {/* Category Filter */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
-            <span className="text-xs font-mono text-slate-500 uppercase mr-1">Category:</span>
+            <span className="text-xs font-bold text-slate-500 uppercase mr-1">Category:</span>
             {[
               { id: "all", label: "All Styles" },
               { id: "tech", label: "Tech / Engineering" },
@@ -226,10 +231,10 @@ export default function StyleGalleryPage() {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                   selectedCategory === cat.id
-                    ? "bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20"
-                    : "bg-slate-900 border border-white/[0.08] text-slate-400 hover:text-white hover:bg-slate-800"
+                    ? "bg-[#991B1B] text-white shadow-xs"
+                    : "bg-white border border-slate-200 text-slate-600 hover:text-[#1E293B] hover:bg-slate-50"
                 }`}
               >
                 {cat.label}
@@ -239,7 +244,7 @@ export default function StyleGalleryPage() {
 
           {/* Mood Filter */}
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-slate-500 uppercase mr-1">Mood:</span>
+            <span className="text-xs font-bold text-slate-500 uppercase mr-1">Mood:</span>
             {[
               { id: "all", label: "All" },
               { id: "formal", label: "Formal" },
@@ -249,10 +254,10 @@ export default function StyleGalleryPage() {
               <button
                 key={m.id}
                 onClick={() => setSelectedMood(m.id)}
-                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
                   selectedMood === m.id
-                    ? "bg-slate-800 text-emerald-400 border border-emerald-500/40 font-bold"
-                    : "text-slate-500 hover:text-slate-300"
+                    ? "bg-slate-800 text-white font-bold"
+                    : "text-slate-500 hover:text-slate-900"
                 }`}
               >
                 {m.label}
@@ -270,43 +275,43 @@ export default function StyleGalleryPage() {
             return (
               <div
                 key={theme.id}
-                className={`rounded-2xl border transition-all duration-300 flex flex-col justify-between overflow-hidden bg-slate-900/80 backdrop-blur-sm ${
+                className={`rounded-3xl border transition-all duration-300 flex flex-col justify-between overflow-hidden bg-white shadow-sm hover:shadow-xl ${
                   isActive
-                    ? "border-emerald-500 shadow-xl shadow-emerald-500/10 ring-1 ring-emerald-500/40"
-                    : "border-white/[0.08] hover:border-white/[0.2]"
+                    ? "border-[#991B1B] ring-2 ring-[#991B1B]/30"
+                    : "border-slate-200 hover:border-slate-300"
                 }`}
               >
                 {/* Theme Header Info */}
-                <div className="p-5 border-b border-white/[0.08] bg-slate-950/40">
+                <div className="p-5 border-b border-slate-100 bg-slate-50/70">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-400 font-semibold">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#991B1B]">
                       {theme.category} • {theme.mood}
                     </span>
                     {isActive && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-50 border border-red-200 text-[#991B1B] text-[10px] font-bold">
                         <Check size={10} /> Active On Live Site
                       </span>
                     )}
                   </div>
 
-                  <h3 className="text-xl font-bold text-white tracking-tight">
+                  <h3 className="text-xl font-extrabold text-[#1E293B] tracking-tight">
                     {theme.name}
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1 line-clamp-2">
-                    Pattern: <span className="text-slate-200 font-mono">{theme.layout.pattern}</span> • Motion:{" "}
-                    <span className="text-slate-200">{theme.tokens.motion.level}</span>
+                  <p className="text-xs text-slate-500 mt-1 line-clamp-2 font-normal">
+                    Pattern: <span className="text-slate-800 font-mono font-bold">{theme.layout.pattern}</span> • Motion:{" "}
+                    <span className="text-slate-800 font-medium">{theme.tokens.motion.level}</span>
                   </p>
                 </div>
 
                 {/* Sandboxed Live Viewport Preview with User's Real Data */}
-                <div className="p-4 bg-slate-950">
-                  <div className="relative rounded-xl border border-white/[0.08] overflow-hidden h-[340px] shadow-inner select-none pointer-events-none transform origin-top scale-[0.98]">
+                <div className="p-4 bg-slate-100">
+                  <div className="relative rounded-2xl border border-slate-200 overflow-hidden h-[340px] shadow-sm select-none pointer-events-none transform origin-top scale-[0.98] bg-white">
                     {/* Viewport Top Bar */}
-                    <div className="bg-slate-900 px-3 py-1.5 border-b border-white/[0.08] flex items-center justify-between text-[10px] font-mono text-slate-400">
+                    <div className="bg-slate-900 px-3 py-1.5 border-b border-slate-800 flex items-center justify-between text-[10px] font-mono text-slate-400">
                       <div className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-red-500/70"></span>
-                        <span className="w-2 h-2 rounded-full bg-amber-500/70"></span>
-                        <span className="w-2 h-2 rounded-full bg-emerald-500/70"></span>
+                        <span className="w-2 h-2 rounded-full bg-red-500/90"></span>
+                        <span className="w-2 h-2 rounded-full bg-amber-500/90"></span>
+                        <span className="w-2 h-2 rounded-full bg-emerald-500/90"></span>
                       </div>
                       <span>folioveda.me/{normalizedContent.name.toLowerCase().replace(/\s+/g, "")}</span>
                     </div>
@@ -324,28 +329,28 @@ export default function StyleGalleryPage() {
                 </div>
 
                 {/* Token Swatches & Features */}
-                <div className="p-5 border-t border-white/[0.08] space-y-4 bg-slate-950/20">
+                <div className="p-5 border-t border-slate-100 space-y-4 bg-white">
                   {/* Palette Swatches */}
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400 font-mono text-[11px]">Palette Tokens:</span>
+                    <span className="text-slate-500 font-semibold text-[11px]">Palette Tokens:</span>
                     <div className="flex items-center gap-1.5">
                       <div
-                        className="w-4 h-4 rounded-full border border-white/20"
+                        className="w-4 h-4 rounded-full border border-slate-300"
                         style={{ backgroundColor: theme.tokens.colors.bg }}
                         title={`Background: ${theme.tokens.colors.bg}`}
                       />
                       <div
-                        className="w-4 h-4 rounded-full border border-white/20"
+                        className="w-4 h-4 rounded-full border border-slate-300"
                         style={{ backgroundColor: theme.tokens.colors.surface }}
                         title={`Surface: ${theme.tokens.colors.surface}`}
                       />
                       <div
-                        className="w-4 h-4 rounded-full border border-white/20"
+                        className="w-4 h-4 rounded-full border border-slate-300"
                         style={{ backgroundColor: theme.tokens.colors.accent }}
                         title={`Accent: ${theme.tokens.colors.accent}`}
                       />
                       <div
-                        className="w-4 h-4 rounded-full border border-white/20"
+                        className="w-4 h-4 rounded-full border border-slate-300"
                         style={{ backgroundColor: theme.tokens.colors.text }}
                         title={`Text: ${theme.tokens.colors.text}`}
                       />
@@ -354,8 +359,8 @@ export default function StyleGalleryPage() {
 
                   {/* Typography Pairing */}
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400 font-mono text-[11px]">Typography:</span>
-                    <span className="text-slate-200 text-[11px] truncate max-w-[160px] font-mono">
+                    <span className="text-slate-500 font-semibold text-[11px]">Typography:</span>
+                    <span className="text-slate-700 text-[11px] truncate max-w-[160px] font-mono font-bold">
                       {theme.tokens.typography.headingWeight}w • {theme.layout.pattern}
                     </span>
                   </div>
@@ -365,17 +370,17 @@ export default function StyleGalleryPage() {
                     <button
                       onClick={() => handleApplyTheme(theme)}
                       disabled={isActive || isApplying}
-                      className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                      className={`flex-1 py-2.5 px-3 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
                         isActive
-                          ? "bg-slate-800 text-slate-500 cursor-default"
+                          ? "bg-slate-100 text-slate-500 cursor-default"
                           : isApplying
-                          ? "bg-emerald-600/70 text-white animate-pulse"
-                          : "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-md shadow-emerald-500/20"
+                          ? "bg-[#991B1B]/80 text-white animate-pulse"
+                          : "bg-[#991B1B] hover:bg-[#7F1D1D] text-white shadow-md shadow-[#991B1B]/20"
                       }`}
                     >
                       {isActive ? (
                         <>
-                          <Check size={13} className="text-emerald-400" /> Active Theme
+                          <Check size={13} className="text-[#991B1B]" /> Active Theme
                         </>
                       ) : isApplying ? (
                         "Applying..."
@@ -387,7 +392,7 @@ export default function StyleGalleryPage() {
                     <Link
                       href={`/p/${usernameSlug}?theme=${theme.id}`}
                       target="_blank"
-                      className="p-2.5 rounded-lg bg-slate-900 border border-white/[0.08] hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"
+                      className="p-2.5 rounded-full bg-slate-100 border border-slate-200 hover:bg-slate-200 text-slate-700 transition-colors"
                       title="Open full-screen preview"
                     >
                       <Eye size={15} />
