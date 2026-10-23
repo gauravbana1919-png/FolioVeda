@@ -27,6 +27,7 @@ import { FolioVedaLogo } from "@/components/ui/Logo";
 import { HangingResumesGallery } from "@/components/portfolio/HangingResumesGallery";
 import { RedBullStyleCommercial } from "@/components/portfolio/RedBullStyleCommercial";
 import { FolioTreeHeroAnimation } from "@/components/portfolio/FolioTreeHeroAnimation";
+import { PlatformGuideSection } from "@/components/portfolio/PlatformGuideSection";
 
 type TemplateCategory = "all" | "creative" | "engineering" | "architecture" | "product";
 
@@ -171,7 +172,8 @@ export default function ColorfulEditorialHomePage() {
             onMouseLeave={() => setHoveredNav(null)}
           >
             {[
-              { id: "story", label: "Why FolioVeda", href: "#career-story", badge: "STORY" },
+              { id: "guide", label: "How It Works", href: "#guide", badge: "GUIDE" },
+              { id: "story", label: "Commercial", href: "#career-story" },
               { id: "resumes", label: "Top Resumes", href: "#top-resumes" },
               { id: "templates", label: "Templates", href: "#templates" },
               { id: "inspiration", label: "Inspiration AI", href: "/inspiration", badge: "AI" },
@@ -329,6 +331,13 @@ export default function ColorfulEditorialHomePage() {
           & Full-Screen Front Page Cover on Hover
           ========================================================================= */}
       <HangingResumesGallery />
+
+
+      {/* =========================================================================
+          INTERACTIVE STEP-BY-STEP PLATFORM GUIDE: Tailored for Indian Audience
+          Walkthrough of All Functions with Manual Arrow & Auto-Play Controls
+          ========================================================================= */}
+      <PlatformGuideSection />
 
 
       {/* =========================================================================
