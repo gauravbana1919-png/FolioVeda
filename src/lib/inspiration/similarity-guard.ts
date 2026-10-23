@@ -111,10 +111,25 @@ export function enforceSimilarityGuard(
   }
 
   // Push design further away:
-  // 1. Shift accent color toward FolioVeda Cyber Mint (#10B981) or Emerald Anchor (#047857)
-  const safeAccent = theme.tokens.colors.accent === "#10B981" ? "#047857" : "#10B981";
+  // 1. Shift accent color toward distinct FolioVeda hue
+  const safeAccent = theme.tokens.colors.accent === "#10B981" ? "#0284C7" : "#10B981";
 
-  // 2. Adjust density
+  // 2. Modulate background tone to FolioVeda slate canvas
+  const safeBg =
+    theme.tokens.colors.bg === "#000000" || theme.tokens.colors.bg === "#09090B"
+      ? "#0F172A"
+      : theme.tokens.colors.bg;
+
+  // 3. Diversify layout pattern to a distinct original variant if identical to source
+  let safePattern = theme.layout.pattern;
+  if (safePattern === sourceProfile.layoutPattern) {
+    if (safePattern === "poster") safePattern = "split-hero";
+    else if (safePattern === "terminal-grid") safePattern = "split-hero";
+    else if (safePattern === "centered-editorial") safePattern = "case-study";
+    else safePattern = "poster";
+  }
+
+  // 4. Adjust density
   const safeDensity = theme.tokens.spacing.density === "compact" ? "comfortable" : "spacious";
 
   const adjustedTheme: ThemePackage = {
@@ -124,6 +139,7 @@ export function enforceSimilarityGuard(
       ...theme.tokens,
       colors: {
         ...theme.tokens.colors,
+        bg: safeBg,
         accent: safeAccent,
         accentHover: safeAccent,
       },
@@ -131,6 +147,10 @@ export function enforceSimilarityGuard(
         ...theme.tokens.spacing,
         density: safeDensity,
       },
+    },
+    layout: {
+      ...theme.layout,
+      pattern: safePattern,
     },
   };
 
