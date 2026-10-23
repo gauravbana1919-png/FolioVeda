@@ -15,7 +15,10 @@ import {
   Layers,
   CheckCircle2,
   Share2,
-  ArrowRight
+  ArrowRight,
+  Maximize2,
+  X,
+  Image as ImageIcon
 } from "lucide-react";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import { getAllSystemThemes, mapUserToPortfolioContent } from "@/lib/themes/registry";
@@ -30,6 +33,15 @@ export default function StyleGalleryPage() {
   const [selectedMood, setSelectedMood] = useState<string>("all");
   const [applyingThemeId, setApplyingThemeId] = useState<string | null>(null);
   const [appliedToast, setAppliedToast] = useState<{ name: string; url: string } | null>(null);
+  const [viewModes, setViewModes] = useState<Record<string, "pin" | "sandbox">>({});
+  const [lightboxPin, setLightboxPin] = useState<{
+    name: string;
+    category: string;
+    mood: string;
+    image: string;
+    pinterestUrl?: string;
+    title?: string;
+  } | null>(null);
 
   // Load user data on mount
   useEffect(() => {
@@ -180,13 +192,36 @@ export default function StyleGalleryPage() {
             <div className="absolute top-0 right-0 w-48 h-48 bg-red-500/5 rounded-full blur-2xl pointer-events-none" />
 
             <div className="flex items-start gap-4">
-              <div className="p-3 rounded-2xl bg-red-50 border border-red-200 text-[#991B1B] mt-0.5">
-                <Sparkles size={24} />
-              </div>
+              {topPick.theme.previewImage ? (
+                <div 
+                  onClick={() => setLightboxPin({
+                    name: topPick.theme.name,
+                    category: topPick.theme.category,
+                    mood: topPick.theme.mood,
+                    image: topPick.theme.previewImage!,
+                    pinterestUrl: topPick.theme.pinterestUrl,
+                    title: topPick.theme.inspirationTitle,
+                  })}
+                  className="w-20 h-24 rounded-2xl overflow-hidden shrink-0 border-2 border-red-200 shadow-sm cursor-pointer hover:scale-105 transition-transform relative group"
+                >
+                  <img
+                    src={topPick.theme.previewImage}
+                    alt={topPick.theme.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                    <Maximize2 size={16} />
+                  </div>
+                </div>
+              ) : (
+                <div className="p-3 rounded-2xl bg-red-50 border border-red-200 text-[#991B1B] mt-0.5">
+                  <Sparkles size={24} />
+                </div>
+              )}
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#991B1B]">
-                    Recommended Match
+                    Recommended Match ({topPick.theme.category} • {topPick.theme.mood})
                   </span>
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#991B1B] text-white">
                     TOP MATCH ({topPick.score}%)
@@ -198,6 +233,17 @@ export default function StyleGalleryPage() {
                 <p className="text-xs text-slate-600 mt-1 max-w-2xl leading-relaxed font-normal">
                   {topPick.reason}
                 </p>
+                {topPick.theme.pinterestUrl && (
+                  <a
+                    href={topPick.theme.pinterestUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#991B1B] hover:text-[#7F1D1D] mt-2 underline"
+                  >
+                    <span>View Curated Pinterest Pin Source</span>
+                    <ExternalLink size={11} />
+                  </a>
+                )}
               </div>
             </div>
 
@@ -217,6 +263,69 @@ export default function StyleGalleryPage() {
           </div>
         )}
 
+        {/* Quick-Select Curated Pinterest Blueprints Bar */}
+        <div className="mb-6 p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+          <div className="flex items-center justify-between gap-3 mb-2.5">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#991B1B] animate-pulse" />
+              <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                Curated Pinterest Design Blueprints:
+              </span>
+            </div>
+            <span className="text-[11px] text-slate-500 hidden sm:inline">
+              Click any style to filter instantly
+            </span>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {[
+              { label: "tech • formal", category: "tech", mood: "formal", themeId: "developer-terminal" },
+              { label: "design • calm", category: "design", mood: "calm", themeId: "minimal-editorial" },
+              { label: "creative • bold", category: "creative", mood: "bold", themeId: "bold-poster" },
+              { label: "business • formal", category: "business", mood: "formal", themeId: "corporate-clean" },
+              { label: "creative • playful", category: "creative", mood: "playful", themeId: "creative-collage" },
+              { label: "design • formal", category: "design", mood: "formal", themeId: "case-study-heavy" },
+              { label: "tech • bold", category: "tech", mood: "bold", themeId: "dark-showcase" },
+            ].map((preset) => {
+              const isMatch = selectedCategory === preset.category && selectedMood === preset.mood;
+              return (
+                <button
+                  key={preset.label}
+                  onClick={() => {
+                    if (isMatch) {
+                      setSelectedCategory("all");
+                      setSelectedMood("all");
+                    } else {
+                      setSelectedCategory(preset.category);
+                      setSelectedMood(preset.mood);
+                    }
+                  }}
+                  className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                    isMatch
+                      ? "bg-[#991B1B] text-white shadow-xs"
+                      : "bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-[#991B1B] border border-slate-200"
+                  }`}
+                >
+                  <span className={isMatch ? "text-white" : "text-[#991B1B]"}>•</span>
+                  <span>{preset.label}</span>
+                </button>
+              );
+            })}
+            
+            {(selectedCategory !== "all" || selectedMood !== "all") && (
+              <button
+                onClick={() => {
+                  setSelectedCategory("all");
+                  setSelectedMood("all");
+                }}
+                className="px-3 py-1.5 rounded-full text-xs font-bold text-slate-500 hover:text-slate-900 bg-slate-50 border border-slate-200 transition-colors"
+              >
+                Clear Filters
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Filter Controls Bar */}
         <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-slate-200">
           {/* Category Filter */}
@@ -226,6 +335,7 @@ export default function StyleGalleryPage() {
               { id: "all", label: "All Styles" },
               { id: "tech", label: "Tech / Engineering" },
               { id: "design", label: "Product & Design" },
+              { id: "business", label: "Business & Executive" },
               { id: "creative", label: "Creative & Poster" },
             ].map((cat) => (
               <button
@@ -250,6 +360,7 @@ export default function StyleGalleryPage() {
               { id: "formal", label: "Formal" },
               { id: "calm", label: "Calm" },
               { id: "bold", label: "Bold" },
+              { id: "playful", label: "Playful" },
             ].map((m) => (
               <button
                 key={m.id}
@@ -271,6 +382,7 @@ export default function StyleGalleryPage() {
           {filteredThemes.map((theme) => {
             const isActive = activeThemeId === theme.id;
             const isApplying = applyingThemeId === theme.id;
+            const currentMode = viewModes[theme.id] || (theme.previewImage ? "pin" : "sandbox");
 
             return (
               <div
@@ -284,48 +396,142 @@ export default function StyleGalleryPage() {
                 {/* Theme Header Info */}
                 <div className="p-5 border-b border-slate-100 bg-slate-50/70">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#991B1B]">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#991B1B] bg-red-50 border border-red-200/80 px-2.5 py-0.5 rounded-full">
                       {theme.category} • {theme.mood}
                     </span>
-                    {isActive && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-50 border border-red-200 text-[#991B1B] text-[10px] font-bold">
-                        <Check size={10} /> Active On Live Site
-                      </span>
-                    )}
+                    <div className="flex items-center gap-1.5">
+                      {theme.pinterestUrl && (
+                        <a
+                          href={theme.pinterestUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-[10px] font-bold text-red-700 hover:text-white bg-red-50 hover:bg-[#991B1B] border border-red-200 px-2 py-0.5 rounded-full transition-all"
+                          title="Open original Pinterest inspiration"
+                        >
+                          <span>Pinterest</span>
+                          <ExternalLink size={9} />
+                        </a>
+                      )}
+                      {isActive && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold">
+                          <Check size={10} /> Active
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <h3 className="text-xl font-extrabold text-[#1E293B] tracking-tight">
                     {theme.name}
                   </h3>
                   <p className="text-xs text-slate-500 mt-1 line-clamp-2 font-normal">
-                    Pattern: <span className="text-slate-800 font-mono font-bold">{theme.layout.pattern}</span> • Motion:{" "}
-                    <span className="text-slate-800 font-medium">{theme.tokens.motion.level}</span>
+                    {theme.inspirationTitle ? (
+                      <span className="text-slate-700 font-medium">{theme.inspirationTitle}</span>
+                    ) : (
+                      <>
+                        Pattern: <span className="text-slate-800 font-mono font-bold">{theme.layout.pattern}</span> • Motion:{" "}
+                        <span className="text-slate-800 font-medium">{theme.tokens.motion.level}</span>
+                      </>
+                    )}
                   </p>
+
+                  {/* Mode Switcher: Pinterest Design Pin vs Live Sandbox */}
+                  <div className="mt-3 flex items-center gap-1.5 p-1 bg-slate-200/70 rounded-xl text-[11px] font-bold">
+                    <button
+                      onClick={() => setViewModes((prev) => ({ ...prev, [theme.id]: "pin" }))}
+                      disabled={!theme.previewImage}
+                      className={`flex-1 py-1 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                        currentMode === "pin"
+                          ? "bg-white text-slate-900 shadow-2xs font-extrabold"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      <ImageIcon size={12} className={currentMode === "pin" ? "text-[#991B1B]" : ""} />
+                      <span>Design Blueprint</span>
+                    </button>
+                    <button
+                      onClick={() => setViewModes((prev) => ({ ...prev, [theme.id]: "sandbox" }))}
+                      className={`flex-1 py-1 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                        currentMode === "sandbox"
+                          ? "bg-white text-slate-900 shadow-2xs font-extrabold"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      <Code2 size={12} className={currentMode === "sandbox" ? "text-[#991B1B]" : ""} />
+                      <span>Live Sandbox</span>
+                    </button>
+                  </div>
                 </div>
 
-                {/* Sandboxed Live Viewport Preview with User's Real Data */}
+                {/* Visual Viewport: Either Pinterest Pin Image or Sandbox */}
                 <div className="p-4 bg-slate-100">
-                  <div className="relative rounded-2xl border border-slate-200 overflow-hidden h-[340px] shadow-sm select-none pointer-events-none transform origin-top scale-[0.98] bg-white">
-                    {/* Viewport Top Bar */}
-                    <div className="bg-slate-900 px-3 py-1.5 border-b border-slate-800 flex items-center justify-between text-[10px] font-mono text-slate-400">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-red-500/90"></span>
-                        <span className="w-2 h-2 rounded-full bg-amber-500/90"></span>
-                        <span className="w-2 h-2 rounded-full bg-emerald-500/90"></span>
-                      </div>
-                      <span>folioveda.me/{normalizedContent.name.toLowerCase().replace(/\s+/g, "")}</span>
-                    </div>
-
-                    {/* Miniature Theme Viewport */}
-                    <div className="overflow-y-auto h-[305px] text-xs">
-                      <ThemeRenderer
-                        theme={theme}
-                        content={normalizedContent}
-                        isDemo={false}
-                        hideBadge={true}
+                  {currentMode === "pin" && theme.previewImage ? (
+                    <div 
+                      onClick={() => setLightboxPin({
+                        name: theme.name,
+                        category: theme.category,
+                        mood: theme.mood,
+                        image: theme.previewImage!,
+                        pinterestUrl: theme.pinterestUrl,
+                        title: theme.inspirationTitle,
+                      })}
+                      className="relative rounded-2xl border border-slate-200 overflow-hidden h-[340px] shadow-sm group cursor-pointer bg-slate-900"
+                    >
+                      <img
+                        src={theme.previewImage}
+                        alt={`${theme.name} design blueprint`}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
+                      {/* Gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                      
+                      {/* Top badge */}
+                      <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                        <span className="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-mono uppercase tracking-wider border border-white/20">
+                          {theme.category} • {theme.mood}
+                        </span>
+                      </div>
+
+                      {/* Expand action pill */}
+                      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white text-slate-900 text-[10px] font-bold shadow-md">
+                          <Maximize2 size={11} /> Zoom
+                        </span>
+                      </div>
+
+                      {/* Bottom caption */}
+                      <div className="absolute bottom-3 left-3 right-3 text-white">
+                        <p className="text-xs font-bold truncate drop-shadow-sm">
+                          {theme.inspirationTitle || theme.name}
+                        </p>
+                        <p className="text-[10px] text-slate-300 flex items-center justify-between mt-0.5">
+                          <span>Click to expand design board</span>
+                          <span className="text-red-300 underline font-semibold">Inspect ↗</span>
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="relative rounded-2xl border border-slate-200 overflow-hidden h-[340px] shadow-sm select-none pointer-events-none transform origin-top scale-[0.98] bg-white">
+                      {/* Viewport Top Bar */}
+                      <div className="bg-slate-900 px-3 py-1.5 border-b border-slate-800 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-red-500/90"></span>
+                          <span className="w-2 h-2 rounded-full bg-amber-500/90"></span>
+                          <span className="w-2 h-2 rounded-full bg-emerald-500/90"></span>
+                        </div>
+                        <span>folioveda.me/{normalizedContent.name.toLowerCase().replace(/\s+/g, "")}</span>
+                      </div>
+
+                      {/* Miniature Theme Viewport */}
+                      <div className="overflow-y-auto h-[305px] text-xs">
+                        <ThemeRenderer
+                          theme={theme}
+                          content={normalizedContent}
+                          isDemo={false}
+                          hideBadge={true}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Token Swatches & Features */}
@@ -375,7 +581,7 @@ export default function StyleGalleryPage() {
                           ? "bg-slate-100 text-slate-500 cursor-default"
                           : isApplying
                           ? "bg-[#991B1B]/80 text-white animate-pulse"
-                          : "bg-[#991B1B] hover:bg-[#7F1D1D] text-white shadow-md shadow-[#991B1B]/20"
+                          : "bg-[#991B1B] hover:bg-[#7F1D1D] text-white shadow-md shadow-[#991B1B]/20 cursor-pointer"
                       }`}
                     >
                       {isActive ? (
@@ -393,7 +599,7 @@ export default function StyleGalleryPage() {
                       href={`/p/${usernameSlug}?theme=${theme.id}`}
                       target="_blank"
                       className="p-2.5 rounded-full bg-slate-100 border border-slate-200 hover:bg-slate-200 text-slate-700 transition-colors"
-                      title="Open full-screen preview"
+                      title="Open full-screen live profile preview"
                     >
                       <Eye size={15} />
                     </Link>
@@ -403,6 +609,70 @@ export default function StyleGalleryPage() {
             );
           })}
         </div>
+
+        {/* High-Resolution Design Blueprint Lightbox Modal */}
+        {lightboxPin && (
+          <div 
+            className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
+            onClick={() => setLightboxPin(null)}
+          >
+            <div 
+              className="bg-slate-900 border border-slate-700 rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-hidden flex flex-col shadow-2xl relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+                <div className="flex items-center gap-3">
+                  <span className="px-3 py-1 rounded-full bg-[#991B1B] text-white text-xs font-bold uppercase tracking-wider">
+                    {lightboxPin.category} • {lightboxPin.mood}
+                  </span>
+                  <h3 className="text-base sm:text-lg font-extrabold text-white">
+                    {lightboxPin.name} — Blueprint
+                  </h3>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {lightboxPin.pinterestUrl && (
+                    <a
+                      href={lightboxPin.pinterestUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors"
+                    >
+                      <span>Open Pinterest Pin</span>
+                      <ExternalLink size={12} />
+                    </a>
+                  )}
+                  <button
+                    onClick={() => setLightboxPin(null)}
+                    className="p-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal Body / Image Viewer */}
+              <div className="p-4 sm:p-6 overflow-y-auto flex items-center justify-center bg-black/40">
+                <img
+                  src={lightboxPin.image}
+                  alt={lightboxPin.name}
+                  className="max-h-[75vh] w-auto object-contain rounded-2xl border border-slate-800 shadow-2xl"
+                />
+              </div>
+
+              {/* Modal Footer */}
+              <div className="px-6 py-3 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between text-xs text-slate-400">
+                <p className="truncate max-w-xl font-medium">
+                  {lightboxPin.title || "Curated Portfolio Architectural Blueprint"}
+                </p>
+                <span className="font-mono text-[11px] text-slate-500">
+                  FolioVeda Style Matrix
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

@@ -5,6 +5,9 @@ export const creativeCollageTheme: ThemePackage = {
   name: "Creative Collage",
   category: "creative",
   mood: "playful",
+  previewImage: "/images/styles/creative-playful.jpg",
+  pinterestUrl: "https://in.pinterest.com/pin/677088125275224567/",
+  inspirationTitle: "Motion Graphics & Playful Card Dynamics",
   isSystem: true,
   tokens: {
     colors: {

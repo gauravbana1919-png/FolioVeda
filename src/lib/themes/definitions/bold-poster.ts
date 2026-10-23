@@ -5,6 +5,9 @@ export const boldPosterTheme: ThemePackage = {
   name: "Bold Poster",
   category: "creative",
   mood: "bold",
+  previewImage: "/images/styles/creative-bold.jpg",
+  pinterestUrl: "https://in.pinterest.com/pin/1055742337658502355/",
+  inspirationTitle: "Great Design Speaks Louder Than Words",
   isSystem: true,
   tokens: {
     colors: {

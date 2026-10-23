@@ -37,6 +37,9 @@ interface TemplateShowcase {
   name: string;
   category: TemplateCategory;
   categoryLabel: string;
+  styleTag?: string; // e.g. "tech • formal", "design • calm", etc.
+  pinterestUrl?: string;
+  image?: string;
   title: string;
   description: string;
   fonts: string;
@@ -50,9 +53,12 @@ interface TemplateShowcase {
 const TEMPLATES: TemplateShowcase[] = [
   {
     id: "minimal-editorial",
-    name: "Cami",
+    name: "Minimal Editorial",
     category: "creative",
     categoryLabel: "Editorial & Design",
+    styleTag: "design • calm",
+    pinterestUrl: "https://in.pinterest.com/pin/1138003399621985780/",
+    image: "/images/styles/design-calm.jpg",
     title: "Elena Vance — Spatial & Brand Monograph",
     description: "Refined headlines, generous white space, and asymmetric visual rhythm.",
     fonts: "Plus Jakarta Sans + Newsreader Display",
@@ -64,9 +70,12 @@ const TEMPLATES: TemplateShowcase[] = [
   },
   {
     id: "developer-terminal",
-    name: "Kester",
+    name: "Developer Terminal",
     category: "engineering",
     categoryLabel: "Systems & Engineering",
+    styleTag: "tech • formal",
+    pinterestUrl: "https://in.pinterest.com/pin/937452478704956169/",
+    image: "/images/styles/tech-formal.jpg",
     title: "Alex Rivera — Distributed Systems Engineer",
     description: "Monospace prompt, real git commit hashes, and verified throughput metrics.",
     fonts: "JetBrains Mono + Plus Jakarta Sans",
@@ -78,9 +87,12 @@ const TEMPLATES: TemplateShowcase[] = [
   },
   {
     id: "creative-collage",
-    name: "Reseda",
+    name: "Creative Collage",
     category: "architecture",
     categoryLabel: "Spatial & Architecture",
+    styleTag: "creative • playful",
+    pinterestUrl: "https://in.pinterest.com/pin/677088125275224567/",
+    image: "/images/styles/creative-playful.jpg",
     title: "Studio Ortiz — Architectural Practices",
     description: "Monumental typography, full-bleed imagery grids, and tactile project cards.",
     fonts: "Plus Jakarta Sans Bold + Syne",
@@ -92,9 +104,12 @@ const TEMPLATES: TemplateShowcase[] = [
   },
   {
     id: "case-study-heavy",
-    name: "Nolan",
+    name: "Case-Study Heavy",
     category: "product",
     categoryLabel: "Product & Strategy",
+    styleTag: "design • formal",
+    pinterestUrl: "https://in.pinterest.com/pin/628955904245390485/",
+    image: "/images/styles/design-formal.jpg",
     title: "Marcus Vance — Principal Product Lead",
     description: "Problem-Approach-Outcome cards with verified business metrics and telemetry.",
     fonts: "Plus Jakarta Sans Bold + Inter",
@@ -106,9 +121,12 @@ const TEMPLATES: TemplateShowcase[] = [
   },
   {
     id: "bold-poster",
-    name: "Verve",
+    name: "Bold Poster",
     category: "creative",
     categoryLabel: "High-Energy Poster",
+    styleTag: "creative • bold",
+    pinterestUrl: "https://in.pinterest.com/pin/1055742337658502355/",
+    image: "/images/styles/creative-bold.jpg",
     title: "Kai Tanaka — Creative Technologist",
     description: "Brutalist grid borders, vibrant crimson tags, and bold display headers.",
     fonts: "Plus Jakarta Sans Heavy + JetBrains Mono",
@@ -117,6 +135,40 @@ const TEMPLATES: TemplateShowcase[] = [
     badgeText: "text-rose-700",
     previewType: "poster",
     tags: ["Brutalist", "High-Energy", "Experimental"],
+  },
+  {
+    id: "corporate-clean",
+    name: "Corporate Clean",
+    category: "product",
+    categoryLabel: "Executive & Business",
+    styleTag: "business • formal",
+    pinterestUrl: "https://in.pinterest.com/pin/1097963584193800356/",
+    image: "/images/styles/business-formal.jpg",
+    title: "Conicorn — Executive Solutions Portfolio",
+    description: "Clean enterprise typography, structured case sections, and verified outcome telemetry.",
+    fonts: "Plus Jakarta Sans Bold + Inter",
+    accentColor: "#0284C7",
+    badgeBg: "bg-sky-50 border-sky-200",
+    badgeText: "text-sky-700",
+    previewType: "strategy",
+    tags: ["Executive", "Enterprise", "Corporate"],
+  },
+  {
+    id: "dark-showcase",
+    name: "Dark Showcase",
+    category: "engineering",
+    categoryLabel: "Dark Engineering & Cyber",
+    styleTag: "tech • bold",
+    pinterestUrl: "https://in.pinterest.com/pin/970525788470144809/",
+    image: "/images/styles/tech-bold.jpg",
+    title: "Nexus Cyber Interface & Cloud Systems",
+    description: "Ultra-dark high-contrast cyber theme with carousel cards and system telemetry.",
+    fonts: "Plus Jakarta Sans + JetBrains Mono",
+    accentColor: "#06B6D4",
+    badgeBg: "bg-cyan-50 border-cyan-200",
+    badgeText: "text-cyan-700",
+    previewType: "terminal",
+    tags: ["Cyber", "Dark Theme", "Interactive Carousel"],
   },
 ];
 
@@ -408,8 +460,23 @@ export default function ColorfulEditorialHomePage() {
               <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
               <span className="ml-4 text-xs text-slate-500 font-mono hidden sm:inline">
-                https://folioveda.me/{currentTemplate.name.toLowerCase()}
+                https://folioveda.me/{currentTemplate.name.toLowerCase().replace(/\s+/g, "")}
               </span>
+              {currentTemplate.styleTag && (
+                <span className="ml-2 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-red-50 text-[#991B1B] border border-red-200">
+                  {currentTemplate.styleTag}
+                </span>
+              )}
+              {currentTemplate.pinterestUrl && (
+                <a
+                  href={currentTemplate.pinterestUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden md:inline-flex items-center gap-1 text-[11px] font-bold text-red-700 hover:text-[#991B1B] underline ml-1"
+                >
+                  <span>Pinterest Blueprint ↗</span>
+                </a>
+              )}
             </div>
 
             <div className="flex items-center gap-3 text-xs">
@@ -670,13 +737,20 @@ export default function ColorfulEditorialHomePage() {
                   <button
                     key={t.id}
                     onClick={() => setSelectedTemplate(t.id)}
-                    className={`px-3 py-1 rounded-full font-bold transition ${
+                    className={`px-3 py-1 rounded-full font-bold transition flex items-center gap-1.5 cursor-pointer ${
                       selectedTemplate === t.id
                         ? "bg-[#991B1B] text-white shadow-xs"
                         : "bg-white text-slate-600 hover:text-[#1E293B] border border-slate-200"
                     }`}
                   >
-                    {t.name} ({t.categoryLabel})
+                    <span>{t.name}</span>
+                    {t.styleTag && (
+                      <span className={`text-[10px] uppercase font-mono px-1.5 py-0.5 rounded ${
+                        selectedTemplate === t.id ? "bg-red-950/40 text-red-100" : "bg-slate-100 text-slate-500"
+                      }`}>
+                        {t.styleTag}
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
