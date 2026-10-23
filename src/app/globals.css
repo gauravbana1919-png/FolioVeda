@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-studio-alabaster: #FAFAF9;
-  --color-deep-slate: #111827;
+  --color-studio-alabaster: #F8F9FA;
+  --color-deep-slate: #1E293B;
   --color-industrial-crimson: #991B1B;
   --color-industrial-crimson-hover: #7F1D1D;
   --color-background: var(--background);
@@ -18,13 +18,13 @@
 }
 
 :root {
-  --background: #FAFAF9;
-  --foreground: #111827;
-  --primary: #111827;
-  --secondary: #F3F4F6;
-  --muted: #F9FAFB;
-  --muted-foreground: #6B7280;
-  --border: #E5E7EB;
+  --background: #F8F9FA;
+  --foreground: #1E293B;
+  --primary: #991B1B;
+  --secondary: #F1F5F9;
+  --muted: #F8FAFC;
+  --muted-foreground: #64748B;
+  --border: #E2E8F0;
 }
 
 body {
@@ -49,4 +49,60 @@ body {
   font-family: var(--font-serif-display), "Newsreader", "Georgia", serif;
   font-style: italic;
   font-weight: 300;
+}
+
+/* Rich Animations & Glow Effects */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(153, 27, 27, 0.25), 0 0 30px rgba(153, 27, 27, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(153, 27, 27, 0.45), 0 0 50px rgba(153, 27, 27, 0.2);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes floatGentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes shimmerEffect {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s infinite ease-in-out;
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease infinite;
+}
+
+.animate-float {
+  animation: floatGentle 4s ease-in-out infinite;
+}
+
+.shimmer-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: skewX(-20deg);
+  animation: shimmerEffect 4s infinite;
 }
