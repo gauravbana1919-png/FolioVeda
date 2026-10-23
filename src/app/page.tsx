@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import {
   ArrowRight,
   Check,
@@ -29,7 +29,6 @@ import { HangingResumesGallery } from "@/components/portfolio/HangingResumesGall
 import { RedBullStyleCommercial } from "@/components/portfolio/RedBullStyleCommercial";
 import { FolioTreeHeroAnimation } from "@/components/portfolio/FolioTreeHeroAnimation";
 import { PlatformGuideSection } from "@/components/portfolio/PlatformGuideSection";
-import { SignInModal } from "@/components/auth/SignInModal";
 
 type TemplateCategory = "all" | "creative" | "engineering" | "architecture" | "product";
 
@@ -123,7 +122,6 @@ const TEMPLATES: TemplateShowcase[] = [
 
 export default function ColorfulEditorialHomePage() {
   const { data: session, status } = useSession();
-  const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<TemplateCategory>("all");
   const [selectedTemplate, setSelectedTemplate] = useState<string>("minimal-editorial");
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
@@ -212,40 +210,28 @@ export default function ColorfulEditorialHomePage() {
 
           {/* Right: Operational Status & Animated Shimmer CTA */}
           <div className="flex items-center gap-3 sm:gap-4">
-            {status === "authenticated" && session?.user ? (
-              <div className="flex items-center gap-3">
+            {status === "authenticated" ? (
+              <div className="flex items-center gap-2.5">
                 <Link
                   href="/dashboard"
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-800 transition-all shadow-2xs group"
+                  className="text-xs font-bold text-slate-700 hover:text-[#991B1B] px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200/80 transition-all border border-slate-200 hidden sm:inline-block shadow-2xs"
                 >
-                  {session.user.image ? (
-                    <img
-                      src={session.user.image}
-                      alt={session.user.name || "User"}
-                      className="w-5 h-5 rounded-full object-cover border border-slate-300"
-                    />
-                  ) : (
-                    <div className="w-5 h-5 rounded-full bg-[#1E293B] text-white flex items-center justify-center text-[10px] font-bold">
-                      {session.user.name?.[0] || "U"}
-                    </div>
-                  )}
-                  <span className="hidden sm:inline max-w-[120px] truncate text-slate-700 group-hover:text-[#991B1B]">
-                    {session.user.name?.split(" ")[0] || "Dashboard"}
-                  </span>
+                  Dashboard
                 </Link>
 
                 <button
+                  id="navbar-signout-button"
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="text-xs font-bold text-slate-500 hover:text-[#991B1B] transition-colors cursor-pointer hidden sm:inline"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-white px-4 py-2 rounded-full bg-white hover:bg-[#991B1B] border border-slate-200 hover:border-[#991B1B] shadow-2xs transition-all cursor-pointer"
                 >
-                  Sign Out
+                  <span>Sign Out</span>
                 </button>
               </div>
             ) : (
               <button
                 id="navbar-signin-button"
-                onClick={() => setIsSignInOpen(true)}
-                className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#991B1B] px-3.5 py-1.5 rounded-full bg-white/80 hover:bg-red-50/80 border border-slate-200 hover:border-red-200 shadow-2xs transition-all cursor-pointer group"
+                onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+                className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#991B1B] px-4 py-2 rounded-full bg-white hover:bg-red-50/80 border border-slate-200 hover:border-red-200 shadow-2xs transition-all cursor-pointer group"
               >
                 <svg className="w-3.5 h-3.5 shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -1261,7 +1247,7 @@ export default function ColorfulEditorialHomePage() {
                 <li><Link href="/dashboard" className="hover:text-[#991B1B] transition">User Dashboard</Link></li>
                 <li>
                   <button
-                    onClick={() => setIsSignInOpen(true)}
+                    onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
                     className="hover:text-[#991B1B] transition text-left cursor-pointer flex items-center gap-1.5"
                   >
                     <span>Google Sign In</span>
@@ -1309,13 +1295,6 @@ export default function ColorfulEditorialHomePage() {
 
         </div>
       </footer>
-
-      {/* Google Sign In Modal */}
-      <SignInModal
-        isOpen={isSignInOpen}
-        onClose={() => setIsSignInOpen(false)}
-        defaultCallbackUrl="/dashboard"
-      />
 
     </div>
   );

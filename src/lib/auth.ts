@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
               data: {
                 email,
                 name,
-                image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+                image: null,
                 consentGiven: true,
                 projects: {
                   create: [
@@ -99,7 +99,7 @@ export const authOptions: NextAuthOptions = {
             id: 'demo-user-id',
             email,
             name,
-            image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+            image: null,
           };
         }
       },
