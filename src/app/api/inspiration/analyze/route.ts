@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     // 4. Abstract Style Profile Extraction (Strictly mathematical design tokens; zero content/assets stored)
     const styleProfile = extractAbstractStyleProfile(fetchResult.htmlSnippet, url);
 
-    // 5. Audit Logging for Abuse Prevention & Compliance
+    // 5. Audit Logging & Abuse Controls
     let userId: string | null = null;
     if (session?.user?.email) {
       const user = await prisma.user.findUnique({
@@ -51,6 +51,22 @@ export async function POST(req: Request) {
         select: { id: true },
       });
       if (user) userId = user.id;
+    }
+
+    // Rate-limiting check to block automated scraping/abuse (max 10 in 10 mins)
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    const recentCount = await prisma.inspirationRequest.count({
+      where: {
+        createdAt: { gte: tenMinutesAgo },
+        ...(userId ? { userId } : {}),
+      },
+    });
+
+    if (recentCount >= 15) {
+      return NextResponse.json(
+        { error: "Rate limit exceeded. Maximum 15 inspiration analyses allowed per 10 minutes." },
+        { status: 429 }
+      );
     }
 
     const logEntry = await prisma.inspirationRequest.create({

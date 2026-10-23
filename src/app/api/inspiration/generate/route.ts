@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { InspirationGenerateInputSchema, StyleProfileSchema } from "@/types/inspiration";
 import { generateThemeFromStyleProfile } from "@/lib/inspiration/theme-generator";
+import { enforceSimilarityGuard } from "@/lib/inspiration/similarity-guard";
 
 export async function POST(req: Request) {
   try {
@@ -51,7 +52,10 @@ export async function POST(req: Request) {
     }
 
     // Generate custom ThemePackage with modulated closeness
-    const generatedTheme = generateThemeFromStyleProfile(validProfile, closeness, userId);
+    const baseTheme = generateThemeFromStyleProfile(validProfile, closeness, userId);
+
+    // Enforce Similarity Guard (guarantees originality under 0.78 threshold)
+    const { theme: finalTheme, similarity } = enforceSimilarityGuard(validProfile, baseTheme);
 
     // Update InspirationRequest in DB
     await prisma.inspirationRequest.update({
@@ -59,14 +63,17 @@ export async function POST(req: Request) {
       data: {
         status: "generated",
         closeness,
-        generatedTheme: JSON.stringify(generatedTheme),
+        generatedTheme: JSON.stringify(finalTheme),
+        similarityScore: similarity.overallScore,
+        isFlagged: similarity.adjustmentApplied,
       },
     });
 
     return NextResponse.json({
       success: true,
       closeness,
-      theme: generatedTheme,
+      theme: finalTheme,
+      similarity,
       notice: "Original theme package synthesized from abstract traits. Zero proprietary code or assets stored.",
     });
   } catch (error: any) {
