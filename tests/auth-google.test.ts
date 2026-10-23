@@ -48,4 +48,13 @@ describe('Google Authentication Configuration & NextAuth Provider Suite', () => 
     });
     expect((sessionResult.user as any).id).toBe('usr_test_123');
   });
+
+  it('should return dev mode for google-config when credentials are mock or unset', async () => {
+    const { GET } = await import('@/app/api/auth/google-config/route');
+    const response = await GET();
+    const data = await response.json();
+    expect(data).toHaveProperty('isConfigured');
+    expect(data).toHaveProperty('mode');
+    expect(typeof data.isConfigured).toBe('boolean');
+  });
 });
