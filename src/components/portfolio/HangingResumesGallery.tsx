@@ -32,6 +32,9 @@ export interface ResumeShowcaseItem {
   threadOffset: string; // horizontal offset for aesthetic distribution
   accentColor: string;
   cardBg: string;
+  image: string; // Pinterest portfolio image
+  pinterestUrl: string; // Exact Pinterest pin URL
+  pinterestTitle: string; // Original Pin Title
   metrics: { label: string; value: string }[];
   summary: string;
   skills: string[];
@@ -61,24 +64,189 @@ export interface ResumeShowcaseItem {
 
 const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
   {
+    id: "elena-vance",
+    name: "Elena Vance",
+    role: "Brand & Web Designer",
+    category: "creative",
+    categoryLabel: "Brand & Editorial Design",
+    avatarText: "EV",
+    badge: "Pentagram Fellow • Cannes Grand Prix",
+    threadLength: 90,
+    threadOffset: "top-4",
+    accentColor: "#991B1B",
+    cardBg: "from-white to-rose-50/50",
+    image: "/images/portfolios/portfolio-1.jpg",
+    pinterestUrl: "https://in.pinterest.com/pin/1033787289507431391/",
+    pinterestTitle: "Personal Portfolio Website Design | Brand & Web Designer Homepage Inspo",
+    metrics: [
+      { label: "Design Awards", value: "24 Cannes & D&AD" },
+      { label: "Type Precision", value: "100% Bespoke" },
+      { label: "Spatial Systems", value: "12 Global Sites" },
+    ],
+    summary: "Crafting timeless, high-whitespace spatial environments, brand design monographs, and serene corporate identity systems.",
+    skills: ["Brand Architecture", "Editorial Typography", "Homepage Layouts", "Spatial Design", "Figma", "Art Direction"],
+    experience: [
+      {
+        role: "Design Director & Spatial Lead",
+        company: "Pentagram",
+        period: "2021 — Present",
+        description: "Led holistic spatial rebrand and museum identity for Kamakura Architectural Pavilion and Nordic Heritage Institute.",
+        metrics: "Honored with Cannes Design Grand Prix and Awwwards Annual Trophy."
+      },
+      {
+        role: "Senior Visual Designer",
+        company: "Apple Design Studio",
+        period: "2018 — 2021",
+        description: "Engineered typographic scaling systems for spatial computing interfaces and editorial hardware keynotes.",
+        metrics: "Filed 4 design patents on dynamic optical font weight interpolation."
+      }
+    ],
+    education: {
+      degree: "Bachelor of Fine Arts (Graphic & Spatial Design)",
+      school: "Rhode Island School of Design (RISD)",
+      year: "2014 — 2018"
+    },
+    recommendation: {
+      author: "Marcus Lindqvist",
+      title: "Senior Partner, Pentagram New York",
+      quote: "Elena possesses a rare gift for negative space and architectural discipline. Her portfolios convert top-tier museum and enterprise patrons effortlessly."
+    },
+    liveProject: {
+      title: "The Kamakura Monograph",
+      description: "Custom editorial portfolio archive with tactile micro-interactions and dual-grid layout engine.",
+      tag: "Cannes Grand Prix 2024"
+    }
+  },
+  {
+    id: "kaito-tanaka",
+    name: "Kaito Tanaka",
+    role: "Principal UI/UX & Design Systems Lead",
+    category: "design",
+    categoryLabel: "UI/UX & Product Design",
+    avatarText: "KT",
+    badge: "ex-Figma & Linear • Design Systems",
+    threadLength: 125,
+    threadOffset: "top-12",
+    accentColor: "#2563EB",
+    cardBg: "from-white to-blue-50/40",
+    image: "/images/portfolios/portfolio-2.jpg",
+    pinterestUrl: "https://in.pinterest.com/pin/892064638708311034/",
+    pinterestTitle: "Personal Portfolio Website UIUX Design | Portfolio Website | Figma | Web Design",
+    metrics: [
+      { label: "Design Systems", value: "100+ Components" },
+      { label: "Site of the Year", value: "8x Awwwards" },
+      { label: "Conversion Lift", value: "+38% UX Metric" },
+    ],
+    summary: "Synthesizing intuitive UI/UX hierarchies, atomic design tokens, and delightful micro-interactions into world-class digital products.",
+    skills: ["UI/UX Design", "Figma Systems", "Interaction Design", "Prototyping", "Design Tokens", "User Research"],
+    experience: [
+      {
+        role: "Principal UI/UX Architect",
+        company: "Linear",
+        period: "2021 — Present",
+        description: "Designed keyboard-first navigation patterns, fluid command menus, and dark-mode data visualizations.",
+        metrics: "Streamlined task completion speed by 44% across 80,000 engineering teams."
+      },
+      {
+        role: "Senior Design Systems Designer",
+        company: "Figma",
+        period: "2018 — 2021",
+        description: "Created foundational auto-layout tokens, multi-platform component variants, and interactive documentation.",
+        metrics: "Adopted by 4,000+ enterprise design organizations globally."
+      }
+    ],
+    education: {
+      degree: "B.A. in Human-Computer Interaction",
+      school: "Tokyo University of the Arts & Keio HCI",
+      year: "2014 — 2018"
+    },
+    recommendation: {
+      author: "Karri Saarinen",
+      title: "Co-Founder & CEO, Linear",
+      quote: "Kaito builds digital tools that feel like physical precision instruments. His taste in UI/UX architecture is unmatched."
+    },
+    liveProject: {
+      title: "Quantum Design Kit",
+      description: "Complete Figma design system with automated token syncing and dark-mode token transformers.",
+      tag: "Used by 12,000 Designers"
+    }
+  },
+  {
+    id: "marcus-chen",
+    name: "Dr. Marcus Chen",
+    role: "Nova Persona AI Scientist & Webflow Architect",
+    category: "ai",
+    categoryLabel: "Nova Persona & AI Architecture",
+    avatarText: "MC",
+    badge: "DeepMind Fellow • 14 NeurIPS Papers",
+    threadLength: 80,
+    threadOffset: "top-2",
+    accentColor: "#0284C7",
+    cardBg: "from-white to-sky-50/40",
+    image: "/images/portfolios/portfolio-3.jpg",
+    pinterestUrl: "https://in.pinterest.com/pin/924293523540445135/",
+    pinterestTitle: "Nova Persona Website Page Template for Webflow | Personal Web Page Layout",
+    metrics: [
+      { label: "NeurIPS & ICML", value: "14 First-Author" },
+      { label: "Inference Speedup", value: "4.8x Distillation" },
+      { label: "Open Citations", value: "18,400+ Citations" },
+    ],
+    summary: "Architecting parameter-efficient LLM inference, speculative token decoders, and clean minimalist personal academic showcase portfolios.",
+    skills: ["Deep Learning", "Nova Persona", "Webflow", "PyTorch", "CUDA Kernels", "LLM Quantization", "Minimal Design"],
+    experience: [
+      {
+        role: "Staff Research Scientist",
+        company: "Google DeepMind",
+        period: "2021 — Present",
+        description: "Principal investigator on sub-quadratic attention kernels and multi-token speculation frameworks.",
+        metrics: "Delivered 4.8x wall-clock inference speedups for trillion-token production deployments."
+      },
+      {
+        role: "AI Research Scientist",
+        company: "Meta AI (FAIR)",
+        period: "2019 — 2021",
+        description: "Researched sparse mixture-of-experts (MoE) routing algorithms and cross-lingual representation alignment.",
+        metrics: "Published 6 peer-reviewed papers at NeurIPS, ICML, and ICLR."
+      }
+    ],
+    education: {
+      degree: "Ph.D. in Computer Science & Artificial Intelligence",
+      school: "Massachusetts Institute of Technology (MIT)",
+      year: "2015 — 2019"
+    },
+    recommendation: {
+      author: "Prof. Sarah Jenkins",
+      title: "Director of Cognitive Computation, MIT",
+      quote: "Marcus's algorithmic breakthroughs in transformer distillation are fundamental to the future of decentralized edge intelligence."
+    },
+    liveProject: {
+      title: "Nova Persona Academic Template",
+      description: "Clean typography-focused personal portfolio layout engineered for research scientists and technical fellows.",
+      tag: "Adopted by 8 AI Labs"
+    }
+  },
+  {
     id: "alex-rivera",
     name: "Alex Rivera",
     role: "Staff Distributed Systems Engineer",
     category: "engineering",
-    categoryLabel: "Systems & Infrastructure",
+    categoryLabel: "Modern Tech Webflow Engineer",
     avatarText: "AR",
-    badge: "ex-Stripe • 400M Tx/Day",
-    threadLength: 90,
-    threadOffset: "top-4",
+    badge: "ex-Stripe • 400M Events/Day",
+    threadLength: 115,
+    threadOffset: "top-10",
     accentColor: "#10B981",
     cardBg: "from-slate-900 to-slate-950",
+    image: "/images/portfolios/portfolio-4.jpg",
+    pinterestUrl: "https://in.pinterest.com/pin/1106196727238206410/",
+    pinterestTitle: "Technology Black Modern Webflow Website Template | Engineer Portfolio",
     metrics: [
       { label: "Throughput", value: "400M Events/Day" },
       { label: "P99 Latency", value: "11.4 ms" },
       { label: "Verified SLA", value: "99.999%" },
     ],
-    summary: "Architect of mission-critical financial consensus protocols, global payment routers, and high-throughput Kafka streaming pipelines.",
-    skills: ["Go", "Rust", "Kubernetes", "Kafka", "Distributed Systems", "gRPC", "eBPF", "Terraform"],
+    summary: "Architect of mission-critical financial consensus protocols, dark modern engineer portfolios, and high-throughput streaming systems.",
+    skills: ["Go", "Rust", "Modern Webflow", "Kubernetes", "Kafka", "Distributed Systems", "gRPC", "eBPF"],
     experience: [
       {
         role: "Staff Infrastructure Engineer",
@@ -112,126 +280,27 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
     }
   },
   {
-    id: "elena-vance",
-    name: "Elena Vance",
-    role: "Principal Spatial & Brand Architect",
-    category: "design",
-    categoryLabel: "Editorial & Architecture",
-    avatarText: "EV",
-    badge: "Pentagram & Apple • Cannes Grand Prix",
-    threadLength: 130,
-    threadOffset: "top-14",
-    accentColor: "#991B1B",
-    cardBg: "from-white to-rose-50/50",
-    metrics: [
-      { label: "Design Awards", value: "24 Cannes & D&AD" },
-      { label: "Type Precision", value: "100% Bespoke" },
-      { label: "Spatial Systems", value: "12 Global Sites" },
-    ],
-    summary: "Crafting timeless, high-whitespace spatial environments, physical monographs, and serene corporate identity systems.",
-    skills: ["Spatial Design", "Editorial Typography", "Brand Architecture", "Art Direction", "Figma", "Industrial Prototyping"],
-    experience: [
-      {
-        role: "Design Director & Spatial Lead",
-        company: "Pentagram",
-        period: "2021 — Present",
-        description: "Led holistic spatial rebrand and museum identity for Kamakura Architectural Pavilion and Nordic Heritage Institute.",
-        metrics: "Honored with Cannes Design Grand Prix 2024 and Awwwards Annual Trophy."
-      },
-      {
-        role: "Senior Visual Designer",
-        company: "Apple Design Studio",
-        period: "2018 — 2021",
-        description: "Engineered typographic scaling systems for spatial computing interfaces and editorial hardware keynotes.",
-        metrics: "Filed 4 design patents on dynamic optical font weight interpolation."
-      }
-    ],
-    education: {
-      degree: "Bachelor of Fine Arts (Graphic & Spatial Design)",
-      school: "Rhode Island School of Design (RISD)",
-      year: "2014 — 2018"
-    },
-    recommendation: {
-      author: "Marcus Lindqvist",
-      title: "Senior Partner, Pentagram New York",
-      quote: "Elena possesses a rare gift for negative space and architectural discipline. Her portfolios convert top-tier museum and enterprise patrons effortlessly."
-    },
-    liveProject: {
-      title: "The Kamakura Monograph",
-      description: "Complete photographic, typographic, and spatial study of monolithic cedar structures in Kanagawa.",
-      tag: "Exhibited at Venice Biennale"
-    }
-  },
-  {
-    id: "dr-marcus-chen",
-    name: "Dr. Marcus Chen",
-    role: "Lead AI & Neural Architecture Scientist",
-    category: "ai",
-    categoryLabel: "Deep Learning & LLMs",
-    avatarText: "MC",
-    badge: "ex-DeepMind • 14 NeurIPS Papers",
-    threadLength: 75,
-    threadOffset: "top-2",
-    accentColor: "#0284C7",
-    cardBg: "from-slate-900 to-sky-950",
-    metrics: [
-      { label: "Inference Speedup", value: "4.8x on A100" },
-      { label: "NeurIPS / ICLR", value: "14 Citations 3.2k" },
-      { label: "HuggingFace", value: "2.1M Downloads" },
-    ],
-    summary: "Pioneering sparse attention kernels, low-bit quantization, and sub-10ms multimodal transformer inference architectures.",
-    skills: ["PyTorch", "CUDA C++", "Sparse Attention", "LLM Distillation", "TensorRT", "Neural Architecture Search"],
-    experience: [
-      {
-        role: "Staff Research Scientist",
-        company: "Google DeepMind",
-        period: "2021 — Present",
-        description: "Formulated sparse linear attention mechanisms enabling 1M-token context windows at linear compute complexity.",
-        metrics: "Deployed to 400M active mobile endpoints with zero perplexity degradation."
-      },
-      {
-        role: "Postdoctoral Research Fellow",
-        company: "MIT CSAIL",
-        period: "2019 — 2021",
-        description: "Researched hardware-aware neural pruning and sub-4-bit weight activations for on-device inference.",
-        metrics: "Awarded Best Paper at NeurIPS 2020 (Systems & Neural Computation track)."
-      }
-    ],
-    education: {
-      degree: "Ph.D. in Computer Science & Artificial Intelligence",
-      school: "Massachusetts Institute of Technology (MIT)",
-      year: "2015 — 2019"
-    },
-    recommendation: {
-      author: "Prof. Sarah Jenkins",
-      title: "Director of Cognitive Computation, MIT",
-      quote: "Marcus's algorithmic breakthroughs in transformer distillation are fundamental to the future of decentralized edge intelligence."
-    },
-    liveProject: {
-      title: "FlashSparse-Kernel",
-      description: "Open-source Triton/CUDA fused attention kernel outperforming FlashAttention-2 by 28% on extreme sequence lengths.",
-      tag: "Adopted by 8 AI Unicorns"
-    }
-  },
-  {
     id: "sophia-al-mansoor",
     name: "Sophia Al-Mansoor",
     role: "VP of Product & Fintech Growth",
     category: "product",
-    categoryLabel: "Fintech & PLG Scale",
+    categoryLabel: "Framer Business & Services Template",
     avatarText: "SA",
     badge: "ex-Revolut • $0 → $400M ARR",
-    threadLength: 120,
-    threadOffset: "top-12",
+    threadLength: 95,
+    threadOffset: "top-5",
     accentColor: "#D97706",
     cardBg: "from-white to-amber-50/40",
+    image: "/images/portfolios/portfolio-5.jpg",
+    pinterestUrl: "https://in.pinterest.com/pin/883972233114980875/",
+    pinterestTitle: "Modern Responsive Ready-Made Business Website Template for Framer | Services One Page",
     metrics: [
       { label: "ARR Scaled", value: "$400M Global" },
       { label: "Active Users", value: "18M Customers" },
       { label: "Retention D30", value: "78.4% Top Decile" },
     ],
-    summary: "Architecting product-led viral growth loops, automated onboarding engines, and cross-border treasury infrastructure.",
-    skills: ["Product Strategy", "PLG Architecture", "Fintech Compliance", "Unit Economics", "Executive Org Scaling"],
+    summary: "Architecting product-led viral growth loops, modern Framer business sections, and cross-border treasury infrastructure.",
+    skills: ["Product Strategy", "Framer Business Layouts", "PLG Architecture", "Fintech Compliance", "Unit Economics"],
     experience: [
       {
         role: "VP of Product, Global Expansion",
@@ -262,57 +331,6 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
       title: "Borderless Treasury Engine",
       description: "Multi-currency algorithmic liquidity router managing foreign exchange risk in sub-second clearing windows.",
       tag: "$4.2B Monthly Volume"
-    }
-  },
-  {
-    id: "kaito-tanaka",
-    name: "Kaito Tanaka",
-    role: "Senior Creative Director & 3D WebGL Artist",
-    category: "creative",
-    categoryLabel: "Interactive & Spatial Web",
-    avatarText: "KT",
-    badge: "ex-Active Theory • 8x Awwwards SOTY",
-    threadLength: 85,
-    threadOffset: "top-3",
-    accentColor: "#8B5CF6",
-    cardBg: "from-slate-900 to-indigo-950",
-    metrics: [
-      { label: "Site of the Year", value: "8x Awwwards / FWA" },
-      { label: "Framerate", value: "Solid 60fps WebGL" },
-      { label: "Shader Engine", value: "100% Procedural" },
-    ],
-    summary: "Synthesizing custom GLSL shaders, spatial WebAudio acoustics, and cinematic physics into sensory web experiences.",
-    skills: ["Three.js", "WebGL", "GLSL Shaders", "WebAudio API", "Creative Direction", "Blender", "GSAP Physics"],
-    experience: [
-      {
-        role: "Creative Director",
-        company: "Active Theory",
-        period: "2021 — Present",
-        description: "Directed flagship interactive brand spaces for Nike, Sony, and Google I/O showcasing dynamic WebGL volumetric lighting.",
-        metrics: "Won 8 Awwwards Site of the Year trophies and inducted into the FWA Hall of Fame."
-      },
-      {
-        role: "Lead Interactive Shader Artist",
-        company: "Resn",
-        period: "2018 — 2021",
-        description: "Created real-time fluid simulation and physics-based particle systems running in mobile Safari without thermal throttling.",
-        metrics: "Delivered 14M interactive user sessions with an average time-on-page of 4m 12s."
-      }
-    ],
-    education: {
-      degree: "B.A. in Media Arts & Computational Design",
-      school: "Tokyo University of the Arts (Geidai)",
-      year: "2014 — 2018"
-    },
-    recommendation: {
-      author: "Nick Mountford",
-      title: "Managing Director, Active Theory",
-      quote: "Kaito is the rare digital artist who writes mathematics as poetry. His work pushes the boundary of what browser compute can feel like."
-    },
-    liveProject: {
-      title: "Metasphere 3D Interactive Symphony",
-      description: "Audio-reactive procedural particle universe with 3,000,000 GPU particles computed in WebGL compute shaders.",
-      tag: "Grand Awwwards SOTY Winner"
     }
   }
 ];
@@ -391,12 +409,15 @@ export function HangingResumesGallery() {
   return (
     <section 
       ref={sectionRef} 
-      className="relative py-20 px-6 sm:px-10 max-w-7xl mx-auto overflow-hidden select-none"
       id="top-resumes"
+      className="relative py-24 px-4 sm:px-8 max-w-7xl mx-auto overflow-visible select-none"
     >
+      
       {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto mb-14 relative z-10">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#1E293B]/10 text-xs text-[#1E293B] shadow-2xs mb-4">
+      <div className="text-center max-w-3xl mx-auto mb-16 relative z-10">
+        
+        {/* Category Kicker */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#1E293B]/10 shadow-2xs mb-4">
           <span className="w-2 h-2 rounded-full bg-[#991B1B] animate-pulse" />
           <span className="font-extrabold uppercase tracking-wider text-[10px] text-[#991B1B]">
             Interactive Showcase
@@ -413,7 +434,7 @@ export function HangingResumesGallery() {
         </h2>
 
         <p className="text-sm sm:text-base text-slate-600 font-normal max-w-2xl mx-auto leading-relaxed">
-          Scroll down to see them drop into place. Move your cursor to sway their flexible threads. <strong className="text-[#1E293B] font-bold">Hover on any resume</strong> to immediately expand it full-screen on the front page.
+          Scroll down to see them drop into place. Move your cursor to sway their flexible threads. <strong className="text-[#1E293B] font-bold">Hover on any portfolio card</strong> to immediately expand the full design and verified ATS resume on the front page.
         </p>
 
         {/* Reset / Replay Animation Button */}
@@ -423,7 +444,7 @@ export function HangingResumesGallery() {
               setHasFallen(false);
               setTimeout(() => setHasFallen(true), 150);
             }}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-[#991B1B] transition-colors bg-white px-3 py-1 rounded-full border border-slate-200 shadow-2xs"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-[#991B1B] transition-colors bg-white px-3 py-1 rounded-full border border-slate-200 shadow-2xs cursor-pointer"
             title="Replay the drop-down thread animation"
           >
             <RotateCcw size={12} />
@@ -512,16 +533,15 @@ export function HangingResumesGallery() {
                   onMouseMove={(e) => handleCardMouseMove(e, resume.id)}
                   onMouseLeave={() => handleCardMouseLeave(resume.id)}
                   onClick={() => setExpandedResume(resume)}
-                  className={`w-full rounded-3xl bg-white border cursor-pointer relative transition-all duration-300 transform-gpu ${
+                  className={`w-full rounded-3xl bg-white border cursor-pointer relative transition-all duration-300 transform-gpu overflow-hidden ${
                     hasFallen 
                       ? "opacity-100 translate-y-0" 
                       : "opacity-0 -translate-y-48 pointer-events-none"
                   } ${
                     isHovered
-                      ? "border-[#991B1B] shadow-2xl scale-[1.05] z-30 ring-4 ring-[#991B1B]/10"
+                      ? "border-[#991B1B] shadow-2xl scale-[1.05] z-30 ring-4 ring-[#991B1B]/15"
                       : "border-[#1E293B]/10 shadow-lg hover:shadow-xl hover:border-slate-300"
                   } ${
-                    // Add subtle natural pendulum sway when resting
                     hasFallen && !isHovered
                       ? index % 2 === 0 ? "animate-pendulum-slow" : "animate-pendulum-delayed"
                       : ""
@@ -534,45 +554,75 @@ export function HangingResumesGallery() {
                   }}
                 >
                   {/* Card Header Top Accent Tag */}
-                  <div className="p-5 pb-3 border-b border-slate-100 flex items-center justify-between">
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-mono">
+                  <div className="p-4 pb-2.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700 font-mono">
                       0{index + 1} • {resume.categoryLabel}
                     </span>
                     <span className="w-2 h-2 rounded-full bg-[#991B1B] animate-pulse" />
                   </div>
 
+                  {/* Pinterest Visual Portfolio Preview Picture Container */}
+                  <div className="p-3 pb-0">
+                    <div className="relative w-full h-36 sm:h-40 overflow-hidden rounded-2xl bg-slate-100 border border-slate-200 shadow-inner group/thumb">
+                      <img
+                        src={resume.image}
+                        alt={`${resume.name} Portfolio Design Preview`}
+                        className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover/thumb:scale-108"
+                        loading="lazy"
+                      />
+                      {/* Live Template Tag */}
+                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#1E293B]/85 backdrop-blur-md text-white text-[9px] font-bold tracking-wider uppercase flex items-center gap-1 shadow-xs pointer-events-none">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>Live Template</span>
+                      </div>
+                      {/* Direct Pinterest Pin Link Icon */}
+                      <a
+                        href={resume.pinterestUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="absolute top-2 right-2 p-1.5 rounded-full bg-white/95 hover:bg-white text-[#E60023] shadow-md hover:scale-115 transition-all flex items-center justify-center cursor-pointer"
+                        title="View original Pinterest Pin"
+                      >
+                        <svg className="w-3.5 h-3.5 fill-[#E60023]" viewBox="0 0 24 24">
+                          <path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345-.09.375-.291 1.199-.33 1.365-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+
                   {/* Card Body */}
-                  <div className="p-5 space-y-4">
+                  <div className="p-4 space-y-3.5">
                     
                     {/* Avatar & Name */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2.5">
                       <div 
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center font-extrabold text-white text-sm shadow-md"
+                        className="w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-white text-xs shadow-sm shrink-0"
                         style={{ backgroundColor: resume.accentColor }}
                       >
                         {resume.avatarText}
                       </div>
-                      <div>
-                        <h3 className="font-extrabold text-base text-[#1E293B] leading-tight group-hover:text-[#991B1B] transition-colors">
+                      <div className="min-w-0">
+                        <h3 className="font-extrabold text-sm text-[#1E293B] leading-tight truncate group-hover:text-[#991B1B] transition-colors">
                           {resume.name}
                         </h3>
-                        <p className="text-xs text-slate-500 font-bold truncate max-w-[130px]">
+                        <p className="text-[11px] text-slate-500 font-bold truncate">
                           {resume.role}
                         </p>
                       </div>
                     </div>
 
                     {/* Social/Institutional Badge */}
-                    <div className="text-[11px] font-bold text-[#991B1B] bg-red-50 border border-red-200 px-2.5 py-1 rounded-xl">
+                    <div className="text-[10px] font-bold text-[#991B1B] bg-red-50 border border-red-200 px-2 py-0.5 rounded-lg truncate">
                       {resume.badge}
                     </div>
 
                     {/* Core Metric Highlight */}
-                    <div className="bg-slate-50 rounded-2xl p-3 border border-slate-100 space-y-1">
-                      <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
+                    <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 space-y-0.5">
+                      <div className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">
                         {resume.metrics[0].label}
                       </div>
-                      <div className="text-sm font-extrabold text-[#1E293B]">
+                      <div className="text-xs font-extrabold text-[#1E293B]">
                         {resume.metrics[0].value}
                       </div>
                     </div>
@@ -582,13 +632,13 @@ export function HangingResumesGallery() {
                       {resume.skills.slice(0, 3).map((skill) => (
                         <span 
                           key={skill}
-                          className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700"
+                          className="text-[9px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700"
                         >
                           {skill}
                         </span>
                       ))}
                       {resume.skills.length > 3 && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-200 text-slate-600">
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-slate-200 text-slate-600">
                           +{resume.skills.length - 3}
                         </span>
                       )}
@@ -596,7 +646,7 @@ export function HangingResumesGallery() {
 
                     {/* Hover Prompt Callout */}
                     <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#991B1B]">
-                      <span className="flex items-center gap-1">
+                      <span className="flex items-center gap-1 text-[11px]">
                         <Maximize2 size={12} />
                         <span>Hover to expand</span>
                       </span>
@@ -634,7 +684,7 @@ export function HangingResumesGallery() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-extrabold text-[#1E293B] uppercase tracking-wider">
-                  Full Screen Resume Showcase
+                  Full Screen Portfolio Showcase
                 </span>
                 <span className="text-slate-300">•</span>
                 <span className="text-xs font-bold text-[#991B1B] bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full">
@@ -646,17 +696,30 @@ export function HangingResumesGallery() {
             {/* Right: Actions & Close (ESC) */}
             <div className="flex items-center gap-3">
               
+              <a
+                href={expandedResume.pinterestUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-200 text-[#E60023] text-xs font-bold transition"
+              >
+                <svg className="w-3.5 h-3.5 fill-[#E60023]" viewBox="0 0 24 24">
+                  <path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345-.09.375-.291 1.199-.33 1.365-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/>
+                </svg>
+                <span>View on Pinterest</span>
+                <ExternalLink size={11} />
+              </a>
+
               <Link
                 href="/onboarding"
                 className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white text-xs font-bold shadow-md shadow-[#991B1B]/20 transition-all hover:scale-105"
               >
-                <span>Use This Resume Style</span>
+                <span>Adopt This Style Free</span>
                 <ArrowRight size={13} />
               </Link>
 
               <button
                 onClick={() => setExpandedResume(null)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-[#1E293B] text-slate-700 hover:text-white font-bold text-xs transition-colors border border-slate-200"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-[#1E293B] text-slate-700 hover:text-white font-bold text-xs transition-colors border border-slate-200 cursor-pointer"
                 title="Close full-screen resume (or press ESC)"
                 aria-label="Close"
               >
@@ -699,19 +762,78 @@ export function HangingResumesGallery() {
                   href="/resume"
                   className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition border border-slate-200"
                 >
-                  <Download size={14} /> Download PDF
+                  <Download size={14} /> Download ATS Resume
                 </Link>
-                <Link
-                  href="/p/alex"
+                <a
+                  href={expandedResume.pinterestUrl}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#1E293B] hover:bg-slate-800 text-white text-xs font-bold transition"
                 >
-                  <ExternalLink size={14} /> View Recruiter Link
-                </Link>
+                  <ExternalLink size={14} /> Open Pinterest Pin
+                </a>
               </div>
             </div>
 
-            {/* 2. Key Metrics Bar */}
+            {/* 2. LIVE PINTEREST PORTFOLIO WEBSITE SHOWCASE (Interactive Browser Frame) */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xs font-extrabold text-[#991B1B] uppercase tracking-wider flex items-center gap-2">
+                  <Globe size={14} /> LIVE PINTEREST DESIGN BLUEPRINT &amp; PORTFOLIO LAYOUT
+                </h2>
+                <span className="text-[11px] font-bold text-slate-500 hidden sm:inline">
+                  Interactive High-Res View
+                </span>
+              </div>
+
+              <div className="bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-xl space-y-3 overflow-hidden">
+                {/* Browser Top Window Bar */}
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800 flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-full bg-rose-500 inline-block" />
+                    <span className="w-3 h-3 rounded-full bg-amber-400 inline-block" />
+                    <span className="w-3 h-3 rounded-full bg-emerald-400 inline-block" />
+                    <div className="bg-slate-950 px-3 py-1 rounded-lg border border-slate-800 text-xs text-slate-300 font-mono ml-2 truncate max-w-xs sm:max-w-md">
+                      https://folioveda.dev/p/{expandedResume.id}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 bg-emerald-950/80 border border-emerald-800/80 px-2 py-0.5 rounded-full">
+                      ● Active Deployment
+                    </span>
+                  </div>
+                </div>
+
+                {/* Screenshot Display Frame with Smooth Vertical Hover Scroll */}
+                <div className="relative w-full max-h-[500px] overflow-hidden rounded-2xl bg-slate-950 border border-slate-800 group/viewport">
+                  <img 
+                    src={expandedResume.image}
+                    alt={expandedResume.name + " Live Portfolio Design from Pinterest"}
+                    className="w-full h-auto object-cover object-top transition-all duration-1000 ease-in-out group-hover/viewport:object-bottom cursor-ns-resize"
+                  />
+                  <div className="absolute bottom-3 right-3 px-3 py-1.5 bg-black/85 backdrop-blur-md rounded-full text-white text-[11px] font-bold flex items-center gap-1.5 pointer-events-none shadow-md">
+                    <span className="w-2 h-2 rounded-full bg-[#991B1B] animate-pulse" />
+                    <span>Hover over image to preview full webpage scroll</span>
+                  </div>
+                </div>
+
+                <div className="pt-1 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-slate-400 gap-2">
+                  <div className="font-medium truncate max-w-xl">
+                    Source: <strong className="text-white">{expandedResume.pinterestTitle}</strong>
+                  </div>
+                  <a 
+                    href={expandedResume.pinterestUrl}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-rose-400 hover:text-rose-300 font-bold shrink-0 flex items-center gap-1"
+                  >
+                    <span>View Inspiration Pin</span> ↗
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* 3. Key Metrics Bar */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {expandedResume.metrics.map((m, i) => (
                 <div key={i} className="bg-slate-50 rounded-2xl p-5 border border-slate-200">
@@ -725,7 +847,7 @@ export function HangingResumesGallery() {
               ))}
             </div>
 
-            {/* 3. Executive Summary */}
+            {/* 4. Executive Summary */}
             <div className="space-y-3">
               <h2 className="text-xs font-extrabold text-[#991B1B] uppercase tracking-wider">
                 Executive Profile
@@ -735,7 +857,7 @@ export function HangingResumesGallery() {
               </p>
             </div>
 
-            {/* 4. Experience & Career Timeline */}
+            {/* 5. Experience & Career Timeline */}
             <div className="space-y-6">
               <h2 className="text-xs font-extrabold text-[#991B1B] uppercase tracking-wider flex items-center gap-2">
                 <Briefcase size={14} /> VERIFIED CAREER HISTORY
@@ -763,7 +885,7 @@ export function HangingResumesGallery() {
               </div>
             </div>
 
-            {/* 5. Featured Live Project */}
+            {/* 6. Featured Live Project */}
             <div className="space-y-4">
               <h2 className="text-xs font-extrabold text-[#991B1B] uppercase tracking-wider flex items-center gap-2">
                 <Code2 size={14} /> FLAGSHIP SHOWCASE PROJECT
@@ -791,7 +913,7 @@ export function HangingResumesGallery() {
               </div>
             </div>
 
-            {/* 6. Skills & Education Grid */}
+            {/* 7. Skills & Education Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 border-t border-slate-100">
               
               {/* Skills */}
@@ -828,7 +950,7 @@ export function HangingResumesGallery() {
 
             </div>
 
-            {/* 7. Endorsement Callout */}
+            {/* 8. Endorsement Callout */}
             <div className="p-6 rounded-2xl bg-red-50/60 border border-red-200 space-y-2">
               <span className="text-[10px] font-extrabold text-[#991B1B] uppercase tracking-wider">
                 EXECUTIVE ENDORSEMENT
@@ -849,7 +971,7 @@ export function HangingResumesGallery() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setExpandedResume(null)}
-                  className="px-4 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition"
+                  className="px-4 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition cursor-pointer"
                 >
                   Return to Home
                 </button>
