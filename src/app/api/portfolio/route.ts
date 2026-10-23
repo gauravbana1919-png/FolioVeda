@@ -5,6 +5,29 @@ import prisma from '@/lib/db';
 
 export async function GET(req: Request) {
   try {
+    const url = new URL(req.url);
+    const checkHandle = url.searchParams.get('check');
+    const requestedUsername = url.searchParams.get('username') || url.searchParams.get('name');
+
+    // Handle check availability endpoint
+    if (checkHandle) {
+      const normalized = checkHandle.trim().toLowerCase();
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          OR: [
+            { name: { equals: normalized } },
+            { name: { equals: checkHandle.trim() } },
+          ],
+        },
+      });
+
+      return NextResponse.json({
+        available: !existingUser,
+        handle: normalized,
+        reserved: ["admin", "api", "dashboard", "styles", "hub", "onboarding"].includes(normalized),
+      });
+    }
+
     let session = null;
     try {
       session = await getServerSession(authOptions);
@@ -12,7 +35,51 @@ export async function GET(req: Request) {
       // Unit test or non-request scope
     }
 
-    if (!session?.user?.email) {
+    let user = null;
+
+    // 1. If authenticated via session, find by email
+    if (session?.user?.email) {
+      user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        include: {
+          profile: true,
+          portfolio: true,
+          projects: true,
+        },
+      });
+    }
+
+    // 2. If requested by username/name query param
+    if (!user && requestedUsername) {
+      user = await prisma.user.findFirst({
+        where: {
+          OR: [
+            { name: { equals: requestedUsername } },
+            { id: { equals: requestedUsername } },
+          ],
+        },
+        include: {
+          profile: true,
+          portfolio: true,
+          projects: true,
+        },
+      });
+    }
+
+    // 3. Fallback: Find the most recently active user in the database
+    if (!user) {
+      user = await prisma.user.findFirst({
+        orderBy: { id: 'desc' },
+        include: {
+          profile: true,
+          portfolio: true,
+          projects: true,
+        },
+      });
+    }
+
+    // 4. If no users exist at all in DB, return initial seed
+    if (!user) {
       return NextResponse.json({
         isMock: true,
         user: {
@@ -22,41 +89,22 @@ export async function GET(req: Request) {
             skills: "React, Next.js, TypeScript, Tailwind CSS, Node.js, Prisma, SQLite",
           },
           portfolio: {
-            templateId: "template1",
+            templateId: "developer-terminal",
+            themePackageId: "developer-terminal",
             theme: "dark",
-            designPrefs: JSON.stringify({ accentColor: "blue" }),
+            designPrefs: JSON.stringify({ accentColor: "emerald" }),
           },
           projects: [
             {
-              title: "Fintech Dashboard",
-              description: "A comprehensive dashboard for tracking personal finances with real-time analytics and data visualization.",
-              techStack: "Next.js, Tailwind, Recharts",
-              liveUrl: "#",
-              githubUrl: "#",
-            },
-            {
-              title: "AI Writing Assistant",
-              description: "An AI-powered tool that helps writers brainstorm, outline, and polish long-form content on the fly.",
-              techStack: "React, Gemini API, Node.js",
-              liveUrl: "#",
-              githubUrl: "#",
+              title: "Distributed Edge Cache",
+              description: "Zero-copy caching daemon in Rust with automated replica failover.",
+              techStack: "Rust, Redis, Docker",
+              liveUrl: "https://github.com",
+              githubUrl: "https://github.com",
             },
           ],
         },
       });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      include: {
-        profile: true,
-        portfolio: true,
-        projects: true,
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     return NextResponse.json({
@@ -64,14 +112,16 @@ export async function GET(req: Request) {
       user: {
         id: user.id,
         name: user.name || "Portfolio Owner",
+        email: user.email,
         profile: user.profile || {
-          bio: "Welcome to my portfolio!",
+          bio: "Welcome to my verified portfolio!",
           skills: "Full-Stack Development, React, Node.js",
         },
         portfolio: user.portfolio || {
-          templateId: "template1",
+          templateId: "developer-terminal",
+          themePackageId: "developer-terminal",
           theme: "system",
-          designPrefs: JSON.stringify({ accentColor: "blue" }),
+          designPrefs: JSON.stringify({ accentColor: "emerald" }),
         },
         projects: user.projects || [],
       },
@@ -91,7 +141,7 @@ export async function POST(req: Request) {
       // Unit test or non-request scope
     }
     const body = await req.json();
-    const { name, bio, skills, templateId, theme, accentColor } = body;
+    const { name, bio, skills, templateId, themeId, theme, accentColor } = body;
 
     let user = null;
     if (session?.user?.email) {
@@ -147,18 +197,20 @@ export async function POST(req: Request) {
       });
     }
 
-    // Update or create Portfolio
-    const finalTemplateId = templateId || "template1";
+    // Update or create Portfolio with themePackageId
+    const finalTemplateId = themeId || templateId || "developer-terminal";
     await prisma.portfolio.upsert({
       where: { userId: user.id },
       create: {
         userId: user.id,
         templateId: finalTemplateId,
+        themePackageId: finalTemplateId,
         theme: theme || "system",
-        designPrefs: JSON.stringify({ accentColor: accentColor || "blue" }),
+        designPrefs: JSON.stringify({ accentColor: accentColor || "emerald" }),
       },
       update: {
-        ...(templateId && { templateId }),
+        templateId: finalTemplateId,
+        themePackageId: finalTemplateId,
         ...(theme && { theme }),
         ...(accentColor && {
           designPrefs: JSON.stringify({ accentColor }),

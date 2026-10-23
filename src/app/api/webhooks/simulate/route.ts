@@ -35,29 +35,36 @@ export async function POST(req: Request) {
     }
 
     if (!targetUserId) {
-      // Find or create a demo user for local simulation
-      let demoUser = await prisma.user.findFirst({
-        where: { email: 'demo@folioveda.dev' },
+      // Find the most recently active real user in SQLite database
+      let activeUser = await prisma.user.findFirst({
+        orderBy: { id: 'desc' },
         include: { accounts: true },
       });
 
-      if (!demoUser) {
-        demoUser = await prisma.user.create({
+      if (!activeUser) {
+        activeUser = await prisma.user.create({
           data: {
             name: 'Alex Developer',
             email: 'demo@folioveda.dev',
-            accounts: {
-              create: {
-                type: 'oauth',
-                provider: 'github',
-                providerAccountId: githubAccountId,
-              },
-            },
           },
           include: { accounts: true },
         });
       }
-      targetUserId = demoUser.id;
+
+      // Link a mock GitHub account to this user if not present
+      const ghAccount = activeUser.accounts.find(a => a.provider === 'github');
+      if (!ghAccount) {
+        await prisma.account.create({
+          data: {
+            userId: activeUser.id,
+            type: 'oauth',
+            provider: 'github',
+            providerAccountId: githubAccountId,
+          },
+        });
+      }
+
+      targetUserId = activeUser.id;
     }
 
     // Sample repo names for realistic simulation

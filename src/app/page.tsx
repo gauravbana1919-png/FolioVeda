@@ -29,6 +29,7 @@ import { HangingResumesGallery } from "@/components/portfolio/HangingResumesGall
 import { RedBullStyleCommercial } from "@/components/portfolio/RedBullStyleCommercial";
 import { FolioTreeHeroAnimation } from "@/components/portfolio/FolioTreeHeroAnimation";
 import { PlatformGuideSection } from "@/components/portfolio/PlatformGuideSection";
+import { ClaimHandleBar } from "@/components/home/ClaimHandleBar";
 
 type TemplateCategory = "all" | "creative" | "engineering" | "architecture" | "product";
 
@@ -333,9 +334,12 @@ export default function ColorfulEditorialHomePage() {
         </h1>
 
         {/* Clean, Confident Subtitle */}
-        <p className="text-lg sm:text-xl text-slate-600 font-normal max-w-2xl mx-auto leading-relaxed mb-10 relative z-10">
+        <p className="text-lg sm:text-xl text-slate-600 font-normal max-w-2xl mx-auto leading-relaxed mb-8 relative z-10">
           Showcase your work with award-winning design, zero-hallucination intake, and instant custom domains. Built for designers, engineers, and creators who let their work speak.
         </p>
+
+        {/* Real-time Backend Handle Claimer */}
+        <ClaimHandleBar />
 
         {/* High-Conversion CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 relative z-10">
