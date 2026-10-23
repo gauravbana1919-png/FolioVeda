@@ -8,20 +8,23 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  profile       Profile?
-  projects      Project[]
-  resumes       Resume[]
-  portfolio     Portfolio?
-  dailyAiCalls  Int       @default(0)
-  lastAiCallAt  DateTime?
-  consentGiven  Boolean   @default(false)
+  id                  String               @id @default(cuid())
+  name                String?
+  email               String?              @unique
+  emailVerified       DateTime?
+  image               String?
+  accounts            Account[]
+  sessions            Session[]
+  profile             Profile?
+  projects            Project[]
+  resumes             Resume[]
+  portfolio           Portfolio?
+  dailyAiCalls        Int                  @default(0)
+  lastAiCallAt        DateTime?
+  consentGiven        Boolean              @default(false)
+  themePackages       ThemePackage[]
+  intakeAnswers       IntakeAnswers?
+  inspirationRequests InspirationRequest[]
 }
 
 model Account {
@@ -91,13 +94,75 @@ model Resume {
 }
 
 model Portfolio {
-  id          String   @id @default(cuid())
-  userId      String   @unique
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  templateId   String
-  theme        String   @default("system") // light, dark, system
-  customDomain String?
-  designPrefs  String?    // Stores reference URL, specific info, custom colors/fonts
-  isPublished  Boolean  @default(false)
-  createdAt    DateTime @default(now())
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  templateId     String
+  themePackageId String?
+  theme          String   @default("system") // light, dark, system
+  customDomain   String?
+  designPrefs    String?  // Stores reference URL, specific info, custom colors/fonts
+  isPublished    Boolean  @default(false)
+  createdAt      DateTime @default(now())
+}
+
+model ThemePackage {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  category  String   // 'tech' | 'design' | 'business' | 'creative'
+  mood      String   // 'calm' | 'bold' | 'playful' | 'formal'
+  tokens    String   // JSON string: colors, typography, spacing, motion, radii
+  layout    String   // JSON string: pattern, sectionOrder, variants
+  isSystem  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model IntakeAnswers {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profileType       String   // 'tech' | 'designer' | 'bba' | 'other'
+  targetGoal        String   // 'internship' | 'job' | 'freelance' | 'studies'
+  targetRoles       String   // JSON string array
+  topStrengths      String   // JSON string array
+  tone              String   // 'formal' | 'friendly' | 'bold'
+  preferredMood     String?  // 'calm' | 'bold' | 'playful' | 'formal'
+  preferredColors   String?  // JSON string array
+  links             String?  // JSON string: github, linkedin, behance
+  rawResumeText     String?  // parsed text from optional PDF
+  suggestedBio      String?  // strictly factual AI-drafted bio
+  suggestedHeadline String?  // strictly factual AI-drafted headline
+  isApproved        Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model InspirationRequest {
+  id              String   @id @default(cuid())
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceUrl       String
+  userConsent     Boolean  @default(false)
+  status          String   @default("pending") // 'pending' | 'analyzed' | 'generated' | 'failed' | 'rejected'
+  styleProfile    String?  // JSON string: abstract extracted traits (no code/assets)
+  generatedTheme  String?  // JSON string: resulting ThemePackage
+  closeness       String   @default("medium")  // 'loose' | 'medium' | 'close'
+  similarityScore Float?   // 0.0 to 1.0 similarity metric
+  isFlagged       Boolean  @default(false)
+  ipAddress       String?
+  createdAt       DateTime @default(now())
+}
+
+model TakedownReport {
+  id            String    @id @default(cuid())
+  reportedUrl   String
+  reporterEmail String
+  reason        String
+  status        String    @default("open") // 'open' | 'reviewing' | 'resolved' | 'dismissed'
+  notes         String?
+  createdAt     DateTime  @default(now())
+  resolvedAt    DateTime?
 }
