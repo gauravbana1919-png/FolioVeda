@@ -4,481 +4,734 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Code2, 
-  Code, 
-  Layout, 
   Palette, 
+  Briefcase, 
   ArrowRight, 
+  ArrowLeft,
   CheckCircle2, 
   Sparkles, 
-  Briefcase, 
   ExternalLink, 
   Copy, 
   Check, 
   Globe,
   Terminal,
+  ShieldCheck,
+  User,
+  Send,
   Layers,
-  TrendingUp
+  HeartHandshake
 } from "lucide-react";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import Link from "next/link";
+import { ProfileType, TargetGoal, ToneOfVoice, PreferredMood, IntakeAnswersInput } from "@/types/intake";
 
 type Step = 1 | 2 | 3 | 4;
 
-interface TemplateOption {
-  id: "template1" | "template2" | "template3";
-  name: string;
-  category: string;
-  tagline: string;
-  accent: string;
-  icon: any;
-  preview: {
-    bg: string;
-    elements: string[];
-  };
-}
-
-const TEMPLATES: TemplateOption[] = [
-  {
-    id: "template1",
-    name: "The Developer Studio",
-    category: "Software & Engineering",
-    tagline: "Terminal aesthetics, tech stack badges, synced GitHub repos, and dark mode.",
-    accent: "from-blue-600 to-indigo-600",
-    icon: Terminal,
-    preview: {
-      bg: "bg-slate-950 border-slate-800",
-      elements: ["<Alex.Dev />", "const stack = ['Next.js', 'Prisma', 'AI']", "● pf-ecommerce-engine"],
-    },
-  },
-  {
-    id: "template2",
-    name: "The Creative Designer",
-    category: "Design & Creative",
-    tagline: "Masonry gallery layout, bold editorial typography, and high-impact visual cards.",
-    accent: "from-pink-600 to-rose-600",
-    icon: Palette,
-    preview: {
-      bg: "bg-zinc-900 border-zinc-800",
-      elements: ["Selected Works", "Grid Layout", "Case Studies & Visuals"],
-    },
-  },
-  {
-    id: "template3",
-    name: "The Executive / Business",
-    category: "Product & Leadership",
-    tagline: "Clean chronological experience timeline, business metrics, and strategic impact.",
-    accent: "from-emerald-600 to-teal-600",
-    icon: TrendingUp,
-    preview: {
-      bg: "bg-stone-950 border-stone-800",
-      elements: ["Executive Impact", "10x Revenue Strategy", "Leadership Timeline"],
-    },
-  },
-];
-
-export default function OnboardingWizard() {
+export default function SmartIntakeOnboardingPage() {
   const [step, setStep] = useState<Step>(1);
-  const [githubConnected, setGithubConnected] = useState(false);
-  const [profession, setProfession] = useState("engineer");
-  const [selectedTemplate, setSelectedTemplate] = useState<"template1" | "template2" | "template3">("template1");
-  const [username, setUsername] = useState("alex");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
+  const [publishedUrl, setPublishedUrl] = useState<string | null>(null);
+
+  // Form State
+  const [candidateName, setCandidateName] = useState("Alex Developer");
+  const [profileType, setProfileType] = useState<ProfileType>("tech");
+  const [targetGoal, setTargetGoal] = useState<TargetGoal>("job");
+  const [targetRoles, setTargetRoles] = useState<string[]>(["Full-Stack Engineer"]);
+  const [customRoleInput, setCustomRoleInput] = useState("");
   
-  // Generation & Live URL state
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generationStage, setGenerationStage] = useState("Attaching template...");
-  const [liveUrl, setLiveUrl] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [topStrengths, setTopStrengths] = useState<string[]>(["Next.js", "TypeScript", "Distributed Systems"]);
+  const [customStrengthInput, setCustomStrengthInput] = useState("");
+  const [tone, setTone] = useState<ToneOfVoice>("bold");
+  const [preferredMood, setPreferredMood] = useState<PreferredMood>("formal");
 
-  const nextStep = () => setStep((s) => (s < 4 ? ((s + 1) as Step) : 4));
+  const [githubUrl, setGithubUrl] = useState("https://github.com/alex");
+  const [linkedinUrl, setLinkedinUrl] = useState("https://linkedin.com/in/alex");
+  const [portfolioUrl, setPortfolioUrl] = useState("");
+  const [rawResumeText, setRawResumeText] = useState("");
 
-  const handleGithubConnect = () => {
-    setGithubConnected(true);
-    setTimeout(() => nextStep(), 800);
+  // AI Generated Draft State (Step 4)
+  const [draftHeadline, setDraftHeadline] = useState("");
+  const [draftBio, setDraftBio] = useState("");
+  const [recommendedThemeIds, setRecommendedThemeIds] = useState<string[]>([]);
+  const [selectedThemeId, setSelectedThemeId] = useState("developer-terminal");
+
+  // Role presets by profile
+  const ROLE_PRESETS: Record<ProfileType, string[]> = {
+    tech: ["Full-Stack Engineer", "Frontend Specialist", "Backend Architect", "Systems Engineer", "Mobile Dev"],
+    designer: ["Product Designer", "UI/UX Specialist", "Design Systems Lead", "Brand Strategist"],
+    bba: ["Product Manager", "Operations Lead", "Strategy Consultant", "Data Analyst"],
+    other: ["Creator & Engineer", "Technical Writer", "Researcher", "Founder"],
   };
 
-  const handleBuildPortfolio = async () => {
-    nextStep(); // Move to Step 4
-    setIsGenerating(true);
+  const STRENGTH_PRESETS: Record<ProfileType, string[]> = {
+    tech: ["Next.js", "TypeScript", "Distributed Systems", "PostgreSQL", "Cloud Architecture", "Docker", "REST APIs"],
+    designer: ["Figma Systems", "Design Thinking", "Interaction Design", "Prototyping", "Design Systems", "Typography"],
+    bba: ["Go-to-Market", "KPI Analytics", "Roadmapping", "Cross-Functional Leadership", "Financial Modeling"],
+    other: ["Execution", "Communication", "System Design", "Deep Research"],
+  };
 
-    const cleanUsername = username.trim() || "alex";
+  const toggleRole = (r: string) => {
+    if (targetRoles.includes(r)) {
+      if (targetRoles.length > 1) setTargetRoles(targetRoles.filter((item) => item !== r));
+    } else {
+      if (targetRoles.length < 3) setTargetRoles([...targetRoles, r]);
+    }
+  };
+
+  const toggleStrength = (s: string) => {
+    if (topStrengths.includes(s)) {
+      if (topStrengths.length > 1) setTopStrengths(topStrengths.filter((item) => item !== s));
+    } else {
+      if (topStrengths.length < 3) setTopStrengths([...topStrengths, s]);
+    }
+  };
+
+  const handleGenerateDraft = async () => {
+    setIsSubmitting(true);
+    const answersPayload: IntakeAnswersInput = {
+      profileType,
+      targetGoal,
+      targetRoles,
+      topStrengths,
+      tone,
+      preferredMood,
+      links: {
+        github: githubUrl || undefined,
+        linkedin: linkedinUrl || undefined,
+        portfolio: portfolioUrl || undefined,
+      },
+      rawResumeText: rawResumeText || undefined,
+    };
 
     try {
-      setGenerationStage("Connecting selected template...");
-      await new Promise((r) => setTimeout(r, 600));
-
-      setGenerationStage("Injecting GitHub repositories & bio...");
-      await new Promise((r) => setTimeout(r, 600));
-
-      setGenerationStage("Publishing live portfolio to database...");
-
-      // Call real backend API to attach template and persist user portfolio
-      const res = await fetch("/api/portfolio", {
+      const res = await fetch("/api/intake", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: cleanUsername,
-          templateId: selectedTemplate,
-          bio: profession === "designer" 
-            ? "Senior Product & UI/UX Designer crafting delightful digital experiences."
-            : profession === "business"
-            ? "Product & Strategy Leader scaling operations and revenue."
-            : "Full-Stack Engineer building high-performance modern web apps.",
-          skills: profession === "designer"
-            ? "Figma, Design Systems, Prototyping, UI/UX"
-            : profession === "business"
-            ? "Product Strategy, Growth, SQL, Analytics"
-            : "Next.js, TypeScript, React, Node.js, SQLite",
+          action: "draft",
+          answers: answersPayload,
+          userName: candidateName,
         }),
       });
 
       if (res.ok) {
         const data = await res.json();
-        setLiveUrl(data.liveUrl || `/p/${encodeURIComponent(cleanUsername)}`);
-      } else {
-        setLiveUrl(`/p/${encodeURIComponent(cleanUsername)}`);
+        if (data.draft) {
+          setDraftHeadline(data.draft.suggestedHeadline);
+          setDraftBio(data.draft.suggestedBio);
+          setRecommendedThemeIds(data.draft.recommendedThemeIds);
+          if (data.draft.recommendedThemeIds[0]) {
+            setSelectedThemeId(data.draft.recommendedThemeIds[0]);
+          }
+          setStep(4);
+        }
       }
     } catch (err) {
-      console.error(err);
-      setLiveUrl(`/p/${encodeURIComponent(cleanUsername)}`);
+      console.error("Draft generation failed:", err);
     } finally {
-      setIsGenerating(false);
+      setIsSubmitting(false);
     }
   };
 
-  const copyLiveLink = () => {
-    if (!liveUrl) return;
-    const fullUrl = `${window.location.origin}${liveUrl}`;
-    navigator.clipboard.writeText(fullUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleApproveAndPublish = async () => {
+    if (!isApproved) return;
+    setIsSubmitting(true);
+
+    const answersPayload: IntakeAnswersInput = {
+      profileType,
+      targetGoal,
+      targetRoles,
+      topStrengths,
+      tone,
+      preferredMood,
+      links: {
+        github: githubUrl || undefined,
+        linkedin: linkedinUrl || undefined,
+        portfolio: portfolioUrl || undefined,
+      },
+      rawResumeText: rawResumeText || undefined,
+    };
+
+    try {
+      const res = await fetch("/api/intake", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "approve",
+          answers: answersPayload,
+          approvedHeadline: draftHeadline,
+          approvedBio: draftBio,
+          themeId: selectedThemeId,
+          userName: candidateName,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setPublishedUrl(data.liveUrl || `/p/${encodeURIComponent(candidateName)}`);
+      }
+    } catch (err) {
+      console.error("Failed to approve and publish:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 bg-slate-950 text-slate-100 font-sans">
-      
-      {/* Brand Header */}
-      <div className="mb-6">
-        <Link href="/">
-          <FolioVedaLogo size="lg" showBadge={true} />
-        </Link>
-      </div>
-
-      <div className="w-full max-w-3xl bg-slate-900/90 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden backdrop-blur-xl">
-        
-        {/* Top Progress Bar */}
-        <div className="w-full bg-slate-800 h-1.5">
-          <div
-            className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full transition-all duration-500 ease-out"
-            style={{ width: `${(step / 4) * 100}%` }}
-          />
+    <div className="min-h-screen bg-[#0A0F1D] text-slate-100 selection:bg-emerald-500/30 font-sans flex flex-col justify-between">
+      {/* Top Header */}
+      <header className="border-b border-white/[0.08] bg-[#0A0F1D]/90 backdrop-blur-md px-6 py-4">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <FolioVedaLogo size="sm" showBadge={false} />
+            <span className="text-xs font-mono text-slate-400">/ Smart Intake</span>
+          </Link>
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-mono text-emerald-400">Step {step} of 4</span>
+            <div className="w-24 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-emerald-500 transition-all duration-300"
+                style={{ width: `${(step / 4) * 100}%` }}
+              />
+            </div>
+          </div>
         </div>
+      </header>
 
-        <div className="p-6 md:p-10 min-h-[460px] flex flex-col justify-center relative">
+      {/* Main Container */}
+      <main className="max-w-3xl mx-auto px-6 py-10 w-full flex-1">
+        {publishedUrl ? (
+          /* SUCCESS PUBLISHED VIEW */
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-12 space-y-6"
+          >
+            <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto animate-bounce">
+              <CheckCircle2 size={36} />
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-black text-white">
+              Your Verified Live Portfolio is Live!
+            </h1>
+            <p className="text-slate-400 max-w-lg mx-auto text-sm leading-relaxed">
+              Crafted with zero hallucinations, factual accuracy, and your approved tone of voice.
+            </p>
+
+            <div className="p-4 rounded-xl bg-slate-900 border border-emerald-500/30 max-w-md mx-auto flex items-center justify-between">
+              <span className="font-mono text-xs text-emerald-400 truncate">
+                folioveda.me{publishedUrl}
+              </span>
+              <Link
+                href={publishedUrl}
+                target="_blank"
+                className="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-1 transition-all"
+              >
+                <span>Visit Now</span>
+                <ExternalLink size={12} />
+              </Link>
+            </div>
+
+            <div className="pt-6 flex justify-center gap-4">
+              <Link
+                href="/portfolio/preview"
+                className="px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors"
+              >
+                Open in AI Studio →
+              </Link>
+              <Link
+                href="/styles"
+                className="px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors"
+              >
+                Browse Style Gallery →
+              </Link>
+            </div>
+          </motion.div>
+        ) : (
           <AnimatePresence mode="wait">
-            
-            {/* STEP 1: Connect GitHub */}
+            {/* STEP 1: FOCUS & GOALS */}
             {step === 1 && (
               <motion.div
                 key="step1"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                className="flex flex-col items-center text-center space-y-6 max-w-lg mx-auto"
+                exit={{ opacity: 0, y: -10 }}
+                className="space-y-8"
               >
-                <div className="w-16 h-16 bg-slate-800 border border-slate-700 rounded-2xl flex items-center justify-center text-emerald-400 mb-1 shadow-inner">
-                  <Code2 size={32} />
-                </div>
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-extrabold text-white">Connect Your Projects</h2>
-                  <p className="text-slate-400 text-sm mt-2 leading-relaxed">
-                    FolioVeda automatically pulls your repositories, commits, and tech stacks so you never have to manually copy-paste.
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono mb-2">
+                    <User size={12} /> Step 1: Career Identity & Goals
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl font-black text-white">
+                    What are you looking to achieve?
+                  </h1>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Takes under 2 minutes. We only collect details that make your portfolio stand out to recruiters.
                   </p>
                 </div>
 
-                <div className="w-full space-y-3">
-                  <button
-                    onClick={handleGithubConnect}
-                    disabled={githubConnected}
-                    className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50"
-                  >
-                    {githubConnected ? (
-                      <>
-                        <CheckCircle2 size={18} /> <span>Projects Synced Successfully!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Globe size={18} /> <span>Auto-Sync GitHub Projects</span>
-                      </>
-                    )}
-                  </button>
+                {/* Candidate Name */}
+                <div className="space-y-2">
+                  <label className="text-xs font-mono uppercase text-slate-400">Your Full Name</label>
+                  <input
+                    type="text"
+                    value={candidateName}
+                    onChange={(e) => setCandidateName(e.target.value)}
+                    placeholder="e.g. Alex Developer"
+                    className="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-white/[0.08] text-white text-sm focus:border-emerald-500 focus:outline-none"
+                  />
+                </div>
 
+                {/* Profile Type */}
+                <div className="space-y-3">
+                  <label className="text-xs font-mono uppercase text-slate-400">Profile Discipline</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {[
+                      { id: "tech", label: "Tech / Engineering", icon: Code2 },
+                      { id: "designer", label: "Product / Design", icon: Palette },
+                      { id: "bba", label: "Business / PM", icon: Briefcase },
+                      { id: "other", label: "Other / Creator", icon: Sparkles },
+                    ].map((item) => {
+                      const Icon = item.icon;
+                      const selected = profileType === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => {
+                            setProfileType(item.id as ProfileType);
+                            setTargetRoles([ROLE_PRESETS[item.id as ProfileType][0]]);
+                            setTopStrengths([STRENGTH_PRESETS[item.id as ProfileType][0], STRENGTH_PRESETS[item.id as ProfileType][1]]);
+                          }}
+                          className={`p-3.5 rounded-xl border text-left transition-all ${
+                            selected
+                              ? "bg-emerald-500/10 border-emerald-500 text-white shadow-md shadow-emerald-500/10"
+                              : "bg-slate-900 border-white/[0.08] text-slate-400 hover:text-white"
+                          }`}
+                        >
+                          <Icon size={18} className={selected ? "text-emerald-400" : "text-slate-500"} />
+                          <div className="text-xs font-bold mt-2">{item.label}</div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Target Goal */}
+                <div className="space-y-3">
+                  <label className="text-xs font-mono uppercase text-slate-400">Primary Career Goal</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {[
+                      { id: "job", label: "Full-Time Job" },
+                      { id: "internship", label: "Internships" },
+                      { id: "freelance", label: "Freelancing" },
+                      { id: "studies", label: "Higher Studies" },
+                    ].map((g) => (
+                      <button
+                        key={g.id}
+                        type="button"
+                        onClick={() => setTargetGoal(g.id as TargetGoal)}
+                        className={`py-2 px-3 rounded-lg text-xs font-medium border text-center transition-all ${
+                          targetGoal === g.id
+                            ? "bg-emerald-500 text-slate-950 font-bold border-emerald-400"
+                            : "bg-slate-900 border-white/[0.08] text-slate-400 hover:text-white"
+                        }`}
+                      >
+                        {g.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Target Roles */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-mono uppercase text-slate-400">Target Roles (1 to 3)</label>
+                    <span className="text-[11px] text-slate-500 font-mono">{targetRoles.length}/3 selected</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {ROLE_PRESETS[profileType].map((role) => {
+                      const active = targetRoles.includes(role);
+                      return (
+                        <button
+                          key={role}
+                          type="button"
+                          onClick={() => toggleRole(role)}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+                            active
+                              ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold"
+                              : "bg-slate-900 border-white/[0.08] text-slate-400 hover:text-white"
+                          }`}
+                        >
+                          {active ? "✓ " : "+ "}{role}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="flex justify-end pt-4">
                   <button
-                    onClick={nextStep}
-                    className="text-xs text-slate-400 hover:text-white transition-colors py-1 block mx-auto"
+                    onClick={() => setStep(2)}
+                    className="px-6 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-emerald-500/20"
                   >
-                    Skip GitHub sync &bull; Use starter project data &rarr;
+                    <span>Continue: Strengths & Tone</span>
+                    <ArrowRight size={14} />
                   </button>
                 </div>
               </motion.div>
             )}
 
-            {/* STEP 2: Choose Profession */}
+            {/* STEP 2: STRENGTHS, TONE & MOOD */}
             {step === 2 && (
               <motion.div
                 key="step2"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                className="space-y-6"
+                exit={{ opacity: 0, y: -10 }}
+                className="space-y-8"
               >
-                <div className="text-center">
-                  <h2 className="text-2xl md:text-3xl font-extrabold text-white">What is your primary focus?</h2>
-                  <p className="text-slate-400 text-xs md:text-sm mt-1">
-                    We tailor your portfolio layout and tone to what hiring managers look for.
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono mb-2">
+                    <Sparkles size={12} /> Step 2: Strengths & Voice
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl font-black text-white">
+                    How do you want to sound?
+                  </h1>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Pick your top 3 superpowers and how your portfolio communicates.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {[
-                    { id: "engineer", icon: Code, label: "Software Engineer", desc: "Full-Stack, Backend, Web3, Mobile", template: "template1" },
-                    { id: "designer", icon: Palette, label: "UI/UX & Creative", desc: "Product Design, 3D, Visual Media", template: "template2" },
-                    { id: "business", icon: Briefcase, label: "Business & Leader", desc: "Product Managers, Founders, Strategy", template: "template3" },
-                  ].map((job) => {
-                    const Icon = job.icon;
-                    const isSelected = profession === job.id;
-                    return (
-                      <button
-                        key={job.id}
-                        onClick={() => {
-                          setProfession(job.id);
-                          setSelectedTemplate(job.template as any);
-                        }}
-                        className={`flex flex-col items-start p-5 border-2 rounded-2xl text-left transition-all ${
-                          isSelected
-                            ? "border-emerald-500 bg-emerald-500/10 shadow-lg shadow-emerald-500/10"
-                            : "border-slate-800 hover:border-slate-700 bg-slate-900/60"
-                        }`}
-                      >
-                        <div className={`p-2.5 rounded-xl mb-3 ${isSelected ? "bg-emerald-500 text-slate-950 font-bold" : "bg-slate-800 text-slate-300"}`}>
-                          <Icon size={20} />
-                        </div>
-                        <span className="font-bold text-white text-base">{job.label}</span>
-                        <span className="text-xs text-slate-400 mt-1">{job.desc}</span>
-                      </button>
-                    );
-                  })}
+                {/* Strengths */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-mono uppercase text-slate-400">Core Strengths (Max 3)</label>
+                    <span className="text-[11px] text-slate-500 font-mono">{topStrengths.length}/3 selected</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {STRENGTH_PRESETS[profileType].map((strength) => {
+                      const active = topStrengths.includes(strength);
+                      return (
+                        <button
+                          key={strength}
+                          type="button"
+                          onClick={() => toggleStrength(strength)}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+                            active
+                              ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold"
+                              : "bg-slate-900 border-white/[0.08] text-slate-400 hover:text-white"
+                          }`}
+                        >
+                          {active ? "✓ " : "+ "}{strength}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                <div className="flex justify-between items-center pt-4 border-t border-slate-800">
+                {/* Tone of Voice */}
+                <div className="space-y-3">
+                  <label className="text-xs font-mono uppercase text-slate-400">Tone of Voice</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {[
+                      { id: "bold", title: "Bold & Direct", desc: "Punchy, high-energy, highlights leverage and outcome impact." },
+                      { id: "formal", title: "Formal & Precise", desc: "Structured, academic or enterprise tone focusing on reliability." },
+                      { id: "friendly", title: "Warm & Collaborative", desc: "Approachable, conversational, team-first narrative." },
+                    ].map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => setTone(t.id as ToneOfVoice)}
+                        className={`p-4 rounded-xl border text-left transition-all ${
+                          tone === t.id
+                            ? "bg-emerald-500/10 border-emerald-500 text-white shadow-md shadow-emerald-500/10"
+                            : "bg-slate-900 border-white/[0.08] text-slate-400 hover:text-white"
+                        }`}
+                      >
+                        <div className="text-xs font-bold text-white mb-1">{t.title}</div>
+                        <div className="text-[11px] text-slate-400 leading-relaxed">{t.desc}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Preferred Mood */}
+                <div className="space-y-3">
+                  <label className="text-xs font-mono uppercase text-slate-400">Preferred Aesthetic Mood</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {[
+                      { id: "formal", label: "Formal & Technical" },
+                      { id: "bold", label: "High-Contrast Bold" },
+                      { id: "calm", label: "Calm & Editorial" },
+                      { id: "playful", label: "Expressive & Playful" },
+                    ].map((m) => (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => setPreferredMood(m.id as PreferredMood)}
+                        className={`py-2 px-3 rounded-lg text-xs font-medium border text-center transition-all ${
+                          preferredMood === m.id
+                            ? "bg-emerald-500 text-slate-950 font-bold border-emerald-400"
+                            : "bg-slate-900 border-white/[0.08] text-slate-400 hover:text-white"
+                        }`}
+                      >
+                        {m.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex justify-between pt-4">
                   <button
                     onClick={() => setStep(1)}
-                    className="text-xs text-slate-400 hover:text-white"
+                    className="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-white/[0.08] text-xs font-semibold text-slate-300 flex items-center gap-2"
                   >
-                    &larr; Back
+                    <ArrowLeft size={14} /> Back
                   </button>
                   <button
-                    onClick={nextStep}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-md shadow-emerald-500/20"
+                    onClick={() => setStep(3)}
+                    className="px-6 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-emerald-500/20"
                   >
-                    <span>Choose Template</span> <ArrowRight size={16} />
+                    <span>Continue: Proof & Links</span>
+                    <ArrowRight size={14} />
                   </button>
                 </div>
               </motion.div>
             )}
 
-            {/* STEP 3: SELECT TEMPLATE & SET USERNAME */}
+            {/* STEP 3: PROOF LINKS & RESUME */}
             {step === 3 && (
               <motion.div
                 key="step3"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                className="space-y-6"
+                exit={{ opacity: 0, y: -10 }}
+                className="space-y-8"
               >
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-extrabold text-white text-center">
-                    Select Your Live Template
-                  </h2>
-                  <p className="text-slate-400 text-xs md:text-sm text-center mt-1">
-                    Click the template you want. Our engine attaches your projects into this layout immediately.
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono mb-2">
+                    <Globe size={12} /> Step 3: Verified Proof & Links
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl font-black text-white">
+                    Anchor your portfolio in real proof.
+                  </h1>
+                  <p className="text-xs text-slate-400 mt-1">
+                    HARD RULE: FolioVeda never invents fake metrics or unverified jobs. All copy is generated strictly from what you provide below.
                   </p>
                 </div>
 
-                {/* 3 Real Templates Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {TEMPLATES.map((t) => {
-                    const isSelected = selectedTemplate === t.id;
-                    const Icon = t.icon;
-
-                    return (
-                      <div
-                        key={t.id}
-                        onClick={() => setSelectedTemplate(t.id)}
-                        className={`cursor-pointer rounded-2xl border-2 transition-all p-4 flex flex-col justify-between ${
-                          isSelected
-                            ? "border-emerald-500 bg-emerald-500/10 ring-2 ring-emerald-500/30 shadow-lg"
-                            : "border-slate-800 hover:border-slate-700 bg-slate-900/60"
-                        }`}
-                      >
-                        {/* Mock Wireframe Preview */}
-                        <div className={`w-full h-28 rounded-xl border p-2.5 flex flex-col justify-between mb-3 text-[10px] font-mono select-none ${t.preview.bg}`}>
-                          <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
-                            <span className="text-slate-300 font-bold">{t.preview.elements[0]}</span>
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                          </div>
-                          <div className="text-slate-400 py-1 text-[9px] line-clamp-1">
-                            {t.preview.elements[1]}
-                          </div>
-                          <div className="bg-white/5 rounded px-1.5 py-0.5 text-slate-300 text-[9px]">
-                            {t.preview.elements[2]}
-                          </div>
-                        </div>
-
-                        {/* Template Details */}
-                        <div className="space-y-1">
-                          <div className="flex items-center justify-between">
-                            <h3 className="font-bold text-white text-sm">{t.name}</h3>
-                            <span className={`w-2.5 h-2.5 rounded-full ${isSelected ? "bg-emerald-400 ring-2 ring-emerald-400/40" : "bg-slate-700"}`} />
-                          </div>
-                          <p className="text-[11px] text-slate-400 leading-snug">{t.tagline}</p>
-                        </div>
-
-                        <div className="mt-3 pt-2 border-t border-slate-800 text-center">
-                          <span className={`text-[10px] font-bold uppercase tracking-wider ${isSelected ? "text-emerald-400" : "text-slate-500"}`}>
-                            {isSelected ? "Active Choice" : "Select Template"}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Custom Username & Live URL Input */}
-                <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <Globe size={16} className="text-emerald-400 shrink-0" />
-                    <span className="text-xs text-slate-300 font-semibold whitespace-nowrap">Your Live URL:</span>
-                    <span className="text-xs text-slate-500 hidden sm:inline">localhost:3000/p/</span>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-xs font-mono uppercase text-slate-400">GitHub Profile URL</label>
+                    <input
+                      type="url"
+                      value={githubUrl}
+                      onChange={(e) => setGithubUrl(e.target.value)}
+                      placeholder="https://github.com/yourusername"
+                      className="w-full mt-1 px-4 py-2.5 rounded-lg bg-slate-900 border border-white/[0.08] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none"
+                    />
                   </div>
 
-                  <div className="flex items-center gap-1 w-full sm:w-auto">
+                  <div>
+                    <label className="text-xs font-mono uppercase text-slate-400">LinkedIn Profile URL</label>
                     <input
-                      type="text"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ""))}
-                      placeholder="username"
-                      className="bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-mono text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 w-full sm:w-40 text-center sm:text-left"
+                      type="url"
+                      value={linkedinUrl}
+                      onChange={(e) => setLinkedinUrl(e.target.value)}
+                      placeholder="https://linkedin.com/in/yourusername"
+                      className="w-full mt-1 px-4 py-2.5 rounded-lg bg-slate-900 border border-white/[0.08] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-mono uppercase text-slate-400">Behance / Portfolio Link (Optional)</label>
+                    <input
+                      type="url"
+                      value={portfolioUrl}
+                      onChange={(e) => setPortfolioUrl(e.target.value)}
+                      placeholder="https://behance.net/yourname"
+                      className="w-full mt-1 px-4 py-2.5 rounded-lg bg-slate-900 border border-white/[0.08] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-mono uppercase text-slate-400">Existing Resume Notes or Highlights (Optional)</label>
+                    <textarea
+                      rows={3}
+                      value={rawResumeText}
+                      onChange={(e) => setRawResumeText(e.target.value)}
+                      placeholder="Paste 1-2 bullet points from your resume to anchor the AI bio..."
+                      className="w-full mt-1 px-4 py-2.5 rounded-lg bg-slate-900 border border-white/[0.08] text-white text-xs leading-relaxed focus:border-emerald-500 focus:outline-none"
                     />
                   </div>
                 </div>
 
-                {/* Navigation Buttons */}
-                <div className="flex justify-between items-center pt-2">
+                <div className="flex justify-between pt-4">
                   <button
                     onClick={() => setStep(2)}
-                    className="text-xs text-slate-400 hover:text-white"
+                    className="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-white/[0.08] text-xs font-semibold text-slate-300 flex items-center gap-2"
                   >
-                    &larr; Back
+                    <ArrowLeft size={14} /> Back
                   </button>
-
                   <button
-                    onClick={handleBuildPortfolio}
-                    className="flex items-center gap-2 px-8 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm rounded-xl transition-all shadow-lg shadow-emerald-500/20 hover:scale-105"
+                    onClick={handleGenerateDraft}
+                    disabled={isSubmitting}
+                    className="px-6 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-emerald-500/20 disabled:opacity-50"
                   >
-                    <Sparkles size={16} />
-                    <span>Attach &amp; Launch Live Portfolio</span>
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                        <span>Synthesizing Copy...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles size={14} />
+                        <span>Draft Copy & Recommend Styles →</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </motion.div>
             )}
 
-            {/* STEP 4: GENERATION & CELEBRATION */}
+            {/* STEP 4: REVIEW, APPROVE & LAUNCH */}
             {step === 4 && (
               <motion.div
                 key="step4"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center text-center space-y-6 py-6"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="space-y-8"
               >
-                {isGenerating ? (
-                  <>
-                    <div className="relative">
-                      <div className="w-20 h-20 border-4 border-slate-800 border-t-emerald-500 rounded-full animate-spin" />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <Sparkles size={24} className="text-emerald-400 animate-pulse" />
-                      </div>
-                    </div>
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono mb-2">
+                    <ShieldCheck size={12} /> Step 4: Zero-Hallucination Review & Approval
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl font-black text-white">
+                    Review and approve your portfolio copy.
+                  </h1>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Every word below was generated strictly from your stated roles ({targetRoles.join(", ")}) and strengths ({topStrengths.join(", ")}). You have complete editing control.
+                  </p>
+                </div>
 
-                    <div className="space-y-1">
-                      <h2 className="text-2xl font-bold text-white">Forging Your Live Portfolio...</h2>
-                      <p className="text-sm font-medium text-emerald-400 animate-pulse font-mono">
-                        {generationStage}
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    {/* Success Celebratory Badge */}
-                    <div className="w-20 h-20 bg-emerald-500/20 border-2 border-emerald-500 text-emerald-400 rounded-3xl flex items-center justify-center shadow-2xl shadow-emerald-500/20">
-                      <CheckCircle2 size={42} />
-                    </div>
+                {/* Headline Editor */}
+                <div className="space-y-2">
+                  <label className="text-xs font-mono uppercase text-slate-400 flex items-center justify-between">
+                    <span>Generated Professional Headline</span>
+                    <span className="text-emerald-400 text-[10px]">Editable</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={draftHeadline}
+                    onChange={(e) => setDraftHeadline(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-white/[0.08] text-white text-sm font-semibold focus:border-emerald-500 focus:outline-none"
+                  />
+                </div>
 
-                    <div className="space-y-2">
-                      <h2 className="text-3xl font-extrabold text-white tracking-tight">
-                        🎉 Your Live Portfolio Is Published!
-                      </h2>
-                      <p className="text-sm text-slate-300 max-w-md mx-auto">
-                        We attached <strong className="text-emerald-400">{TEMPLATES.find(t => t.id === selectedTemplate)?.name}</strong> to your profile and activated your live public URL.
-                      </p>
-                    </div>
+                {/* Bio Editor */}
+                <div className="space-y-2">
+                  <label className="text-xs font-mono uppercase text-slate-400 flex items-center justify-between">
+                    <span>Generated Profile Bio ({tone.toUpperCase()} tone)</span>
+                    <span className="text-emerald-400 text-[10px]">Editable</span>
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={draftBio}
+                    onChange={(e) => setDraftBio(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-white/[0.08] text-white text-xs leading-relaxed focus:border-emerald-500 focus:outline-none"
+                  />
+                </div>
 
-                    {/* Live URL Link Box */}
-                    <div className="w-full max-w-md bg-slate-950 p-4 rounded-2xl border border-slate-800 flex items-center justify-between gap-3 shadow-inner">
-                      <div className="text-left font-mono text-xs overflow-hidden">
-                        <span className="text-slate-500">Live URL: </span>
-                        <span className="text-emerald-400 font-bold underline">
-                          {typeof window !== "undefined" ? window.location.origin : "http://localhost:3000"}{liveUrl}
-                        </span>
-                      </div>
+                {/* Recommended Styles Picker */}
+                <div className="space-y-3">
+                  <label className="text-xs font-mono uppercase text-slate-400">
+                    Recommended Architecture For You
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {[
+                      { id: "developer-terminal", name: "Developer Terminal", desc: "Bash chrome, CLI prompts, Git history" },
+                      { id: "minimal-editorial", name: "Minimal Editorial", desc: "Serif typography, generous whitespace" },
+                      { id: "bold-poster", name: "Bold Poster", desc: "High-contrast neo-grotesque display headers" },
+                    ].map((theme) => {
+                      const isSelected = selectedThemeId === theme.id;
+                      const isTopMatch = recommendedThemeIds[0] === theme.id;
+                      return (
+                        <button
+                          key={theme.id}
+                          type="button"
+                          onClick={() => setSelectedThemeId(theme.id)}
+                          className={`p-3.5 rounded-xl border text-left transition-all ${
+                            isSelected
+                              ? "bg-emerald-500/10 border-emerald-500 text-white shadow-md shadow-emerald-500/10"
+                              : "bg-slate-900 border-white/[0.08] text-slate-400 hover:text-white"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs font-bold text-white">{theme.name}</span>
+                            {isTopMatch && (
+                              <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500 text-slate-950">
+                                TOP MATCH
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[11px] text-slate-400">{theme.desc}</div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
-                      <button
-                        onClick={copyLiveLink}
-                        className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 shrink-0 transition-colors"
-                        title="Copy live link"
-                      >
-                        {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
-                        <span>{copied ? "Copied!" : "Copy"}</span>
-                      </button>
-                    </div>
+                {/* Mandatory Approval Checkbox */}
+                <div className="p-4 rounded-xl bg-slate-950 border border-emerald-500/30 flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="approvalCheckbox"
+                    checked={isApproved}
+                    onChange={(e) => setIsApproved(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 rounded text-emerald-500 focus:ring-emerald-500 bg-slate-900 border-white/20"
+                  />
+                  <label htmlFor="approvalCheckbox" className="text-xs text-slate-300 leading-relaxed cursor-pointer">
+                    <strong className="text-white">Factual Accuracy Confirmation:</strong> I confirm that this headline, bio, and experience data accurately represent my real background and do not contain false claims, unverified metrics, or unauthorized external branding.
+                  </label>
+                </div>
 
-                    {/* Action Buttons */}
-                    <div className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-md pt-2">
-                      <a
-                        href={liveUrl || `/p/${username}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="w-full sm:flex-1 py-3 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all hover:scale-105"
-                      >
-                        <ExternalLink size={15} />
-                        <span>View Live Portfolio</span>
-                      </a>
-
-                      <Link
-                        href="/portfolio/preview"
-                        className="w-full sm:flex-1 py-3 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center justify-center gap-2 border border-slate-700 transition-colors"
-                      >
-                        <Sparkles size={15} className="text-emerald-400" />
-                        <span>AI Studio Editor</span>
-                      </Link>
-                    </div>
-                  </>
-                )}
+                <div className="flex justify-between pt-4">
+                  <button
+                    onClick={() => setStep(3)}
+                    className="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-white/[0.08] text-xs font-semibold text-slate-300 flex items-center gap-2"
+                  >
+                    <ArrowLeft size={14} /> Back
+                  </button>
+                  <button
+                    onClick={handleApproveAndPublish}
+                    disabled={!isApproved || isSubmitting}
+                    className="px-6 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                        <span>Publishing Live...</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 size={14} />
+                        <span>Approve & Launch My Live Portfolio</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </motion.div>
             )}
-
           </AnimatePresence>
-        </div>
-      </div>
+        )}
+      </main>
+
+      {/* Footer info */}
+      <footer className="border-t border-white/[0.08] py-4 px-6 text-center text-xs text-slate-500 font-mono">
+        FolioVeda Smart Intake • Zero Hallucination Engine • Live Recruiter Proof
+      </footer>
     </div>
   );
 }

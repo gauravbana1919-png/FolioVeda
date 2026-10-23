@@ -171,12 +171,20 @@ export function mapUserToPortfolioContent(userRecord: any, fallbackName = "Alex 
       },
     ],
     experience: Array.isArray(userRecord.experience) ? userRecord.experience : [],
-    contact: {
-      email: userRecord.email || null,
-      github: userRecord.profile?.github || null,
-      linkedin: userRecord.profile?.linkedin || null,
-      twitter: userRecord.profile?.twitter || null,
-      website: userRecord.profile?.website || null,
-    },
+    contact: (() => {
+      let socialsObj: any = {};
+      if (typeof userRecord.profile?.socials === "string") {
+        try {
+          socialsObj = JSON.parse(userRecord.profile.socials);
+        } catch {}
+      }
+      return {
+        email: userRecord.email || null,
+        github: socialsObj.github || userRecord.profile?.github || null,
+        linkedin: socialsObj.linkedin || userRecord.profile?.linkedin || null,
+        twitter: socialsObj.twitter || userRecord.profile?.twitter || null,
+        website: socialsObj.portfolio || socialsObj.website || userRecord.profile?.website || null,
+      };
+    })(),
   };
 }
