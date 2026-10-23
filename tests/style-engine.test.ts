@@ -9,17 +9,22 @@ import {
   mapUserToPortfolioContent,
 } from "../src/lib/themes/registry";
 
-describe("Stage 2: Core Style Engine & System Themes", () => {
-  it("should have exactly 3 initial distinct system themes registered", () => {
+describe("Stage 2 & Stage 5: Core Style Engine & 8 Distinct System Themes", () => {
+  it("should have all 8 distinct system themes registered", () => {
     const themes = getAllSystemThemes();
-    expect(themes.length).toBe(3);
+    expect(themes.length).toBe(8);
     const ids = themes.map((t) => t.id);
     expect(ids).toContain("developer-terminal");
     expect(ids).toContain("minimal-editorial");
     expect(ids).toContain("bold-poster");
+    expect(ids).toContain("corporate-clean");
+    expect(ids).toContain("creative-collage");
+    expect(ids).toContain("case-study-heavy");
+    expect(ids).toContain("dark-showcase");
+    expect(ids).toContain("playful-sticker");
   });
 
-  it("should strictly validate all 3 system themes against ThemePackageSchema", () => {
+  it("should strictly validate all 8 system themes against ThemePackageSchema", () => {
     for (const [id, theme] of Object.entries(SYSTEM_THEMES)) {
       const parsed = ThemePackageSchema.safeParse(theme);
       expect(parsed.success, `Theme ${id} failed validation: ${parsed.error}`).toBe(true);
@@ -47,16 +52,21 @@ describe("Stage 2: Core Style Engine & System Themes", () => {
 
   it("should filter themes accurately by category and mood", () => {
     const techThemes = filterThemes({ category: "tech" });
-    expect(techThemes.length).toBe(1);
-    expect(techThemes[0].id).toBe("developer-terminal");
+    expect(techThemes.length).toBeGreaterThanOrEqual(2);
+    expect(techThemes.map((t) => t.id)).toContain("developer-terminal");
+    expect(techThemes.map((t) => t.id)).toContain("dark-showcase");
 
     const designThemes = filterThemes({ category: "design" });
-    expect(designThemes.length).toBe(1);
-    expect(designThemes[0].id).toBe("minimal-editorial");
+    expect(designThemes.length).toBeGreaterThanOrEqual(2);
+    expect(designThemes.map((t) => t.id)).toContain("minimal-editorial");
+    expect(designThemes.map((t) => t.id)).toContain("case-study-heavy");
+
+    const businessThemes = filterThemes({ category: "business" });
+    expect(businessThemes.length).toBeGreaterThanOrEqual(1);
+    expect(businessThemes.map((t) => t.id)).toContain("corporate-clean");
 
     const boldThemes = filterThemes({ mood: "bold" });
-    expect(boldThemes.length).toBe(1);
-    expect(boldThemes[0].id).toBe("bold-poster");
+    expect(boldThemes.length).toBeGreaterThanOrEqual(2);
   });
 
   it("should map arbitrary user data into standardized PortfolioContent without data loss", () => {

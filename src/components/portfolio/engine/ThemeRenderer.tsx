@@ -31,6 +31,30 @@ import {
   PosterExperience,
   PosterContact,
 } from "./variants/poster";
+import {
+  CorporateNav,
+  CorporateHero,
+  CorporateProjects,
+  CorporateSkills,
+  CorporateExperience,
+  CorporateContact,
+} from "./variants/corporate";
+import {
+  ShowcaseNav,
+  ShowcaseHero,
+  ShowcaseProjects,
+  ShowcaseSkills,
+  ShowcaseExperience,
+  ShowcaseContact,
+} from "./variants/showcase";
+import {
+  StickerNav,
+  StickerHero,
+  StickerProjects,
+  StickerSkills,
+  StickerExperience,
+  StickerContact,
+} from "./variants/sticker";
 
 interface ThemeRendererProps {
   theme: ThemePackage;
@@ -72,8 +96,16 @@ export function ThemeRenderer({
       case "terminal-grid":
         return <TerminalNav content={content} theme={theme} />;
       case "centered-editorial":
+      case "case-study":
         return <EditorialNav content={content} theme={theme} />;
+      case "split-hero":
+        return <CorporateNav content={content} theme={theme} />;
+      case "dark-showcase":
+        return <ShowcaseNav content={content} theme={theme} />;
+      case "playful-sticker":
+        return <StickerNav content={content} theme={theme} />;
       case "poster":
+      case "masonry":
       default:
         return <PosterNav content={content} theme={theme} />;
     }
@@ -84,27 +116,42 @@ export function ThemeRenderer({
     switch (sectionName) {
       case "hero":
         if (pattern === "terminal-grid") return <TerminalHero key={index} content={content} theme={theme} />;
-        if (pattern === "centered-editorial") return <EditorialHero key={index} content={content} theme={theme} />;
+        if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialHero key={index} content={content} theme={theme} />;
+        if (pattern === "split-hero") return <CorporateHero key={index} content={content} theme={theme} />;
+        if (pattern === "dark-showcase") return <ShowcaseHero key={index} content={content} theme={theme} />;
+        if (pattern === "playful-sticker") return <StickerHero key={index} content={content} theme={theme} />;
         return <PosterHero key={index} content={content} theme={theme} />;
 
       case "projects":
         if (pattern === "terminal-grid") return <TerminalProjects key={index} content={content} theme={theme} />;
-        if (pattern === "centered-editorial") return <EditorialProjects key={index} content={content} theme={theme} />;
+        if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialProjects key={index} content={content} theme={theme} />;
+        if (pattern === "split-hero") return <CorporateProjects key={index} content={content} theme={theme} />;
+        if (pattern === "dark-showcase") return <ShowcaseProjects key={index} content={content} theme={theme} />;
+        if (pattern === "playful-sticker") return <StickerProjects key={index} content={content} theme={theme} />;
         return <PosterProjects key={index} content={content} theme={theme} />;
 
       case "skills":
         if (pattern === "terminal-grid") return <TerminalSkills key={index} content={content} theme={theme} />;
-        if (pattern === "centered-editorial") return <EditorialSkills key={index} content={content} theme={theme} />;
+        if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialSkills key={index} content={content} theme={theme} />;
+        if (pattern === "split-hero") return <CorporateSkills key={index} content={content} theme={theme} />;
+        if (pattern === "dark-showcase") return <ShowcaseSkills key={index} content={content} theme={theme} />;
+        if (pattern === "playful-sticker") return <StickerSkills key={index} content={content} theme={theme} />;
         return <PosterSkills key={index} content={content} theme={theme} />;
 
       case "experience":
         if (pattern === "terminal-grid") return <TerminalExperience key={index} content={content} theme={theme} />;
-        if (pattern === "centered-editorial") return <EditorialExperience key={index} content={content} theme={theme} />;
+        if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialExperience key={index} content={content} theme={theme} />;
+        if (pattern === "split-hero") return <CorporateExperience key={index} content={content} theme={theme} />;
+        if (pattern === "dark-showcase") return <ShowcaseExperience key={index} content={content} theme={theme} />;
+        if (pattern === "playful-sticker") return <StickerExperience key={index} content={content} theme={theme} />;
         return <PosterExperience key={index} content={content} theme={theme} />;
 
       case "contact":
         if (pattern === "terminal-grid") return <TerminalContact key={index} content={content} theme={theme} />;
-        if (pattern === "centered-editorial") return <EditorialContact key={index} content={content} theme={theme} />;
+        if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialContact key={index} content={content} theme={theme} />;
+        if (pattern === "split-hero") return <CorporateContact key={index} content={content} theme={theme} />;
+        if (pattern === "dark-showcase") return <ShowcaseContact key={index} content={content} theme={theme} />;
+        if (pattern === "playful-sticker") return <StickerContact key={index} content={content} theme={theme} />;
         return <PosterContact key={index} content={content} theme={theme} />;
 
       default:

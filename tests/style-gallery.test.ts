@@ -45,9 +45,21 @@ describe("Stage 3: Style Gallery & Recommendations Engine", () => {
     expect(calmOnly.every((t) => t.mood === "calm")).toBe(true);
   });
 
+  it("should return recommendations for BBA profile with Corporate Clean as top pick", () => {
+    const recs = getThemeRecommendations({
+      profileType: "bba",
+      targetGoal: "fulltime",
+    });
+
+    expect(recs.length).toBeGreaterThanOrEqual(3);
+    const topPick = recs.find((r) => r.isTopPick);
+    expect(topPick).toBeDefined();
+    expect(topPick?.theme.id).toBe("corporate-clean");
+  });
+
   it("should return complete system theme list for gallery view", () => {
     const themes = getAllSystemThemes();
-    expect(themes.length).toBe(3);
+    expect(themes.length).toBe(8);
     for (const theme of themes) {
       expect(theme.tokens.colors.bg).toBeDefined();
       expect(theme.tokens.colors.surface).toBeDefined();

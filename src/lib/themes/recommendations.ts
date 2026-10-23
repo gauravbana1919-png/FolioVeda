@@ -27,27 +27,38 @@ export function getThemeRecommendations(
     let score = 50; // baseline score
     let reason = "Well-balanced portfolio suitable for broad professional visibility.";
 
-    // Match Category to Profile Type
+    // Specific Top Theme Boosts
     if (profileType === "tech") {
-      if (theme.category === "tech") {
+      if (theme.id === "developer-terminal") {
+        score += 45;
+        reason = "Engineered specifically for technical roles with CLI prompts, bash window chrome, and Git commit logs.";
+      } else if (theme.id === "dark-showcase") {
         score += 40;
-        reason = "Engineered specifically for developers with terminal syntax, CLI prompts, and Git logs.";
-      } else if (theme.category === "creative") {
-        score += 20;
-        reason = "High-energy presentation that highlights engineering impact and systems metrics.";
+        reason = "High-tech obsidian and cyan glow showcasing deep systems architecture and live units.";
+      } else if (theme.category === "tech") {
+        score += 30;
       }
     } else if (profileType === "designer") {
-      if (theme.category === "design") {
-        score += 40;
+      if (theme.id === "minimal-editorial") {
+        score += 45;
         reason = "Serif typography, generous negative space, and curated magazine-grade case studies.";
-      } else if (theme.category === "creative") {
-        score += 25;
-        reason = "Bold visual punch ideal for high-contrast branding and product showcases.";
+      } else if (theme.id === "case-study-heavy") {
+        score += 40;
+        reason = "Comprehensive architectural narrative breaking down problem, solution, and impact metrics.";
+      } else if (theme.category === "design") {
+        score += 30;
       }
-    } else if (profileType === "bba" || profileType === "other") {
-      if (theme.mood === "formal" || theme.category === "design") {
+    } else if (profileType === "bba") {
+      if (theme.id === "corporate-clean") {
+        score += 45;
+        reason = "Structured executive dossier with clean typography, KPI metrics, and career timeline clarity.";
+      } else if (theme.category === "business") {
         score += 35;
-        reason = "Refined and structured layout tailored for leadership, analytics, and project deliverables.";
+      }
+    } else if (profileType === "other") {
+      if (theme.id === "playful-sticker" || theme.id === "creative-collage") {
+        score += 40;
+        reason = "Warm, approachable, and expressive layout designed for creative makers and consultants.";
       }
     }
 
@@ -57,10 +68,13 @@ export function getThemeRecommendations(
     }
 
     // Goal Match
-    if (params.targetGoal === "internships" || params.targetGoal === "fulltime") {
+    if (params.targetGoal === "internships" || params.targetGoal === "fulltime" || params.targetGoal === "job") {
       if (theme.id === "developer-terminal" && profileType === "tech") {
         score += 10;
         reason += " Proven to capture technical recruiters' attention in under 30 seconds.";
+      } else if (theme.id === "corporate-clean" && profileType === "bba") {
+        score += 10;
+        reason += " Optimized for corporate recruiters and institutional hiring managers.";
       }
     }
 

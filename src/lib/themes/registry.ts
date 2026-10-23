@@ -3,11 +3,21 @@ import { PortfolioContent } from "@/types/content";
 import { developerTerminalTheme } from "./definitions/developer-terminal";
 import { minimalEditorialTheme } from "./definitions/minimal-editorial";
 import { boldPosterTheme } from "./definitions/bold-poster";
+import { corporateCleanTheme } from "./definitions/corporate-clean";
+import { creativeCollageTheme } from "./definitions/creative-collage";
+import { caseStudyHeavyTheme } from "./definitions/case-study-heavy";
+import { darkShowcaseTheme } from "./definitions/dark-showcase";
+import { playfulStickerTheme } from "./definitions/playful-sticker";
 
 export const SYSTEM_THEMES: Record<string, ThemePackage> = {
   "developer-terminal": developerTerminalTheme,
   "minimal-editorial": minimalEditorialTheme,
   "bold-poster": boldPosterTheme,
+  "corporate-clean": corporateCleanTheme,
+  "creative-collage": creativeCollageTheme,
+  "case-study-heavy": caseStudyHeavyTheme,
+  "dark-showcase": darkShowcaseTheme,
+  "playful-sticker": playfulStickerTheme,
 };
 
 // Validate that all system themes satisfy ThemePackageSchema at module load
