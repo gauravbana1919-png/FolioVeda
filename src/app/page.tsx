@@ -24,6 +24,7 @@ import {
   Palette
 } from "lucide-react";
 import { FolioVedaLogo } from "@/components/ui/Logo";
+import { HangingResumesGallery } from "@/components/portfolio/HangingResumesGallery";
 
 type TemplateCategory = "all" | "creative" | "engineering" | "architecture" | "product";
 
@@ -168,6 +169,7 @@ export default function ColorfulEditorialHomePage() {
             onMouseLeave={() => setHoveredNav(null)}
           >
             {[
+              { id: "resumes", label: "Top Resumes", href: "#top-resumes", badge: "HOT" },
               { id: "templates", label: "Templates", href: "#templates" },
               { id: "inspiration", label: "Inspiration", href: "/inspiration", badge: "AI" },
               { id: "intake", label: "Intake Flow", href: "/onboarding" },
@@ -308,6 +310,13 @@ export default function ColorfulEditorialHomePage() {
         </div>
 
       </section>
+
+
+      {/* =========================================================================
+          HANGING RESUMES GALLERY: Scroll-Triggered Drop Tied With Flexible Threads
+          & Full-Screen Front Page Cover on Hover
+          ========================================================================= */}
+      <HangingResumesGallery />
 
 
       {/* =========================================================================
