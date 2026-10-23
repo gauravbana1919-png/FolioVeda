@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import { HangingResumesGallery } from "@/components/portfolio/HangingResumesGallery";
+import { AnimatedCareerStory } from "@/components/portfolio/AnimatedCareerStory";
 
 type TemplateCategory = "all" | "creative" | "engineering" | "architecture" | "product";
 
@@ -163,20 +164,17 @@ export default function ColorfulEditorialHomePage() {
             </div>
           </Link>
 
-          {/* Center: Animated Interactive Navigation with Smooth Floating Hover Pills */}
+          {/* Center: Clean Minimal Navigation with Smooth Floating Hover Pills */}
           <nav 
             className="hidden md:flex items-center gap-1.5 p-1.5 rounded-full bg-white/80 border border-[#1E293B]/10 shadow-2xs backdrop-blur-md"
             onMouseLeave={() => setHoveredNav(null)}
           >
             {[
-              { id: "resumes", label: "Top Resumes", href: "#top-resumes", badge: "HOT" },
+              { id: "story", label: "Why FolioVeda", href: "#career-story", badge: "STORY" },
+              { id: "resumes", label: "Top Resumes", href: "#top-resumes" },
               { id: "templates", label: "Templates", href: "#templates" },
-              { id: "inspiration", label: "Inspiration", href: "/inspiration", badge: "AI" },
-              { id: "intake", label: "Intake Flow", href: "/onboarding" },
-              { id: "features", label: "Features", href: "#features" },
+              { id: "inspiration", label: "Inspiration AI", href: "/inspiration", badge: "AI" },
               { id: "pricing", label: "Pricing", href: "#pricing" },
-              { id: "styles", label: "Style Gallery", href: "/styles" },
-              { id: "hub", label: "Dev Hub ↗", href: "/hub" },
             ].map((link) => {
               const isHovered = hoveredNav === link.id;
               return (
@@ -310,6 +308,13 @@ export default function ColorfulEditorialHomePage() {
         </div>
 
       </section>
+
+
+      {/* =========================================================================
+          ANIMATED CAREER STORY: The Tale of Two Applicants (Video-style comparison)
+          Why a Live Portfolio & ATS-Friendly Resume Changes Everything
+          ========================================================================= */}
+      <AnimatedCareerStory />
 
 
       {/* =========================================================================
