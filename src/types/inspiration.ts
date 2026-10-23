@@ -65,6 +65,7 @@ export const TakedownReportInputSchema = z.object({
 });
 
 export type AbstractFontCategory = z.infer<typeof AbstractFontCategorySchema>;
+export type AbstractLayoutPattern = z.infer<typeof AbstractLayoutPatternSchema>;
 export type StyleProfile = z.infer<typeof StyleProfileSchema>;
 export type ClosenessLevel = z.infer<typeof ClosenessLevelSchema>;
 export type InspirationAnalyzeInput = z.infer<typeof InspirationAnalyzeInputSchema>;
