@@ -26,6 +26,7 @@ import {
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import { HangingResumesGallery } from "@/components/portfolio/HangingResumesGallery";
 import { RedBullStyleCommercial } from "@/components/portfolio/RedBullStyleCommercial";
+import { FolioTreeHeroAnimation } from "@/components/portfolio/FolioTreeHeroAnimation";
 
 type TemplateCategory = "all" | "creative" | "engineering" | "architecture" | "product";
 
@@ -306,6 +307,12 @@ export default function ColorfulEditorialHomePage() {
             Alumni hired at <strong className="text-[#1E293B] font-bold">Stripe</strong>, <strong className="text-[#1E293B] font-bold">Linear</strong>, <strong className="text-[#1E293B] font-bold">Vercel</strong>, and <strong className="text-[#1E293B] font-bold">Datadog</strong>
           </div>
         </div>
+
+        {/* =========================================================================
+            HERO ANIMATION: Stickman Plants FolioVeda Seed, Waters User Information,
+            Grows Full Apple Tree, Apple Drops & Live Portfolio Pops Up
+            ========================================================================= */}
+        <FolioTreeHeroAnimation />
 
       </section>
 
