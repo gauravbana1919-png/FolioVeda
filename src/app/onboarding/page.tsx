@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Code2, 
@@ -27,7 +29,10 @@ import { ProfileType, TargetGoal, ToneOfVoice, PreferredMood, IntakeAnswersInput
 
 type Step = 1 | 2 | 3 | 4;
 
-export default function SmartIntakeOnboardingPage() {
+function SmartIntakeOnboardingContent() {
+  const searchParams = useSearchParams();
+  const { data: session } = useSession();
+
   const [step, setStep] = useState<Step>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
@@ -50,11 +55,58 @@ export default function SmartIntakeOnboardingPage() {
   const [portfolioUrl, setPortfolioUrl] = useState("");
   const [rawResumeText, setRawResumeText] = useState("");
 
+  const [isSyncingGithub, setIsSyncingGithub] = useState(false);
+  const [githubSyncResult, setGithubSyncResult] = useState<string | null>(null);
+
   // AI Generated Draft State (Step 4)
   const [draftHeadline, setDraftHeadline] = useState("");
   const [draftBio, setDraftBio] = useState("");
   const [recommendedThemeIds, setRecommendedThemeIds] = useState<string[]>([]);
   const [selectedThemeId, setSelectedThemeId] = useState("developer-terminal");
+
+  // Read URL query params (?handle=, ?name=, ?template=) & session
+  useEffect(() => {
+    const handleParam = searchParams.get("handle") || searchParams.get("name");
+    const templateParam = searchParams.get("template");
+
+    if (handleParam) {
+      setCandidateName(handleParam);
+    } else if (session?.user?.name) {
+      setCandidateName(session.user.name);
+    }
+
+    if (templateParam) {
+      setSelectedThemeId(templateParam);
+    }
+  }, [searchParams, session]);
+
+  const handleSyncGithub = async () => {
+    if (!githubUrl.trim()) return;
+    setIsSyncingGithub(true);
+    setGithubSyncResult(null);
+
+    try {
+      const res = await fetch("/api/github/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: githubUrl.trim(),
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setGithubSyncResult(`✓ Synced ${data.count} repos directly to your database!`);
+        setTimeout(() => setGithubSyncResult(null), 5000);
+      } else {
+        setGithubSyncResult(`Failed: ${data.error || "Could not sync"}`);
+      }
+    } catch (err) {
+      setGithubSyncResult("Network error syncing GitHub");
+    } finally {
+      setIsSyncingGithub(false);
+    }
+  };
 
   // Role presets by profile
   const ROLE_PRESETS: Record<ProfileType, string[]> = {
@@ -242,7 +294,21 @@ export default function SmartIntakeOnboardingPage() {
               </Link>
             </div>
 
-            <div className="pt-6 flex justify-center gap-4">
+            <div className="pt-6 flex flex-wrap justify-center gap-3">
+              <Link
+                href={publishedUrl}
+                target="_blank"
+                className="px-5 py-2.5 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-[#991B1B]/20"
+              >
+                <span>Visit Live Site ↗</span>
+                <ExternalLink size={12} />
+              </Link>
+              <Link
+                href="/dashboard"
+                className="px-5 py-2.5 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 transition-colors shadow-2xs"
+              >
+                Go to Dashboard →
+              </Link>
               <Link
                 href="/portfolio/preview"
                 className="px-5 py-2.5 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 transition-colors shadow-2xs"
@@ -533,14 +599,41 @@ export default function SmartIntakeOnboardingPage() {
 
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500">GitHub Profile URL</label>
-                    <input
-                      type="url"
-                      value={githubUrl}
-                      onChange={(e) => setGithubUrl(e.target.value)}
-                      placeholder="https://github.com/yourusername"
-                      className="w-full mt-1 px-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-xs font-semibold focus:border-[#991B1B] focus:outline-none"
-                    />
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500">GitHub Profile URL</label>
+                      {githubSyncResult && (
+                        <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                          {githubSyncResult}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="url"
+                        value={githubUrl}
+                        onChange={(e) => setGithubUrl(e.target.value)}
+                        placeholder="https://github.com/yourusername"
+                        className="flex-1 px-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-xs font-semibold focus:border-[#991B1B] focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleSyncGithub}
+                        disabled={isSyncingGithub || !githubUrl.trim()}
+                        className="px-4 py-3 rounded-full bg-slate-900 hover:bg-[#991B1B] text-white text-xs font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer disabled:opacity-50 shadow-2xs"
+                      >
+                        {isSyncingGithub ? (
+                          <>
+                            <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <span>Syncing...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Code2 size={13} />
+                            <span>Sync Repos</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                   <div>
@@ -743,5 +836,22 @@ export default function SmartIntakeOnboardingPage() {
         FolioVeda Smart Intake • Zero Hallucination Engine • Live Recruiter Proof
       </footer>
     </div>
+  );
+}
+
+export default function SmartIntakeOnboardingPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center">
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
+            <div className="w-4 h-4 border-2 border-[#991B1B] border-t-transparent rounded-full animate-spin" />
+            <span>Loading FolioVeda Smart Intake...</span>
+          </div>
+        </div>
+      }
+    >
+      <SmartIntakeOnboardingContent />
+    </Suspense>
   );
 }

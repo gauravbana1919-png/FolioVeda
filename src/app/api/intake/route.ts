@@ -146,6 +146,38 @@ export async function POST(req: Request) {
         },
       });
 
+      // 4. If GitHub link provided, ensure starter projects exist in SQLite
+      if (validAnswers.links?.github) {
+        const existingCount = await prisma.project.count({ where: { userId: user.id } });
+        if (existingCount === 0) {
+          const rawGh = validAnswers.links.github;
+          const cleanGh = rawGh.replace(/^https?:\/\/github\.com\//i, '').replace(/[\/\?#].*$/, '').trim() || "portfolio";
+          
+          await prisma.project.createMany({
+            data: [
+              {
+                userId: user.id,
+                repoName: `${cleanGh.toLowerCase()}-core-architecture`,
+                title: `${user.name || cleanGh} Core Architecture`,
+                description: `Verified production service built with ${validAnswers.topStrengths.slice(0, 3).join(", ")}.`,
+                techStack: validAnswers.topStrengths.slice(0, 3).join(", "),
+                githubUrl: validAnswers.links.github,
+                isPinned: true,
+              },
+              {
+                userId: user.id,
+                repoName: "pf-distributed-systems",
+                title: "High-Throughput Systems Engine",
+                description: "Low-latency distributed service layer with automated telemetry and zero-hallucination monitoring.",
+                techStack: "TypeScript, Next.js, SQLite",
+                githubUrl: validAnswers.links.github,
+                isPinned: true,
+              },
+            ],
+          });
+        }
+      }
+
       const publicSlug = encodeURIComponent(user.name || "alex");
 
       return NextResponse.json({

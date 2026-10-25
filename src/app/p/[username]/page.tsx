@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function PublicPortfolioPage({ params, searchParams }: PageProps) {
   const { username } = await params;
   const query = searchParams ? await searchParams : {};
-  const decodedUsername = decodeURIComponent(username);
+  const decodedUsername = decodeURIComponent(username).trim();
+  const lowerUsername = decodedUsername.toLowerCase();
 
   // Look up user by name or id in Prisma
   let userRecord = null;
@@ -46,6 +47,28 @@ export default async function PublicPortfolioPage({ params, searchParams }: Page
         projects: true,
       },
     });
+
+    // Flexible match for slug variations (e.g. "gauravsingh" matching "GAURAV SINGH ")
+    if (!userRecord) {
+      const allUsers = await prisma.user.findMany({
+        include: {
+          profile: true,
+          portfolio: true,
+          projects: true,
+        },
+      });
+      userRecord = allUsers.find((u) => {
+        if (!u.name) return false;
+        const normalizedDb = u.name.trim().toLowerCase().replace(/\s+/g, "");
+        const queryNorm = lowerUsername.replace(/\s+/g, "");
+        return (
+          normalizedDb === queryNorm ||
+          u.name.trim().toLowerCase() === lowerUsername ||
+          u.name.trim().toLowerCase().includes(lowerUsername) ||
+          lowerUsername.includes(normalizedDb)
+        );
+      }) || null;
+    }
   } catch (err) {
     console.warn("DB query warning in public portfolio:", err);
   }
