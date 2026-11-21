@@ -119,7 +119,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const userSlug = encodeURIComponent(user.name || "alex");
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#1E293B] p-6 md:p-12 font-sans selection:bg-[#991B1B] selection:text-white">
+    <div className="min-h-screen bg-[#F8F9FA] text-[#1E293B] p-6 md:p-12 font-sans selection:bg-[#173f32] selection:text-white">
       <div className="max-w-6xl mx-auto space-y-8">
         
         {/* Top Operational Header */}
@@ -147,9 +147,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <div className="flex items-center gap-3">
             <Link 
               href="/styles" 
-              className="text-xs px-3.5 py-2 rounded-full bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-[#991B1B] border border-slate-200 font-bold inline-flex items-center gap-1.5 transition-all shadow-2xs"
+              className="text-xs px-3.5 py-2 rounded-full bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-[#173f32] border border-slate-200 font-bold inline-flex items-center gap-1.5 transition-all shadow-2xs"
             >
-              <Layers size={13} className="text-[#991B1B]" />
+              <Layers size={13} className="text-[#173f32]" />
               <span>Style Gallery</span>
             </Link>
 
@@ -176,7 +176,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         {allUsers.length > 1 && (
           <div className="px-5 py-3 rounded-2xl bg-white border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs shadow-2xs">
             <div className="flex items-center gap-2 text-slate-600">
-              <Database size={13} className="text-[#991B1B]" />
+              <Database size={13} className="text-[#173f32]" />
               <span className="font-bold">Database Profiles:</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -188,7 +188,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                     href={`/dashboard?user=${u.id}`}
                     className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
                       isCurrent
-                        ? "bg-[#991B1B] text-white shadow-xs"
+                        ? "bg-[#173f32] text-white shadow-xs"
                         : "bg-slate-100 hover:bg-slate-200 text-slate-700"
                     }`}
                   >
@@ -230,7 +230,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               <div className="text-sm font-extrabold text-[#1E293B] truncate max-w-[140px]">
                 {activeTheme}
               </div>
-              <Link href="/styles" className="text-xs text-[#991B1B] hover:underline font-bold">
+              <Link href="/styles" className="text-xs text-[#173f32] hover:underline font-bold">
                 Change Theme →
               </Link>
             </div>
@@ -270,7 +270,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <Link
               href={`/p/${userSlug}`}
               target="_blank"
-              className="px-5 py-3 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-md shadow-[#991B1B]/30 shrink-0 w-full md:w-auto"
+              className="px-5 py-3 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-md shadow-[#173f32]/30 shrink-0 w-full md:w-auto"
             >
               <span>View Live Portfolio</span>
               <ExternalLink size={13} />
@@ -292,7 +292,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <div className="p-6 border-b border-slate-100 flex justify-between items-center flex-wrap gap-3 bg-slate-50/70">
             <div>
               <h2 className="text-lg font-extrabold text-[#1E293B] flex items-center gap-2">
-                <Briefcase size={18} className="text-[#991B1B]" />
+                <Briefcase size={18} className="text-[#173f32]" />
                 <span>Verified SQLite Database Projects ({user.projects.length})</span>
               </h2>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -332,7 +332,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                       {project.description || "Production repository synced to FolioVeda."}
                     </p>
                     {project.techStack && (
-                      <div className="text-[11px] font-mono text-[#991B1B] font-semibold pt-0.5">
+                      <div className="text-[11px] font-mono text-[#173f32] font-semibold pt-0.5">
                         {project.techStack}
                       </div>
                     )}

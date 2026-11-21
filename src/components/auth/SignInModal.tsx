@@ -167,7 +167,7 @@ export function SignInModal({
       <div className="relative w-full max-w-md bg-[#F8F9FA] border border-[#1E293B]/15 rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-8 animate-in zoom-in-95 duration-200">
         
         {/* Top Crimson Accent Gradient Streak */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#991B1B] via-red-500 to-[#1E293B]" />
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#173f32] via-red-500 to-[#1E293B]" />
 
         {/* Close Button */}
         <button
@@ -203,7 +203,7 @@ export function SignInModal({
         {/* Error Alert if any */}
         {errorMessage && (
           <div className="mt-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs font-semibold flex items-start gap-2">
-            <Info size={16} className="text-[#991B1B] shrink-0 mt-0.5" />
+            <Info size={16} className="text-[#173f32] shrink-0 mt-0.5" />
             <span>{errorMessage}</span>
           </div>
         )}
@@ -218,7 +218,7 @@ export function SignInModal({
           >
             {isLoadingGoogle ? (
               <>
-                <Loader2 size={18} className="animate-spin text-[#991B1B]" />
+                <Loader2 size={18} className="animate-spin text-[#173f32]" />
                 <span>Authenticating with Google Account...</span>
               </>
             ) : (
@@ -239,7 +239,7 @@ export function SignInModal({
           {!showCustomInput ? (
             <button
               onClick={() => setShowCustomInput(true)}
-              className="w-full text-center text-xs font-bold text-slate-500 hover:text-[#991B1B] transition py-1 cursor-pointer flex items-center justify-center gap-1"
+              className="w-full text-center text-xs font-bold text-slate-500 hover:text-[#173f32] transition py-1 cursor-pointer flex items-center justify-center gap-1"
             >
               <Mail size={12} />
               <span>Or sign in with custom Gmail / Email</span>
@@ -262,7 +262,7 @@ export function SignInModal({
                 placeholder="Full Name (e.g. Rahul Verma)"
                 value={customName}
                 onChange={(e) => setCustomName(e.target.value)}
-                className="w-full px-3 py-2 text-xs font-medium bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-[#991B1B]"
+                className="w-full px-3 py-2 text-xs font-medium bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-[#173f32]"
               />
               <input
                 type="email"
@@ -270,12 +270,12 @@ export function SignInModal({
                 value={customEmail}
                 onChange={(e) => setCustomEmail(e.target.value)}
                 required
-                className="w-full px-3 py-2 text-xs font-medium bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-[#991B1B]"
+                className="w-full px-3 py-2 text-xs font-medium bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-[#173f32]"
               />
               <button
                 type="submit"
                 disabled={isLoadingCustom}
-                className="w-full py-2 px-3 bg-[#991B1B] hover:bg-[#7F1D1D] text-white text-xs font-bold rounded-xl transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
+                className="w-full py-2 px-3 bg-[#173f32] hover:bg-[#13352a] text-white text-xs font-bold rounded-xl transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
               >
                 {isLoadingCustom ? (
                   <>
@@ -317,11 +317,11 @@ export function SignInModal({
         {/* Instant Indian Creator Demo Profile Card */}
         <div className="mt-5 p-3.5 rounded-2xl bg-gradient-to-br from-red-50/70 to-slate-100 border border-red-100 shadow-2xs">
           <div className="flex items-center justify-between mb-1.5">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-[#991B1B]">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[#173f32]">
               <Sparkles size={13} />
               <span>Verified Indian Creator Profile</span>
             </div>
-            <span className="text-[9px] uppercase font-extrabold bg-[#991B1B] text-white px-2 py-0.5 rounded-full">
+            <span className="text-[9px] uppercase font-extrabold bg-[#173f32] text-white px-2 py-0.5 rounded-full">
               Demo
             </span>
           </div>

@@ -3,8 +3,11 @@
 @theme inline {
   --color-studio-alabaster: #F8F9FA;
   --color-deep-slate: #1E293B;
-  --color-industrial-crimson: #991B1B;
-  --color-industrial-crimson-hover: #7F1D1D;
+  --color-industrial-crimson: #173f32;
+  --color-industrial-crimson-hover: #13352a;
+  --color-forest-green: #173f32;
+  --color-cyber-mint: #10B981;
+  --color-nyc-yellow: #ebd800;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);

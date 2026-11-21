@@ -308,7 +308,7 @@ function SmartIntakeOnboardingContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#1E293B] selection:bg-[#991B1B] selection:text-white font-sans flex flex-col justify-between antialiased">
+    <div className="min-h-screen bg-[#F8F9FA] text-[#1E293B] selection:bg-[#173f32] selection:text-white font-sans flex flex-col justify-between antialiased">
       {/* Top Header */}
       <header className="border-b border-[#1E293B]/10 bg-[#F8F9FA]/90 backdrop-blur-xl px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
@@ -317,10 +317,10 @@ function SmartIntakeOnboardingContent() {
             <span className="text-slate-400 text-xs font-medium">/ Smart Intake</span>
           </Link>
           <div className="flex items-center gap-3">
-            <span className="text-xs font-bold text-[#991B1B]">Step {step} of 4</span>
+            <span className="text-xs font-bold text-[#173f32]">Step {step} of 4</span>
             <div className="w-24 h-2 bg-slate-200 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-[#991B1B] transition-all duration-300 rounded-full"
+                className="h-full bg-[#173f32] transition-all duration-300 rounded-full"
                 style={{ width: `${(step / 4) * 100}%` }}
               />
             </div>
@@ -337,7 +337,7 @@ function SmartIntakeOnboardingContent() {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-12 space-y-6"
           >
-            <div className="w-16 h-16 rounded-full bg-red-50 border-2 border-[#991B1B] text-[#991B1B] flex items-center justify-center mx-auto shadow-md animate-bounce">
+            <div className="w-16 h-16 rounded-full bg-red-50 border-2 border-[#173f32] text-[#173f32] flex items-center justify-center mx-auto shadow-md animate-bounce">
               <CheckCircle2 size={36} />
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1E293B]">
@@ -348,13 +348,13 @@ function SmartIntakeOnboardingContent() {
             </p>
 
             <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-md max-w-md mx-auto flex items-center justify-between">
-              <span className="font-mono text-xs text-[#991B1B] font-bold truncate">
+              <span className="font-mono text-xs text-[#173f32] font-bold truncate">
                 folioveda.me{publishedUrl}
               </span>
               <Link
                 href={publishedUrl}
                 target="_blank"
-                className="px-4 py-2 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white font-bold text-xs flex items-center gap-1 transition-all shadow-xs"
+                className="px-4 py-2 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white font-bold text-xs flex items-center gap-1 transition-all shadow-xs"
               >
                 <span>Visit Now</span>
                 <ExternalLink size={12} />
@@ -365,7 +365,7 @@ function SmartIntakeOnboardingContent() {
               <Link
                 href={publishedUrl}
                 target="_blank"
-                className="px-5 py-2.5 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-[#991B1B]/20"
+                className="px-5 py-2.5 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-[#173f32]/20"
               >
                 <span>Visit Live Site ↗</span>
                 <ExternalLink size={12} />
@@ -402,7 +402,7 @@ function SmartIntakeOnboardingContent() {
                 className="space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-lg"
               >
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#991B1B] text-xs font-bold uppercase tracking-wider mb-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#173f32] text-xs font-bold uppercase tracking-wider mb-2">
                     <User size={12} /> Step 1: Career Identity &amp; Goals
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1E293B]">
@@ -421,7 +421,7 @@ function SmartIntakeOnboardingContent() {
                     value={candidateName}
                     onChange={(e) => setCandidateName(e.target.value)}
                     placeholder="e.g. Alex Developer"
-                    className="w-full px-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-sm font-semibold focus:border-[#991B1B] focus:outline-none"
+                    className="w-full px-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-sm font-semibold focus:border-[#173f32] focus:outline-none"
                   />
                 </div>
 
@@ -448,11 +448,11 @@ function SmartIntakeOnboardingContent() {
                           }}
                           className={`p-4 rounded-2xl border text-left transition-all ${
                             selected
-                              ? "bg-red-50/70 border-[#991B1B] text-[#991B1B] shadow-sm"
+                              ? "bg-red-50/70 border-[#173f32] text-[#173f32] shadow-sm"
                               : "bg-slate-50 border-slate-200 text-slate-600 hover:text-[#1E293B]"
                           }`}
                         >
-                          <Icon size={20} className={selected ? "text-[#991B1B]" : "text-slate-400"} />
+                          <Icon size={20} className={selected ? "text-[#173f32]" : "text-slate-400"} />
                           <div className="text-xs font-bold mt-2">{item.label}</div>
                         </button>
                       );
@@ -476,7 +476,7 @@ function SmartIntakeOnboardingContent() {
                         onClick={() => setTargetGoal(g.id as TargetGoal)}
                         className={`py-2.5 px-3 rounded-full text-xs font-bold border text-center transition-all ${
                           targetGoal === g.id
-                            ? "bg-[#991B1B] text-white border-[#991B1B] shadow-xs"
+                            ? "bg-[#173f32] text-white border-[#173f32] shadow-xs"
                             : "bg-white border-slate-200 text-slate-600 hover:text-[#1E293B]"
                         }`}
                       >
@@ -502,7 +502,7 @@ function SmartIntakeOnboardingContent() {
                           onClick={() => toggleRole(role)}
                           className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all ${
                             active
-                              ? "bg-red-50 text-[#991B1B] border-red-300"
+                              ? "bg-red-50 text-[#173f32] border-red-300"
                               : "bg-white border-slate-200 text-slate-600 hover:text-black"
                           }`}
                         >
@@ -516,7 +516,7 @@ function SmartIntakeOnboardingContent() {
                 <div className="flex justify-end pt-4">
                   <button
                     onClick={() => setStep(2)}
-                    className="px-6 py-3 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-[#991B1B]/20"
+                    className="px-6 py-3 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-[#173f32]/20"
                   >
                     <span>Continue: Strengths &amp; Voice</span>
                     <ArrowRight size={14} />
@@ -535,7 +535,7 @@ function SmartIntakeOnboardingContent() {
                 className="space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-lg"
               >
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#991B1B] text-xs font-bold uppercase tracking-wider mb-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#173f32] text-xs font-bold uppercase tracking-wider mb-2">
                     <Sparkles size={12} /> Step 2: Strengths &amp; Voice
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1E293B]">
@@ -562,7 +562,7 @@ function SmartIntakeOnboardingContent() {
                           onClick={() => toggleStrength(strength)}
                           className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all ${
                             active
-                              ? "bg-red-50 text-[#991B1B] border-red-300"
+                              ? "bg-red-50 text-[#173f32] border-red-300"
                               : "bg-white border-slate-200 text-slate-600 hover:text-black"
                           }`}
                         >
@@ -588,7 +588,7 @@ function SmartIntakeOnboardingContent() {
                         onClick={() => setTone(t.id as ToneOfVoice)}
                         className={`p-4 rounded-2xl border text-left transition-all ${
                           tone === t.id
-                            ? "bg-red-50/70 border-[#991B1B] text-[#991B1B] shadow-sm"
+                            ? "bg-red-50/70 border-[#173f32] text-[#173f32] shadow-sm"
                             : "bg-slate-50 border-slate-200 text-slate-600 hover:text-black"
                         }`}
                       >
@@ -615,7 +615,7 @@ function SmartIntakeOnboardingContent() {
                         onClick={() => setPreferredMood(m.id as PreferredMood)}
                         className={`py-2.5 px-3 rounded-full text-xs font-bold border text-center transition-all ${
                           preferredMood === m.id
-                            ? "bg-[#991B1B] text-white border-[#991B1B] shadow-xs"
+                            ? "bg-[#173f32] text-white border-[#173f32] shadow-xs"
                             : "bg-white border-slate-200 text-slate-600 hover:text-[#1E293B]"
                         }`}
                       >
@@ -634,7 +634,7 @@ function SmartIntakeOnboardingContent() {
                   </button>
                   <button
                     onClick={() => setStep(3)}
-                    className="px-6 py-2.5 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-[#991B1B]/20"
+                    className="px-6 py-2.5 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-[#173f32]/20"
                   >
                     <span>Continue: Proof &amp; Links</span>
                     <ArrowRight size={14} />
@@ -653,7 +653,7 @@ function SmartIntakeOnboardingContent() {
                 className="space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-lg"
               >
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#991B1B] text-xs font-bold uppercase tracking-wider mb-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#173f32] text-xs font-bold uppercase tracking-wider mb-2">
                     <Globe size={12} /> Step 3: Verified Proof &amp; Links
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1E293B]">
@@ -680,13 +680,13 @@ function SmartIntakeOnboardingContent() {
                         value={githubUrl}
                         onChange={(e) => setGithubUrl(e.target.value)}
                         placeholder="https://github.com/yourusername"
-                        className="flex-1 px-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-xs font-semibold focus:border-[#991B1B] focus:outline-none"
+                        className="flex-1 px-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-xs font-semibold focus:border-[#173f32] focus:outline-none"
                       />
                       <button
                         type="button"
                         onClick={handleSyncGithub}
                         disabled={isSyncingGithub || !githubUrl.trim()}
-                        className="px-4 py-3 rounded-full bg-slate-900 hover:bg-[#991B1B] text-white text-xs font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer disabled:opacity-50 shadow-2xs"
+                        className="px-4 py-3 rounded-full bg-slate-900 hover:bg-[#173f32] text-white text-xs font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer disabled:opacity-50 shadow-2xs"
                       >
                         {isSyncingGithub ? (
                           <>
@@ -710,7 +710,7 @@ function SmartIntakeOnboardingContent() {
                       value={linkedinUrl}
                       onChange={(e) => setLinkedinUrl(e.target.value)}
                       placeholder="https://linkedin.com/in/yourusername"
-                      className="w-full mt-1 px-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-xs font-semibold focus:border-[#991B1B] focus:outline-none"
+                      className="w-full mt-1 px-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-xs font-semibold focus:border-[#173f32] focus:outline-none"
                     />
                   </div>
 
@@ -721,14 +721,14 @@ function SmartIntakeOnboardingContent() {
                       value={portfolioUrl}
                       onChange={(e) => setPortfolioUrl(e.target.value)}
                       placeholder="https://behance.net/yourname"
-                      className="w-full mt-1 px-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-xs font-semibold focus:border-[#991B1B] focus:outline-none"
+                      className="w-full mt-1 px-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-xs font-semibold focus:border-[#173f32] focus:outline-none"
                     />
                   </div>
 
                   {/* AI Resume & LinkedIn Extractor */}
                   <div className="p-5 rounded-2xl bg-gradient-to-br from-red-50/60 to-slate-50 border-2 border-red-100 space-y-3">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold uppercase tracking-wider text-[#991B1B] flex items-center gap-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-[#173f32] flex items-center gap-1.5">
                         <Sparkles size={14} /> AI Resume &amp; LinkedIn Career Importer
                       </label>
                       <span className="text-[10px] font-bold text-slate-500 bg-white px-2 py-0.5 rounded-full border">
@@ -743,7 +743,7 @@ function SmartIntakeOnboardingContent() {
                       value={rawResumeText}
                       onChange={(e) => setRawResumeText(e.target.value)}
                       placeholder="Paste your resume or LinkedIn profile text here (Work history, education, projects, skills)..."
-                      className="w-full p-4 rounded-xl bg-white border border-slate-200 text-[#1E293B] text-xs leading-relaxed focus:border-[#991B1B] focus:outline-none shadow-inner"
+                      className="w-full p-4 rounded-xl bg-white border border-slate-200 text-[#1E293B] text-xs leading-relaxed focus:border-[#173f32] focus:outline-none shadow-inner"
                     />
 
                     <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
@@ -751,7 +751,7 @@ function SmartIntakeOnboardingContent() {
                         type="button"
                         onClick={handleAutoExtract}
                         disabled={isExtracting || !rawResumeText.trim()}
-                        className="px-5 py-2.5 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 shadow-md shadow-red-950/20"
+                        className="px-5 py-2.5 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 shadow-md shadow-red-950/20"
                       >
                         {isExtracting ? (
                           <>
@@ -785,7 +785,7 @@ function SmartIntakeOnboardingContent() {
                     <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                       <div className="flex items-center justify-between text-xs font-bold text-slate-700">
                         <span className="flex items-center gap-1.5">
-                          <Briefcase size={13} className="text-[#991B1B]" /> Work Experience
+                          <Briefcase size={13} className="text-[#173f32]" /> Work Experience
                         </span>
                         <span className="text-slate-400 font-mono text-[11px]">{experienceList.length} items</span>
                       </div>
@@ -803,7 +803,7 @@ function SmartIntakeOnboardingContent() {
                     <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                       <div className="flex items-center justify-between text-xs font-bold text-slate-700">
                         <span className="flex items-center gap-1.5">
-                          <GraduationCap size={13} className="text-[#991B1B]" /> Education
+                          <GraduationCap size={13} className="text-[#173f32]" /> Education
                         </span>
                         <span className="text-slate-400 font-mono text-[11px]">{educationList.length} items</span>
                       </div>
@@ -829,7 +829,7 @@ function SmartIntakeOnboardingContent() {
                   <button
                     onClick={handleGenerateDraft}
                     disabled={isSubmitting}
-                    className="px-6 py-2.5 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-[#991B1B]/20 disabled:opacity-50"
+                    className="px-6 py-2.5 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-[#173f32]/20 disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <>
@@ -857,7 +857,7 @@ function SmartIntakeOnboardingContent() {
                 className="space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-lg"
               >
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#991B1B] text-xs font-bold uppercase tracking-wider mb-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#173f32] text-xs font-bold uppercase tracking-wider mb-2">
                     <ShieldCheck size={12} /> Step 4: Zero-Hallucination Review &amp; Approval
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1E293B]">
@@ -872,13 +872,13 @@ function SmartIntakeOnboardingContent() {
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
                     <span>Generated Professional Headline</span>
-                    <span className="text-[#991B1B] text-[10px]">Editable</span>
+                    <span className="text-[#173f32] text-[10px]">Editable</span>
                   </label>
                   <input
                     type="text"
                     value={draftHeadline}
                     onChange={(e) => setDraftHeadline(e.target.value)}
-                    className="w-full px-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-sm font-bold focus:border-[#991B1B] focus:outline-none"
+                    className="w-full px-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-sm font-bold focus:border-[#173f32] focus:outline-none"
                   />
                 </div>
 
@@ -886,13 +886,13 @@ function SmartIntakeOnboardingContent() {
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
                     <span>Generated Profile Bio ({tone.toUpperCase()} tone)</span>
-                    <span className="text-[#991B1B] text-[10px]">Editable</span>
+                    <span className="text-[#173f32] text-[10px]">Editable</span>
                   </label>
                   <textarea
                     rows={4}
                     value={draftBio}
                     onChange={(e) => setDraftBio(e.target.value)}
-                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-[#1E293B] text-xs leading-relaxed focus:border-[#991B1B] focus:outline-none font-medium"
+                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-[#1E293B] text-xs leading-relaxed focus:border-[#173f32] focus:outline-none font-medium"
                   />
                 </div>
 
@@ -916,14 +916,14 @@ function SmartIntakeOnboardingContent() {
                           onClick={() => setSelectedThemeId(theme.id)}
                           className={`p-4 rounded-2xl border text-left transition-all ${
                             isSelected
-                              ? "bg-red-50/70 border-[#991B1B] text-[#991B1B] shadow-sm"
+                              ? "bg-red-50/70 border-[#173f32] text-[#173f32] shadow-sm"
                               : "bg-slate-50 border-slate-200 text-slate-600 hover:text-black"
                           }`}
                         >
                           <div className="flex items-center justify-between mb-1">
                             <span className="text-xs font-bold text-[#1E293B]">{theme.name}</span>
                             {isTopMatch && (
-                              <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-[#991B1B] text-white">
+                              <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-[#173f32] text-white">
                                 TOP MATCH
                               </span>
                             )}
@@ -942,7 +942,7 @@ function SmartIntakeOnboardingContent() {
                     id="approvalCheckbox"
                     checked={isApproved}
                     onChange={(e) => setIsApproved(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded text-[#991B1B] focus:ring-[#991B1B] border-slate-300"
+                    className="mt-0.5 w-4 h-4 rounded text-[#173f32] focus:ring-[#173f32] border-slate-300"
                   />
                   <label htmlFor="approvalCheckbox" className="text-xs text-slate-700 leading-relaxed cursor-pointer font-medium">
                     <strong className="text-slate-900 font-bold">Factual Accuracy Confirmation:</strong> I confirm that this headline, bio, and experience data accurately represent my real background and do not contain false claims, unverified metrics, or unauthorized external branding.
@@ -959,7 +959,7 @@ function SmartIntakeOnboardingContent() {
                   <button
                     onClick={handleApproveAndPublish}
                     disabled={!isApproved || isSubmitting}
-                    className="px-7 py-3 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white font-bold text-xs flex items-center gap-2 transition-all shadow-lg shadow-[#991B1B]/20 disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="px-7 py-3 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white font-bold text-xs flex items-center gap-2 transition-all shadow-lg shadow-[#173f32]/20 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <>
@@ -994,7 +994,7 @@ export default function SmartIntakeOnboardingPage() {
       fallback={
         <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
-            <div className="w-4 h-4 border-2 border-[#991B1B] border-t-transparent rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-[#173f32] border-t-transparent rounded-full animate-spin" />
             <span>Loading FolioVeda Smart Intake...</span>
           </div>
         </div>

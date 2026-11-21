@@ -160,7 +160,7 @@ export default function InspirationPage() {
   const usernameSlug = encodeURIComponent(normalizedContent.name || "alex");
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#1E293B] selection:bg-[#991B1B] selection:text-white font-sans antialiased">
+    <div className="min-h-screen bg-[#F8F9FA] text-[#1E293B] selection:bg-[#173f32] selection:text-white font-sans antialiased">
       
       {/* Top Header: Clean & consistent with Main Landing */}
       <header className="sticky top-0 z-50 w-full border-b border-[#1E293B]/10 bg-[#F8F9FA]/90 backdrop-blur-xl px-6 py-4 transition-all">
@@ -168,7 +168,7 @@ export default function InspirationPage() {
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white border border-[#1E293B]/10 text-slate-700 hover:text-[#991B1B] hover:border-[#991B1B]/40 transition-colors shadow-2xs"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white border border-[#1E293B]/10 text-slate-700 hover:text-[#173f32] hover:border-[#173f32]/40 transition-colors shadow-2xs"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
@@ -182,14 +182,14 @@ export default function InspirationPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/styles"
-              className="text-xs font-bold px-3.5 py-1.5 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-[#991B1B] transition-colors"
+              className="text-xs font-bold px-3.5 py-1.5 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-[#173f32] transition-colors"
             >
               Style Gallery
             </Link>
             <Link
               href={`/p/${usernameSlug}`}
               target="_blank"
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white transition-all shadow-md shadow-[#991B1B]/20"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white transition-all shadow-md shadow-[#173f32]/20"
             >
               <ExternalLink size={13} /> My Live Site
             </Link>
@@ -199,8 +199,8 @@ export default function InspirationPage() {
 
       {/* Applied Toast */}
       {appliedToast && (
-        <div className="fixed top-20 right-6 z-50 bg-[#1E293B] text-white border-2 border-[#991B1B] shadow-2xl rounded-2xl p-4 flex items-center gap-3 animate-in slide-in-from-top-4 duration-300">
-          <CheckCircle2 size={20} className="text-[#991B1B]" />
+        <div className="fixed top-20 right-6 z-50 bg-[#1E293B] text-white border-2 border-[#173f32] shadow-2xl rounded-2xl p-4 flex items-center gap-3 animate-in slide-in-from-top-4 duration-300">
+          <CheckCircle2 size={20} className="text-[#173f32]" />
           <div className="text-xs">
             <p className="font-bold text-white">Inspired Theme Applied!</p>
             <p className="text-slate-300">
@@ -210,7 +210,7 @@ export default function InspirationPage() {
           <Link
             href={appliedToast.url}
             target="_blank"
-            className="ml-2 px-3 py-1 rounded-full bg-[#991B1B] text-white font-bold text-xs hover:bg-[#7F1D1D] transition-colors"
+            className="ml-2 px-3 py-1 rounded-full bg-[#173f32] text-white font-bold text-xs hover:bg-[#13352a] transition-colors"
           >
             Visit ↗
           </Link>
@@ -221,7 +221,7 @@ export default function InspirationPage() {
       <main className="max-w-7xl mx-auto px-6 py-12">
         {/* Hero Explainer & Non-Negotiable Copyright Disclaimer */}
         <div className="max-w-3xl mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-50 border border-red-200 text-[#991B1B] text-xs font-bold tracking-wide uppercase mb-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-50 border border-red-200 text-[#173f32] text-xs font-bold tracking-wide uppercase mb-3">
             <Sparkles size={13} /> &quot;MAKE MINE FEEL LIKE THIS&quot; ENGINE
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1E293B] mb-3">
@@ -232,7 +232,7 @@ export default function InspirationPage() {
           </p>
 
           <div className="p-4 rounded-2xl bg-white border border-[#1E293B]/10 shadow-xs flex items-start gap-3 text-xs text-slate-700">
-            <ShieldCheck size={20} className="text-[#991B1B] mt-0.5 shrink-0" />
+            <ShieldCheck size={20} className="text-[#173f32] mt-0.5 shrink-0" />
             <p className="leading-relaxed">
               <strong className="text-[#1E293B] font-bold">Copyright &amp; Legal Safety Promise:</strong> We never copy HTML, CSS, JavaScript, text, images, or proprietary font files. Fonts are matched to licensed Google Fonts, and components are rendered strictly from our own modular engine.
             </p>
@@ -254,14 +254,14 @@ export default function InspirationPage() {
                     value={inputUrl}
                     onChange={(e) => setInputUrl(e.target.value)}
                     placeholder="https://dribbble.com/shots/... or https://pinterest.com/pin/... or any portfolio URL"
-                    className="w-full pl-10 pr-4 py-3.5 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-sm font-medium focus:border-[#991B1B] focus:outline-none focus:ring-1 focus:ring-[#991B1B]"
+                    className="w-full pl-10 pr-4 py-3.5 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-sm font-medium focus:border-[#173f32] focus:outline-none focus:ring-1 focus:ring-[#173f32]"
                     required
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={isAnalyzing || !userConsent}
-                  className="px-7 py-3.5 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-[#991B1B]/20 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="px-7 py-3.5 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-[#173f32]/20 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isAnalyzing ? (
                     <>
@@ -291,7 +291,7 @@ export default function InspirationPage() {
                 id="consentCheck"
                 checked={userConsent}
                 onChange={(e) => setUserConsent(e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded text-[#991B1B] focus:ring-[#991B1B] border-slate-300"
+                className="mt-0.5 w-4 h-4 rounded text-[#173f32] focus:ring-[#173f32] border-slate-300"
               />
               <label htmlFor="consentCheck" className="text-xs text-slate-600 cursor-pointer leading-relaxed">
                 I confirm: <strong className="text-slate-900 font-bold">&quot;I&apos;m using this site only as design inspiration and I will not publish anyone else&apos;s content as mine.&quot;</strong>
@@ -319,7 +319,7 @@ export default function InspirationPage() {
             {/* Closeness Slider Controls */}
             <div className="p-6 sm:p-8 rounded-3xl border border-slate-200 bg-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
               <div>
-                <span className="text-xs font-bold uppercase text-[#991B1B] tracking-wider">
+                <span className="text-xs font-bold uppercase text-[#173f32] tracking-wider">
                   Originality &amp; Closeness Slider
                 </span>
                 <h3 className="text-lg font-extrabold text-[#1E293B] mt-0.5 font-sans">
@@ -339,7 +339,7 @@ export default function InspirationPage() {
                     disabled={isGenerating}
                     className={`px-4 py-2 rounded-full capitalize transition-all ${
                       closeness === level
-                        ? "bg-[#991B1B] text-white shadow-xs"
+                        ? "bg-[#173f32] text-white shadow-xs"
                         : "text-slate-600 hover:text-slate-900"
                     }`}
                   >
@@ -354,7 +354,7 @@ export default function InspirationPage() {
               {/* LEFT PANE: EXTRACTED ABSTRACT TRAITS BREAKDOWN */}
               <div className="lg:col-span-4 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 space-y-6 shadow-md">
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#991B1B]">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#173f32]">
                     Abstract Trait Extraction
                   </span>
                   <h3 className="text-lg font-extrabold text-[#1E293B] mt-1 font-sans">
@@ -368,7 +368,7 @@ export default function InspirationPage() {
                 <div className="space-y-3 text-xs divide-y divide-slate-100 font-medium">
                   <div className="pt-2 flex items-center justify-between">
                     <span className="text-slate-500">Detected Mood:</span>
-                    <span className="font-bold uppercase text-[#991B1B]">
+                    <span className="font-bold uppercase text-[#173f32]">
                       {extractedProfile.detectedMood}
                     </span>
                   </div>
@@ -431,7 +431,7 @@ export default function InspirationPage() {
                 <button
                   onClick={handleApplyTheme}
                   disabled={!generatedTheme || isApplying}
-                  className="w-full py-3.5 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#991B1B]/20 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#173f32]/20 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isApplying ? "Applying to Portfolio..." : "Apply Theme to My Live Portfolio"}
                 </button>

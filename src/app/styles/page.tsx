@@ -116,7 +116,7 @@ export default function StyleGalleryPage() {
   const usernameSlug = encodeURIComponent(normalizedContent.name || "alex");
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#1E293B] selection:bg-[#991B1B] selection:text-white font-sans antialiased">
+    <div className="min-h-screen bg-[#F8F9FA] text-[#1E293B] selection:bg-[#173f32] selection:text-white font-sans antialiased">
       
       {/* Top Navigation: Clean, matching the main landing page */}
       <header className="sticky top-0 z-50 w-full border-b border-[#1E293B]/10 bg-[#F8F9FA]/90 backdrop-blur-xl px-6 py-4 transition-all">
@@ -124,7 +124,7 @@ export default function StyleGalleryPage() {
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white border border-[#1E293B]/10 text-slate-700 hover:text-[#991B1B] hover:border-[#991B1B]/40 transition-colors shadow-2xs"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white border border-[#1E293B]/10 text-slate-700 hover:text-[#173f32] hover:border-[#173f32]/40 transition-colors shadow-2xs"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
@@ -138,14 +138,14 @@ export default function StyleGalleryPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/hub"
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white hover:bg-slate-50 border border-[#1E293B]/10 text-slate-700 hover:text-[#991B1B] transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white hover:bg-slate-50 border border-[#1E293B]/10 text-slate-700 hover:text-[#173f32] transition-colors"
             >
               Master Hub ↗
             </Link>
             <Link
               href={`/p/${usernameSlug}`}
               target="_blank"
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white transition-all shadow-md shadow-[#991B1B]/20"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white transition-all shadow-md shadow-[#173f32]/20"
             >
               <ExternalLink size={13} /> View Live Profile
             </Link>
@@ -155,8 +155,8 @@ export default function StyleGalleryPage() {
 
       {/* Toast Notification */}
       {appliedToast && (
-        <div className="fixed top-20 right-6 z-50 bg-[#1E293B] text-white border-2 border-[#991B1B] shadow-2xl rounded-2xl p-4 flex items-center gap-3 animate-in slide-in-from-top-4 duration-300">
-          <CheckCircle2 size={20} className="text-[#991B1B]" />
+        <div className="fixed top-20 right-6 z-50 bg-[#1E293B] text-white border-2 border-[#173f32] shadow-2xl rounded-2xl p-4 flex items-center gap-3 animate-in slide-in-from-top-4 duration-300">
+          <CheckCircle2 size={20} className="text-[#173f32]" />
           <div className="text-xs">
             <p className="font-bold text-white">Theme Applied Successfully!</p>
             <p className="text-slate-300">
@@ -166,7 +166,7 @@ export default function StyleGalleryPage() {
           <Link
             href={appliedToast.url}
             target="_blank"
-            className="ml-2 px-3 py-1 rounded-full bg-[#991B1B] text-white font-bold text-xs hover:bg-[#7F1D1D] transition-colors"
+            className="ml-2 px-3 py-1 rounded-full bg-[#173f32] text-white font-bold text-xs hover:bg-[#13352a] transition-colors"
           >
             Visit ↗
           </Link>
@@ -177,7 +177,7 @@ export default function StyleGalleryPage() {
       <main className="max-w-7xl mx-auto px-6 py-12">
         {/* Title & Explainer (Bold, attractive, zero italic) */}
         <div className="max-w-3xl mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-50 border border-red-200 text-[#991B1B] text-xs font-bold tracking-wide uppercase mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-50 border border-red-200 text-[#173f32] text-xs font-bold tracking-wide uppercase mb-4">
             <Sparkles size={13} /> LIVE ARCHITECTURAL STYLES
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1E293B] mb-4">
@@ -199,10 +199,10 @@ export default function StyleGalleryPage() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#991B1B]">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#173f32]">
                     Recommended Match ({topPick.theme.category} • {topPick.theme.mood})
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#991B1B] text-white">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#173f32] text-white">
                     TOP MATCH ({topPick.score}%)
                   </span>
                 </div>
@@ -217,7 +217,7 @@ export default function StyleGalleryPage() {
                     href={topPick.theme.pinterestUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#991B1B] hover:text-[#7F1D1D] mt-2 underline"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#173f32] hover:text-[#13352a] mt-2 underline"
                   >
                     <span>View Curated Pinterest Pin Source</span>
                     <ExternalLink size={11} />
@@ -230,7 +230,7 @@ export default function StyleGalleryPage() {
               <button
                 onClick={() => handleApplyTheme(topPick.theme)}
                 disabled={activeThemeId === topPick.theme.id || applyingThemeId === topPick.theme.id}
-                className="w-full md:w-auto px-6 py-3 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] disabled:bg-slate-200 disabled:text-slate-500 text-white font-bold text-xs transition-all shadow-md shadow-[#991B1B]/20"
+                className="w-full md:w-auto px-6 py-3 rounded-full bg-[#173f32] hover:bg-[#13352a] disabled:bg-slate-200 disabled:text-slate-500 text-white font-bold text-xs transition-all shadow-md shadow-[#173f32]/20"
               >
                 {activeThemeId === topPick.theme.id
                   ? "✓ Currently Active"
@@ -246,7 +246,7 @@ export default function StyleGalleryPage() {
         <div className="mb-6 p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between gap-3 mb-2.5">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#991B1B] animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[#173f32] animate-pulse" />
               <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
                 Curated Pinterest Design Blueprints:
               </span>
@@ -281,11 +281,11 @@ export default function StyleGalleryPage() {
                   }}
                   className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                     isMatch
-                      ? "bg-[#991B1B] text-white shadow-xs"
-                      : "bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-[#991B1B] border border-slate-200"
+                      ? "bg-[#173f32] text-white shadow-xs"
+                      : "bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-[#173f32] border border-slate-200"
                   }`}
                 >
-                  <span className={isMatch ? "text-white" : "text-[#991B1B]"}>•</span>
+                  <span className={isMatch ? "text-white" : "text-[#173f32]"}>•</span>
                   <span>{preset.label}</span>
                 </button>
               );
@@ -322,7 +322,7 @@ export default function StyleGalleryPage() {
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                   selectedCategory === cat.id
-                    ? "bg-[#991B1B] text-white shadow-xs"
+                    ? "bg-[#173f32] text-white shadow-xs"
                     : "bg-white border border-slate-200 text-slate-600 hover:text-[#1E293B] hover:bg-slate-50"
                 }`}
               >
@@ -368,14 +368,14 @@ export default function StyleGalleryPage() {
                 key={theme.id}
                 className={`rounded-3xl border transition-all duration-300 flex flex-col justify-between overflow-hidden bg-white shadow-sm hover:shadow-xl ${
                   isActive
-                    ? "border-[#991B1B] ring-2 ring-[#991B1B]/30"
+                    ? "border-[#173f32] ring-2 ring-[#173f32]/30"
                     : "border-slate-200 hover:border-slate-300"
                 }`}
               >
                 {/* Theme Header Info */}
                 <div className="p-5 border-b border-slate-100 bg-slate-50/70">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#991B1B] bg-red-50 border border-red-200/80 px-2.5 py-0.5 rounded-full">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#173f32] bg-red-50 border border-red-200/80 px-2.5 py-0.5 rounded-full">
                       {theme.category} • {theme.mood}
                     </span>
                     <div className="flex items-center gap-1.5">
@@ -384,7 +384,7 @@ export default function StyleGalleryPage() {
                           href={theme.pinterestUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-[10px] font-bold text-red-700 hover:text-white bg-red-50 hover:bg-[#991B1B] border border-red-200 px-2 py-0.5 rounded-full transition-all"
+                          className="inline-flex items-center gap-1 text-[10px] font-bold text-red-700 hover:text-white bg-red-50 hover:bg-[#173f32] border border-red-200 px-2 py-0.5 rounded-full transition-all"
                           title="Open original Pinterest inspiration"
                         >
                           <span>Pinterest</span>
@@ -424,7 +424,7 @@ export default function StyleGalleryPage() {
                           : "text-slate-600 hover:text-slate-900"
                       }`}
                     >
-                      <ImageIcon size={12} className={currentMode === "pin" ? "text-[#991B1B]" : ""} />
+                      <ImageIcon size={12} className={currentMode === "pin" ? "text-[#173f32]" : ""} />
                       <span>Design Blueprint</span>
                     </button>
                     <button
@@ -435,7 +435,7 @@ export default function StyleGalleryPage() {
                           : "text-slate-600 hover:text-slate-900"
                       }`}
                     >
-                      <Code2 size={12} className={currentMode === "sandbox" ? "text-[#991B1B]" : ""} />
+                      <Code2 size={12} className={currentMode === "sandbox" ? "text-[#173f32]" : ""} />
                       <span>Live Sandbox</span>
                     </button>
                   </div>
@@ -559,13 +559,13 @@ export default function StyleGalleryPage() {
                         isActive
                           ? "bg-slate-100 text-slate-500 cursor-default"
                           : isApplying
-                          ? "bg-[#991B1B]/80 text-white animate-pulse"
-                          : "bg-[#991B1B] hover:bg-[#7F1D1D] text-white shadow-md shadow-[#991B1B]/20 cursor-pointer"
+                          ? "bg-[#173f32]/80 text-white animate-pulse"
+                          : "bg-[#173f32] hover:bg-[#13352a] text-white shadow-md shadow-[#173f32]/20 cursor-pointer"
                       }`}
                     >
                       {isActive ? (
                         <>
-                          <Check size={13} className="text-[#991B1B]" /> Active Theme
+                          <Check size={13} className="text-[#173f32]" /> Active Theme
                         </>
                       ) : isApplying ? (
                         "Applying..."
@@ -602,7 +602,7 @@ export default function StyleGalleryPage() {
               {/* Modal Header */}
               <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
                 <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 rounded-full bg-[#991B1B] text-white text-xs font-bold uppercase tracking-wider">
+                  <span className="px-3 py-1 rounded-full bg-[#173f32] text-white text-xs font-bold uppercase tracking-wider">
                     {lightboxPin.category} • {lightboxPin.mood}
                   </span>
                   <h3 className="text-base sm:text-lg font-extrabold text-white">
