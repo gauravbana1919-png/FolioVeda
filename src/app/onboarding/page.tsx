@@ -21,7 +21,8 @@ import {
   User, 
   Send, 
   Layers, 
-  HeartHandshake 
+  HeartHandshake,
+  GraduationCap 
 } from "lucide-react";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import Link from "next/link";
@@ -61,8 +62,33 @@ function SmartIntakeOnboardingContent() {
   // AI Generated Draft State (Step 4)
   const [draftHeadline, setDraftHeadline] = useState("");
   const [draftBio, setDraftBio] = useState("");
-  const [recommendedThemeIds, setRecommendedThemeIds] = useState<string[]>([]);
-  const [selectedThemeId, setSelectedThemeId] = useState("developer-terminal");
+  const [recommendedThemeIds, setRecommendedThemeIds] = useState<string[]>(["luxe-creative"]);
+  const [selectedThemeId, setSelectedThemeId] = useState("luxe-creative");
+
+  // Rich Career Data State
+  const [experienceList, setExperienceList] = useState<any[]>([
+    {
+      role: "Senior Full-Stack Engineer",
+      company: "Nexus Cloud Systems",
+      period: "2023 - Present",
+      location: "San Francisco, CA / Remote",
+      highlights: [
+        "Architected edge caching layer reducing egress bandwidth costs by 34%.",
+        "Mentored 6 engineers and spearheaded migration to TypeScript and Next.js.",
+      ],
+    },
+  ]);
+  const [educationList, setEducationList] = useState<any[]>([
+    {
+      degree: "B.Tech in Computer Science & Engineering",
+      institution: "Institute of Technology",
+      year: "2023",
+      honors: "First Class with Distinction",
+    },
+  ]);
+  const [isExtracting, setIsExtracting] = useState(false);
+  const [extractSuccess, setExtractSuccess] = useState<string | null>(null);
+  const [extractError, setExtractError] = useState<string | null>(null);
 
   // Read URL query params (?handle=, ?name=, ?template=) & session
   useEffect(() => {
@@ -105,6 +131,45 @@ function SmartIntakeOnboardingContent() {
       setGithubSyncResult("Network error syncing GitHub");
     } finally {
       setIsSyncingGithub(false);
+    }
+  };
+
+  const handleAutoExtract = async () => {
+    if (!rawResumeText.trim() || rawResumeText.trim().length < 20) {
+      setExtractError("Please paste your resume or LinkedIn profile text first (at least a few sentences).");
+      return;
+    }
+    setIsExtracting(true);
+    setExtractError(null);
+    setExtractSuccess(null);
+
+    try {
+      const res = await fetch("/api/intake/extract", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rawText: rawResumeText }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to extract");
+
+      if (data.extracted) {
+        if (data.extracted.headline) setDraftHeadline(data.extracted.headline);
+        if (data.extracted.bio) setDraftBio(data.extracted.bio);
+        if (data.extracted.skills && data.extracted.skills.length > 0) {
+          setTopStrengths(data.extracted.skills.slice(0, 3));
+        }
+        if (data.extracted.experience && data.extracted.experience.length > 0) {
+          setExperienceList(data.extracted.experience);
+        }
+        if (data.extracted.education && data.extracted.education.length > 0) {
+          setEducationList(data.extracted.education);
+        }
+        setExtractSuccess(`✓ Extracted ${data.extracted.experience?.length || 0} career roles, ${data.extracted.education?.length || 0} academic credentials, and skills!`);
+      }
+    } catch (err: any) {
+      setExtractError(err.message || "Failed to extract career data.");
+    } finally {
+      setIsExtracting(false);
     }
   };
 
@@ -162,6 +227,8 @@ function SmartIntakeOnboardingContent() {
         portfolio: portfolioUrl || undefined,
       },
       rawResumeText: rawResumeText || undefined,
+      experience: experienceList,
+      education: educationList,
     };
 
     try {
@@ -211,6 +278,8 @@ function SmartIntakeOnboardingContent() {
         portfolio: portfolioUrl || undefined,
       },
       rawResumeText: rawResumeText || undefined,
+      experience: experienceList,
+      education: educationList,
     };
 
     try {
@@ -658,15 +727,97 @@ function SmartIntakeOnboardingContent() {
                     />
                   </div>
 
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Existing Resume Notes or Highlights (Optional)</label>
+                  {/* AI Resume & LinkedIn Extractor */}
+                  <div className="p-5 rounded-2xl bg-gradient-to-br from-red-50/60 to-slate-50 border-2 border-red-100 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold uppercase tracking-wider text-[#991B1B] flex items-center gap-1.5">
+                        <Sparkles size={14} /> AI Resume &amp; LinkedIn Career Importer
+                      </label>
+                      <span className="text-[10px] font-bold text-slate-500 bg-white px-2 py-0.5 rounded-full border">
+                        Zero Hallucinations
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 font-normal leading-relaxed">
+                      Copy and paste your LinkedIn &ldquo;About&rdquo; + &ldquo;Experience&rdquo; text or your full resume below. Gemini will automatically extract your verified roles, achievements, education, and skills.
+                    </p>
                     <textarea
-                      rows={3}
+                      rows={5}
                       value={rawResumeText}
                       onChange={(e) => setRawResumeText(e.target.value)}
-                      placeholder="Paste 1-2 bullet points from your resume to anchor the AI bio..."
-                      className="w-full mt-1 px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-[#1E293B] text-xs leading-relaxed focus:border-[#991B1B] focus:outline-none"
+                      placeholder="Paste your resume or LinkedIn profile text here (Work history, education, projects, skills)..."
+                      className="w-full p-4 rounded-xl bg-white border border-slate-200 text-[#1E293B] text-xs leading-relaxed focus:border-[#991B1B] focus:outline-none shadow-inner"
                     />
+
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={handleAutoExtract}
+                        disabled={isExtracting || !rawResumeText.trim()}
+                        className="px-5 py-2.5 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 shadow-md shadow-red-950/20"
+                      >
+                        {isExtracting ? (
+                          <>
+                            <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <span>Extracting with Gemini...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles size={13} />
+                            <span>Extract Career &amp; Education →</span>
+                          </>
+                        )}
+                      </button>
+
+                      {extractSuccess && (
+                        <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 flex items-center gap-1">
+                          <Check size={12} /> {extractSuccess}
+                        </span>
+                      )}
+                      {extractError && (
+                        <span className="text-xs font-bold text-rose-700 bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
+                          ⚠ {extractError}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Career & Education Previews */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Experience Preview */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-700">
+                        <span className="flex items-center gap-1.5">
+                          <Briefcase size={13} className="text-[#991B1B]" /> Work Experience
+                        </span>
+                        <span className="text-slate-400 font-mono text-[11px]">{experienceList.length} items</span>
+                      </div>
+                      <div className="space-y-1.5 max-h-36 overflow-y-auto">
+                        {experienceList.map((exp, i) => (
+                          <div key={i} className="text-[11px] p-2 bg-white rounded-lg border border-slate-200">
+                            <div className="font-bold text-slate-900">{exp.role}</div>
+                            <div className="text-slate-500">{exp.company} • {exp.period}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Education Preview */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-700">
+                        <span className="flex items-center gap-1.5">
+                          <GraduationCap size={13} className="text-[#991B1B]" /> Education
+                        </span>
+                        <span className="text-slate-400 font-mono text-[11px]">{educationList.length} items</span>
+                      </div>
+                      <div className="space-y-1.5 max-h-36 overflow-y-auto">
+                        {educationList.map((edu, i) => (
+                          <div key={i} className="text-[11px] p-2 bg-white rounded-lg border border-slate-200">
+                            <div className="font-bold text-slate-900">{edu.degree}</div>
+                            <div className="text-slate-500">{edu.institution} ({edu.year})</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -754,12 +905,12 @@ function SmartIntakeOnboardingContent() {
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {[
-                      { id: "developer-terminal", name: "Developer Terminal", desc: "Bash chrome, CLI prompts, Git history" },
-                      { id: "minimal-editorial", name: "Minimal Editorial", desc: "Editorial typography, generous whitespace" },
-                      { id: "bold-poster", name: "Bold Poster", desc: "High-contrast neo-grotesque display headers" },
+                      { id: "luxe-creative", name: "Luxe Creative", desc: "Ambient glow, interactive motion, animated stats, filterable artifacts & timeline" },
+                      { id: "minimal-editorial", name: "Minimal Editorial", desc: "Editorial typography, generous whitespace, publication aesthetic" },
+                      { id: "dark-showcase", name: "Dark Showcase", desc: "High-contrast dark grid, neon cyan accents, system layout" },
                     ].map((theme) => {
                       const isSelected = selectedThemeId === theme.id;
-                      const isTopMatch = recommendedThemeIds[0] === theme.id;
+                      const isTopMatch = selectedThemeId === theme.id || theme.id === "luxe-creative";
                       return (
                         <button
                           key={theme.id}

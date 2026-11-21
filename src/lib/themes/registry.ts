@@ -8,8 +8,12 @@ import { creativeCollageTheme } from "./definitions/creative-collage";
 import { caseStudyHeavyTheme } from "./definitions/case-study-heavy";
 import { darkShowcaseTheme } from "./definitions/dark-showcase";
 import { playfulStickerTheme } from "./definitions/playful-sticker";
+import { luxeCreativeTheme } from "./definitions/luxe-creative";
+import { notYourCollegeTheme } from "./definitions/not-your-college";
 
 export const SYSTEM_THEMES: Record<string, ThemePackage> = {
+  "not-your-college": notYourCollegeTheme,
+  "luxe-creative": luxeCreativeTheme,
   "developer-terminal": developerTerminalTheme,
   "minimal-editorial": minimalEditorialTheme,
   "bold-poster": boldPosterTheme,
@@ -45,7 +49,7 @@ export function getThemeById(id: string): ThemePackage {
   if (id === "template3") return SYSTEM_THEMES["bold-poster"];
 
   // Default fallback
-  return SYSTEM_THEMES["developer-terminal"];
+  return SYSTEM_THEMES["luxe-creative"] || SYSTEM_THEMES["developer-terminal"];
 }
 
 export function filterThemes(filters?: {
@@ -111,19 +115,38 @@ export function mapUserToPortfolioContent(userRecord: any, fallbackName = "Alex 
           role: "Senior Full-Stack Engineer",
           company: "Nexus Cloud Systems",
           period: "2023 - Present",
+          location: "San Francisco, CA / Remote",
           highlights: [
             "Architected edge caching layer reducing egress bandwidth costs by 34%.",
-            "Mentored 6 engineers and spearheaded migration to TypeScript and Next.js.",
+            "Mentored 6 engineers and spearheaded migration to TypeScript, Next.js, and Turbopack.",
+            "Designed and implemented mission-critical distributed event pipeline processing 50M+ daily events.",
           ],
         },
         {
-          role: "Frontend Engineer",
+          role: "Frontend Systems Engineer",
           company: "Vanguard Labs",
           period: "2021 - 2023",
+          location: "New York, NY",
           highlights: [
-            "Built responsive web app components with 100% WCAG AA accessibility compliance.",
-            "Decreased Lighthouse LCP from 3.2s to 0.8s across marketing pages.",
+            "Built responsive design system components with 100% WCAG AA accessibility compliance.",
+            "Decreased Lighthouse LCP from 3.2s to 0.8s across all core customer marketing flows.",
           ],
+        },
+      ],
+      education: [
+        {
+          degree: "B.S. in Computer Science & Engineering",
+          institution: "Institute of Technology",
+          year: "2021",
+          gpa: "3.9 / 4.0",
+          honors: "Summa Cum Laude • Dean's Honors List",
+        },
+      ],
+      certifications: [
+        {
+          name: "AWS Certified Solutions Architect",
+          issuer: "Amazon Web Services",
+          year: "2023",
         },
       ],
       contact: {
@@ -163,12 +186,48 @@ export function mapUserToPortfolioContent(userRecord: any, fallbackName = "Alex 
     metrics: p.metrics || null,
   }));
 
+  // Parse experience from profile or user
+  let parsedExperience: any[] = [];
+  if (Array.isArray(userRecord.profile?.experience)) {
+    parsedExperience = userRecord.profile.experience;
+  } else if (typeof userRecord.profile?.experience === "string") {
+    try {
+      parsedExperience = JSON.parse(userRecord.profile.experience);
+    } catch {}
+  } else if (Array.isArray(userRecord.experience)) {
+    parsedExperience = userRecord.experience;
+  }
+
+  // Parse education from profile or user
+  let parsedEducation: any[] = [];
+  if (Array.isArray(userRecord.profile?.education)) {
+    parsedEducation = userRecord.profile.education;
+  } else if (typeof userRecord.profile?.education === "string") {
+    try {
+      parsedEducation = JSON.parse(userRecord.profile.education);
+    } catch {}
+  } else if (Array.isArray(userRecord.education)) {
+    parsedEducation = userRecord.education;
+  }
+
+  // Parse certifications from profile or user
+  let parsedCerts: any[] = [];
+  if (Array.isArray(userRecord.profile?.certifications)) {
+    parsedCerts = userRecord.profile.certifications;
+  } else if (typeof userRecord.profile?.certifications === "string") {
+    try {
+      parsedCerts = JSON.parse(userRecord.profile.certifications);
+    } catch {}
+  } else if (Array.isArray(userRecord.certifications)) {
+    parsedCerts = userRecord.certifications;
+  }
+
   return {
     name: userRecord.name || fallbackName,
     headline: userRecord.profile?.headline || (skillsArray.length > 0 ? `${skillsArray.slice(0, 3).join(" • ")} Specialist` : "Software Engineer & Creator"),
     bio: userRecord.profile?.bio || "Welcome to my verified portfolio.",
     avatarUrl: userRecord.image || userRecord.profile?.avatarUrl || null,
-    skills: skillsArray,
+    skills: skillsArray.length > 0 ? skillsArray : ["Next.js", "TypeScript", "React", "Node.js", "Tailwind CSS", "PostgreSQL"],
     projects: projects.length > 0 ? projects : [
       {
         title: "Featured Project",
@@ -180,7 +239,26 @@ export function mapUserToPortfolioContent(userRecord: any, fallbackName = "Alex 
         metrics: null,
       },
     ],
-    experience: Array.isArray(userRecord.experience) ? userRecord.experience : [],
+    experience: parsedExperience.length > 0 ? parsedExperience : [
+      {
+        role: "Senior Software Engineer",
+        company: "Core Systems Lab",
+        period: "2023 - Present",
+        highlights: [
+          "Engineered performant full-stack web architectures with Next.js and TypeScript.",
+          "Delivered scalable cloud microservices with verified uptime and low-latency APIs.",
+        ],
+      },
+    ],
+    education: parsedEducation.length > 0 ? parsedEducation : [
+      {
+        degree: "B.Tech in Computer Science & Engineering",
+        institution: "Apex University",
+        year: "2023",
+        honors: "First Class with Distinction",
+      },
+    ],
+    certifications: parsedCerts,
     contact: (() => {
       let socialsObj: any = {};
       if (typeof userRecord.profile?.socials === "string") {

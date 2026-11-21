@@ -84,6 +84,11 @@ export async function POST(req: Request) {
     });
   } catch (error: any) {
     console.error('Tailor Resume Error:', error);
-    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
+    const message = error.message || 'Internal server error';
+    // Surface user-friendly messages for known issues
+    if (message.includes('unavailable') || message.includes('503') || message.includes('high demand')) {
+      return NextResponse.json({ error: 'AI models are temporarily busy. Please wait a moment and try again.' }, { status: 503 });
+    }
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

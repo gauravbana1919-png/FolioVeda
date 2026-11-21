@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     if (action === "approve") {
       const finalHeadline = approvedHeadline || generateIntakeCopy(validAnswers).suggestedHeadline;
       const finalBio = approvedBio || generateIntakeCopy(validAnswers).suggestedBio;
-      const finalThemeId = themeId || (validAnswers.profileType === "tech" ? "developer-terminal" : "minimal-editorial");
+      const finalThemeId = themeId || "luxe-creative";
 
       // Locate or create user
       const targetName = userName || session?.user?.name || "Alex Developer";
@@ -116,18 +116,38 @@ export async function POST(req: Request) {
 
       const socialsJson = validAnswers.links ? JSON.stringify(validAnswers.links) : null;
 
+      const experienceJson = validAnswers.experience && validAnswers.experience.length > 0
+        ? JSON.stringify(validAnswers.experience)
+        : null;
+
+      const educationJson = validAnswers.education && validAnswers.education.length > 0
+        ? JSON.stringify(validAnswers.education)
+        : null;
+
+      const certificationsJson = validAnswers.certifications && validAnswers.certifications.length > 0
+        ? JSON.stringify(validAnswers.certifications)
+        : null;
+
       await prisma.profile.upsert({
         where: { userId: user.id },
         create: {
           userId: user.id,
           bio: finalBio,
+          headline: finalHeadline,
           skills: combinedSkills,
           socials: socialsJson,
+          experience: experienceJson,
+          education: educationJson,
+          certifications: certificationsJson,
         },
         update: {
           bio: finalBio,
+          headline: finalHeadline,
           skills: combinedSkills,
           ...(socialsJson && { socials: socialsJson }),
+          ...(experienceJson !== null && { experience: experienceJson }),
+          ...(educationJson !== null && { education: educationJson }),
+          ...(certificationsJson !== null && { certifications: certificationsJson }),
         },
       });
 

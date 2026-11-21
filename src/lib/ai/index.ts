@@ -9,6 +9,28 @@ export interface LLMProvider {
   tailorResume(originalResume: string, jobDescription: string): Promise<TailoredResumeResult>;
 }
 
+// Models to try in order — start with most stable, then newer ones
+const MODEL_CHAIN = [
+  'gemini-2.5-flash',
+  'gemini-3.5-flash',
+  'gemini-3.6-flash',
+  'gemini-3.7-flash',
+];
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`Timeout after ${ms}ms`)), ms);
+    promise.then(
+      (val) => { clearTimeout(timer); resolve(val); },
+      (err) => { clearTimeout(timer); reject(err); }
+    );
+  });
+}
+
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export class GeminiProvider implements LLMProvider {
   private ai: GoogleGenAI;
 
@@ -37,34 +59,55 @@ export class GeminiProvider implements LLMProvider {
       ${jobDescription}
     `;
 
-    try {
-      const response = await this.ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-        config: {
-          responseMimeType: 'application/json',
-          temperature: 0.2, // Low temperature for factual accuracy
-        },
-      });
+    let lastError: Error | null = null;
 
-      if (!response.text) {
-        throw new Error("Empty response from AI");
+    // Try each model in the fallback chain
+    for (const model of MODEL_CHAIN) {
+      try {
+        console.log(`[Resume Tailor] Trying model: ${model}`);
+        
+        const response = await withTimeout(
+          this.ai.models.generateContent({
+            model,
+            contents: prompt,
+            config: {
+              responseMimeType: 'application/json',
+              temperature: 0.2,
+            },
+          }),
+          15000 // 15 second timeout per model
+        );
+
+        if (!response.text) {
+          throw new Error("Empty response from AI");
+        }
+
+        const parsed = JSON.parse(response.text);
+        
+        console.log(`[Resume Tailor] ✅ Success with model: ${model}`);
+
+        return {
+          tailoredContent: parsed.tailoredContent || originalResume,
+          keywordMatchScore: parsed.keywordMatchScore || 0,
+        };
+      } catch (error: any) {
+        lastError = error;
+        const status = error?.status || error?.httpStatusCode || 0;
+        console.error(`[Resume Tailor] ❌ Model ${model} failed (status: ${status}): ${error.message}`);
+
+        // Brief pause before trying next model
+        await sleep(500);
+        continue;
       }
-
-      const parsed = JSON.parse(response.text);
-      
-      return {
-        tailoredContent: parsed.tailoredContent || originalResume,
-        keywordMatchScore: parsed.keywordMatchScore || 0,
-      };
-    } catch (error) {
-      console.error("AI Generation Error:", error);
-      throw new Error("Failed to tailor resume");
     }
+
+    // All models failed
+    console.error("[Resume Tailor] All models exhausted. Last error:", lastError?.message);
+    throw new Error("Failed to tailor resume — all AI models are currently unavailable. Please try again in a few minutes.");
   }
 }
 
-// Factory or default export
+// Factory
 export const getLLMProvider = (): LLMProvider => {
   return new GeminiProvider();
 };

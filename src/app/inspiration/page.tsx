@@ -35,6 +35,7 @@ export default function InspirationPage() {
   // Inspiration Analysis & Theme State
   const [requestId, setRequestId] = useState<string | null>(null);
   const [extractedProfile, setExtractedProfile] = useState<StyleProfile | null>(null);
+  const [analysisNotice, setAnalysisNotice] = useState<string | null>(null);
   const [closeness, setCloseness] = useState<ClosenessLevel>("medium");
   const [generatedTheme, setGeneratedTheme] = useState<ThemePackage | null>(null);
 
@@ -72,12 +73,13 @@ export default function InspirationPage() {
     setIsAnalyzing(true);
     setGeneratedTheme(null);
     setExtractedProfile(null);
+    setAnalysisNotice(null);
 
     try {
       const res = await fetch("/api/inspiration/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: inputUrl }),
+        body: JSON.stringify({ url: inputUrl, userConsent: true }),
       });
 
       const data = await res.json();
@@ -86,7 +88,8 @@ export default function InspirationPage() {
       }
 
       setRequestId(data.requestId);
-      setExtractedProfile(data.profile);
+      setExtractedProfile(data.styleProfile);
+      if (data.notice) setAnalysisNotice(data.notice);
 
       // Automatically synthesize medium closeness theme
       await handleGenerateTheme(data.requestId, "medium");
@@ -248,7 +251,7 @@ export default function InspirationPage() {
                     type="url"
                     value={inputUrl}
                     onChange={(e) => setInputUrl(e.target.value)}
-                    placeholder="https://pattin.design or https://leerob.io"
+                    placeholder="https://dribbble.com/shots/... or https://pinterest.com/pin/... or any portfolio URL"
                     className="w-full pl-10 pr-4 py-3.5 rounded-full bg-slate-50 border border-slate-200 text-[#1E293B] text-sm font-medium focus:border-[#991B1B] focus:outline-none focus:ring-1 focus:ring-[#991B1B]"
                     required
                   />
@@ -272,6 +275,12 @@ export default function InspirationPage() {
                 </button>
               </div>
             </div>
+
+            {/* Helper text for supported sites */}
+            <p className="text-xs text-slate-500 mt-2">
+              💡 Works with Pinterest, Dribbble, Behance, personal portfolio sites, and more.
+              If the site blocks direct access, we extract style signals from the URL itself.
+            </p>
 
             {/* Mandatory User Consent Checkbox */}
             <div className="flex items-start gap-2.5 pt-1">
@@ -298,6 +307,13 @@ export default function InspirationPage() {
         {/* RESULTS & SIDE-BY-SIDE VIEW */}
         {extractedProfile && (
           <div className="space-y-8 animate-in fade-in-50 duration-500">
+            {/* URL-pattern fallback notice banner */}
+            {analysisNotice && analysisNotice.includes('URL patterns') && (
+              <div className="mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-700 font-medium flex items-center gap-2">
+                <span>⚡</span>
+                <span>Style extracted from URL signals (the site blocked direct access — results are approximate)</span>
+              </div>
+            )}
             {/* Closeness Slider Controls */}
             <div className="p-6 sm:p-8 rounded-3xl border border-slate-200 bg-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
               <div>

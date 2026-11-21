@@ -55,14 +55,18 @@ model Session {
 }
 
 model Profile {
-  id        String   @id @default(cuid())
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bio       String?
-  skills    String?
-  location  String?
-  phone     String?
-  socials   String?  // JSON string
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio            String?
+  skills         String?
+  location       String?
+  phone          String?
+  socials        String?  // JSON string
+  headline       String?
+  experience     String?  // JSON array of {role, company, period, location, highlights[]}
+  education      String?  // JSON array of {degree, institution, year, gpa?, honors?}
+  certifications String?  // JSON array of {name, issuer, year}
 }
 
 model Project {

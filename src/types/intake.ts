@@ -12,6 +12,28 @@ export const IntakeLinksSchema = z.object({
   portfolio: z.string().url().optional().or(z.literal("")),
 }).optional();
 
+export const IntakeExperienceSchema = z.object({
+  role: z.string(),
+  company: z.string(),
+  period: z.string(),
+  location: z.string().optional(),
+  highlights: z.array(z.string()).default([]),
+});
+
+export const IntakeEducationSchema = z.object({
+  degree: z.string(),
+  institution: z.string(),
+  year: z.string(),
+  gpa: z.string().optional(),
+  honors: z.string().optional(),
+});
+
+export const IntakeCertificationSchema = z.object({
+  name: z.string(),
+  issuer: z.string(),
+  year: z.string(),
+});
+
 export const IntakeAnswersInputSchema = z.object({
   profileType: ProfileTypeSchema,
   targetGoal: TargetGoalSchema,
@@ -22,6 +44,9 @@ export const IntakeAnswersInputSchema = z.object({
   preferredColors: z.array(z.string()).optional(),
   links: IntakeLinksSchema,
   rawResumeText: z.string().optional(),
+  experience: z.array(IntakeExperienceSchema).optional(),
+  education: z.array(IntakeEducationSchema).optional(),
+  certifications: z.array(IntakeCertificationSchema).optional(),
 });
 
 export const IntakeAnswersSchema = IntakeAnswersInputSchema.extend({
@@ -39,5 +64,8 @@ export type TargetGoal = z.infer<typeof TargetGoalSchema>;
 export type ToneOfVoice = z.infer<typeof ToneOfVoiceSchema>;
 export type PreferredMood = z.infer<typeof PreferredMoodSchema>;
 export type IntakeLinks = z.infer<typeof IntakeLinksSchema>;
+export type IntakeExperience = z.infer<typeof IntakeExperienceSchema>;
+export type IntakeEducation = z.infer<typeof IntakeEducationSchema>;
+export type IntakeCertification = z.infer<typeof IntakeCertificationSchema>;
 export type IntakeAnswersInput = z.infer<typeof IntakeAnswersInputSchema>;
 export type IntakeAnswers = z.infer<typeof IntakeAnswersSchema>;

@@ -13,18 +13,22 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --font-sans: var(--font-sans-main), -apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", sans-serif;
-  --font-serif: var(--font-serif-display), "Newsreader", "Canela", "Georgia", serif;
+  --font-serif: "Instrument Serif", "Newsreader", "Georgia", serif;
   --font-mono: var(--font-mono), monospace;
 }
 
 :root {
-  --background: #F8F9FA;
-  --foreground: #1E293B;
-  --primary: #991B1B;
-  --secondary: #F1F5F9;
-  --muted: #F8FAFC;
-  --muted-foreground: #64748B;
-  --border: #E2E8F0;
+  --background: #f7f4eb;
+  --foreground: #222e26;
+  --primary: #173f32;
+  --secondary: #eeeaf4;
+  --muted: #faf8f1;
+  --muted-foreground: #5a6b60;
+  --border: rgba(23, 63, 50, 0.15);
+  --nyc-cream: #f7f4eb;
+  --nyc-green: #173f32;
+  --nyc-ink: #222e26;
+  --nyc-yellow: #ebd800;
 }
 
 body {
@@ -34,6 +38,16 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.015em;
+}
+
+/* Not Your College Editorial Typography */
+.font-editorial {
+  font-family: 'Instrument Serif', Georgia, serif;
+}
+
+.font-editorial-italic {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
 }
 
 /* Squarespace-style Editorial Typography Helpers */

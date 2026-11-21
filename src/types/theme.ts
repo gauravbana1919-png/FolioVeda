@@ -52,6 +52,8 @@ export const ThemeLayoutPatternSchema = z.enum([
   "case-study",
   "dark-showcase",
   "playful-sticker",
+  "luxe-creative",
+  "not-your-college",
 ]);
 
 export const ThemeSectionNameSchema = z.enum([
@@ -60,6 +62,7 @@ export const ThemeSectionNameSchema = z.enum([
   "experience",
   "skills",
   "contact",
+  "education",
 ]);
 
 export const ThemeLayoutVariantsSchema = z.object({

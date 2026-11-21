@@ -55,6 +55,24 @@ import {
   StickerExperience,
   StickerContact,
 } from "./variants/sticker";
+import {
+  LuxeNav,
+  LuxeHero,
+  LuxeProjects,
+  LuxeSkills,
+  LuxeExperience,
+  LuxeEducation,
+  LuxeContact,
+} from "./variants/luxe";
+import {
+  NYCNav,
+  NYCHero,
+  NYCProjects,
+  NYCSkills,
+  NYCExperience,
+  NYCEducation,
+  NYCContact,
+} from "./variants/nyc";
 
 interface ThemeRendererProps {
   theme: ThemePackage;
@@ -93,6 +111,10 @@ export function ThemeRenderer({
   // Render navigation based on layout pattern
   const renderNav = () => {
     switch (pattern) {
+      case "not-your-college":
+        return <NYCNav content={content} theme={theme} />;
+      case "luxe-creative":
+        return <LuxeNav content={content} theme={theme} />;
       case "terminal-grid":
         return <TerminalNav content={content} theme={theme} />;
       case "centered-editorial":
@@ -107,7 +129,7 @@ export function ThemeRenderer({
       case "poster":
       case "masonry":
       default:
-        return <PosterNav content={content} theme={theme} />;
+        return <NYCNav content={content} theme={theme} />;
     }
   };
 
@@ -115,44 +137,58 @@ export function ThemeRenderer({
   const renderSection = (sectionName: string, index: number) => {
     switch (sectionName) {
       case "hero":
+        if (pattern === "not-your-college") return <NYCHero key={index} content={content} theme={theme} />;
+        if (pattern === "luxe-creative") return <LuxeHero key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalHero key={index} content={content} theme={theme} />;
         if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialHero key={index} content={content} theme={theme} />;
         if (pattern === "split-hero") return <CorporateHero key={index} content={content} theme={theme} />;
         if (pattern === "dark-showcase") return <ShowcaseHero key={index} content={content} theme={theme} />;
         if (pattern === "playful-sticker") return <StickerHero key={index} content={content} theme={theme} />;
-        return <PosterHero key={index} content={content} theme={theme} />;
+        return <NYCHero key={index} content={content} theme={theme} />;
 
       case "projects":
+        if (pattern === "not-your-college") return <NYCProjects key={index} content={content} theme={theme} />;
+        if (pattern === "luxe-creative") return <LuxeProjects key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalProjects key={index} content={content} theme={theme} />;
         if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialProjects key={index} content={content} theme={theme} />;
         if (pattern === "split-hero") return <CorporateProjects key={index} content={content} theme={theme} />;
         if (pattern === "dark-showcase") return <ShowcaseProjects key={index} content={content} theme={theme} />;
         if (pattern === "playful-sticker") return <StickerProjects key={index} content={content} theme={theme} />;
-        return <PosterProjects key={index} content={content} theme={theme} />;
+        return <NYCProjects key={index} content={content} theme={theme} />;
 
       case "skills":
+        if (pattern === "not-your-college") return <NYCSkills key={index} content={content} theme={theme} />;
+        if (pattern === "luxe-creative") return <LuxeSkills key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalSkills key={index} content={content} theme={theme} />;
         if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialSkills key={index} content={content} theme={theme} />;
         if (pattern === "split-hero") return <CorporateSkills key={index} content={content} theme={theme} />;
         if (pattern === "dark-showcase") return <ShowcaseSkills key={index} content={content} theme={theme} />;
         if (pattern === "playful-sticker") return <StickerSkills key={index} content={content} theme={theme} />;
-        return <PosterSkills key={index} content={content} theme={theme} />;
+        return <NYCSkills key={index} content={content} theme={theme} />;
 
       case "experience":
+        if (pattern === "not-your-college") return <NYCExperience key={index} content={content} theme={theme} />;
+        if (pattern === "luxe-creative") return <LuxeExperience key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalExperience key={index} content={content} theme={theme} />;
         if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialExperience key={index} content={content} theme={theme} />;
         if (pattern === "split-hero") return <CorporateExperience key={index} content={content} theme={theme} />;
         if (pattern === "dark-showcase") return <ShowcaseExperience key={index} content={content} theme={theme} />;
         if (pattern === "playful-sticker") return <StickerExperience key={index} content={content} theme={theme} />;
-        return <PosterExperience key={index} content={content} theme={theme} />;
+        return <NYCExperience key={index} content={content} theme={theme} />;
+
+      case "education":
+        if (pattern === "not-your-college") return <NYCEducation key={index} content={content} theme={theme} />;
+        return <LuxeEducation key={index} content={content} theme={theme} />;
 
       case "contact":
+        if (pattern === "not-your-college") return <NYCContact key={index} content={content} theme={theme} />;
+        if (pattern === "luxe-creative") return <LuxeContact key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalContact key={index} content={content} theme={theme} />;
         if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialContact key={index} content={content} theme={theme} />;
         if (pattern === "split-hero") return <CorporateContact key={index} content={content} theme={theme} />;
         if (pattern === "dark-showcase") return <ShowcaseContact key={index} content={content} theme={theme} />;
         if (pattern === "playful-sticker") return <StickerContact key={index} content={content} theme={theme} />;
-        return <PosterContact key={index} content={content} theme={theme} />;
+        return <NYCContact key={index} content={content} theme={theme} />;
 
       default:
         return null;

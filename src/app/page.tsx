@@ -1,1379 +1,634 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import {
   ArrowRight,
   Check,
-  ChevronDown,
   Sparkles,
   ExternalLink,
   ShieldCheck,
   Globe,
-  Activity,
-  Layers,
-  Layout,
   Code2,
-  Lock,
-  Compass,
   FileText,
   Star,
-  CheckCircle2,
   Zap,
-  Flame,
-  Palette
+  Laptop,
+  CheckCircle2,
+  ArrowUpRight,
+  ChevronDown,
+  Layers,
+  Terminal,
+  Cpu,
 } from "lucide-react";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import { HangingResumesGallery } from "@/components/portfolio/HangingResumesGallery";
-import { RedBullStyleCommercial } from "@/components/portfolio/RedBullStyleCommercial";
 import { FolioTreeHeroAnimation } from "@/components/portfolio/FolioTreeHeroAnimation";
-import { PlatformGuideSection } from "@/components/portfolio/PlatformGuideSection";
-import { ClaimHandleBar } from "@/components/home/ClaimHandleBar";
+import { SignInModal } from "@/components/auth/SignInModal";
 
-type TemplateCategory = "all" | "creative" | "engineering" | "architecture" | "product";
-
-interface TemplateShowcase {
-  id: string;
-  name: string;
-  category: TemplateCategory;
-  categoryLabel: string;
-  styleTag?: string; // e.g. "tech • formal", "design • calm", etc.
-  pinterestUrl?: string;
-  image?: string;
-  title: string;
-  description: string;
-  fonts: string;
-  accentColor: string;
-  badgeBg: string;
-  badgeText: string;
-  previewType: "editorial" | "terminal" | "spatial" | "strategy" | "poster";
-  tags: string[];
-}
-
-const TEMPLATES: TemplateShowcase[] = [
-  {
-    id: "minimal-editorial",
-    name: "Minimal Editorial",
-    category: "creative",
-    categoryLabel: "Editorial & Design",
-    styleTag: "design • calm",
-    pinterestUrl: "https://in.pinterest.com/pin/1138003399621985780/",
-    image: "/images/styles/design-calm.jpg",
-    title: "Elena Vance — Spatial & Brand Monograph",
-    description: "Refined headlines, generous white space, and asymmetric visual rhythm.",
-    fonts: "Plus Jakarta Sans + Newsreader Display",
-    accentColor: "#991B1B",
-    badgeBg: "bg-red-50 border-red-200",
-    badgeText: "text-[#991B1B]",
-    previewType: "editorial",
-    tags: ["Editorial", "High Whitespace", "Typography-First"],
-  },
-  {
-    id: "developer-terminal",
-    name: "Developer Terminal",
-    category: "engineering",
-    categoryLabel: "Systems & Engineering",
-    styleTag: "tech • formal",
-    pinterestUrl: "https://in.pinterest.com/pin/937452478704956169/",
-    image: "/images/styles/tech-formal.jpg",
-    title: "Alex Rivera — Distributed Systems Engineer",
-    description: "Monospace prompt, real git commit hashes, and verified throughput metrics.",
-    fonts: "JetBrains Mono + Plus Jakarta Sans",
-    accentColor: "#10B981",
-    badgeBg: "bg-emerald-50 border-emerald-200",
-    badgeText: "text-emerald-700",
-    previewType: "terminal",
-    tags: ["Technical", "Verified Git", "Low Latency"],
-  },
-  {
-    id: "creative-collage",
-    name: "Creative Collage",
-    category: "architecture",
-    categoryLabel: "Spatial & Architecture",
-    styleTag: "creative • playful",
-    pinterestUrl: "https://in.pinterest.com/pin/677088125275224567/",
-    image: "/images/styles/creative-playful.jpg",
-    title: "Studio Ortiz — Architectural Practices",
-    description: "Monumental typography, full-bleed imagery grids, and tactile project cards.",
-    fonts: "Plus Jakarta Sans Bold + Syne",
-    accentColor: "#D97706",
-    badgeBg: "bg-amber-50 border-amber-200",
-    badgeText: "text-amber-800",
-    previewType: "spatial",
-    tags: ["Spatial", "Gallery Grid", "Expansive"],
-  },
-  {
-    id: "case-study-heavy",
-    name: "Case-Study Heavy",
-    category: "product",
-    categoryLabel: "Product & Strategy",
-    styleTag: "design • formal",
-    pinterestUrl: "https://in.pinterest.com/pin/628955904245390485/",
-    image: "/images/styles/design-formal.jpg",
-    title: "Marcus Vance — Principal Product Lead",
-    description: "Problem-Approach-Outcome cards with verified business metrics and telemetry.",
-    fonts: "Plus Jakarta Sans Bold + Inter",
-    accentColor: "#2563EB",
-    badgeBg: "bg-blue-50 border-blue-200",
-    badgeText: "text-blue-700",
-    previewType: "strategy",
-    tags: ["Case Studies", "PLG Metrics", "Executive"],
-  },
-  {
-    id: "bold-poster",
-    name: "Bold Poster",
-    category: "creative",
-    categoryLabel: "High-Energy Poster",
-    styleTag: "creative • bold",
-    pinterestUrl: "https://in.pinterest.com/pin/1055742337658502355/",
-    image: "/images/styles/creative-bold.jpg",
-    title: "Kai Tanaka — Creative Technologist",
-    description: "Brutalist grid borders, vibrant crimson tags, and bold display headers.",
-    fonts: "Plus Jakarta Sans Heavy + JetBrains Mono",
-    accentColor: "#DC2626",
-    badgeBg: "bg-rose-50 border-rose-200",
-    badgeText: "text-rose-700",
-    previewType: "poster",
-    tags: ["Brutalist", "High-Energy", "Experimental"],
-  },
-  {
-    id: "corporate-clean",
-    name: "Corporate Clean",
-    category: "product",
-    categoryLabel: "Executive & Business",
-    styleTag: "business • formal",
-    pinterestUrl: "https://in.pinterest.com/pin/1097963584193800356/",
-    image: "/images/styles/business-formal.jpg",
-    title: "Conicorn — Executive Solutions Portfolio",
-    description: "Clean enterprise typography, structured case sections, and verified outcome telemetry.",
-    fonts: "Plus Jakarta Sans Bold + Inter",
-    accentColor: "#0284C7",
-    badgeBg: "bg-sky-50 border-sky-200",
-    badgeText: "text-sky-700",
-    previewType: "strategy",
-    tags: ["Executive", "Enterprise", "Corporate"],
-  },
-  {
-    id: "dark-showcase",
-    name: "Dark Showcase",
-    category: "engineering",
-    categoryLabel: "Dark Engineering & Cyber",
-    styleTag: "tech • bold",
-    pinterestUrl: "https://in.pinterest.com/pin/970525788470144809/",
-    image: "/images/styles/tech-bold.jpg",
-    title: "Nexus Cyber Interface & Cloud Systems",
-    description: "Ultra-dark high-contrast cyber theme with carousel cards and system telemetry.",
-    fonts: "Plus Jakarta Sans + JetBrains Mono",
-    accentColor: "#06B6D4",
-    badgeBg: "bg-cyan-50 border-cyan-200",
-    badgeText: "text-cyan-700",
-    previewType: "terminal",
-    tags: ["Cyber", "Dark Theme", "Interactive Carousel"],
-  },
-];
-
-export default function ColorfulEditorialHomePage() {
-  const { data: session, status } = useSession();
-  const [activeCategory, setActiveCategory] = useState<TemplateCategory>("all");
-  const [selectedTemplate, setSelectedTemplate] = useState<string>("minimal-editorial");
-  const [hoveredNav, setHoveredNav] = useState<string | null>(null);
+export default function NotYourCollegeHomePage() {
+  const { data: session } = useSession();
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [handleInput, setHandleInput] = useState("");
+  const [activeTab, setActiveTab] = useState<"nyc" | "luxe" | "terminal" | "minimal">("nyc");
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
 
-  const filteredTemplates = activeCategory === "all" 
-    ? TEMPLATES 
-    : TEMPLATES.filter((t) => t.category === activeCategory);
+  const showcaseThemes = {
+    nyc: {
+      name: "Not Your College (Editorial)",
+      subtitle: "Warm cream paper aesthetic, Instrument Serif typography, and high-impact editorial cards.",
+      accent: "#173f32",
+      badge: "STUDENT & BUILDER FAVORITE",
+      previewUrl: "/p/gaurav?theme=not-your-college",
+      bgClass: "bg-[#f7f4eb] text-[#222e26]",
+      cardBorder: "border-[#173f32]/20",
+    },
+    luxe: {
+      name: "Luxe Creative (Dark Glow)",
+      subtitle: "Deep ambient gradient mesh, floating glass cards, and animated interactive telemetry.",
+      accent: "#991B1B",
+      badge: "FLAGSHIP DARK THEME",
+      previewUrl: "/p/gaurav?theme=luxe-creative",
+      bgClass: "bg-[#0B0F19] text-white",
+      cardBorder: "border-white/10",
+    },
+    terminal: {
+      name: "Developer Terminal",
+      subtitle: "Monospace CLI prompt, real git commits, and verified systems latency benchmarks.",
+      accent: "#10B981",
+      badge: "HARDCORE ENGINEERING",
+      previewUrl: "/p/gaurav?theme=developer-terminal",
+      bgClass: "bg-[#0D1117] text-[#E6EDF3]",
+      cardBorder: "border-[#30363D]",
+    },
+    minimal: {
+      name: "Minimal Editorial",
+      subtitle: "High whitespace, classic typography, and museum monograph layout.",
+      accent: "#1E293B",
+      badge: "CLEAN & TIMELESS",
+      previewUrl: "/p/gaurav?theme=minimal-editorial",
+      bgClass: "bg-white text-slate-900",
+      cardBorder: "border-slate-200",
+    },
+  };
 
-  const currentTemplate = TEMPLATES.find((t) => t.id === selectedTemplate) || TEMPLATES[0];
+  const faqs = [
+    {
+      q: "How does FolioVeda prevent fake credentials and hallucinations?",
+      a: "Unlike generic AI writers that invent fake job titles and metrics, FolioVeda uses a strict factual anchor model. We only synthesize headlines, bullet points, and portfolios from your real GitHub repositories, uploaded resume notes, and verified work history.",
+    },
+    {
+      q: "Can I share my portfolio on LinkedIn, Twitter, and job applications?",
+      a: "Yes! Every portfolio gets an instant shareable link like folioveda.me/p/[your-name], fully responsive on mobile, tablet, and desktop with open-graph cards for social sharing.",
+    },
+    {
+      q: "How does the ATS Resume Tailor work?",
+      a: "You paste your base resume and any job description. FolioVeda analyzes keyword overlap, reorganizes your real experience to match the employer's requirements, and exports a high-resolution, machine-parseable PDF.",
+    },
+    {
+      q: "Can I switch themes without losing my data?",
+      a: "Yes. All portfolio content is stored in a standardized schema. You can switch between Not Your College, Luxe Creative, Developer Terminal, and Minimal Editorial with zero data loss in one click.",
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#1E293B] font-sans selection:bg-[#991B1B] selection:text-white antialiased overflow-x-hidden">
+    <div className="min-h-screen bg-[#f7f4eb] text-[#222e26] font-sans selection:bg-[#ebd800] selection:text-[#173f32] antialiased overflow-x-hidden">
       
-      {/* =========================================================================
-          ANIMATED NAVBAR: Positioned cleanly at the very top (No line/ribbon above)
-          ========================================================================= */}
-      <header className="sticky top-0 z-50 bg-[#F8F9FA]/90 backdrop-blur-xl border-b border-[#1E293B]/10 transition-all duration-300">
-        
-        {/* Subtle bottom animated crimson gradient accent streak */}
-        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#991B1B]/40 to-transparent pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 h-20 flex items-center justify-between relative">
+      {/* ── STICKY NOT YOUR COLLEGE HEADER ── */}
+      <header className="sticky top-0 z-50 bg-[#f7f4eb]/90 backdrop-blur-md border-b border-[#173f32]/15 transition-all">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 h-20 flex items-center justify-between">
           
-          {/* Left: Animated Brand Identity */}
-          <Link href="/" className="flex items-center gap-3 group relative">
-            <div className="relative">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1E293B] to-[#0F172A] flex items-center justify-center text-white shadow-sm group-hover:rotate-6 group-hover:scale-105 group-hover:shadow-[#991B1B]/30 transition-all duration-300">
-                <FolioVedaLogo size="sm" showText={false} />
-              </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#991B1B] ring-2 ring-[#F8F9FA] animate-pulse" />
+          {/* Logo & Monogram */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-full bg-[#173f32] text-[#f7f4eb] flex items-center justify-center font-bold text-base shadow-xs group-hover:scale-105 transition-transform">
+              FV
             </div>
-
             <div className="flex flex-col">
-              <div className="flex items-center gap-1">
-                <span className="text-xl font-bold tracking-tight text-[#1E293B] font-sans group-hover:text-[#991B1B] transition-colors">
-                  FolioVeda
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#991B1B]" />
-              </div>
-              <span className="text-[10px] tracking-widest uppercase text-slate-400 font-bold -mt-0.5">
-                Portfolio Engine
+              <span className="text-xl font-bold tracking-tight text-[#222e26] group-hover:text-[#173f32] transition-colors">
+                FolioVeda
+              </span>
+              <span className="text-[10px] tracking-wider uppercase text-[#5a6b60] font-bold">
+                Where Builders Launch
               </span>
             </div>
           </Link>
 
-          {/* Center: Clean Minimal Navigation with Smooth Floating Hover Pills */}
-          <nav 
-            className="hidden md:flex items-center gap-1.5 p-1.5 rounded-full bg-white/80 border border-[#1E293B]/10 shadow-2xs backdrop-blur-md"
-            onMouseLeave={() => setHoveredNav(null)}
-          >
-            {[
-              { id: "guide", label: "How It Works", href: "#guide", badge: "GUIDE" },
-              { id: "story", label: "Commercial", href: "#career-story" },
-              { id: "resumes", label: "Top Resumes", href: "#top-resumes" },
-              { id: "templates", label: "Templates", href: "#templates" },
-              { id: "inspiration", label: "Inspiration AI", href: "/inspiration", badge: "AI" },
-              { id: "pricing", label: "Pricing", href: "#pricing" },
-            ].map((link) => {
-              const isHovered = hoveredNav === link.id;
-              return (
-                <Link
-                  key={link.id}
-                  href={link.href}
-                  onMouseEnter={() => setHoveredNav(link.id)}
-                  className={`relative px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 ${
-                    isHovered
-                      ? "text-[#991B1B]"
-                      : "text-slate-600 hover:text-[#1E293B]"
-                  }`}
-                >
-                  {/* Animated Pill Background */}
-                  {isHovered && (
-                    <span className="absolute inset-0 rounded-full bg-red-50/90 border border-red-200 shadow-2xs -z-10 animate-fade-in" />
-                  )}
-                  <span>{link.label}</span>
-                  {link.badge && (
-                    <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded-full bg-gradient-to-r from-[#991B1B] to-[#DC2626] text-white">
-                      {link.badge}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center gap-7 text-xs font-bold text-[#222e26]">
+            <a href="#why-proof" className="hover:text-[#173f32] transition-colors">
+              Why Proof Matters
+            </a>
+            <a href="#top-resumes" className="hover:text-[#173f32] transition-colors flex items-center gap-1.5">
+              <span>Floating Portfolios</span>
+              <span className="w-2 h-2 rounded-full bg-[#ebd800] border border-[#173f32] animate-ping" />
+            </a>
+            <a href="#showcase" className="hover:text-[#173f32] transition-colors">
+              Live Showcase
+            </a>
+            <a href="#curriculum" className="hover:text-[#173f32] transition-colors">
+              How It Works
+            </a>
+            <Link href="/resume" className="hover:text-[#173f32] transition-colors">
+              Resume Tailor
+            </Link>
+            <Link href="/inspiration" className="hover:text-[#173f32] transition-colors flex items-center gap-1">
+              <span>Inspiration Studio</span>
+              <span className="px-1.5 py-0.5 rounded text-[9px] bg-[#ebd800] text-[#173f32] font-extrabold">NEW</span>
+            </Link>
           </nav>
 
-          {/* Right: Operational Status & Animated Shimmer CTA */}
-          <div className="flex items-center gap-3 sm:gap-4">
-            {status === "authenticated" ? (
-              <div className="flex items-center gap-2.5">
-                <Link
-                  href="/dashboard"
-                  className="text-xs font-bold text-slate-700 hover:text-[#991B1B] px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200/80 transition-all border border-slate-200 hidden sm:inline-block shadow-2xs"
-                >
-                  Dashboard
-                </Link>
-
-                <button
-                  id="navbar-signout-button"
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-white px-4 py-2 rounded-full bg-white hover:bg-[#991B1B] border border-slate-200 hover:border-[#991B1B] shadow-2xs transition-all cursor-pointer"
-                >
-                  <span>Sign Out</span>
-                </button>
+          {/* CTA Button */}
+          <div className="flex items-center gap-3">
+            {session?.user ? (
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#173f32]/10 border border-[#173f32]/20 text-xs font-bold text-[#173f32]">
+                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+                <span>{session.user.name || session.user.email?.split("@")[0]}</span>
               </div>
             ) : (
               <button
-                id="navbar-signin-button"
-                onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-                className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#991B1B] px-4 py-2 rounded-full bg-white hover:bg-red-50/80 border border-slate-200 hover:border-red-200 shadow-2xs transition-all cursor-pointer group"
+                type="button"
+                onClick={() => setIsAuthModalOpen(true)}
+                className="hidden sm:inline-flex px-4 py-2 rounded-full border border-[#173f32]/20 hover:bg-white text-xs font-bold text-[#222e26] transition-all cursor-pointer"
               >
-                <svg className="w-3.5 h-3.5 shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none">
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
-                </svg>
-                <span>Sign In</span>
+                Sign In
               </button>
             )}
-
+            <Link
+              href="/p/gaurav"
+              className="hidden sm:inline-flex px-4 py-2 rounded-full border border-[#173f32]/20 hover:bg-white text-xs font-bold text-[#222e26] transition-all"
+            >
+              Live Demo ↗
+            </Link>
             <Link
               href="/onboarding"
-              className="shimmer-button bg-gradient-to-r from-[#991B1B] via-[#B91C1C] to-[#991B1B] hover:from-[#7F1D1D] hover:to-[#991B1B] text-white text-xs font-bold px-5 py-2.5 rounded-full shadow-md shadow-[#991B1B]/25 hover:shadow-lg hover:shadow-[#991B1B]/40 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-1.5 group"
+              className="px-5 py-2.5 rounded-full bg-[#173f32] hover:bg-[#16382c] text-[#f7f4eb] text-xs font-bold uppercase tracking-wider transition-all shadow-xs hover:scale-105 active:scale-95"
             >
-              <span>Create Your Portfolio</span>
-              <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+              Start Building Free →
             </Link>
           </div>
-
         </div>
       </header>
 
+      {/* ── HERO SECTION: NYC EDITORIAL STYLE ── */}
+      <section className="relative px-6 sm:px-10 pt-16 pb-24 max-w-6xl mx-auto overflow-hidden">
+        {/* Subtle background grid pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.035] pointer-events-none"
+          style={{
+            backgroundImage: `linear-gradient(#173f32 1px, transparent 1px), linear-gradient(90deg, #173f32 1px, transparent 1px)`,
+            backgroundSize: "44px 44px",
+          }}
+        />
 
-      {/* =========================================================================
-          HERO SECTION: Bold, Attractive Display Typography (Zero Italic)
-          ========================================================================= */}
-      <section className="relative pt-20 pb-16 md:pt-28 md:pb-24 px-6 sm:px-10 max-w-6xl mx-auto text-center">
-        
-        {/* Soft Background Crimson Glow Aura */}
-        <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[340px] bg-gradient-to-br from-[#991B1B]/15 via-red-500/5 to-transparent blur-3xl pointer-events-none rounded-full" />
-
-        {/* Kicker Tag */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#1E293B]/10 text-xs font-bold text-[#1E293B] shadow-xs mb-8 relative z-10">
-          <span className="w-2 h-2 rounded-full bg-[#991B1B] animate-pulse" />
-          <span className="font-extrabold text-slate-800 tracking-wide uppercase text-[11px]">60-30-10 PALETTE</span>
-          <span className="text-slate-300">•</span>
-          <span className="text-slate-600 font-semibold">Studio Alabaster, Deep Slate &amp; Industrial Crimson</span>
-        </div>
-
-        {/* Bold, Striking Display Headline (Non-Italic, High-Impact) */}
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[84px] font-extrabold tracking-tight text-[#1E293B] leading-[1.05] mb-8 font-sans relative z-10">
-          Create a portfolio <br />
-          <span className="font-extrabold tracking-tight bg-gradient-to-r from-[#991B1B] via-[#DC2626] to-[#7F1D1D] bg-clip-text text-transparent">
-            that gets you noticed.
-          </span>
-        </h1>
-
-        {/* Clean, Confident Subtitle */}
-        <p className="text-lg sm:text-xl text-slate-600 font-normal max-w-2xl mx-auto leading-relaxed mb-8 relative z-10">
-          Showcase your work with award-winning design, zero-hallucination intake, and instant custom domains. Built for designers, engineers, and creators who let their work speak.
-        </p>
-
-        {/* Real-time Backend Handle Claimer */}
-        <ClaimHandleBar />
-
-        {/* High-Conversion CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 relative z-10">
-          <Link
-            href="/onboarding"
-            className="w-full sm:w-auto shimmer-button bg-gradient-to-r from-[#991B1B] via-[#B91C1C] to-[#991B1B] hover:from-[#7F1D1D] hover:to-[#991B1B] text-white font-bold text-base px-9 py-4 rounded-full shadow-lg shadow-[#991B1B]/30 hover:shadow-xl hover:shadow-[#991B1B]/40 hover:scale-105 active:scale-98 transition-all duration-200 flex items-center justify-center gap-2 group"
-          >
-            <span>Create Your Portfolio — Free</span>
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-
-          <Link
-            href="/inspiration"
-            className="w-full sm:w-auto bg-white hover:bg-slate-50 text-[#1E293B] border border-[#1E293B]/20 hover:border-[#991B1B] hover:text-[#991B1B] font-bold text-base px-8 py-4 rounded-full shadow-xs hover:shadow transition-all duration-200 flex items-center justify-center gap-2 group"
-          >
-            <Sparkles size={16} className="text-[#991B1B] group-hover:rotate-12 transition-transform" />
-            <span>Paste Inspiration Link</span>
-          </Link>
-        </div>
-
-        {/* Micro-Reassurance */}
-        <div className="flex flex-wrap items-center justify-center gap-y-2 gap-x-6 text-xs text-slate-500 font-medium relative z-10 mb-14">
-          <span className="flex items-center gap-1.5">
-            <CheckCircle2 size={13} className="text-[#991B1B]" /> Free 14-day trial
-          </span>
-          <span className="flex items-center gap-1.5">
-            <CheckCircle2 size={13} className="text-[#991B1B]" /> No credit card required
-          </span>
-          <span className="flex items-center gap-1.5">
-            <CheckCircle2 size={13} className="text-[#991B1B]" /> Sub-50ms Global Edge CDN
-          </span>
-        </div>
-
-        {/* Verified Social Proof Strip */}
-        <div className="inline-flex flex-wrap items-center justify-center gap-4 py-2.5 px-6 rounded-2xl bg-white border border-[#1E293B]/10 shadow-xs relative z-10">
-          <div className="flex -space-x-2">
-            <div className="w-7 h-7 rounded-full bg-[#1E293B] text-white flex items-center justify-center text-[10px] font-bold border-2 border-white">EV</div>
-            <div className="w-7 h-7 rounded-full bg-[#991B1B] text-white flex items-center justify-center text-[10px] font-bold border-2 border-white">AR</div>
-            <div className="w-7 h-7 rounded-full bg-slate-700 text-white flex items-center justify-center text-[10px] font-bold border-2 border-white">MV</div>
-            <div className="w-7 h-7 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] font-bold border-2 border-white">+14k</div>
+        <div className="space-y-8 relative z-10 text-left sm:text-center max-w-4xl mx-auto">
+          {/* Eyebrow Pill */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ebd800] text-[#173f32] text-xs font-bold uppercase tracking-wider border border-[#173f32]/20 shadow-xs">
+            <span>✦ THE PORTFOLIO ENGINE FOR THE AI GENERATION</span>
           </div>
-          <div className="text-xs text-slate-700 font-semibold flex items-center gap-1">
-            <div className="flex text-amber-500">
-              {"★".repeat(5)}
+
+          {/* Massive Instrument Serif Heading */}
+          <h1 className="text-4xl sm:text-7xl md:text-8xl font-normal text-[#222e26] font-editorial tracking-tight leading-[1.04]">
+            Careers are made on proof. <br />
+            <span className="font-editorial-italic font-normal text-[#173f32]">
+              Not just certificates.
+            </span>
+          </h1>
+
+          {/* Subheading */}
+          <p className="text-base sm:text-xl text-[#3d4d42] max-w-2xl sm:mx-auto leading-relaxed font-normal">
+            College syllabi hand you generic degrees. FolioVeda turns your shipped code, live projects, and real achievements into an award-winning portfolio and ATS-tailored resume.
+          </p>
+
+          {/* Claim Handle Bar */}
+          <div className="pt-4 max-w-xl sm:mx-auto">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const name = handleInput.trim() || "alex";
+                window.location.href = `/onboarding?name=${encodeURIComponent(name)}`;
+              }}
+              className="p-2 bg-white rounded-full border-2 border-[#173f32]/25 shadow-md flex items-center gap-2"
+            >
+              <div className="pl-4 pr-1 text-xs font-mono font-bold text-[#5a6b60] shrink-0 select-none hidden sm:block">
+                folioveda.me/p/
+              </div>
+              <input
+                type="text"
+                value={handleInput}
+                onChange={(e) => setHandleInput(e.target.value)}
+                placeholder="your-handle-or-name"
+                className="w-full bg-transparent px-3 py-2 text-sm font-bold text-[#222e26] focus:outline-none placeholder:text-slate-400"
+              />
+              <button
+                type="submit"
+                className="px-6 py-3 rounded-full bg-[#173f32] hover:bg-[#16382c] text-[#f7f4eb] text-xs font-bold uppercase tracking-wider shrink-0 transition-all flex items-center gap-1.5 shadow-sm"
+              >
+                <span>Claim &amp; Build</span>
+                <ArrowRight size={13} />
+              </button>
+            </form>
+
+            {/* Micro badges below form */}
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-[#5a6b60] pt-4">
+              <span className="flex items-center gap-1">
+                <CheckCircle2 size={13} className="text-[#173f32]" /> 100% Free to Start
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1">
+                <CheckCircle2 size={13} className="text-[#173f32]" /> Zero Hallucinations
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1">
+                <CheckCircle2 size={13} className="text-[#173f32]" /> Instant ATS PDF Export
+              </span>
             </div>
-            <span className="font-bold text-[#1E293B]">4.96/5</span>
-            <span>from 14,200+ engineers &amp; designers</span>
           </div>
-          <div className="hidden md:block w-px h-4 bg-slate-200" />
-          <div className="text-xs text-slate-500 font-medium hidden md:block">
-            Alumni hired at <strong className="text-[#1E293B] font-bold">Stripe</strong>, <strong className="text-[#1E293B] font-bold">Linear</strong>, <strong className="text-[#1E293B] font-bold">Vercel</strong>, and <strong className="text-[#1E293B] font-bold">Datadog</strong>
+
+          {/* Interactive FolioTree Animation */}
+          <div className="pt-8">
+            <FolioTreeHeroAnimation />
           </div>
         </div>
-
-        {/* =========================================================================
-            HERO ANIMATION: Stickman Plants FolioVeda Seed, Waters User Information,
-            Grows Full Apple Tree, Apple Drops & Live Portfolio Pops Up
-            ========================================================================= */}
-        <FolioTreeHeroAnimation />
-
       </section>
 
+      {/* ── TWO REALITIES: THE COLLEGE GAP VS THE FOLIOVEDA STANDARD ── */}
+      <section id="why-proof" className="py-20 px-6 sm:px-10 bg-[#faf8f1] border-y border-[#173f32]/15">
+        <div className="max-w-6xl mx-auto space-y-12">
+          
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <span className="text-xs font-bold text-[#173f32] uppercase tracking-wider block">
+              [ 01 // THE REALITY GAP ]
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-editorial font-normal text-[#222e26] tracking-tight">
+              By final year, most students are just surviving. Start building proof now.
+            </h2>
+          </div>
 
-      {/* =========================================================================
-          RED BULL STYLE ANIMATED COMMERCIAL: Hand-Drawn Cartoon Video
-          Why a Live Portfolio & ATS-Friendly Resume Gives Your Career Wiiings!
-          ========================================================================= */}
-      <RedBullStyleCommercial />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            
+            {/* The Old College Way */}
+            <div className="p-8 sm:p-10 rounded-3xl bg-[#fffdf8] border border-[#173f32]/20 flex flex-col justify-between space-y-6 opacity-85">
+              <div className="space-y-4">
+                <div className="inline-block px-3 py-1 rounded-full bg-slate-200 text-slate-700 text-xs font-bold uppercase tracking-wider">
+                  The Traditional College Way
+                </div>
+                <h3 className="text-2xl font-editorial font-bold text-[#222e26]">
+                  A 2-page PDF filled with generic buzzwords and 404 links.
+                </h3>
+                <ul className="space-y-3 text-sm text-[#5a6b60] leading-relaxed">
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-rose-600 font-bold">✕</span>
+                    <span>No live deployed URLs or verifiable code commits for recruiters to test.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-rose-600 font-bold">✕</span>
+                    <span>Generic Canva or Word templates that get rejected by automated ATS screening.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-rose-600 font-bold">✕</span>
+                    <span>Zero visual impact or interactivity when hiring managers open your profile.</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="text-xs font-bold text-slate-500 font-mono pt-4 border-t border-slate-200">
+                RESULT: 100+ Applications sent with 0 recruiter callbacks.
+              </div>
+            </div>
 
+            {/* The FolioVeda Standard (NYC Deep Forest Green Card) */}
+            <div className="p-8 sm:p-10 rounded-3xl bg-[#173f32] text-[#f7f4eb] flex flex-col justify-between space-y-6 shadow-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#ebd800]/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* =========================================================================
-          HANGING RESUMES GALLERY: Scroll-Triggered Drop Tied With Flexible Threads
-          & Full-Screen Front Page Cover on Hover
-          ========================================================================= */}
+              <div className="space-y-4 relative z-10">
+                <div className="inline-block px-3.5 py-1 rounded-full bg-[#ebd800] text-[#173f32] text-xs font-bold uppercase tracking-wider border border-[#ebd800]">
+                  The FolioVeda Standard
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-editorial font-normal text-[#f7f4eb] tracking-tight">
+                  A verified live portfolio and tailored resume built on real artifacts.
+                </h3>
+                <ul className="space-y-3 text-sm text-[#f7f4eb]/90 leading-relaxed">
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-[#ebd800] font-bold">✓</span>
+                    <span><strong>Verified GitHub sync:</strong> real repositories, commit hashes, and live deployment links.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-[#ebd800] font-bold">✓</span>
+                    <span><strong>Zero-hallucination AI:</strong> every word anchored in your real experience, never fabricated.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-[#ebd800] font-bold">✓</span>
+                    <span><strong>Editorial &amp; motion themes:</strong> Not Your College, Luxe Dark, and Terminal layouts.</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="text-xs font-bold text-[#ebd800] font-mono pt-4 border-t border-white/15 relative z-10">
+                RESULT: Verified portfolio link recruiters actually click and remember.
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ── FLOATING PORTFOLIOS & HANGING RESUMES GALLERY ── */}
       <HangingResumesGallery />
 
+      {/* ── LIVE INTERACTIVE SHOWCASE SECTION ── */}
+      <section id="showcase" className="py-24 px-6 sm:px-10 max-w-6xl mx-auto space-y-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#173f32]/15 pb-6">
+          <div>
+            <span className="text-xs font-bold text-[#173f32] uppercase tracking-wider block">
+              [ 02 // ARCHITECTURAL SHOWCASE ]
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-editorial font-normal text-[#222e26] tracking-tight">
+              Portfolios in the showcase.
+            </h2>
+            <p className="text-[#5a6b60] text-sm sm:text-base mt-2 max-w-xl font-normal">
+              Switch between themes built for builders, systems engineers, and creative technologists.
+            </p>
+          </div>
 
-      {/* =========================================================================
-          INTERACTIVE STEP-BY-STEP PLATFORM GUIDE: Tailored for Indian Audience
-          Walkthrough of All Functions with Manual Arrow & Auto-Play Controls
-          ========================================================================= */}
-      <PlatformGuideSection />
-
-
-      {/* =========================================================================
-          HERO VISUAL SHOWCASE: Colorful, Interactive Template Stage
-          ========================================================================= */}
-      <section id="templates" className="px-6 sm:px-10 max-w-7xl mx-auto pb-28 scroll-mt-24">
-        
-        {/* Colorful Discipline Tabs */}
-        <div className="flex items-center justify-center gap-2 md:gap-3 mb-10 overflow-x-auto no-scrollbar pb-2">
-          {(
-            [
-              { id: "all", label: "All Disciplines" },
-              { id: "creative", label: "Design & Creative" },
-              { id: "engineering", label: "Systems & Engineering" },
-              { id: "architecture", label: "Spatial & Architecture" },
-              { id: "product", label: "Product & Strategy" },
-            ] as { id: TemplateCategory; label: string }[]
-          ).map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 ${
-                activeCategory === cat.id
-                  ? "bg-[#991B1B] text-white shadow-md shadow-[#991B1B]/30 scale-105"
-                  : "bg-white text-slate-600 hover:text-[#1E293B] border border-slate-200 hover:border-slate-300"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+          {/* Theme Switcher Tabs */}
+          <div className="flex flex-wrap gap-2">
+            {(["nyc", "luxe", "terminal", "minimal"] as const).map((key) => {
+              const active = activeTab === key;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setActiveTab(key)}
+                  className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
+                    active
+                      ? "bg-[#173f32] text-[#f7f4eb] shadow-xs"
+                      : "bg-[#fffdf8] text-[#222e26] border border-[#173f32]/20 hover:bg-white"
+                  }`}
+                >
+                  {showcaseThemes[key].name}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Elevated Showcase Window */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl overflow-hidden transition-all duration-300">
-          
-          {/* Window Address Header */}
-          <div className="bg-slate-50 border-b border-slate-200 px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-              <span className="ml-4 text-xs text-slate-500 font-mono hidden sm:inline">
-                https://folioveda.me/{currentTemplate.name.toLowerCase().replace(/\s+/g, "")}
+        {/* Active Theme Preview Card */}
+        <div
+          className={`p-8 sm:p-12 rounded-3xl border ${showcaseThemes[activeTab].cardBorder} ${showcaseThemes[activeTab].bgClass} transition-all duration-300 shadow-xl`}
+        >
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-current/15 pb-6">
+            <div>
+              <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-[#ebd800] text-[#173f32] inline-block mb-3">
+                {showcaseThemes[activeTab].badge}
               </span>
-              {currentTemplate.styleTag && (
-                <span className="ml-2 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-red-50 text-[#991B1B] border border-red-200">
-                  {currentTemplate.styleTag}
-                </span>
-              )}
-              {currentTemplate.pinterestUrl && (
-                <a
-                  href={currentTemplate.pinterestUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hidden md:inline-flex items-center gap-1 text-[11px] font-bold text-red-700 hover:text-[#991B1B] underline ml-1"
-                >
-                  <span>Pinterest Blueprint ↗</span>
-                </a>
-              )}
+              <h3 className="text-3xl sm:text-4xl font-editorial font-bold tracking-tight">
+                {showcaseThemes[activeTab].name}
+              </h3>
+              <p className="text-sm opacity-80 mt-1 max-w-xl">
+                {showcaseThemes[activeTab].subtitle}
+              </p>
             </div>
-
-            <div className="flex items-center gap-3 text-xs">
-              <span className="text-slate-400 font-medium hidden md:inline">
-                Typography: <strong className="text-slate-800 font-bold">{currentTemplate.fonts}</strong>
-              </span>
-              <Link
-                href={`/onboarding?template=${currentTemplate.id}`}
-                className="bg-[#991B1B] hover:bg-[#7F1D1D] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-xs transition flex items-center gap-1.5"
-              >
-                <span>Use {currentTemplate.name} Template</span>
-                <ArrowRight size={12} />
-              </Link>
-            </div>
-          </div>
-
-          {/* Dynamic Template Canvas */}
-          <div className="p-8 sm:p-12 lg:p-16 min-h-[460px] flex flex-col justify-between">
-            
-            {/* 1. Editorial Showcase (Bold headlines, zero italic) */}
-            {currentTemplate.previewType === "editorial" && (
-              <div className="space-y-12 animate-fade-in">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200 pb-8">
-                  <div>
-                    <span className="text-xs font-bold tracking-widest uppercase text-[#991B1B] bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full inline-block">
-                      MONOGRAPH 01 • CURATED
-                    </span>
-                    <h2 className="text-4xl sm:text-5xl font-extrabold text-[#1E293B] mt-3 tracking-tight font-sans">
-                      Elena Vance
-                    </h2>
-                    <p className="text-sm font-semibold text-slate-500 mt-1 uppercase tracking-wider">
-                      Brand Systems &amp; Spatial Architecture • Kyoto &amp; San Francisco
-                    </p>
-                  </div>
-                  <p className="text-sm text-slate-700 max-w-sm font-medium text-right hidden md:block">
-                    &quot;Form follows clarity. Designing spaces, identities, and digital publications that leave a lasting mark.&quot;
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <div className="space-y-3 group cursor-pointer">
-                    <div className="aspect-[4/3] bg-gradient-to-br from-rose-50 to-stone-100 rounded-2xl overflow-hidden border border-rose-200/80 p-6 flex flex-col justify-between group-hover:shadow-md transition-all">
-                      <span className="text-[10px] font-mono font-bold text-[#991B1B]">CASE 01</span>
-                      <span className="font-bold text-slate-800 text-lg">The Glass Pavilion (2025)</span>
-                    </div>
-                    <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#991B1B] transition-colors">The Glass Pavilion</h3>
-                    <p className="text-xs text-slate-500 leading-relaxed font-normal">
-                      Monolithic cedar and low-iron glass residential retreat in Kamakura.
-                    </p>
-                  </div>
-
-                  <div className="space-y-3 group cursor-pointer">
-                    <div className="aspect-[4/3] bg-gradient-to-br from-red-50 to-amber-50 rounded-2xl overflow-hidden border border-red-200/80 p-6 flex flex-col justify-between group-hover:shadow-md transition-all">
-                      <span className="text-[10px] font-mono font-bold text-[#991B1B]">CASE 02</span>
-                      <span className="font-bold text-slate-800 text-lg">Prism Type Specimen</span>
-                    </div>
-                    <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#991B1B] transition-colors">Prism Type Specimen</h3>
-                    <p className="text-xs text-slate-500 leading-relaxed font-normal">
-                      Bespoke geometric typeface and publication guidelines.
-                    </p>
-                  </div>
-
-                  <div className="space-y-3 group cursor-pointer">
-                    <div className="aspect-[4/3] bg-gradient-to-br from-stone-100 to-rose-50 rounded-2xl overflow-hidden border border-stone-200 p-6 flex flex-col justify-between group-hover:shadow-md transition-all">
-                      <span className="text-[10px] font-mono font-bold text-[#991B1B]">CASE 03</span>
-                      <span className="font-bold text-slate-800 text-lg">Aura Ceramic Objects</span>
-                    </div>
-                    <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#991B1B] transition-colors">Aura Ceramic Objects</h3>
-                    <p className="text-xs text-slate-500 leading-relaxed font-normal">
-                      Limited hand-thrown vessel edition exploring tactile glaze gradients.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 2. Technical / Systems Engineering (Deep Slate & Cyber Emerald) */}
-            {currentTemplate.previewType === "terminal" && (
-              <div className="bg-[#1E293B] text-slate-100 -m-8 sm:-m-12 lg:-m-16 p-8 sm:p-12 lg:p-16 font-mono space-y-10 animate-fade-in rounded-2xl">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-800 pb-8">
-                  <div>
-                    <div className="flex items-center gap-2 text-emerald-400 text-xs mb-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      <span>SYSTEM_STATUS: 100% OPERATIONAL • GITHUB SYNCED</span>
-                    </div>
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                      Alex Rivera
-                    </h2>
-                    <p className="text-xs text-slate-400 mt-1">
-                      Senior Systems Architect • Distributed Caches &amp; Edge Compute
-                    </p>
-                  </div>
-                  <div className="flex gap-3 text-xs">
-                    <div className="bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg text-slate-200 font-bold">
-                      <span className="text-[#991B1B]">#</span> p99 &lt; 3.2ms
-                    </div>
-                    <div className="bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg text-slate-200 font-bold">
-                      <span className="text-[#991B1B]">#</span> 100k req/sec
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-slate-900/90 border border-slate-800 hover:border-[#991B1B]/70 p-6 rounded-2xl space-y-3 transition">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-white font-bold text-sm">Distributed Edge Cache</span>
-                      <span className="text-slate-500 font-mono">commit a4f8e91</span>
-                    </div>
-                    <p className="text-xs text-slate-300 leading-relaxed font-sans font-normal">
-                      Zero-copy in-memory caching daemon written in Rust with automated replica failover and sub-5ms global p99.
-                    </p>
-                    <div className="text-xs text-emerald-400 font-bold pt-1">
-                      100k req/s • 34% cloud bandwidth cost reduction
-                    </div>
-                  </div>
-
-                  <div className="bg-slate-900/90 border border-slate-800 hover:border-[#991B1B]/70 p-6 rounded-2xl space-y-3 transition">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-white font-bold text-sm">FolioVeda Compiler Engine</span>
-                      <span className="text-slate-500 font-mono">commit 7c2d1b0</span>
-                    </div>
-                    <p className="text-xs text-slate-300 leading-relaxed font-sans font-normal">
-                      Zero-hallucination portfolio builder with dynamic multi-theme architectural renderer and SSRF safety guard.
-                    </p>
-                    <div className="text-xs text-emerald-400 font-bold pt-1">
-                      Sub-50ms TTFB worldwide on 300+ Edge locations
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 3. Spatial / Architecture (Warm Terracotta & Sand) */}
-            {currentTemplate.previewType === "spatial" && (
-              <div className="space-y-10 animate-fade-in">
-                <div className="border-b border-slate-200 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-                  <div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full inline-block">
-                      SPATIAL ARCHITECTURE
-                    </span>
-                    <h2 className="text-4xl sm:text-5xl font-extrabold text-[#1E293B] mt-2 tracking-tight">
-                      Studio Ortiz
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">
-                      Civic Infrastructure, Cultural Centers &amp; Urban Landscapes
-                    </p>
-                  </div>
-                  <span className="text-xs text-slate-400 font-medium">
-                    Selection 2022 — 2026
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="p-8 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 space-y-3 shadow-xs">
-                    <span className="text-xs font-mono font-bold text-amber-800">PROJECT 01</span>
-                    <h3 className="text-2xl font-bold text-slate-900">The Nordic Pavilion</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      Sustainable cross-laminated timber pavilion exploring carbon-neutral civic assembly in Oslo.
-                    </p>
-                  </div>
-                  <div className="p-8 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 space-y-3 shadow-xs">
-                    <span className="text-xs font-mono font-bold text-amber-800">PROJECT 02</span>
-                    <h3 className="text-2xl font-bold text-slate-900">Maritime Heritage Museum</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      Submerged tidal gallery space constructed from recycled marine aggregate concrete.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 4. Strategy / Product Lead (Royal Cobalt & Deep Slate) */}
-            {currentTemplate.previewType === "strategy" && (
-              <div className="space-y-10 animate-fade-in">
-                <div className="border-b border-slate-200 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-                  <div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full inline-block">
-                      PRODUCT LEADERSHIP
-                    </span>
-                    <h2 className="text-4xl sm:text-5xl font-extrabold text-[#1E293B] mt-2 tracking-tight">
-                      Marcus Vance
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">
-                      Principal PM • Scaling Developer Tooling from $0 to $12M ARR
-                    </p>
-                  </div>
-                  <div className="text-xs font-bold text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
-                    Recruiter Telemetry Active
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="p-6 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50/50 to-slate-50 space-y-3 shadow-xs">
-                    <span className="text-xs text-blue-700 font-bold">CASE STUDY 01</span>
-                    <h3 className="text-xl font-bold text-slate-900">Developer Self-Serve Funnel</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      Re-architected developer onboarding cutting time-to-first-API-call from 14 minutes to 82 seconds.
-                    </p>
-                    <div className="text-xs font-bold text-slate-900 pt-2 border-t border-slate-200">
-                      Outcome: +38% self-serve activation • $4.2M new ARR
-                    </div>
-                  </div>
-
-                  <div className="p-6 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50/50 to-slate-50 space-y-3 shadow-xs">
-                    <span className="text-xs text-blue-700 font-bold">CASE STUDY 02</span>
-                    <h3 className="text-xl font-bold text-slate-900">Enterprise Audit Log API</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      Designed and launched enterprise SAML &amp; compliance suite unlocking 8-figure pipeline across banks.
-                    </p>
-                    <div className="text-xs font-bold text-slate-900 pt-2 border-t border-slate-200">
-                      Outcome: 100% SOC2 Type II compliance audit passed
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 5. Bold Poster / High-Energy (Vibrant Crimson & Neo-Grotesque) */}
-            {currentTemplate.previewType === "poster" && (
-              <div className="bg-rose-50/60 text-[#1E293B] -m-8 sm:-m-12 lg:-m-16 p-8 sm:p-12 lg:p-16 border-4 border-[#1E293B] font-sans space-y-8 animate-fade-in rounded-2xl">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b-4 border-[#1E293B] pb-6">
-                  <div>
-                    <span className="inline-block bg-[#991B1B] text-white px-3 py-1 font-black text-xs uppercase tracking-wider mb-2">
-                      CREATIVE TECH SHOWCASE
-                    </span>
-                    <h2 className="text-4xl sm:text-5xl font-black uppercase tracking-tighter text-[#1E293B]">
-                      Kai Tanaka
-                    </h2>
-                    <p className="text-sm font-bold text-slate-700 mt-1">Creative Technologist • WebGPU &amp; Haptic Systems</p>
-                  </div>
-                  <div className="bg-white border-2 border-[#1E293B] p-3 shadow-[4px_4px_0px_#1E293B]">
-                    <span className="text-xs font-black uppercase text-[#991B1B] block">PROVEN OUTCOME</span>
-                    <span className="text-sm font-bold">FWA Site of the Month 2026</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-white border-2 border-[#1E293B] p-4 shadow-[4px_4px_0px_#1E293B]">
-                    <h3 className="font-black text-base uppercase text-[#1E293B]">Spatial Audio Visualizer</h3>
-                    <p className="text-xs text-slate-700 font-medium mt-1">Browser-based generative sound sculptures with custom haptic web controllers.</p>
-                  </div>
-                  <div className="bg-white border-2 border-[#1E293B] p-4 shadow-[4px_4px_0px_#1E293B]">
-                    <h3 className="font-black text-base uppercase text-[#1E293B]">Neural Shader Pipeline</h3>
-                    <p className="text-xs text-slate-700 font-medium mt-1">Real-time WebGL rendering engine running at 120 FPS on mobile browsers.</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-          </div>
-
-          {/* Bottom Switcher Strip */}
-          <div className="bg-slate-50 border-t border-slate-200 px-6 py-4 flex flex-wrap items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2">
-              <span className="text-slate-500 font-semibold">Switch Showcase:</span>
-              <div className="flex flex-wrap gap-1.5">
-                {filteredTemplates.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => setSelectedTemplate(t.id)}
-                    className={`px-3 py-1 rounded-full font-bold transition flex items-center gap-1.5 cursor-pointer ${
-                      selectedTemplate === t.id
-                        ? "bg-[#991B1B] text-white shadow-xs"
-                        : "bg-white text-slate-600 hover:text-[#1E293B] border border-slate-200"
-                    }`}
-                  >
-                    <span>{t.name}</span>
-                    {t.styleTag && (
-                      <span className={`text-[10px] uppercase font-mono px-1.5 py-0.5 rounded ${
-                        selectedTemplate === t.id ? "bg-red-950/40 text-red-100" : "bg-slate-100 text-slate-500"
-                      }`}>
-                        {t.styleTag}
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-
             <Link
-              href="/styles"
-              className="text-[#991B1B] hover:text-[#7F1D1D] font-bold flex items-center gap-1 transition"
+              href={showcaseThemes[activeTab].previewUrl}
+              target="_blank"
+              className="px-6 py-3 rounded-full bg-[#173f32] text-[#f7f4eb] font-bold text-xs uppercase tracking-wider hover:bg-[#16382c] transition-all flex items-center gap-2 self-start md:self-auto shadow-md"
             >
-              <span>Explore all 8 styles in gallery</span>
-              <ArrowRight size={12} />
+              <span>Explore Live Theme</span>
+              <ExternalLink size={13} />
             </Link>
           </div>
 
-        </div>
+          {/* Mock Preview Content */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+            <div className="p-6 rounded-2xl bg-white/5 border border-current/10 space-y-3">
+              <span className="text-[11px] font-mono font-bold opacity-60">FEATURED UNIT_01</span>
+              <h4 className="text-lg font-bold">Distributed Edge Cache</h4>
+              <p className="text-xs opacity-75 leading-relaxed">
+                A low-latency distributed caching layer built with Rust and Redis, serving 100k+ req/sec with sub-5ms p99.
+              </p>
+              <div className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 inline-block">
+                100k req/sec • Verified
+              </div>
+            </div>
 
+            <div className="p-6 rounded-2xl bg-white/5 border border-current/10 space-y-3">
+              <span className="text-[11px] font-mono font-bold opacity-60">FEATURED UNIT_02</span>
+              <h4 className="text-lg font-bold">AI Synthesis Engine</h4>
+              <p className="text-xs opacity-75 leading-relaxed">
+                Interactive real-time collaboration canvas with LLM-powered diagram generation and markdown previewing.
+              </p>
+              <div className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 inline-block">
+                12k Active Monthly Users
+              </div>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-white/5 border border-current/10 space-y-3">
+              <span className="text-[11px] font-mono font-bold opacity-60">FEATURED UNIT_03</span>
+              <h4 className="text-lg font-bold">Zero-Hallucination Core</h4>
+              <p className="text-xs opacity-75 leading-relaxed">
+                Live portfolio and resume tailor system ensuring zero hallucinated metrics or fabricated job titles.
+              </p>
+              <div className="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500/10 text-rose-600 inline-block">
+                Production Deployed
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-
-      {/* =========================================================================
-          EDITORIAL CHAPTER 1: "Make it undeniably yours" (Flexible Design Systems)
-          ========================================================================= */}
-      <section id="features" className="py-24 px-6 sm:px-10 max-w-7xl mx-auto border-t border-slate-200">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          
-          {/* Left: Editorial Storytelling */}
-          <div className="space-y-6 max-w-xl">
-            <span className="text-xs font-bold tracking-widest uppercase text-[#991B1B] bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full inline-block">
-              FLEXIBLE DESIGN SYSTEMS
+      {/* ── 4-STEP ENGINE WORKFLOW (TIMETABLE / NYC ACTIVITIES STYLE) ── */}
+      <section id="curriculum" className="py-24 px-6 sm:px-10 bg-[#faf8f1] border-y border-[#173f32]/15">
+        <div className="max-w-6xl mx-auto space-y-14">
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <span className="text-xs font-bold text-[#173f32] uppercase tracking-wider block">
+              [ 03 // HOW FOLIOVEDA WORKS ]
             </span>
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-[#1E293B] tracking-tight leading-[1.1] font-sans">
-              Make it undeniably yours. <br />
-              <span className="font-extrabold text-[#991B1B]">
-                With complete creative freedom.
-              </span>
+            <h2 className="text-3xl sm:text-5xl font-editorial font-normal text-[#222e26] tracking-tight">
+              Everything about FolioVeda, in 4 simple steps.
             </h2>
-            <p className="text-base text-slate-600 font-normal leading-relaxed">
-              Every portfolio begins with a designer-crafted foundation. Customize typography pairings, spatial scales, color harmonies, and layout patterns with zero code. Switch architectural themes anytime with mathematical zero content loss.
+            <p className="text-[#5a6b60] text-sm sm:text-base font-normal">
+              From raw code and resume notes to an award-winning live portfolio in 60 seconds.
             </p>
+          </div>
 
-            <div className="space-y-3 pt-2 text-sm text-slate-700 font-medium">
-              <div className="flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-[#991B1B]" />
-                <span>8 distinct architectural theme packages for every profession</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-[#991B1B]" />
-                <span>Open-source Google Fonts pairings with refined optical tracking</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-[#991B1B]" />
-                <span>Fluid responsive layout grids tuned for mobile, tablet, and ultra-wide screens</span>
-              </div>
-            </div>
-
-            <div className="pt-4">
-              <Link
-                href="/styles"
-                className="inline-flex items-center gap-2 text-sm font-bold text-[#991B1B] hover:text-[#7F1D1D] group"
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                step: "01",
+                title: "Smart Intake & Extraction",
+                desc: "Paste your LinkedIn summary or full resume. Gemini AI extracts your real roles, dates, achievements, and degrees automatically.",
+                badge: "AI EXTRACTOR",
+              },
+              {
+                step: "02",
+                title: "Zero-Hallucination Guard",
+                desc: "Our factual anchor model strictly forbids inventing fake metrics or unverified titles. Complete truth, verified by you.",
+                badge: "VERIFIED ACCURACY",
+              },
+              {
+                step: "03",
+                title: "Architectural Themes",
+                desc: "Pick your aesthetic: Not Your College editorial paper, Luxe dark gradient, or developer terminal. Switch anytime with zero data loss.",
+                badge: "DESIGN CRAFT",
+              },
+              {
+                step: "04",
+                title: "Instant Live URL & ATS PDF",
+                desc: "Share your live link at folioveda.me/p/[you] and download a publication-grade, machine-readable ATS resume PDF.",
+                badge: "ONE-CLICK LAUNCH",
+              },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="p-8 rounded-3xl bg-[#fffdf8] border border-[#173f32]/20 flex flex-col justify-between space-y-6 shadow-2xs hover:border-[#173f32] transition-colors"
               >
-                <span>Browse the Style Library</span>
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Right: Rich Colorful Token Card */}
-          <div className="bg-white p-8 sm:p-12 rounded-3xl border border-slate-200 shadow-xl space-y-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-2xl pointer-events-none" />
-
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <span className="text-xs font-mono font-bold text-slate-400">DESIGN_TOKENS</span>
-              <span className="text-xs bg-red-50 text-[#991B1B] border border-red-200 px-2.5 py-0.5 rounded-full font-bold">
-                60-30-10 Harmony
-              </span>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <span className="text-xs text-slate-500 font-semibold">Typography Pairing</span>
-                <div className="mt-1.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex justify-between items-center shadow-2xs">
-                  <span className="font-bold text-lg text-slate-900">Plus Jakarta Sans Bold</span>
-                  <span className="text-xs text-[#991B1B] font-mono font-bold">+ Inter Medium</span>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-editorial font-bold text-[#173f32]">
+                      {item.step}
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#eeeaf4] text-[#173f32]">
+                      {item.badge}
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-bold text-[#222e26] tracking-tight">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-[#5a6b60] leading-relaxed font-normal">
+                    {item.desc}
+                  </p>
+                </div>
+                <div className="text-[11px] font-bold text-[#173f32] flex items-center gap-1">
+                  <span>Learn more</span>
+                  <span>→</span>
                 </div>
               </div>
-
-              <div>
-                <span className="text-xs text-slate-500 font-semibold">Palette Distribution</span>
-                <div className="mt-1.5 grid grid-cols-3 gap-2 text-xs">
-                  <div className="p-3 rounded-xl bg-[#F8F9FA] border border-slate-200 text-slate-800 shadow-2xs">
-                    <strong className="block text-slate-900 font-bold">60% Canvas</strong>
-                    <span className="text-[11px] text-slate-500">Studio Alabaster</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-[#1E293B] text-white shadow-xs">
-                    <strong className="block text-white font-bold">30% Structure</strong>
-                    <span className="text-[11px] text-slate-300">Deep Slate</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-[#991B1B] text-white shadow-xs">
-                    <strong className="block text-white font-bold">10% Accent</strong>
-                    <span className="text-[11px] text-red-200">Industrial Crimson</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-red-50/50 border border-red-200 text-xs text-slate-700 leading-relaxed font-medium">
-                &quot;Switching between Terminal, Editorial, and Poster themes instantly re-renders components without resetting your bios, links, or uploaded projects.&quot;
-              </div>
-            </div>
+            ))}
           </div>
-
         </div>
       </section>
 
-
-      {/* =========================================================================
-          EDITORIAL CHAPTER 2: "Zero-Hallucination Contract"
-          ========================================================================= */}
-      <section className="py-24 px-6 sm:px-10 max-w-7xl mx-auto border-t border-slate-200">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          
-          {/* Left: Factual Verification Card */}
-          <div className="order-2 lg:order-1 bg-white p-8 sm:p-12 rounded-3xl border border-slate-200 shadow-xl space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <span className="text-xs font-mono font-bold text-slate-400">FACTUAL_INTEGRITY_CHECK</span>
-              <span className="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full font-bold">
-                100% Verified
-              </span>
-            </div>
-
-            <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1.5 shadow-2xs">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800">
-                  <Check size={14} className="text-emerald-700" />
-                  <span>FolioVeda Strict Guard</span>
-                </div>
-                <p className="text-xs text-emerald-900 leading-relaxed font-medium">
-                  &quot;Architected edge caching layer in Rust reducing cloud bandwidth costs by 34% across 12,000 monthly active users.&quot;
-                </p>
-                <span className="text-[10px] text-emerald-700 block font-mono font-semibold">
-                  Verified against PDF resume and merged GitHub commit a4f8e91
-                </span>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-400 space-y-1">
-                <div className="text-xs font-semibold text-slate-500">
-                  Traditional Generic AI Builders
-                </div>
-                <p className="text-xs text-slate-500 line-through leading-relaxed">
-                  &quot;Pioneered cross-functional synergy generating $50M in enterprise revenue and managed 200 global teams.&quot;
-                </p>
-                <span className="text-[10px] text-rose-500 block font-semibold">
-                  Hallucinated claim — flagged and rejected by recruiters
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right: Storytelling */}
-          <div className="order-1 lg:order-2 space-y-6 max-w-xl">
-            <span className="text-xs font-bold tracking-widest uppercase text-[#991B1B] bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full inline-block">
-              THE ZERO-HALLUCINATION CONTRACT
-            </span>
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-[#1E293B] tracking-tight leading-[1.1] font-sans">
-              From raw proof to published site. <br />
-              <span className="font-extrabold text-[#991B1B]">
-                Without a single fabricated claim.
-              </span>
-            </h2>
-            <p className="text-base text-slate-600 font-normal leading-relaxed">
-              Recruiters and high-value clients discard portfolios with generic AI buzzwords. FolioVeda enforces strict factual truth: our intake pipeline parses your real PDF resumes and GitHub repositories, drafting crisp case studies where you review and approve every metric.
-            </p>
-
-            <div className="space-y-3 pt-2 text-sm text-slate-700 font-medium">
-              <div className="flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-[#991B1B]" />
-                <span>Smart 4-step intake wizard completed in under 2 minutes</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-[#991B1B]" />
-                <span>Automated GitHub webhook sync for ongoing project updates</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-[#991B1B]" />
-                <span>Zero buzzwords, zero fake titles, and zero exaggerated metrics</span>
-              </div>
-            </div>
-
-            <div className="pt-4">
-              <Link
-                href="/onboarding"
-                className="inline-flex items-center gap-2 text-sm font-bold text-[#991B1B] hover:text-[#7F1D1D] group"
-              >
-                <span>Try the 2-Minute Intake Flow</span>
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-
-      {/* =========================================================================
-          EDITORIAL CHAPTER 3: Inspiration Engine ("Make Mine Feel Like This")
-          ========================================================================= */}
-      <section className="py-24 px-6 sm:px-10 max-w-7xl mx-auto border-t border-slate-200">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          
-          {/* Left: Editorial Storytelling */}
-          <div className="space-y-6 max-w-xl">
-            <span className="text-xs font-bold tracking-widest uppercase text-[#991B1B] bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full inline-block">
-              INSPIRATION SYNTHESIS
-            </span>
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-[#1E293B] tracking-tight leading-[1.1] font-sans">
-              Love a website you saw? <br />
-              <span className="font-extrabold text-[#991B1B]">
-                Extract its aesthetic DNA legally.
-              </span>
-            </h2>
-            <p className="text-base text-slate-600 font-normal leading-relaxed">
-              Paste any public portfolio or design site URL you admire. Our SSRF-isolated Inspiration Engine analyzes high-level design tokens (color harmonies, spatial scale, typography categories) and synthesizes an original, 100% copyright-compliant theme using open-source fonts.
-            </p>
-
-            <div className="space-y-3 pt-2 text-sm text-slate-700 font-medium">
-              <div className="flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-[#991B1B]" />
-                <span>Zero copied code, zero asset scraping, and zero trademark infringement</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-[#991B1B]" />
-                <span>3-tier Closeness slider: Loose, Medium, or Close inspiration match</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-[#991B1B]" />
-                <span>Mathematical similarity guard ensuring all creations stay original</span>
-              </div>
-            </div>
-
-            <div className="pt-4">
-              <Link
-                href="/inspiration"
-                className="inline-flex items-center gap-2 text-sm font-bold text-[#991B1B] hover:text-[#7F1D1D] group"
-              >
-                <span>Launch Inspiration Cloner</span>
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Right: Colorful Extraction Visual Card */}
-          <div className="bg-white p-8 sm:p-12 rounded-3xl border border-slate-200 shadow-xl space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <span className="text-xs font-mono font-bold text-slate-400">INSPIRATION_ANALYZER</span>
-              <span className="text-xs bg-red-50 text-[#991B1B] border border-red-200 px-2.5 py-0.5 rounded-full font-bold">
-                SSRF Sandboxed
-              </span>
-            </div>
-
-            <div className="space-y-4">
-              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 font-mono text-xs flex items-center justify-between shadow-2xs">
-                <span className="text-slate-700 font-bold truncate">https://pattin.design</span>
-                <span className="text-emerald-700 font-bold text-[11px] shrink-0">Analyzed ✓</span>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[#F8F9FA] border border-slate-200 space-y-3 text-xs">
-                <div className="flex justify-between items-center text-slate-700">
-                  <span className="font-semibold">Detected Layout</span>
-                  <span className="text-slate-600 font-mono">Split Hero (45/55)</span>
-                </div>
-                <div className="flex justify-between items-center text-slate-700">
-                  <span className="font-semibold">Typography Pair</span>
-                  <span className="text-slate-600 font-mono">Bold Sans + Editorial Accent</span>
-                </div>
-                <div className="flex justify-between items-center text-slate-700">
-                  <span className="font-semibold">Synthesized Font</span>
-                  <span className="text-[#991B1B] font-bold">Plus Jakarta Sans Bold</span>
-                </div>
-                <div className="flex justify-between items-center text-slate-700 pt-2 border-t border-slate-200">
-                  <span className="font-semibold">Closeness Setting</span>
-                  <span className="text-[#1E293B] font-bold">Medium (Original Harmony)</span>
-                </div>
-              </div>
-
-              <div className="text-[11px] text-slate-400 leading-relaxed font-normal">
-                *FolioVeda does not download external code or copy protected designs. We map abstract mathematical aesthetic properties to open-source assets.
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-
-      {/* =========================================================================
-          PRICING: Dignified, Transparent & Colorful
-          ========================================================================= */}
-      <section id="pricing" className="py-24 px-6 sm:px-10 max-w-5xl mx-auto border-t border-slate-200 scroll-mt-24">
-        
-        <div className="text-center max-w-xl mx-auto mb-16">
-          <span className="text-xs font-bold tracking-widest uppercase text-[#991B1B] bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full inline-block">
-            TRANSPARENT PRICING
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E293B] tracking-tight mt-3 font-sans">
-            Start free. <span className="font-extrabold text-[#991B1B]">Upgrade when interviewing.</span>
-          </h2>
-          <p className="text-sm text-slate-500 mt-2 font-normal">
-            No surprise tier limits. Export your code at any time.
+      {/* ── TECH GIANTS TICKER ── */}
+      <section className="py-14 px-6 border-b border-[#173f32]/15 bg-[#f7f4eb]">
+        <div className="max-w-6xl mx-auto text-center space-y-6">
+          <p className="text-xs font-bold uppercase tracking-wider text-[#5a6b60]">
+            Engineers &amp; builders creating with FolioVeda join teams at
           </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-          
-          {/* Free Tier */}
-          <div className="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-sm flex flex-col justify-between">
-            <div className="space-y-6">
-              <div className="flex justify-between items-baseline">
-                <h3 className="text-xl font-bold text-slate-900 font-sans">Free Forever</h3>
-                <span className="text-xs uppercase font-mono font-bold text-slate-500">$0 / Month</span>
-              </div>
-              <p className="text-xs text-slate-500 font-normal leading-relaxed">
-                Everything you need to launch a beautiful, high-converting live portfolio.
-              </p>
-
-              <div className="space-y-3 text-xs text-slate-700 pt-2 font-medium">
-                <div className="flex items-center gap-2.5">
-                  <Check size={14} className="text-[#991B1B] shrink-0" />
-                  <span>1 Live Portfolio on <code>folioveda.me/yourname</code></span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Check size={14} className="text-[#991B1B] shrink-0" />
-                  <span>Access to all 8 core style packages</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Check size={14} className="text-[#991B1B] shrink-0" />
-                  <span>Instant SSL &amp; Global Edge CDN deployment</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Check size={14} className="text-[#991B1B] shrink-0" />
-                  <span>Unlimited text, metric &amp; project edits</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Check size={14} className="text-[#991B1B] shrink-0" />
-                  <span>GitHub &amp; PDF resume sync</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-8">
-              <Link
-                href="/onboarding"
-                className="w-full bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs py-3.5 rounded-full text-center block transition"
-              >
-                Get Started Free
-              </Link>
-            </div>
+          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-14 text-sm sm:text-base font-extrabold text-[#222e26]/60">
+            <span>Microsoft</span>
+            <span>Google</span>
+            <span>Atlassian</span>
+            <span>Stripe</span>
+            <span>Razorpay</span>
+            <span>Uber</span>
+            <span>Meta</span>
           </div>
-
-          {/* Pro Tier (Rich Deep Slate & Crimson Highlight) */}
-          <div className="bg-[#1E293B] text-white rounded-3xl p-8 sm:p-10 border-2 border-[#991B1B] shadow-2xl flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-[#991B1B] text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-wider">
-              Most Popular
-            </div>
-
-            <div className="space-y-6">
-              <div className="flex justify-between items-baseline">
-                <h3 className="text-xl font-bold text-white font-sans">Pro Accelerator</h3>
-                <span className="text-xs uppercase font-mono font-bold text-red-300">$9 / Month</span>
-              </div>
-              <p className="text-xs text-slate-300 font-normal leading-relaxed">
-                For active job seekers and freelancers requiring custom domains and telemetry.
-              </p>
-
-              <div className="space-y-3 text-xs text-slate-200 pt-2 font-medium">
-                <div className="flex items-center gap-2.5">
-                  <Check size={14} className="text-[#991B1B] shrink-0" />
-                  <span className="font-bold text-white">Custom Domain Support (<code>yourname.com</code>, <code>.dev</code>)</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Check size={14} className="text-[#991B1B] shrink-0" />
-                  <span>Unlimited Inspiration Link Cloner runs</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Check size={14} className="text-[#991B1B] shrink-0" />
-                  <span>Live Recruiter Analytics &amp; Visit Telemetry</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Check size={14} className="text-[#991B1B] shrink-0" />
-                  <span>Zero FolioVeda branding badge</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Check size={14} className="text-[#991B1B] shrink-0" />
-                  <span>Full HTML / JSON / Tailwind code export</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-8">
-              <Link
-                href="/onboarding?plan=pro"
-                className="w-full shimmer-button bg-gradient-to-r from-[#991B1B] via-[#B91C1C] to-[#991B1B] hover:from-[#7F1D1D] hover:to-[#991B1B] text-white font-bold text-xs py-3.5 rounded-full text-center block transition shadow-lg shadow-[#991B1B]/30"
-              >
-                Start 14-Day Free Trial
-              </Link>
-            </div>
-          </div>
-
         </div>
-
-        <div className="mt-8 text-center text-xs text-slate-500 font-medium">
-          14-day money-back guarantee • 50% discount for students with .edu or .ac emails
-        </div>
-
       </section>
 
-
-      {/* =========================================================================
-          FAQ ACCORDION: Clean, Confident & Bold
-          ========================================================================= */}
-      <section className="py-24 px-6 sm:px-10 max-w-3xl mx-auto border-t border-slate-200">
-        
-        <div className="text-center mb-16">
-          <span className="text-xs font-bold tracking-widest uppercase text-[#991B1B] bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full inline-block">
-            COMMON QUESTIONS
+      {/* ── FAQ SECTION ── */}
+      <section className="py-24 px-6 sm:px-10 max-w-4xl mx-auto space-y-12">
+        <div className="text-center space-y-3">
+          <span className="text-xs font-bold text-[#173f32] uppercase tracking-wider block">
+            [ 04 // COMMON QUESTIONS ]
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E293B] tracking-tight mt-3 font-sans">
-            Frequently Asked Questions
+          <h2 className="text-3xl sm:text-5xl font-editorial font-normal text-[#222e26] tracking-tight">
+            Frequently asked questions.
           </h2>
         </div>
 
         <div className="space-y-4">
-          {[
-            {
-              q: "Will the AI invent fake accomplishments or exaggerate my experience?",
-              a: "Never. FolioVeda operates under a strict Zero-Hallucination Contract. Our pipeline only highlights and formats information directly present in your submitted resume, GitHub repositories, or intake answers. You review and approve every single line before publication.",
-            },
-            {
-              q: "Is it legal to use the Inspiration Link feature?",
-              a: "Yes, 100%. Copyright law protects specific expressions (code, text, photography, trademarks), but does not protect abstract design concepts, color palettes, or layout structures. FolioVeda never copies source code or assets. We extract high-level aesthetic tokens and synthesize an original theme using open-source fonts.",
-            },
-            {
-              q: "Can I connect my own custom domain (e.g. alex.dev)?",
-              a: "Yes. Pro users can connect any custom domain or subdomain. We provision automated, managed SSL certificates via our edge CDN with zero DNS headaches.",
-            },
-            {
-              q: "Can I export the code if I want to host it myself?",
-              a: "Yes. You are never locked in. You can download a clean, production-ready Next.js and Tailwind CSS codebase at any time and host it anywhere (Vercel, AWS, Cloudflare Pages, Netlify).",
-            },
-            {
-              q: "What happens if I want to change my portfolio theme next month?",
-              a: "Your career content is decoupled from the presentation layer. You can switch between any of our 8+ themes with one click—your projects, bios, and links will instantly re-render without losing a single character of data.",
-            },
-          ].map((item, idx) => (
-            <div
-              key={idx}
-              className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs transition-all"
-            >
-              <button
-                onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
-                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 font-bold text-sm text-[#1E293B] hover:text-[#991B1B] transition-colors"
+          {faqs.map((faq, idx) => {
+            const isOpen = activeFaq === idx;
+            return (
+              <div
+                key={idx}
+                className="rounded-2xl bg-[#fffdf8] border border-[#173f32]/20 overflow-hidden transition-all shadow-2xs"
               >
-                <span>{item.q}</span>
-                <ChevronDown
-                  size={16}
-                  className={`shrink-0 transition-transform duration-200 text-slate-400 ${
-                    activeFaq === idx ? "rotate-180 text-[#991B1B]" : ""
-                  }`}
-                />
-              </button>
-              {activeFaq === idx && (
-                <div className="px-6 pb-5 pt-1 text-xs text-slate-600 leading-relaxed font-normal border-t border-slate-100">
-                  {item.a}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-      </section>
-
-
-      {/* =========================================================================
-          CLOSING HERO CALL TO ACTION (Sophisticated Gray & Industrial Crimson)
-          ========================================================================= */}
-      <section className="py-24 px-6 sm:px-10 max-w-7xl mx-auto border-t border-slate-200">
-        <div className="bg-gradient-to-br from-slate-100 via-slate-200/90 to-slate-100 text-[#1E293B] rounded-3xl p-12 sm:p-20 text-center relative overflow-hidden shadow-xl border border-slate-300">
-          
-          {/* Subtle Crimson Accent Flare */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#991B1B]/10 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="max-w-2xl mx-auto space-y-6 relative z-10">
-            <span className="text-xs font-bold tracking-widest uppercase text-[#991B1B] bg-red-50 border border-red-200 px-3.5 py-1 rounded-full inline-block">
-              IMMEDIATE VELOCITY
-            </span>
-            <h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#1E293B] leading-tight font-sans">
-              Your work is exceptional. <br />
-              <span className="font-extrabold bg-gradient-to-r from-[#991B1B] via-[#DC2626] to-[#7F1D1D] bg-clip-text text-transparent">
-                Your portfolio should be too.
-              </span>
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 font-medium max-w-xl mx-auto leading-relaxed">
-              Join thousands of creators, engineers, and designers who present their work with calm, award-winning authority.
-            </p>
-
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/onboarding"
-                className="w-full sm:w-auto shimmer-button bg-gradient-to-r from-[#991B1B] via-[#B91C1C] to-[#991B1B] hover:from-[#7F1D1D] hover:to-[#991B1B] text-white font-bold text-sm px-9 py-4 rounded-full shadow-lg shadow-[#991B1B]/30 hover:scale-105 active:scale-98 transition-all duration-200 flex items-center justify-center gap-2 group"
-              >
-                <span>Create Your Portfolio — Free</span>
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-
-            <p className="text-xs text-slate-500 font-medium">
-              Takes 120 seconds • No credit card required • Export anytime
-            </p>
-          </div>
-        </div>
-      </section>
-
-
-      {/* =========================================================================
-          FOOTER: Refined Gray Tone & Clean Typography
-          ========================================================================= */}
-      <footer className="border-t border-slate-200 bg-slate-100/80 pt-16 pb-12 px-6 sm:px-10 text-xs text-slate-600">
-        <div className="max-w-7xl mx-auto">
-          
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-12 border-b border-slate-200">
-            <div className="flex items-center gap-3">
-              <FolioVedaLogo size="sm" showText={false} />
-              <span className="text-base font-bold text-[#1E293B]">FolioVeda</span>
-              <span className="text-xs text-slate-500 font-medium ml-2">Award-winning portfolio architecture for creators.</span>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5 text-slate-600 font-medium">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span>Edge Systems 100% Operational</span>
+                <button
+                  onClick={() => setActiveFaq(isOpen ? null : idx)}
+                  className="w-full p-6 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-[#222e26]"
+                >
+                  <span>{faq.q}</span>
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-200 text-[#173f32] ${isOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="px-6 pb-6 text-xs sm:text-sm text-[#5a6b60] leading-relaxed border-t border-[#173f32]/10 pt-4">
+                    {faq.a}
+                  </div>
+                )}
               </div>
-              <Link href="/hub" className="text-[#991B1B] hover:text-[#7F1D1D] font-bold underline">
-                Master Hub ↗
-              </Link>
-            </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ── FINAL NYC FOREST GREEN CTA BANNER ── */}
+      <section className="px-6 sm:px-10 pb-24">
+        <div className="max-w-6xl mx-auto rounded-3xl bg-[#173f32] text-[#f7f4eb] p-10 sm:p-20 text-center space-y-8 shadow-2xl relative overflow-hidden">
+          <div className="inline-block px-3.5 py-1.5 rounded-full bg-[#ebd800] text-[#173f32] text-xs font-bold uppercase tracking-wider">
+            ✦ STOP APPLYING WITH BORING RESUMES
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 py-12 font-medium">
-            <div>
-              <h3 className="font-bold text-[#1E293B] uppercase tracking-wider text-[11px] mb-3">
-                Templates
-              </h3>
-              <ul className="space-y-2">
-                <li><Link href="/styles?theme=minimal-editorial" className="hover:text-[#991B1B] transition">Cami (Editorial)</Link></li>
-                <li><Link href="/styles?theme=developer-terminal" className="hover:text-[#991B1B] transition">Kester (Terminal)</Link></li>
-                <li><Link href="/styles?theme=creative-collage" className="hover:text-[#991B1B] transition">Reseda (Spatial)</Link></li>
-                <li><Link href="/styles?theme=case-study-heavy" className="hover:text-[#991B1B] transition">Nolan (Product)</Link></li>
-                <li><Link href="/styles" className="hover:text-[#991B1B] transition">Browse All 8 →</Link></li>
-              </ul>
-            </div>
+          <h2 className="text-4xl sm:text-6xl md:text-7xl font-editorial font-normal text-[#f7f4eb] tracking-tight max-w-3xl mx-auto leading-[1.08]">
+            Your career starts with what you build. <br />
+            <span className="font-editorial-italic text-[#ebd800]">
+              Launch your verified portfolio today.
+            </span>
+          </h2>
 
-            <div>
-              <h3 className="font-bold text-[#1E293B] uppercase tracking-wider text-[11px] mb-3">
-                Platform
-              </h3>
-              <ul className="space-y-2">
-                <li><Link href="/inspiration" className="hover:text-[#991B1B] transition">Inspiration Cloner</Link></li>
-                <li><Link href="/onboarding" className="hover:text-[#991B1B] transition">Intake Flow</Link></li>
-                <li><Link href="/resume" className="hover:text-[#991B1B] transition">AI Resume Tailor</Link></li>
-                <li><Link href="/dashboard" className="hover:text-[#991B1B] transition">User Dashboard</Link></li>
-                <li>
-                  <button
-                    onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-                    className="hover:text-[#991B1B] transition text-left cursor-pointer flex items-center gap-1.5"
-                  >
-                    <span>Google Sign In</span>
-                    <span className="text-[9px] bg-red-100 text-[#991B1B] font-bold px-1.5 py-0.2 rounded">OAuth</span>
-                  </button>
-                </li>
-                <li><Link href="/p/alex" className="hover:text-[#991B1B] transition">Public Recruiter Link</Link></li>
-              </ul>
-            </div>
+          <p className="text-base sm:text-lg text-[#f7f4eb]/80 max-w-xl mx-auto font-normal leading-relaxed">
+            Free forever for early-career developers, creators, and engineering builders. No credit card required.
+          </p>
 
-            <div>
-              <h3 className="font-bold text-[#1E293B] uppercase tracking-wider text-[11px] mb-3">
-                Security &amp; Legal
-              </h3>
-              <ul className="space-y-2">
-                <li><Link href="/legal/terms" className="hover:text-[#991B1B] transition">Terms of Service</Link></li>
-                <li><Link href="/legal/takedown" className="hover:text-[#991B1B] transition">DMCA / Takedown</Link></li>
-                <li><Link href="/security" className="hover:text-[#991B1B] transition">Security Architecture</Link></li>
-                <li><span className="text-slate-400">Zero Data Scraping</span></li>
-                <li><span className="text-slate-400">DPDP &amp; GDPR Ready</span></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-bold text-[#1E293B] uppercase tracking-wider text-[11px] mb-3">
-                Company
-              </h3>
-              <ul className="space-y-2">
-                <li><Link href="/brand" className="hover:text-[#991B1B] transition">Brand Guidelines</Link></li>
-                <li><Link href="/hub" className="hover:text-[#991B1B] transition">Developer Studio</Link></li>
-                <li><a href="#pricing" className="hover:text-[#991B1B] transition">Pricing</a></li>
-                <li><a href="#templates" className="hover:text-[#991B1B] transition">Gallery</a></li>
-              </ul>
-            </div>
+          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/onboarding"
+              className="px-8 py-4 rounded-full bg-[#ebd800] hover:bg-[#ffe600] text-[#173f32] font-black text-xs sm:text-sm uppercase tracking-wider transition-all shadow-xl hover:scale-105 active:scale-95 flex items-center gap-2"
+            >
+              <span>Build My Portfolio Free</span>
+              <ArrowRight size={15} />
+            </Link>
+            <Link
+              href="/resume"
+              className="px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 text-[#f7f4eb] border border-white/20 font-bold text-xs sm:text-sm uppercase tracking-wider transition-all"
+            >
+              Tailor Resume for a Job →
+            </Link>
           </div>
+        </div>
+      </section>
 
-          <div className="pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 font-medium">
-            <div>
-              © 2026 FolioVeda Inc. Engineered with Studio Alabaster (#F8F9FA), Deep Slate (#1E293B), and Industrial Crimson (#991B1B).
-            </div>
-            <div>
-              Sub-50ms TTFB worldwide
-            </div>
+      {/* ── FOOTER ── */}
+      <footer className="border-t border-[#173f32]/15 py-12 px-6 sm:px-10 bg-[#f7f4eb]">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-[#5a6b60]">
+          <div className="flex items-center gap-2 font-bold text-[#222e26]">
+            <span>FolioVeda</span>
+            <span>•</span>
+            <span className="font-normal text-[#5a6b60]">Not Your College Editorial Standard</span>
           </div>
-
+          <div className="flex items-center gap-6">
+            <Link href="/p/gaurav" className="hover:text-[#173f32] transition-colors">
+              Sample Portfolio
+            </Link>
+            <Link href="/resume" className="hover:text-[#173f32] transition-colors">
+              ATS Resume
+            </Link>
+            <Link href="/inspiration" className="hover:text-[#173f32] transition-colors">
+              Inspiration Studio
+            </Link>
+          </div>
+          <p>© {new Date().getFullYear()} FolioVeda. Built for builders.</p>
         </div>
       </footer>
 
+      {/* ── AUTH SIGN-IN MODAL ── */}
+      <SignInModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        defaultCallbackUrl="/onboarding"
+      />
     </div>
   );
 }
