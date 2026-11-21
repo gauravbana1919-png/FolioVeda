@@ -125,6 +125,8 @@ export function EditorialProjects({ content }: VariantProps) {
 }
 
 export function EditorialSkills({ content }: VariantProps) {
+  if (!content.skills || content.skills.length === 0) return null;
+
   return (
     <section className="max-w-4xl mx-auto px-6 py-12">
       <div className="border-t border-[#E4E1D9] pt-12">

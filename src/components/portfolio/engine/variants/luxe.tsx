@@ -399,6 +399,8 @@ export function LuxeProjects({ content }: VariantProps) {
 }
 
 export function LuxeSkills({ content }: VariantProps) {
+  if (!content.skills || content.skills.length === 0) return null;
+
   return (
     <section id="skills" className="py-24 px-6 bg-[#0B0F19] border-t border-white/5">
       <div className="max-w-6xl mx-auto space-y-12">

@@ -392,6 +392,8 @@ const GROUP_COLORS: Record<string, { border: string; text: string; bg: string; l
 };
 
 export function TerminalSkills({ content }: VariantProps) {
+  if (!content.skills || content.skills.length === 0) return null;
+
   const groups = groupSkills(content.skills);
 
   return (

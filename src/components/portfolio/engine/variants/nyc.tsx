@@ -265,77 +265,84 @@ export function NYCProjects({ content }: VariantProps) {
         </div>
 
         {/* Project Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {filteredProjects.map((project, idx) => (
-            <div
-              key={idx}
-              className="p-8 rounded-3xl bg-[#fffdf8] border border-[#173f32]/20 hover:border-[#173f32] transition-all flex flex-col justify-between shadow-xs hover:shadow-md"
-            >
-              <div>
-                <div className="flex items-center justify-between text-xs font-mono font-bold text-[#173f32] mb-3">
-                  <span>PROJECT // 0{idx + 1}</span>
-                  {project.metrics && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-[#ebd800] text-[#173f32] text-[11px] font-bold border border-[#173f32]/20">
-                      {project.metrics}
-                    </span>
+        {filteredProjects.length === 0 ? (
+          <div className="p-12 text-center rounded-3xl bg-[#fffdf8] border border-[#173f32]/20 space-y-3">
+            <p className="text-sm font-semibold text-[#5a6b60]">No projects listed under this category.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {filteredProjects.map((project, idx) => (
+              <div
+                key={idx}
+                className="p-8 rounded-3xl bg-[#fffdf8] border border-[#173f32]/20 hover:border-[#173f32] transition-all flex flex-col justify-between shadow-xs hover:shadow-md"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[#173f32] mb-3">
+                    <span>PROJECT // 0{idx + 1}</span>
+                    {project.metrics && (
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#ebd800] text-[#173f32] text-[11px] font-bold border border-[#173f32]/20">
+                        {project.metrics}
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="text-2xl font-editorial font-bold text-[#222e26] tracking-tight mb-3">
+                    {project.title}
+                  </h3>
+
+                  <p className="text-[#3d4d42] text-sm leading-relaxed mb-6 font-normal">
+                    {project.description}
+                  </p>
+
+                  {project.techStack && project.techStack.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-8">
+                      {project.techStack.map((tech, i) => (
+                        <span
+                          key={i}
+                          className="px-2.5 py-1 rounded-lg bg-[#eeeaf4] border border-[#173f32]/10 text-[#173f32] text-[11px] font-bold"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   )}
                 </div>
 
-                <h3 className="text-2xl font-editorial font-bold text-[#222e26] tracking-tight mb-3">
-                  {project.title}
-                </h3>
-
-                <p className="text-[#3d4d42] text-sm leading-relaxed mb-6 font-normal">
-                  {project.description}
-                </p>
-
-                {project.techStack && project.techStack.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {project.techStack.map((tech, i) => (
-                      <span
-                        key={i}
-                        className="px-2.5 py-1 rounded-lg bg-[#eeeaf4] border border-[#173f32]/10 text-[#173f32] text-[11px] font-bold"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                <div className="flex items-center gap-3 pt-4 border-t border-[#173f32]/10">
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 rounded-full bg-[#173f32] hover:bg-[#16382c] text-[#f7f4eb] font-bold text-xs flex items-center gap-1.5 transition-all"
+                    >
+                      <span>View Live Artifact</span>
+                      <ExternalLink size={12} />
+                    </a>
+                  )}
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 rounded-full bg-[#fffdf8] hover:bg-white text-[#222e26] border border-[#173f32]/20 font-bold text-xs flex items-center gap-1.5 transition-all"
+                    >
+                      <GithubIcon size={13} />
+                      <span>Source</span>
+                    </a>
+                  )}
+                </div>
               </div>
-
-              <div className="flex items-center gap-3 pt-4 border-t border-[#173f32]/10">
-                {project.liveUrl && (
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 rounded-full bg-[#173f32] hover:bg-[#16382c] text-[#f7f4eb] font-bold text-xs flex items-center gap-1.5 transition-all"
-                  >
-                    <span>View Live Artifact</span>
-                    <ExternalLink size={12} />
-                  </a>
-                )}
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 rounded-full bg-[#fffdf8] hover:bg-white text-[#222e26] border border-[#173f32]/20 font-bold text-xs flex items-center gap-1.5 transition-all"
-                  >
-                    <GithubIcon size={13} />
-                    <span>Source</span>
-                  </a>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
 export function NYCSkills({ content }: VariantProps) {
+  if (!content.skills || content.skills.length === 0) return null;
   return (
     <section id="skills" className="py-20 px-6 bg-[#f7f4eb] border-t border-[#173f32]/15">
       <div className="max-w-5xl mx-auto space-y-10">

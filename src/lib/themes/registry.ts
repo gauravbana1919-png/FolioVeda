@@ -225,39 +225,12 @@ export function mapUserToPortfolioContent(userRecord: any, fallbackName = "Alex 
   return {
     name: userRecord.name || fallbackName,
     headline: userRecord.profile?.headline || (skillsArray.length > 0 ? `${skillsArray.slice(0, 3).join(" • ")} Specialist` : "Software Engineer & Creator"),
-    bio: userRecord.profile?.bio || "Welcome to my verified portfolio.",
+    bio: userRecord.profile?.bio || "",
     avatarUrl: userRecord.image || userRecord.profile?.avatarUrl || null,
-    skills: skillsArray.length > 0 ? skillsArray : ["Next.js", "TypeScript", "React", "Node.js", "Tailwind CSS", "PostgreSQL"],
-    projects: projects.length > 0 ? projects : [
-      {
-        title: "Featured Project",
-        description: "A showcase project demonstrating engineering craftsmanship.",
-        techStack: ["Next.js", "TypeScript", "Tailwind"],
-        liveUrl: null,
-        githubUrl: null,
-        featured: true,
-        metrics: null,
-      },
-    ],
-    experience: parsedExperience.length > 0 ? parsedExperience : [
-      {
-        role: "Senior Software Engineer",
-        company: "Core Systems Lab",
-        period: "2023 - Present",
-        highlights: [
-          "Engineered performant full-stack web architectures with Next.js and TypeScript.",
-          "Delivered scalable cloud microservices with verified uptime and low-latency APIs.",
-        ],
-      },
-    ],
-    education: parsedEducation.length > 0 ? parsedEducation : [
-      {
-        degree: "B.Tech in Computer Science & Engineering",
-        institution: "Apex University",
-        year: "2023",
-        honors: "First Class with Distinction",
-      },
-    ],
+    skills: skillsArray,
+    projects: projects,
+    experience: parsedExperience,
+    education: parsedEducation,
     certifications: parsedCerts,
     contact: (() => {
       let socialsObj: any = {};

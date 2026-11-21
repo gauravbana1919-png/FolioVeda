@@ -169,6 +169,8 @@ export function CorporateProjects({ content }: VariantProps) {
 }
 
 export function CorporateSkills({ content }: VariantProps) {
+  if (!content.skills || content.skills.length === 0) return null;
+
   return (
     <section id="skills" className="max-w-6xl mx-auto px-6 py-12 border-t border-slate-200">
       <h2 className="text-xl font-bold text-slate-900 mb-6">
