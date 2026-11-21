@@ -129,8 +129,10 @@ export default function StyleGalleryPage() {
               <ArrowLeft size={14} /> Back to Home
             </Link>
             <div className="h-4 w-[1px] bg-slate-200 hidden sm:block" />
-            <FolioVedaLogo size="sm" showBadge={false} />
-            <span className="font-extrabold text-sm text-[#1E293B] hidden md:inline">Style Gallery</span>
+            <Link href="/" className="hover:opacity-90 transition-opacity">
+              <FolioVedaLogo size="sm" />
+            </Link>
+            <span className="text-slate-400 text-xs font-medium hidden md:inline">/ Style Gallery</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -192,32 +194,9 @@ export default function StyleGalleryPage() {
             <div className="absolute top-0 right-0 w-48 h-48 bg-red-500/5 rounded-full blur-2xl pointer-events-none" />
 
             <div className="flex items-start gap-4">
-              {topPick.theme.previewImage ? (
-                <div 
-                  onClick={() => setLightboxPin({
-                    name: topPick.theme.name,
-                    category: topPick.theme.category,
-                    mood: topPick.theme.mood,
-                    image: topPick.theme.previewImage!,
-                    pinterestUrl: topPick.theme.pinterestUrl,
-                    title: topPick.theme.inspirationTitle,
-                  })}
-                  className="w-20 h-24 rounded-2xl overflow-hidden shrink-0 border-2 border-red-200 shadow-sm cursor-pointer hover:scale-105 transition-transform relative group"
-                >
-                  <img
-                    src={topPick.theme.previewImage}
-                    alt={topPick.theme.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-                    <Maximize2 size={16} />
-                  </div>
-                </div>
-              ) : (
-                <div className="p-3 rounded-2xl bg-red-50 border border-red-200 text-[#991B1B] mt-0.5">
-                  <Sparkles size={24} />
-                </div>
-              )}
+              <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-center shrink-0 shadow-2xs">
+                <Sparkles size={24} className="text-emerald-600" />
+              </div>
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#991B1B]">
@@ -382,7 +361,7 @@ export default function StyleGalleryPage() {
           {filteredThemes.map((theme) => {
             const isActive = activeThemeId === theme.id;
             const isApplying = applyingThemeId === theme.id;
-            const currentMode = viewModes[theme.id] || (theme.previewImage ? "pin" : "sandbox");
+            const currentMode = viewModes[theme.id] || "sandbox";
 
             return (
               <div

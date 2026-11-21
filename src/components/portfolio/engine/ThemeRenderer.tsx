@@ -4,7 +4,7 @@ import React, { CSSProperties } from "react";
 import Link from "next/link";
 import { ThemePackage } from "@/types/theme";
 import { PortfolioContent } from "@/types/content";
-import { LotusIcon } from "@/components/ui/Logo";
+import { OrigamiCyberMintIcon } from "@/components/ui/Logo";
 
 // Variants
 import {
@@ -230,7 +230,7 @@ export function ThemeRenderer({
             href="/"
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-900 border border-slate-700/60 shadow-xl text-xs font-medium text-slate-200 backdrop-blur-md transition-all hover:scale-105"
           >
-            <LotusIcon size={16} />
+            <OrigamiCyberMintIcon size={16} />
             <span>Built with <strong className="font-semibold text-white">Folio<span className="text-[#10B981]">Veda</span></strong></span>
           </Link>
         </footer>

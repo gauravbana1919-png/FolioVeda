@@ -133,9 +133,9 @@ export default function MasterAllInOneHub() {
             className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white hover:bg-slate-50 border border-[#1E293B]/10 shadow-2xs transition-all"
             title="Return to Main Landing Page"
           >
-            <FolioVedaLogo size="xs" showText={true} />
-            <span className="text-[10px] bg-red-50 text-[#991B1B] border border-red-200 px-2 py-0.5 rounded-full font-bold hidden sm:inline">
-              Hub
+            <FolioVedaLogo size="sm" />
+            <span className="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-full font-bold hidden sm:inline">
+              Master Hub
             </span>
           </Link>
 
