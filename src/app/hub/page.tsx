@@ -31,28 +31,60 @@ interface ViewTab {
 
 const TABS: ViewTab[] = [
   {
-    id: "landing",
-    name: "Main Landing Page",
-    path: "/",
-    icon: Home,
-    badge: "Public Front",
-    description: "Official institutional SaaS landing page with interactive sandbox, social proof, and pricing.",
+    id: "portfolio",
+    name: "Generated Portfolio",
+    path: "/p/gaurav",
+    icon: Layout,
+    badge: "Not Your College",
+    description: "Flagship live portfolio engine featuring Not-Your-College editorial archetype, zero-hallucination real profile telemetry, and card scannability.",
+  },
+  {
+    id: "resume",
+    name: "ATS Resume Studio",
+    path: "/resume",
+    icon: FileText,
+    badge: "Recruiter Grade",
+    description: "Executive A4 paper canvas, Ivy/Tech typography switch, live ATS keyword score diff, and 1-click PDF/Print export.",
   },
   {
     id: "styles",
-    name: "Style Gallery",
+    name: "Style Archetypes",
     path: "/styles",
     icon: Layers,
-    badge: "Personalisation",
-    description: "Browse distinct live theme packages with real-data previews, smart recommendations, and 1-click apply.",
+    badge: "10 Archetypes",
+    description: "Interactive showcase of all 10 signature design packages with native vector micro-viewports and live sandboxes.",
   },
   {
-    id: "inspiration",
-    name: "Inspiration Engine",
-    path: "/inspiration",
+    id: "studio",
+    name: "Portfolio Studio",
+    path: "/portfolio/preview",
     icon: Sparkles,
-    badge: "Feel-Like-This",
-    description: "Paste any portfolio URL you love. Extract abstract mood & typography into an original, copyright-safe theme with a closeness slider.",
+    badge: "Live Switcher",
+    description: "Live editor canvas with instant 10-archetype selector, accent color palettes, and AI ChatEditor.",
+  },
+  {
+    id: "landing",
+    name: "Master Landing",
+    path: "/",
+    icon: Home,
+    badge: "Institutional",
+    description: "Official institutional SaaS landing page with unified Forest Emerald & Cyber Mint identity and social proof.",
+  },
+  {
+    id: "onboarding",
+    name: "Onboarding Wizard",
+    path: "/onboarding",
+    icon: Compass,
+    badge: "60s Setup",
+    description: "Streamlined welcome flow guiding users through connecting GitHub, choosing a profession, and template setup.",
+  },
+  {
+    id: "dashboard",
+    name: "User Dashboard",
+    path: "/dashboard",
+    icon: Briefcase,
+    badge: "GitHub Sync",
+    description: "Manage synced GitHub projects, view daily quotas, and monitor automated portfolio updates.",
   },
   {
     id: "brand",
@@ -60,55 +92,23 @@ const TABS: ViewTab[] = [
     path: "/brand",
     icon: Palette,
     badge: "Vector IP",
-    description: "Explore 3 original SVG brand marks (Lotus, Monogram, Quill) and set the global logo.",
+    description: "Explore the official Origami Cyber Mint brand mark, typography rules, and vector assets.",
   },
   {
-    id: "studio",
-    name: "AI Portfolio Studio",
-    path: "/portfolio/preview",
+    id: "inspiration",
+    name: "Inspiration Engine",
+    path: "/inspiration",
     icon: Sparkles,
-    badge: "AI Powered",
-    description: "Live interactive editor: ask the AI to change styles, switch between 3 templates, pick accent colors, and save.",
-  },
-  {
-    id: "dashboard",
-    name: "User Dashboard",
-    path: "/dashboard",
-    icon: Briefcase,
-    badge: "Webhook Sim",
-    description: "Manage synced GitHub projects, view daily AI quotas, and test the 'Simulate GitHub Push' button.",
-  },
-  {
-    id: "public",
-    name: "Public Shareable Page",
-    path: "/p/alex",
-    icon: Layout,
-    badge: "Recruiter View",
-    description: "Clean recruiter-facing URL (/p/alex) with zero editor bars and dynamic OpenGraph social cards.",
-  },
-  {
-    id: "resume",
-    name: "AI Resume Tailor & PDF",
-    path: "/resume",
-    icon: FileText,
-    badge: "ATS / Visual",
-    description: "Tailor your resume against any job description with diff viewer and export ATS or Visual PDFs.",
-  },
-  {
-    id: "onboarding",
-    name: "Onboarding Wizard",
-    path: "/onboarding",
-    icon: Compass,
-    badge: "Multi-Step",
-    description: "Animated welcome flow guiding users through connecting GitHub, choosing a profession, and template setup.",
+    badge: "Mood Board",
+    description: "Extract abstract mood and typography into original copyright-safe themes with interactive fidelity controls.",
   },
   {
     id: "security",
     name: "Security & Privacy",
     path: "/security",
     icon: ShieldCheck,
-    badge: "DPDP Ready",
-    description: "Live security audit checking DOMPurify sanitization, CSP headers, and DPDP privacy controls.",
+    badge: "DPDP / XSS",
+    description: "Security audit demonstrating input sanitization, CSP protections, and data compliance standards.",
   },
 ];
 
@@ -121,7 +121,7 @@ export default function MasterAllInOneHub() {
   const currentTab = TABS.find((t) => t.id === activeTab) || TABS[0];
 
   return (
-    <div className="h-screen flex flex-col bg-[#F8F9FA] text-[#1E293B] selection:bg-[#991B1B] selection:text-white font-sans overflow-hidden">
+    <div className="h-screen flex flex-col bg-[#F8F9FA] text-[#1E293B] selection:bg-[#173f32] selection:text-[#f7f4eb] font-sans overflow-hidden">
       
       {/* Master Top Control Bar */}
       <header className="h-16 shrink-0 bg-white/95 border-b border-[#1E293B]/10 px-4 flex items-center justify-between gap-3 z-30 select-none shadow-2xs backdrop-blur-xl">
@@ -165,15 +165,15 @@ export default function MasterAllInOneHub() {
                 }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all ${
                   isActive
-                    ? "bg-[#991B1B] text-white shadow-sm font-bold"
+                    ? "bg-[#173f32] text-[#f7f4eb] shadow-sm font-bold"
                     : "text-slate-600 hover:text-[#1E293B] hover:bg-white/80 font-semibold"
                 }`}
               >
-                <Icon size={14} className={isActive ? "text-white" : "text-slate-500"} />
+                <Icon size={14} className={isActive ? "text-[#10B981]" : "text-slate-500"} />
                 <span>{tab.name}</span>
                 {tab.badge && (
                   <span className={`text-[9px] px-1.5 py-0.5 rounded-full hidden xl:inline font-bold ${
-                    isActive ? "bg-red-950/40 text-red-100" : "bg-slate-200 text-slate-600"
+                    isActive ? "bg-[#10B981]/20 text-[#10B981]" : "bg-slate-200 text-slate-600"
                   }`}>
                     {tab.badge}
                   </span>
@@ -273,7 +273,7 @@ export default function MasterAllInOneHub() {
                           </span>
                         )}
                       </div>
-                      <h3 className="font-extrabold text-base text-[#1E293B] group-hover:text-[#991B1B] transition-colors mb-1.5">
+                      <h3 className="font-extrabold text-base text-[#1E293B] group-hover:text-[#173f32] transition-colors mb-1.5">
                         {tab.name}
                       </h3>
                       <p className="text-xs text-slate-600 leading-relaxed font-normal">
@@ -283,7 +283,7 @@ export default function MasterAllInOneHub() {
 
                     <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 group-hover:text-slate-700">
                       <code className="text-slate-600 font-mono text-[10px] bg-slate-50 px-2 py-0.5 rounded border border-slate-200">{tab.path}</code>
-                      <span className="font-bold text-[#991B1B] flex items-center gap-1">
+                      <span className="font-bold text-[#173f32] flex items-center gap-1">
                         Launch <ArrowRight size={12} />
                       </span>
                     </div>
