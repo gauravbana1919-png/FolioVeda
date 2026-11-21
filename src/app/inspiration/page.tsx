@@ -221,7 +221,7 @@ export default function InspirationPage() {
       <main className="max-w-7xl mx-auto px-6 py-12">
         {/* Hero Explainer & Non-Negotiable Copyright Disclaimer */}
         <div className="max-w-3xl mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-50 border border-red-200 text-[#173f32] text-xs font-bold tracking-wide uppercase mb-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#173f32] text-xs font-bold tracking-wide uppercase mb-3">
             <Sparkles size={13} /> &quot;MAKE MINE FEEL LIKE THIS&quot; ENGINE
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1E293B] mb-3">
@@ -452,7 +452,7 @@ export default function InspirationPage() {
                     </span>
                   </div>
 
-                  <span className="px-2.5 py-0.5 rounded-full bg-red-950 text-red-300 border border-red-800 text-[10px] font-bold">
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] font-bold">
                     Original Theme • {closeness.toUpperCase()}
                   </span>
                 </div>
