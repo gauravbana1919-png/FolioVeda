@@ -19,7 +19,7 @@ export default function BrandPage() {
           <span>Back to Master Studio</span>
         </Link>
 
-        <span className="text-xs text-indigo-400 font-medium">
+        <span className="text-xs text-emerald-400 font-medium">
           FolioVeda Design System &bull; v2.0
         </span>
       </div>

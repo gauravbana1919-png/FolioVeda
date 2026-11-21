@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '',
     '/styles',
     '/resume',
+    '/portfolio/preview',
     '/onboarding',
     '/inspiration',
     '/hub',

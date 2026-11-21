@@ -14,6 +14,7 @@ import {
   BookOpen, 
   Flame,
   ExternalLink,
+  Layers,
 } from "lucide-react";
 import { ChatEditor } from "@/components/ui/ChatEditor";
 import { FolioVedaLogo } from "@/components/ui/Logo";
@@ -34,7 +35,7 @@ export default function PortfolioStudio() {
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "unsaved">("saved");
   const [aiNotice, setAiNotice] = useState<string | null>(null);
 
-  const [activeThemeId, setActiveThemeId] = useState<string>("developer-terminal");
+  const [activeThemeId, setActiveThemeId] = useState<string>("not-your-college");
   const [accentColor, setAccentColor] = useState<string>("emerald");
 
   const [userData, setUserData] = useState({
@@ -180,37 +181,59 @@ export default function PortfolioStudio() {
           </div>
 
           {/* Center: Stage 2 Distinct Style Switcher */}
-          <div className="flex items-center bg-muted/80 p-1 rounded-xl border border-border text-xs font-medium">
-            <button
-              onClick={() => { setActiveThemeId("developer-terminal"); handleSave({ themeId: "developer-terminal" }); }}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
-                activeThemeId === "developer-terminal" || activeThemeId === "template1"
-                  ? "bg-emerald-600 text-white shadow-sm font-semibold" 
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Terminal size={13} /> Dev Terminal
-            </button>
-            <button
-              onClick={() => { setActiveThemeId("minimal-editorial"); handleSave({ themeId: "minimal-editorial" }); }}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
-                activeThemeId === "minimal-editorial" || activeThemeId === "template2"
-                  ? "bg-amber-600 text-white shadow-sm font-semibold" 
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <BookOpen size={13} /> Minimal Editorial
-            </button>
-            <button
-              onClick={() => { setActiveThemeId("bold-poster"); handleSave({ themeId: "bold-poster" }); }}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
-                activeThemeId === "bold-poster" || activeThemeId === "template3"
-                  ? "bg-emerald-500 text-slate-950 shadow-sm font-bold" 
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Flame size={13} /> Bold Poster
-            </button>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center bg-muted/80 p-1 rounded-xl border border-border text-xs font-medium">
+              <button
+                onClick={() => { setActiveThemeId("not-your-college"); handleSave({ themeId: "not-your-college" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
+                  activeThemeId === "not-your-college"
+                    ? "bg-[#173f32] text-[#f7f4eb] shadow-sm font-semibold" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Sparkles size={13} className="text-[#ebd800]" /> Not Your College
+              </button>
+              <button
+                onClick={() => { setActiveThemeId("luxe-creative"); handleSave({ themeId: "luxe-creative" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
+                  activeThemeId === "luxe-creative"
+                    ? "bg-stone-900 text-stone-100 shadow-sm font-semibold" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Layers size={13} /> Luxe Creative
+              </button>
+              <button
+                onClick={() => { setActiveThemeId("developer-terminal"); handleSave({ themeId: "developer-terminal" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
+                  activeThemeId === "developer-terminal" || activeThemeId === "template1"
+                    ? "bg-emerald-600 text-white shadow-sm font-semibold" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Terminal size={13} /> Terminal
+              </button>
+            </div>
+
+            {/* Dropdown for all 10 themes */}
+            <div className="hidden lg:flex items-center">
+              <select
+                value={activeThemeId}
+                onChange={(e) => {
+                  const newTheme = e.target.value;
+                  setActiveThemeId(newTheme);
+                  handleSave({ themeId: newTheme });
+                }}
+                className="text-xs bg-muted/80 text-foreground border border-border rounded-xl px-2.5 py-1.5 font-medium focus:outline-hidden focus:ring-1 focus:ring-emerald-500 cursor-pointer"
+                aria-label="Select Archetype"
+              >
+                {getAllSystemThemes().map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Right: Accents, Theme, & Cloud Save */}
