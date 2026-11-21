@@ -239,7 +239,7 @@ export default function MasterAllInOneHub() {
         {showDirectory ? (
           <div className="w-full h-full max-w-5xl overflow-y-auto p-6 md:p-10 space-y-8 animate-fade-in">
             <div className="text-center max-w-xl mx-auto space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-[#991B1B] text-xs font-bold tracking-wide uppercase">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#173f32] text-xs font-bold tracking-wide uppercase">
                 <Sparkles size={13} /> PLATFORM DIRECTORY
               </div>
               <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E293B]">
@@ -260,11 +260,11 @@ export default function MasterAllInOneHub() {
                       setActiveTab(tab.id);
                       setShowDirectory(false);
                     }}
-                    className="text-left p-6 rounded-3xl bg-white border border-[#1E293B]/10 hover:border-[#991B1B]/40 hover:shadow-xl hover:-translate-y-0.5 transition-all group relative overflow-hidden flex flex-col justify-between"
+                    className="text-left p-6 rounded-3xl bg-white border border-[#1E293B]/10 hover:border-[#173f32]/40 hover:shadow-xl hover:-translate-y-0.5 transition-all group relative overflow-hidden flex flex-col justify-between"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <div className="w-10 h-10 rounded-2xl bg-red-50 text-[#991B1B] flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-[#173f32] flex items-center justify-center group-hover:scale-110 transition-transform">
                           <Icon size={20} />
                         </div>
                         {tab.badge && (

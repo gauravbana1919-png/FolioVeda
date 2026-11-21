@@ -73,8 +73,8 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
     badge: "Pentagram Fellow • Cannes Grand Prix",
     threadLength: 90,
     threadOffset: "top-4",
-    accentColor: "#991B1B",
-    cardBg: "from-white to-rose-50/50",
+    accentColor: "#173f32",
+    cardBg: "from-white to-emerald-50/50",
     image: "/images/portfolios/portfolio-1.jpg",
     livePreviewUrl: "/p/gaurav?theme=not-your-college",
     themeTag: "NYC Editorial Standard",
@@ -418,8 +418,8 @@ export function HangingResumesGallery() {
         
         {/* Category Kicker */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#1E293B]/10 shadow-2xs mb-4">
-          <span className="w-2 h-2 rounded-full bg-[#991B1B] animate-pulse" />
-          <span className="font-extrabold uppercase tracking-wider text-[10px] text-[#991B1B]">
+          <span className="w-2 h-2 rounded-full bg-[#173f32] animate-pulse" />
+          <span className="font-extrabold uppercase tracking-wider text-[10px] text-[#173f32]">
             Interactive Showcase
           </span>
           <span className="text-slate-300">•</span>
@@ -428,7 +428,7 @@ export function HangingResumesGallery() {
 
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#1E293B] leading-tight mb-4">
           Our Five Premier Portfolios, <br />
-          <span className="font-extrabold tracking-tight bg-gradient-to-r from-[#991B1B] via-[#DC2626] to-[#7F1D1D] bg-clip-text text-transparent">
+          <span className="font-extrabold tracking-tight bg-gradient-to-r from-[#173f32] via-[#10B981] to-[#173f32] bg-clip-text text-transparent">
             Suspended Live in Pure Precision.
           </span>
         </h2>
@@ -444,7 +444,7 @@ export function HangingResumesGallery() {
               setHasFallen(false);
               setTimeout(() => setHasFallen(true), 150);
             }}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-[#991B1B] transition-colors bg-white px-3 py-1 rounded-full border border-slate-200 shadow-2xs cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-[#173f32] transition-colors bg-white px-3 py-1 rounded-full border border-slate-200 shadow-2xs cursor-pointer"
             title="Replay the drop-down thread animation"
           >
             <RotateCcw size={12} />
@@ -464,7 +464,7 @@ export function HangingResumesGallery() {
             <div key={r.id} className="flex flex-col items-center">
               {/* Eyelet Anchor Ring */}
               <div className="w-5 h-5 rounded-full bg-white border-2 border-[#1E293B] shadow-sm flex items-center justify-center -mt-1 group cursor-pointer">
-                <span className="w-2 h-2 rounded-full bg-[#991B1B] animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-[#173f32] animate-pulse" />
               </div>
               <span className="text-[9px] font-bold text-slate-600 mt-1 uppercase font-mono tracking-tighter hidden md:inline">
                 0{idx + 1}
@@ -506,7 +506,7 @@ export function HangingResumesGallery() {
                     <defs>
                       <linearGradient id={`threadGrad-${resume.id}`} x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stopColor="#1E293B" stopOpacity="0.8" />
-                        <stop offset="50%" stopColor="#991B1B" stopOpacity="0.9" />
+                        <stop offset="50%" stopColor="#173f32" stopOpacity="0.9" />
                         <stop offset="100%" stopColor="#1E293B" stopOpacity="0.8" />
                       </linearGradient>
                     </defs>
@@ -522,7 +522,7 @@ export function HangingResumesGallery() {
                     {/* Top Ring Pin */}
                     <circle cx="24" cy="2" r="3" fill="#1E293B" />
                     {/* Bottom Connecting Ring on the card */}
-                    <circle cx={`${24 + tilt.x}`} cy={`${resume.threadLength - 2}`} r="4" fill="#991B1B" />
+                    <circle cx={`${24 + tilt.x}`} cy={`${resume.threadLength - 2}`} r="4" fill="#173f32" />
                     <circle cx={`${24 + tilt.x}`} cy={`${resume.threadLength - 2}`} r="1.5" fill="#FFFFFF" />
                   </svg>
                 </div>
@@ -539,7 +539,7 @@ export function HangingResumesGallery() {
                       : "opacity-0 -translate-y-48 pointer-events-none"
                   } ${
                     isHovered
-                      ? "border-[#991B1B] shadow-2xl scale-[1.05] z-30 ring-4 ring-[#991B1B]/15"
+                      ? "border-[#173f32] shadow-2xl scale-[1.05] z-30 ring-4 ring-[#173f32]/15"
                       : "border-[#1E293B]/10 shadow-lg hover:shadow-xl hover:border-slate-300"
                   } ${
                     hasFallen && !isHovered
@@ -558,7 +558,7 @@ export function HangingResumesGallery() {
                     <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700 font-mono">
                       0{index + 1} • {resume.categoryLabel}
                     </span>
-                    <span className="w-2 h-2 rounded-full bg-[#991B1B] animate-pulse" />
+                    <span className="w-2 h-2 rounded-full bg-[#173f32] animate-pulse" />
                   </div>
 
                   {/* Crisp Native Vector Portfolio Preview Canvas */}
@@ -619,7 +619,7 @@ export function HangingResumesGallery() {
                         {resume.avatarText}
                       </div>
                       <div className="min-w-0">
-                        <h3 className="font-extrabold text-sm text-[#1E293B] leading-tight truncate group-hover:text-[#991B1B] transition-colors">
+                        <h3 className="font-extrabold text-sm text-[#1E293B] leading-tight truncate group-hover:text-[#173f32] transition-colors">
                           {resume.name}
                         </h3>
                         <p className="text-[11px] text-slate-500 font-bold truncate">
@@ -629,7 +629,7 @@ export function HangingResumesGallery() {
                     </div>
 
                     {/* Social/Institutional Badge */}
-                    <div className="text-[10px] font-bold text-[#991B1B] bg-red-50 border border-red-200 px-2 py-0.5 rounded-lg truncate">
+                    <div className="text-[10px] font-bold text-[#173f32] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-lg truncate">
                       {resume.badge}
                     </div>
 
@@ -661,7 +661,7 @@ export function HangingResumesGallery() {
                     </div>
 
                     {/* Hover Prompt Callout */}
-                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#991B1B]">
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#173f32]">
                       <span className="flex items-center gap-1 text-[11px]">
                         <Maximize2 size={12} />
                         <span>Hover to expand</span>
@@ -688,14 +688,14 @@ export function HangingResumesGallery() {
           role="dialog"
           aria-modal="true"
           aria-label={`Full screen resume preview for ${expandedResume.name}`}
-          className="fixed inset-0 z-50 bg-[#F8F9FA]/98 backdrop-blur-2xl overflow-y-auto animate-fade-in flex flex-col selection:bg-[#991B1B] selection:text-white"
+          className="fixed inset-0 z-50 bg-[#F8F9FA]/98 backdrop-blur-2xl overflow-y-auto animate-fade-in flex flex-col selection:bg-[#173f32] selection:text-white"
         >
           {/* Top Control Bar */}
           <header className="sticky top-0 z-50 h-16 bg-white/95 border-b border-[#1E293B]/10 px-6 sm:px-12 flex items-center justify-between shadow-2xs backdrop-blur-md">
             
             {/* Left: Branding & Status */}
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#1E293B] to-[#0F172A] flex items-center justify-center text-white font-extrabold text-xs">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#173f32] to-[#10B981] flex items-center justify-center text-white font-extrabold text-xs">
                 FV
               </div>
               <div className="flex items-center gap-2">
@@ -703,7 +703,7 @@ export function HangingResumesGallery() {
                   Full Screen Portfolio Showcase
                 </span>
                 <span className="text-slate-300">•</span>
-                <span className="text-xs font-bold text-[#991B1B] bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full">
+                <span className="text-xs font-bold text-[#173f32] bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
                   {expandedResume.categoryLabel}
                 </span>
               </div>
@@ -750,7 +750,7 @@ export function HangingResumesGallery() {
                   {expandedResume.avatarText}
                 </div>
                 <div className="space-y-1">
-                  <div className="inline-flex items-center gap-2 text-xs font-bold text-[#991B1B] bg-red-50 border border-red-200 px-3 py-0.5 rounded-full">
+                  <div className="inline-flex items-center gap-2 text-xs font-bold text-[#173f32] bg-emerald-50 border border-emerald-200 px-3 py-0.5 rounded-full">
                     <ShieldCheck size={13} /> VERIFIED PROFILE • {expandedResume.badge}
                   </div>
                   <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1E293B]">
@@ -880,7 +880,7 @@ export function HangingResumesGallery() {
 
             {/* 4. Executive Summary */}
             <div className="space-y-3">
-              <h2 className="text-xs font-extrabold text-[#991B1B] uppercase tracking-wider">
+              <h2 className="text-xs font-extrabold text-[#173f32] uppercase tracking-wider">
                 Executive Profile
               </h2>
               <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
@@ -890,7 +890,7 @@ export function HangingResumesGallery() {
 
             {/* 5. Experience & Career Timeline */}
             <div className="space-y-6">
-              <h2 className="text-xs font-extrabold text-[#991B1B] uppercase tracking-wider flex items-center gap-2">
+              <h2 className="text-xs font-extrabold text-[#173f32] uppercase tracking-wider flex items-center gap-2">
                 <Briefcase size={14} /> VERIFIED CAREER HISTORY
               </h2>
               <div className="space-y-6">
@@ -898,7 +898,7 @@ export function HangingResumesGallery() {
                   <div key={idx} className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-slate-300 transition space-y-2">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                       <h3 className="text-lg font-extrabold text-[#1E293B]">
-                        {exp.role} <span className="text-[#991B1B]">@ {exp.company}</span>
+                        {exp.role} <span className="text-[#173f32]">@ {exp.company}</span>
                       </h3>
                       <span className="text-xs font-bold text-slate-500 font-mono">
                         {exp.period}
@@ -908,7 +908,7 @@ export function HangingResumesGallery() {
                       {exp.description}
                     </p>
                     <div className="pt-2 text-xs font-bold text-[#1E293B] bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 flex items-center gap-1.5">
-                      <CheckCircle2 size={13} className="text-[#991B1B]" />
+                      <CheckCircle2 size={13} className="text-[#10B981]" />
                       <span>{exp.metrics}</span>
                     </div>
                   </div>
@@ -918,7 +918,7 @@ export function HangingResumesGallery() {
 
             {/* 6. Featured Live Project */}
             <div className="space-y-4">
-              <h2 className="text-xs font-extrabold text-[#991B1B] uppercase tracking-wider flex items-center gap-2">
+              <h2 className="text-xs font-extrabold text-[#173f32] uppercase tracking-wider flex items-center gap-2">
                 <Code2 size={14} /> FLAGSHIP SHOWCASE PROJECT
               </h2>
               <div className="p-6 rounded-2xl bg-slate-900 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -927,7 +927,7 @@ export function HangingResumesGallery() {
                     <h3 className="text-lg font-extrabold text-white">
                       {expandedResume.liveProject.title}
                     </h3>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 border border-red-500/30">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                       {expandedResume.liveProject.tag}
                     </span>
                   </div>
@@ -950,7 +950,7 @@ export function HangingResumesGallery() {
               {/* Skills */}
               <div className="space-y-3">
                 <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <Award size={14} className="text-[#991B1B]" /> Core Competencies &amp; Technologies
+                  <Award size={14} className="text-[#173f32]" /> Core Competencies &amp; Technologies
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {expandedResume.skills.map((skill) => (
@@ -967,7 +967,7 @@ export function HangingResumesGallery() {
               {/* Education */}
               <div className="space-y-3">
                 <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <GraduationCap size={14} className="text-[#991B1B]" /> Education &amp; Credentials
+                  <GraduationCap size={14} className="text-[#173f32]" /> Education &amp; Credentials
                 </h3>
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
                   <h4 className="text-sm font-extrabold text-[#1E293B]">
@@ -982,8 +982,8 @@ export function HangingResumesGallery() {
             </div>
 
             {/* 8. Endorsement Callout */}
-            <div className="p-6 rounded-2xl bg-red-50/60 border border-red-200 space-y-2">
-              <span className="text-[10px] font-extrabold text-[#991B1B] uppercase tracking-wider">
+            <div className="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-200 space-y-2">
+              <span className="text-[10px] font-extrabold text-[#173f32] uppercase tracking-wider">
                 EXECUTIVE ENDORSEMENT
               </span>
               <p className="text-sm text-slate-800 font-normal leading-relaxed">
@@ -1008,7 +1008,7 @@ export function HangingResumesGallery() {
                 </button>
                 <Link
                   href="/onboarding"
-                  className="px-6 py-2.5 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white text-xs font-bold transition-all shadow-md shadow-[#991B1B]/20"
+                  className="px-6 py-2.5 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white text-xs font-bold transition-all shadow-md shadow-[#173f32]/20"
                 >
                   Adopt This Style Free →
                 </Link>

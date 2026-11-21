@@ -191,8 +191,8 @@ export function PlatformGuideSection() {
       {/* Section Header with Indian Context */}
       <div className="text-center max-w-3xl mx-auto mb-14">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#1E293B]/10 text-xs text-[#1E293B] shadow-2xs mb-4">
-          <span className="w-2 h-2 rounded-full bg-[#991B1B] animate-pulse" />
-          <span className="font-extrabold uppercase tracking-wider text-[11px] text-[#991B1B]">
+          <span className="w-2 h-2 rounded-full bg-[#173f32] animate-pulse" />
+          <span className="font-extrabold uppercase tracking-wider text-[11px] text-[#173f32]">
             STEP-BY-STEP PLATFORM GUIDE
           </span>
           <span className="text-slate-300">•</span>
@@ -201,7 +201,7 @@ export function PlatformGuideSection() {
 
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#1E293B] leading-tight mb-4">
           How to Build a Tier-1 Career Engine <br />
-          <span className="font-extrabold tracking-tight bg-gradient-to-r from-[#991B1B] via-[#DC2626] to-[#7F1D1D] bg-clip-text text-transparent">
+          <span className="font-extrabold tracking-tight bg-gradient-to-r from-[#173f32] via-[#10B981] to-[#173f32] bg-clip-text text-transparent">
             Step-by-Step with FolioVeda.
           </span>
         </h2>
@@ -212,7 +212,7 @@ export function PlatformGuideSection() {
 
         {/* Indian Tech Ecosystem Badge Strip */}
         <div className="mt-5 inline-flex flex-wrap items-center justify-center gap-3 py-1.5 px-4 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">
-          <span className="flex items-center gap-1 text-[#991B1B] font-bold">
+          <span className="flex items-center gap-1 text-[#173f32] font-bold">
             <Building2 size={13} /> Target Companies:
           </span>
           <span>CRED</span>
@@ -265,7 +265,7 @@ export function PlatformGuideSection() {
                 onClick={() => jumpToStep(idx)}
                 className={`px-3 py-1 rounded-full text-xs font-mono font-bold transition-all ${
                   currentStep === idx
-                    ? "bg-[#991B1B] text-white shadow-sm scale-105"
+                    ? "bg-[#173f32] text-white shadow-sm scale-105"
                     : "text-slate-400 hover:text-white hover:bg-slate-800"
                 }`}
               >
@@ -278,7 +278,7 @@ export function PlatformGuideSection() {
           <div className="flex items-center gap-2">
             <button
               onClick={goToPrev}
-              className="p-2 rounded-xl bg-slate-800 hover:bg-[#991B1B] text-white transition font-bold flex items-center justify-center shadow-xs"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-[#173f32] text-white transition font-bold flex items-center justify-center shadow-xs"
               title="Previous Step (or press ← arrow key)"
               aria-label="Previous step"
             >
@@ -287,7 +287,7 @@ export function PlatformGuideSection() {
 
             <button
               onClick={goToNext}
-              className="px-3.5 py-1.5 rounded-xl bg-[#991B1B] hover:bg-[#7F1D1D] text-white transition font-bold flex items-center gap-1 text-xs shadow-md"
+              className="px-3.5 py-1.5 rounded-xl bg-[#173f32] hover:bg-[#13352a] text-white transition font-bold flex items-center gap-1 text-xs shadow-md"
               title="Next Step (or press → arrow key)"
               aria-label="Next step"
             >
@@ -301,7 +301,7 @@ export function PlatformGuideSection() {
         {/* Dynamic Progress Scrubber Bar */}
         <div className="w-full h-1 bg-slate-800 relative">
           <div 
-            className="h-full bg-gradient-to-r from-[#991B1B] to-red-500 transition-all duration-75"
+            className="h-full bg-gradient-to-r from-[#173f32] via-[#10B981] to-[#ebd800] transition-all duration-75"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -315,7 +315,7 @@ export function PlatformGuideSection() {
           <div className="lg:col-span-6 space-y-6">
             
             <div className="space-y-2">
-              <span className="font-mono text-xs font-extrabold text-[#991B1B] uppercase tracking-wider bg-red-50 border border-red-200 px-3 py-1 rounded-full inline-block">
+              <span className="font-mono text-xs font-extrabold text-[#173f32] uppercase tracking-wider bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full inline-block">
                 {step.kicker}
               </span>
               <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1E293B] leading-snug">
@@ -326,7 +326,7 @@ export function PlatformGuideSection() {
             {/* Indian Context Highlight Box */}
             <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/90 text-xs text-amber-950 font-medium space-y-1">
               <div className="flex items-center gap-1.5 font-bold text-amber-900">
-                <MapPin size={13} className="text-[#991B1B]" />
+                <MapPin size={13} className="text-[#173f32]" />
                 <span>Why This Matters in India:</span>
               </div>
               <p className="leading-relaxed">
@@ -342,7 +342,7 @@ export function PlatformGuideSection() {
             <div className="space-y-2.5">
               {step.keyPoints.map((point, i) => (
                 <div key={i} className="flex items-start gap-2.5 text-xs text-slate-700">
-                  <CheckCircle2 size={15} className="text-[#991B1B] shrink-0 mt-0.5" />
+                  <CheckCircle2 size={15} className="text-[#10B981] shrink-0 mt-0.5" />
                   <span className="font-semibold">{point}</span>
                 </div>
               ))}
@@ -352,7 +352,7 @@ export function PlatformGuideSection() {
             <div className="pt-2 flex flex-wrap items-center gap-3">
               <Link
                 href={step.route}
-                className="shimmer-button bg-gradient-to-r from-[#991B1B] via-[#B91C1C] to-[#991B1B] hover:from-[#7F1D1D] hover:to-[#991B1B] text-white font-extrabold text-xs px-6 py-3 rounded-full shadow-md shadow-[#991B1B]/25 hover:scale-105 transition-all flex items-center gap-2"
+                className="shimmer-button bg-gradient-to-r from-[#173f32] via-[#10B981] to-[#173f32] hover:opacity-95 text-white font-extrabold text-xs px-6 py-3 rounded-full shadow-md shadow-[#173f32]/25 hover:scale-105 transition-all flex items-center gap-2"
               >
                 <span>{step.routeLabel}</span>
                 <ArrowRight size={13} />
@@ -379,7 +379,7 @@ export function PlatformGuideSection() {
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
                 <span className="font-mono text-[11px] text-slate-500 ml-2">folioveda.me{step.route}</span>
               </div>
-              <span className="text-[10px] font-bold text-[#991B1B] bg-red-50 px-2 py-0.5 rounded-md uppercase font-mono">
+              <span className="text-[10px] font-bold text-[#173f32] bg-emerald-50 px-2 py-0.5 rounded-md uppercase font-mono">
                 FUNCTION {step.stepNumber}
               </span>
             </div>
@@ -390,7 +390,7 @@ export function PlatformGuideSection() {
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Code2 size={16} className="text-[#991B1B]" />
+                      <Code2 size={16} className="text-[#173f32]" />
                       <span className="font-mono text-xs font-bold text-slate-800">github.com/alexrivera</span>
                     </div>
                     <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">
@@ -418,13 +418,13 @@ export function PlatformGuideSection() {
             {step.mockupType === "styles" && (
               <div className="my-auto py-4 space-y-4 animate-fade-in">
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 bg-slate-900 text-white rounded-2xl border-2 border-[#991B1B] space-y-1">
+                  <div className="p-3 bg-slate-900 text-white rounded-2xl border-2 border-[#173f32] space-y-1">
                     <span className="text-[9px] font-mono text-emerald-400 font-bold">THEME: KESTER</span>
                     <h5 className="font-bold text-xs text-white">Developer Terminal</h5>
                     <p className="text-[10px] text-slate-300">Monospace, CLI prompt, commit hash cards.</p>
                   </div>
                   <div className="p-3 bg-white text-[#1E293B] rounded-2xl border border-slate-200 space-y-1">
-                    <span className="text-[9px] font-mono text-[#991B1B] font-bold">THEME: CAMI</span>
+                    <span className="text-[9px] font-mono text-[#173f32] font-bold">THEME: CAMI</span>
                     <h5 className="font-bold text-xs text-[#1E293B]">Minimal Editorial</h5>
                     <p className="text-[10px] text-slate-500">Serif headlines, generous whitespace.</p>
                   </div>
@@ -442,15 +442,15 @@ export function PlatformGuideSection() {
                   <div className="text-xs font-bold text-slate-700">Inspiration Link Extractor</div>
                   <div className="bg-white p-2 rounded-xl border border-slate-200 font-mono text-xs text-slate-600 flex items-center justify-between">
                     <span>https://pattin.design</span>
-                    <span className="text-[10px] text-[#991B1B] font-bold">Extracting...</span>
+                    <span className="text-[10px] text-[#173f32] font-bold">Extracting...</span>
                   </div>
                   <div className="space-y-1.5">
                     <div className="flex justify-between text-[11px] font-bold text-slate-600">
                       <span>Closeness Slider</span>
-                      <span className="text-[#991B1B]">Balanced (50%)</span>
+                      <span className="text-[#173f32]">Balanced (50%)</span>
                     </div>
                     <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-                      <div className="bg-[#991B1B] h-full w-1/2" />
+                      <div className="bg-[#173f32] h-full w-1/2" />
                     </div>
                   </div>
                 </div>
@@ -517,7 +517,7 @@ export function PlatformGuideSection() {
             {/* Mockup Bottom Navigation Hint */}
             <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-medium">
               <span>Use <strong>←</strong> / <strong>→</strong> arrow keys to switch steps</span>
-              <span className="font-bold text-[#991B1B]">Step {currentStep + 1} of 5</span>
+              <span className="font-bold text-[#173f32]">Step {currentStep + 1} of 5</span>
             </div>
 
           </div>
@@ -528,7 +528,7 @@ export function PlatformGuideSection() {
         <div className="bg-slate-100 px-6 sm:px-10 py-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4 text-xs font-bold text-slate-600">
           <div className="flex items-center gap-2">
             <span className="text-slate-400">Current Step:</span>
-            <span className="text-[#991B1B] font-extrabold">
+            <span className="text-[#173f32] font-extrabold">
               {step.stepNumber}. {step.title}
             </span>
           </div>

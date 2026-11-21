@@ -166,8 +166,8 @@ export function SignInModal({
     >
       <div className="relative w-full max-w-md bg-[#F8F9FA] border border-[#1E293B]/15 rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-8 animate-in zoom-in-95 duration-200">
         
-        {/* Top Crimson Accent Gradient Streak */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#173f32] via-red-500 to-[#1E293B]" />
+        {/* Top FolioVeda Accent Gradient Streak */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#173f32] via-[#10B981] to-[#ebd800]" />
 
         {/* Close Button */}
         <button
@@ -315,7 +315,7 @@ export function SignInModal({
         </div>
 
         {/* Instant Indian Creator Demo Profile Card */}
-        <div className="mt-5 p-3.5 rounded-2xl bg-gradient-to-br from-red-50/70 to-slate-100 border border-red-100 shadow-2xs">
+        <div className="mt-5 p-3.5 rounded-2xl bg-gradient-to-br from-emerald-50/70 to-slate-100 border border-emerald-100 shadow-2xs">
           <div className="flex items-center justify-between mb-1.5">
             <div className="flex items-center gap-1.5 text-xs font-bold text-[#173f32]">
               <Sparkles size={13} />

@@ -47,7 +47,7 @@ export default function NotYourCollegeHomePage() {
     luxe: {
       name: "Luxe Creative (Dark Glow)",
       subtitle: "Deep ambient gradient mesh, floating glass cards, and animated interactive telemetry.",
-      accent: "#991B1B",
+      accent: "#10B981",
       badge: "FLAGSHIP DARK THEME",
       previewUrl: "/p/gaurav?theme=luxe-creative",
       bgClass: "bg-[#0B0F19] text-white",

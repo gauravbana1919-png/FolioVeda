@@ -17,6 +17,7 @@ import {
   ChevronRight,
   Maximize2
 } from "lucide-react";
+import { OrigamiCyberMintIcon } from "@/components/ui/Logo";
 
 export function FolioTreeHeroAnimation() {
   // 5 Distinct Growth Phases:
@@ -98,7 +99,7 @@ export function FolioTreeHeroAnimation() {
       {/* Visual Accent Glow Header */}
       <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2.5">
-          <span className="w-3 h-3 rounded-full bg-[#991B1B] animate-ping" />
+          <span className="w-3 h-3 rounded-full bg-[#173f32] animate-ping" />
           <h3 className="font-extrabold text-base sm:text-lg text-[#1E293B] tracking-tight">
             How FolioVeda Cultivates Your Career
           </h3>
@@ -122,7 +123,7 @@ export function FolioTreeHeroAnimation() {
               onClick={() => jumpToPhase(p.id)}
               className={`px-3 py-1 rounded-full transition-all flex items-center gap-1 ${
                 phase === p.id 
-                  ? "bg-[#991B1B] text-white shadow-xs font-bold scale-105" 
+                  ? "bg-[#173f32] text-white shadow-xs font-bold scale-105" 
                   : "text-slate-600 hover:text-[#1E293B] hover:bg-slate-100"
               }`}
             >
@@ -566,13 +567,13 @@ export function FolioTreeHeroAnimation() {
             <div 
               role="dialog"
               aria-modal="true"
-              className="absolute inset-4 sm:inset-8 z-30 bg-white/95 backdrop-blur-2xl rounded-3xl border-2 border-[#991B1B] shadow-2xl p-6 sm:p-8 flex flex-col justify-between animate-in zoom-in-95 duration-500 ring-8 ring-[#991B1B]/10"
+              className="absolute inset-4 sm:inset-8 z-30 bg-white/95 backdrop-blur-2xl rounded-3xl border-2 border-[#173f32] shadow-2xl p-6 sm:p-8 flex flex-col justify-between animate-in zoom-in-95 duration-500 ring-8 ring-[#173f32]/10"
             >
               {/* Header Bar */}
               <div className="flex items-center justify-between pb-4 border-b border-slate-200">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#991B1B] text-white flex items-center justify-center font-extrabold text-sm shadow-md">
-                    FV
+                  <div className="w-9 h-9 rounded-xl bg-[#173f32] text-white flex items-center justify-center font-extrabold text-sm shadow-md">
+                    <OrigamiCyberMintIcon size={18} />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
@@ -588,7 +589,7 @@ export function FolioTreeHeroAnimation() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-bold text-[#991B1B] bg-red-50 border border-red-200 px-3 py-1 rounded-full hidden sm:inline">
+                  <span className="text-[11px] font-bold text-[#173f32] bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full hidden sm:inline">
                     Harvested From Verified Proof
                   </span>
                   <button
@@ -622,8 +623,8 @@ export function FolioTreeHeroAnimation() {
                 </div>
 
                 {/* 2. Ripe Metric Fruit */}
-                <div className="p-4 rounded-xl bg-red-50/60 border border-red-200 space-y-2">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#991B1B]">
+                <div className="p-4 rounded-xl bg-emerald-50/60 border border-emerald-200 space-y-2">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#173f32]">
                     BEARING FRUIT
                   </span>
                   <div className="text-2xl font-extrabold text-[#1E293B]">
@@ -665,7 +666,7 @@ export function FolioTreeHeroAnimation() {
 
                   <Link
                     href="/onboarding"
-                    className="shimmer-button px-6 py-2 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white font-extrabold transition shadow-md shadow-[#991B1B]/25 flex items-center gap-1.5"
+                    className="shimmer-button px-6 py-2 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white font-extrabold transition shadow-md shadow-[#173f32]/25 flex items-center gap-1.5"
                   >
                     <span>Cultivate Your Portfolio Free</span>
                     <ArrowRight size={14} />
@@ -682,12 +683,12 @@ export function FolioTreeHeroAnimation() {
         <div className="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs font-bold text-slate-700">
           <div className="flex items-center gap-2">
             <span className="text-slate-400">Current Phase:</span>
-            <span className="text-[#991B1B] font-extrabold">
+            <span className="text-[#173f32] font-extrabold">
               {phase === 0 && "1. Stickman Plants the FolioVeda Seed into Soil"}
               {phase === 1 && "2. Adding Career Catalyst Fertilizer (Golden Nutrients Seep into Earth)"}
               {phase === 2 && "3. Watering with Identity, Skills, Code & Verified Milestones"}
               {phase === 3 && "4. Structured Architectural Apple Tree Grows with Deep Roots"}
-              {phase === 4 && "5. Crimson Apple Drops → Live Portfolio Pops Up!"}
+              {phase === 4 && "5. Golden Apple Drops → Live Portfolio Pops Up!"}
             </span>
           </div>
 
@@ -698,7 +699,7 @@ export function FolioTreeHeroAnimation() {
                 onClick={() => jumpToPhase(s)}
                 className={`h-2.5 rounded-full transition-all ${
                   phase === s 
-                    ? "w-8 bg-[#991B1B]" 
+                    ? "w-8 bg-[#173f32]" 
                     : "w-3 bg-slate-300 hover:bg-slate-400"
                 }`}
                 title={`Jump to Phase ${s + 1}`}

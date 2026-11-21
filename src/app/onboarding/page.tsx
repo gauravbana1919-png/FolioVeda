@@ -337,7 +337,7 @@ function SmartIntakeOnboardingContent() {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-12 space-y-6"
           >
-            <div className="w-16 h-16 rounded-full bg-red-50 border-2 border-[#173f32] text-[#173f32] flex items-center justify-center mx-auto shadow-md animate-bounce">
+            <div className="w-16 h-16 rounded-full bg-emerald-50 border-2 border-[#173f32] text-[#173f32] flex items-center justify-center mx-auto shadow-md animate-bounce">
               <CheckCircle2 size={36} />
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1E293B]">
@@ -402,7 +402,7 @@ function SmartIntakeOnboardingContent() {
                 className="space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-lg"
               >
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#173f32] text-xs font-bold uppercase tracking-wider mb-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-[#173f32] border border-emerald-200/60 text-xs font-bold uppercase tracking-wider mb-2">
                     <User size={12} /> Step 1: Career Identity &amp; Goals
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1E293B]">
@@ -448,7 +448,7 @@ function SmartIntakeOnboardingContent() {
                           }}
                           className={`p-4 rounded-2xl border text-left transition-all ${
                             selected
-                              ? "bg-red-50/70 border-[#173f32] text-[#173f32] shadow-sm"
+                              ? "bg-emerald-50/70 border-[#173f32] text-[#173f32] shadow-sm"
                               : "bg-slate-50 border-slate-200 text-slate-600 hover:text-[#1E293B]"
                           }`}
                         >
@@ -502,7 +502,7 @@ function SmartIntakeOnboardingContent() {
                           onClick={() => toggleRole(role)}
                           className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all ${
                             active
-                              ? "bg-red-50 text-[#173f32] border-red-300"
+                              ? "bg-emerald-50 text-[#173f32] border-emerald-300"
                               : "bg-white border-slate-200 text-slate-600 hover:text-black"
                           }`}
                         >
@@ -535,7 +535,7 @@ function SmartIntakeOnboardingContent() {
                 className="space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-lg"
               >
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#173f32] text-xs font-bold uppercase tracking-wider mb-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-[#173f32] border border-emerald-200/60 text-xs font-bold uppercase tracking-wider mb-2">
                     <Sparkles size={12} /> Step 2: Strengths &amp; Voice
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1E293B]">
@@ -562,7 +562,7 @@ function SmartIntakeOnboardingContent() {
                           onClick={() => toggleStrength(strength)}
                           className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all ${
                             active
-                              ? "bg-red-50 text-[#173f32] border-red-300"
+                              ? "bg-emerald-50 text-[#173f32] border-emerald-300"
                               : "bg-white border-slate-200 text-slate-600 hover:text-black"
                           }`}
                         >
@@ -588,7 +588,7 @@ function SmartIntakeOnboardingContent() {
                         onClick={() => setTone(t.id as ToneOfVoice)}
                         className={`p-4 rounded-2xl border text-left transition-all ${
                           tone === t.id
-                            ? "bg-red-50/70 border-[#173f32] text-[#173f32] shadow-sm"
+                            ? "bg-emerald-50/70 border-[#173f32] text-[#173f32] shadow-sm"
                             : "bg-slate-50 border-slate-200 text-slate-600 hover:text-black"
                         }`}
                       >
@@ -653,7 +653,7 @@ function SmartIntakeOnboardingContent() {
                 className="space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-lg"
               >
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#173f32] text-xs font-bold uppercase tracking-wider mb-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-[#173f32] border border-emerald-200/60 text-xs font-bold uppercase tracking-wider mb-2">
                     <Globe size={12} /> Step 3: Verified Proof &amp; Links
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1E293B]">
@@ -726,7 +726,7 @@ function SmartIntakeOnboardingContent() {
                   </div>
 
                   {/* AI Resume & LinkedIn Extractor */}
-                  <div className="p-5 rounded-2xl bg-gradient-to-br from-red-50/60 to-slate-50 border-2 border-red-100 space-y-3">
+                  <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-50/60 to-slate-50 border-2 border-emerald-100 space-y-3">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold uppercase tracking-wider text-[#173f32] flex items-center gap-1.5">
                         <Sparkles size={14} /> AI Resume &amp; LinkedIn Career Importer
@@ -857,7 +857,7 @@ function SmartIntakeOnboardingContent() {
                 className="space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-lg"
               >
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#173f32] text-xs font-bold uppercase tracking-wider mb-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-[#173f32] border border-emerald-200/60 text-xs font-bold uppercase tracking-wider mb-2">
                     <ShieldCheck size={12} /> Step 4: Zero-Hallucination Review &amp; Approval
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1E293B]">
@@ -916,7 +916,7 @@ function SmartIntakeOnboardingContent() {
                           onClick={() => setSelectedThemeId(theme.id)}
                           className={`p-4 rounded-2xl border text-left transition-all ${
                             isSelected
-                              ? "bg-red-50/70 border-[#173f32] text-[#173f32] shadow-sm"
+                              ? "bg-emerald-50/70 border-[#173f32] text-[#173f32] shadow-sm"
                               : "bg-slate-50 border-slate-200 text-slate-600 hover:text-black"
                           }`}
                         >

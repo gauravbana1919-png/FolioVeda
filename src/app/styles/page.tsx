@@ -212,17 +212,11 @@ export default function StyleGalleryPage() {
                 <p className="text-xs text-slate-600 mt-1 max-w-2xl leading-relaxed font-normal">
                   {topPick.reason}
                 </p>
-                {topPick.theme.pinterestUrl && (
-                  <a
-                    href={topPick.theme.pinterestUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#173f32] hover:text-[#13352a] mt-2 underline"
-                  >
-                    <span>View Curated Pinterest Pin Source</span>
-                    <ExternalLink size={11} />
-                  </a>
-                )}
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#173f32]">
+                    <CheckCircle2 size={12} className="text-[#10B981]" /> Verified Production Blueprint ({topPick.theme.layout.pattern})
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -242,17 +236,17 @@ export default function StyleGalleryPage() {
           </div>
         )}
 
-        {/* Quick-Select Curated Pinterest Blueprints Bar */}
+        {/* Quick-Select Curated Signature Archetypes Bar */}
         <div className="mb-6 p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between gap-3 mb-2.5">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#173f32] animate-pulse" />
               <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                Curated Pinterest Design Blueprints:
+                FolioVeda Signature Archetypes:
               </span>
             </div>
             <span className="text-[11px] text-slate-500 hidden sm:inline">
-              Click any style to filter instantly
+              Click any archetype to filter instantly
             </span>
           </div>
 
@@ -379,18 +373,9 @@ export default function StyleGalleryPage() {
                       {theme.category} • {theme.mood}
                     </span>
                     <div className="flex items-center gap-1.5">
-                      {theme.pinterestUrl && (
-                        <a
-                          href={theme.pinterestUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-[10px] font-bold text-red-700 hover:text-white bg-red-50 hover:bg-[#173f32] border border-red-200 px-2 py-0.5 rounded-full transition-all"
-                          title="Open original Pinterest inspiration"
-                        >
-                          <span>Pinterest</span>
-                          <ExternalLink size={9} />
-                        </a>
-                      )}
+                      <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                        {theme.layout.pattern}
+                      </span>
                       {isActive && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold">
                           <Check size={10} /> Active
@@ -611,17 +596,6 @@ export default function StyleGalleryPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  {lightboxPin.pinterestUrl && (
-                    <a
-                      href={lightboxPin.pinterestUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors"
-                    >
-                      <span>Open Pinterest Pin</span>
-                      <ExternalLink size={12} />
-                    </a>
-                  )}
                   <button
                     onClick={() => setLightboxPin(null)}
                     className="p-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
