@@ -6,7 +6,6 @@ export const luxeCreativeTheme: ThemePackage = {
   category: "creative",
   mood: "bold",
   previewImage: "/images/styles/creative-bold.jpg",
-  pinterestUrl: "https://in.pinterest.com/pin/970525788470144809/",
   inspirationTitle: "Luxe Dark Gradient & Interactive Motion UI",
   isSystem: true,
   tokens: {

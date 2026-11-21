@@ -6,7 +6,6 @@ export const caseStudyHeavyTheme: ThemePackage = {
   category: "design",
   mood: "formal",
   previewImage: "/images/styles/design-formal.jpg",
-  pinterestUrl: "https://in.pinterest.com/pin/628955904245390485/",
   inspirationTitle: "Micro Space Website Case Study & Editorial Systems",
   isSystem: true,
   tokens: {

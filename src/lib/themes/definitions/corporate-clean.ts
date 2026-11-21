@@ -6,7 +6,6 @@ export const corporateCleanTheme: ThemePackage = {
   category: "business",
   mood: "formal",
   previewImage: "/images/styles/business-formal.jpg",
-  pinterestUrl: "https://in.pinterest.com/pin/1097963584193800356/",
   inspirationTitle: "Conicorn Executive Template & Architecture",
   isSystem: true,
   tokens: {

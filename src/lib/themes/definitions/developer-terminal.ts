@@ -6,7 +6,6 @@ export const developerTerminalTheme: ThemePackage = {
   category: "tech",
   mood: "formal",
   previewImage: "/images/styles/tech-formal.jpg",
-  pinterestUrl: "https://in.pinterest.com/pin/937452478704956169/",
   inspirationTitle: "Programmers Aesthetic & Terminal System",
   isSystem: true,
   tokens: {

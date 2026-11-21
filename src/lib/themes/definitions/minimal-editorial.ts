@@ -6,7 +6,6 @@ export const minimalEditorialTheme: ThemePackage = {
   category: "design",
   mood: "calm",
   previewImage: "/images/styles/design-calm.jpg",
-  pinterestUrl: "https://in.pinterest.com/pin/1138003399621985780/",
   inspirationTitle: "Minimal Poster Design & Editorial Typography",
   isSystem: true,
   tokens: {

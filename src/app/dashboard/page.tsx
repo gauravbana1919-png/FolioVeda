@@ -147,7 +147,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <div className="flex items-center gap-3">
             <Link 
               href="/styles" 
-              className="text-xs px-3.5 py-2 rounded-full bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-[#173f32] border border-slate-200 font-bold inline-flex items-center gap-1.5 transition-all shadow-2xs"
+              className="text-xs px-3.5 py-2 rounded-full bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-[#173f32] border border-slate-200 font-bold inline-flex items-center gap-1.5 transition-all shadow-2xs"
             >
               <Layers size={13} className="text-[#173f32]" />
               <span>Style Gallery</span>

@@ -6,7 +6,6 @@ export const darkShowcaseTheme: ThemePackage = {
   category: "tech",
   mood: "bold",
   previewImage: "/images/styles/tech-bold.jpg",
-  pinterestUrl: "https://in.pinterest.com/pin/970525788470144809/",
   inspirationTitle: "Dark Carousel UI & Interface Interaction",
   isSystem: true,
   tokens: {

@@ -6,7 +6,6 @@ export const notYourCollegeTheme: ThemePackage = {
   category: "creative",
   mood: "bold",
   previewImage: "/images/styles/creative-bold.jpg",
-  pinterestUrl: "https://notyourcollege.com/",
   inspirationTitle: "Not Your College Editorial & Paper Craft UI",
   isSystem: true,
   tokens: {
