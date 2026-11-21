@@ -99,19 +99,9 @@ export default function NotYourCollegeHomePage() {
       <header className="sticky top-0 z-50 bg-[#f7f4eb]/90 backdrop-blur-md border-b border-[#173f32]/15 transition-all">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 h-20 flex items-center justify-between">
           
-          {/* Logo & Monogram */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-full bg-[#173f32] text-[#f7f4eb] flex items-center justify-center font-bold text-base shadow-xs group-hover:scale-105 transition-transform">
-              FV
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-bold tracking-tight text-[#222e26] group-hover:text-[#173f32] transition-colors">
-                FolioVeda
-              </span>
-              <span className="text-[10px] tracking-wider uppercase text-[#5a6b60] font-bold">
-                Where Builders Launch
-              </span>
-            </div>
+          {/* Official FolioVeda Logo */}
+          <Link href="/" className="flex items-center group">
+            <FolioVedaLogo size="md" subtitle="Where Builders Launch" />
           </Link>
 
           {/* Navigation Links */}
@@ -603,10 +593,10 @@ export default function NotYourCollegeHomePage() {
       {/* ── FOOTER ── */}
       <footer className="border-t border-[#173f32]/15 py-12 px-6 sm:px-10 bg-[#f7f4eb]">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-[#5a6b60]">
-          <div className="flex items-center gap-2 font-bold text-[#222e26]">
-            <span>FolioVeda</span>
-            <span>•</span>
-            <span className="font-normal text-[#5a6b60]">Not Your College Editorial Standard</span>
+          <div className="flex items-center gap-3">
+            <FolioVedaLogo size="xs" />
+            <span className="text-[#5a6b60]">|</span>
+            <span className="font-medium text-[#5a6b60]">Where Builders Launch</span>
           </div>
           <div className="flex items-center gap-6">
             <Link href="/p/gaurav" className="hover:text-[#173f32] transition-colors">

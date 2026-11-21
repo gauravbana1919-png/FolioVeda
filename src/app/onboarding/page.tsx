@@ -313,10 +313,8 @@ function SmartIntakeOnboardingContent() {
       <header className="border-b border-[#1E293B]/10 bg-[#F8F9FA]/90 backdrop-blur-xl px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <FolioVedaLogo size="sm" showBadge={false} />
-            <span className="text-xs font-bold text-[#1E293B] group-hover:text-[#991B1B] transition-colors">
-              FolioVeda <span className="text-slate-400 font-normal">/ Smart Intake</span>
-            </span>
+            <FolioVedaLogo size="sm" />
+            <span className="text-slate-400 text-xs font-medium">/ Smart Intake</span>
           </Link>
           <div className="flex items-center gap-3">
             <span className="text-xs font-bold text-[#991B1B]">Step {step} of 4</span>

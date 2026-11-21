@@ -32,9 +32,9 @@ export interface ResumeShowcaseItem {
   threadOffset: string; // horizontal offset for aesthetic distribution
   accentColor: string;
   cardBg: string;
-  image: string; // Pinterest portfolio image
-  pinterestUrl: string; // Exact Pinterest pin URL
-  pinterestTitle: string; // Original Pin Title
+  image: string;
+  livePreviewUrl?: string;
+  themeTag?: string;
   metrics: { label: string; value: string }[];
   summary: string;
   skills: string[];
@@ -76,8 +76,8 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
     accentColor: "#991B1B",
     cardBg: "from-white to-rose-50/50",
     image: "/images/portfolios/portfolio-1.jpg",
-    pinterestUrl: "https://in.pinterest.com/pin/1033787289507431391/",
-    pinterestTitle: "Personal Portfolio Website Design | Brand & Web Designer Homepage Inspo",
+    livePreviewUrl: "/p/gaurav?theme=not-your-college",
+    themeTag: "NYC Editorial Standard",
     metrics: [
       { label: "Design Awards", value: "24 Cannes & D&AD" },
       { label: "Type Precision", value: "100% Bespoke" },
@@ -130,8 +130,8 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
     accentColor: "#2563EB",
     cardBg: "from-white to-blue-50/40",
     image: "/images/portfolios/portfolio-2.jpg",
-    pinterestUrl: "https://in.pinterest.com/pin/892064638708311034/",
-    pinterestTitle: "Personal Portfolio Website UIUX Design | Portfolio Website | Figma | Web Design",
+    livePreviewUrl: "/p/gaurav?theme=editorial",
+    themeTag: "Modern Product Systems",
     metrics: [
       { label: "Design Systems", value: "100+ Components" },
       { label: "Site of the Year", value: "8x Awwwards" },
@@ -184,8 +184,8 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
     accentColor: "#0284C7",
     cardBg: "from-white to-sky-50/40",
     image: "/images/portfolios/portfolio-3.jpg",
-    pinterestUrl: "https://in.pinterest.com/pin/924293523540445135/",
-    pinterestTitle: "Nova Persona Website Page Template for Webflow | Personal Web Page Layout",
+    livePreviewUrl: "/p/gaurav?theme=developer-terminal",
+    themeTag: "AI & Distributed Systems",
     metrics: [
       { label: "NeurIPS & ICML", value: "14 First-Author" },
       { label: "Inference Speedup", value: "4.8x Distillation" },
@@ -238,8 +238,8 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
     accentColor: "#10B981",
     cardBg: "from-slate-900 to-slate-950",
     image: "/images/portfolios/portfolio-4.jpg",
-    pinterestUrl: "https://in.pinterest.com/pin/1106196727238206410/",
-    pinterestTitle: "Technology Black Modern Webflow Website Template | Engineer Portfolio",
+    livePreviewUrl: "/p/gaurav?theme=luxe-creative",
+    themeTag: "Luxe Obsidian Glow",
     metrics: [
       { label: "Throughput", value: "400M Events/Day" },
       { label: "P99 Latency", value: "11.4 ms" },
@@ -292,8 +292,8 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
     accentColor: "#D97706",
     cardBg: "from-white to-amber-50/40",
     image: "/images/portfolios/portfolio-5.jpg",
-    pinterestUrl: "https://in.pinterest.com/pin/883972233114980875/",
-    pinterestTitle: "Modern Responsive Ready-Made Business Website Template for Framer | Services One Page",
+    livePreviewUrl: "/p/gaurav?theme=corporate",
+    themeTag: "Executive Venture Showcase",
     metrics: [
       { label: "ARR Scaled", value: "$400M Global" },
       { label: "Active Users", value: "18M Customers" },
@@ -561,33 +561,49 @@ export function HangingResumesGallery() {
                     <span className="w-2 h-2 rounded-full bg-[#991B1B] animate-pulse" />
                   </div>
 
-                  {/* Pinterest Visual Portfolio Preview Picture Container */}
+                  {/* Crisp Native Vector Portfolio Preview Canvas */}
                   <div className="p-3 pb-0">
-                    <div className="relative w-full h-36 sm:h-40 overflow-hidden rounded-2xl bg-slate-100 border border-slate-200 shadow-inner group/thumb">
-                      <img
-                        src={resume.image}
-                        alt={`${resume.name} Portfolio Design Preview`}
-                        className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover/thumb:scale-108"
-                        loading="lazy"
-                      />
-                      {/* Live Template Tag */}
-                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#1E293B]/85 backdrop-blur-md text-white text-[9px] font-bold tracking-wider uppercase flex items-center gap-1 shadow-xs pointer-events-none">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        <span>Live Template</span>
+                    <div className="relative w-full h-36 sm:h-40 overflow-hidden rounded-2xl bg-[#0F172A] border border-slate-200/20 shadow-inner group/thumb select-none">
+                      
+                      {/* Mini Browser Header */}
+                      <div className="h-6 bg-slate-900/90 px-3 flex items-center justify-between border-b border-white/10">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-rose-500/80 inline-block" />
+                          <span className="w-2 h-2 rounded-full bg-amber-400/80 inline-block" />
+                          <span className="w-2 h-2 rounded-full bg-emerald-400/80 inline-block" />
+                        </div>
+                        <span className="text-[9px] font-mono text-slate-400 truncate max-w-[140px]">
+                          folioveda.dev/p/{resume.id}
+                        </span>
                       </div>
-                      {/* Direct Pinterest Pin Link Icon */}
-                      <a
-                        href={resume.pinterestUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="absolute top-2 right-2 p-1.5 rounded-full bg-white/95 hover:bg-white text-[#E60023] shadow-md hover:scale-115 transition-all flex items-center justify-center cursor-pointer"
-                        title="View original Pinterest Pin"
-                      >
-                        <svg className="w-3.5 h-3.5 fill-[#E60023]" viewBox="0 0 24 24">
-                          <path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345-.09.375-.291 1.199-.33 1.365-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/>
-                        </svg>
-                      </a>
+
+                      {/* Mini Viewport Body Customized to Persona */}
+                      <div className="p-3 text-white flex flex-col justify-between h-[calc(100%-24px)] transition-transform duration-500 group-hover/thumb:scale-105">
+                        <div className="space-y-1.5">
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-400 inline-block">
+                            ● Verified Live Site
+                          </span>
+                          <div className="text-xs font-extrabold text-white leading-tight line-clamp-1">
+                            {resume.liveProject.title}
+                          </div>
+                          <p className="text-[10px] text-slate-300 line-clamp-2 leading-relaxed">
+                            {resume.liveProject.description}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[9px] text-slate-400 font-mono">
+                          <span className="text-[#ebd800] font-bold">{resume.liveProject.tag}</span>
+                          <span className="text-white font-bold group-hover/thumb:text-[#ebd800] transition-colors">
+                            Preview ↗
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Live Template Tag */}
+                      <div className="absolute top-8 left-2 px-2 py-0.5 rounded-full bg-slate-950/80 backdrop-blur-md text-white text-[9px] font-bold tracking-wider uppercase flex items-center gap-1 shadow-xs pointer-events-none border border-white/10">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>FolioVeda Standard</span>
+                      </div>
                     </div>
                   </div>
 
@@ -695,23 +711,13 @@ export function HangingResumesGallery() {
 
             {/* Right: Actions & Close (ESC) */}
             <div className="flex items-center gap-3">
-              
-              <a
-                href={expandedResume.pinterestUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-200 text-[#E60023] text-xs font-bold transition"
-              >
-                <svg className="w-3.5 h-3.5 fill-[#E60023]" viewBox="0 0 24 24">
-                  <path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345-.09.375-.291 1.199-.33 1.365-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/>
-                </svg>
-                <span>View on Pinterest</span>
-                <ExternalLink size={11} />
-              </a>
+              <span className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
+                ● Active Template
+              </span>
 
               <Link
                 href="/onboarding"
-                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#991B1B] hover:bg-[#7F1D1D] text-white text-xs font-bold shadow-md shadow-[#991B1B]/20 transition-all hover:scale-105"
+                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#173f32] hover:bg-[#13352a] text-[#f7f4eb] text-xs font-bold shadow-md transition-all hover:scale-105"
               >
                 <span>Adopt This Style Free</span>
                 <ArrowRight size={13} />
@@ -762,38 +768,36 @@ export function HangingResumesGallery() {
                   href="/resume"
                   className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition border border-slate-200"
                 >
-                  <Download size={14} /> Download ATS Resume
+                  <Download size={14} /> Tailor Resume
                 </Link>
-                <a
-                  href={expandedResume.pinterestUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#1E293B] hover:bg-slate-800 text-white text-xs font-bold transition"
+                <Link
+                  href="/onboarding"
+                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#173f32] hover:bg-[#13352a] text-[#f7f4eb] text-xs font-bold transition shadow-xs"
                 >
-                  <ExternalLink size={14} /> Open Pinterest Pin
-                </a>
+                  <Sparkles size={14} className="text-[#ebd800]" /> Use This Template
+                </Link>
               </div>
             </div>
 
-            {/* 2. LIVE PINTEREST PORTFOLIO WEBSITE SHOWCASE (Interactive Browser Frame) */}
+            {/* 2. LIVE RETINA PORTFOLIO WEBSITE SHOWCASE (High-Craft Vector Browser Frame) */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h2 className="text-xs font-extrabold text-[#991B1B] uppercase tracking-wider flex items-center gap-2">
-                  <Globe size={14} /> LIVE PINTEREST DESIGN BLUEPRINT &amp; PORTFOLIO LAYOUT
+                <h2 className="text-xs font-extrabold text-[#173f32] uppercase tracking-wider flex items-center gap-2">
+                  <Globe size={14} /> LIVE FOLIOVEDA ARCHITECTURE BLUEPRINT &amp; DESIGN
                 </h2>
                 <span className="text-[11px] font-bold text-slate-500 hidden sm:inline">
-                  Interactive High-Res View
+                  Interactive Retina Preview
                 </span>
               </div>
 
-              <div className="bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-xl space-y-3 overflow-hidden">
+              <div className="bg-slate-950 rounded-3xl p-5 border border-slate-800 shadow-xl space-y-4 overflow-hidden">
                 {/* Browser Top Window Bar */}
                 <div className="flex items-center justify-between pb-3 border-b border-slate-800 flex-wrap gap-2">
                   <div className="flex items-center gap-2">
                     <span className="w-3 h-3 rounded-full bg-rose-500 inline-block" />
                     <span className="w-3 h-3 rounded-full bg-amber-400 inline-block" />
                     <span className="w-3 h-3 rounded-full bg-emerald-400 inline-block" />
-                    <div className="bg-slate-950 px-3 py-1 rounded-lg border border-slate-800 text-xs text-slate-300 font-mono ml-2 truncate max-w-xs sm:max-w-md">
+                    <div className="bg-slate-900 px-3 py-1 rounded-lg border border-slate-800 text-xs text-slate-300 font-mono ml-2 truncate max-w-xs sm:max-w-md">
                       https://folioveda.dev/p/{expandedResume.id}
                     </div>
                   </div>
@@ -804,31 +808,58 @@ export function HangingResumesGallery() {
                   </div>
                 </div>
 
-                {/* Screenshot Display Frame with Smooth Vertical Hover Scroll */}
-                <div className="relative w-full max-h-[500px] overflow-hidden rounded-2xl bg-slate-950 border border-slate-800 group/viewport">
-                  <img 
-                    src={expandedResume.image}
-                    alt={expandedResume.name + " Live Portfolio Design from Pinterest"}
-                    className="w-full h-auto object-cover object-top transition-all duration-1000 ease-in-out group-hover/viewport:object-bottom cursor-ns-resize"
-                  />
-                  <div className="absolute bottom-3 right-3 px-3 py-1.5 bg-black/85 backdrop-blur-md rounded-full text-white text-[11px] font-bold flex items-center gap-1.5 pointer-events-none shadow-md">
-                    <span className="w-2 h-2 rounded-full bg-[#991B1B] animate-pulse" />
-                    <span>Hover over image to preview full webpage scroll</span>
-                  </div>
-                </div>
+                {/* Simulated Live Portfolio Canvas */}
+                <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 space-y-6 text-white">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+                    <div className="space-y-1">
+                      <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+                        {expandedResume.badge}
+                      </span>
+                      <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                        {expandedResume.name}
+                      </h3>
+                      <p className="text-sm text-slate-300">
+                        {expandedResume.role}
+                      </p>
+                    </div>
 
-                <div className="pt-1 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-slate-400 gap-2">
-                  <div className="font-medium truncate max-w-xl">
-                    Source: <strong className="text-white">{expandedResume.pinterestTitle}</strong>
+                    <Link
+                      href="/onboarding"
+                      className="px-4 py-2 rounded-xl bg-white text-slate-950 text-xs font-bold hover:bg-slate-100 transition shadow-xs self-start sm:self-auto"
+                    >
+                      Clone Layout →
+                    </Link>
                   </div>
-                  <a 
-                    href={expandedResume.pinterestUrl}
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-rose-400 hover:text-rose-300 font-bold shrink-0 flex items-center gap-1"
-                  >
-                    <span>View Inspiration Pin</span> ↗
-                  </a>
+
+                  {/* Flagship Artifact Card */}
+                  <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-mono text-emerald-400 font-bold uppercase">
+                        Featured Artifact
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full bg-[#ebd800] text-[#173f32] text-[10px] font-bold">
+                        {expandedResume.liveProject.tag}
+                      </span>
+                    </div>
+                    <div className="text-base font-bold text-white">
+                      {expandedResume.liveProject.title}
+                    </div>
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      {expandedResume.liveProject.description}
+                    </p>
+                  </div>
+
+                  {/* Skills Grid */}
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {expandedResume.skills.map((skill, sIdx) => (
+                      <span
+                        key={sIdx}
+                        className="px-2.5 py-1 rounded-lg bg-white/10 text-slate-200 text-xs font-medium border border-white/10"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

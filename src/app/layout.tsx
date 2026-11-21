@@ -8,7 +8,7 @@ import { LogoProvider } from "@/components/ui/Logo";
 const sans = Plus_Jakarta_Sans({
   variable: "--font-sans-main",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 const serif = Newsreader({

@@ -125,7 +125,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         {/* Top Operational Header */}
         <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
           <div className="flex items-center gap-4">
-            <FolioVedaLogo size="lg" showBadge={true} />
+            <Link href="/" className="hover:opacity-90 transition-opacity">
+              <FolioVedaLogo size="md" />
+            </Link>
             <div className="border-l border-slate-200 pl-4 hidden sm:block">
               <div className="flex items-center gap-2">
                 <h1 className="text-xl font-extrabold text-[#1E293B]">

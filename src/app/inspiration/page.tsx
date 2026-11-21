@@ -173,8 +173,10 @@ export default function InspirationPage() {
               <ArrowLeft size={14} /> Back to Home
             </Link>
             <div className="h-4 w-[1px] bg-slate-200 hidden sm:block" />
-            <FolioVedaLogo size="sm" showBadge={false} />
-            <span className="font-extrabold text-sm text-[#1E293B] hidden md:inline">Inspiration Engine</span>
+            <Link href="/" className="hover:opacity-90 transition-opacity">
+              <FolioVedaLogo size="sm" />
+            </Link>
+            <span className="text-slate-400 text-xs font-medium hidden md:inline">/ Inspiration Studio</span>
           </div>
 
           <div className="flex items-center gap-3">

@@ -9,6 +9,7 @@ interface LogoProps {
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
   showText?: boolean;
   showBadge?: boolean;
+  subtitle?: string;
   className?: string;
   glow?: boolean;
 }
@@ -104,6 +105,7 @@ export function FolioVedaLogo({
   size = "md",
   showText = true,
   showBadge = false,
+  subtitle,
   className = "",
 }: LogoProps) {
   const metrics = SIZE_MAP[size];
@@ -113,9 +115,9 @@ export function FolioVedaLogo({
       <OrigamiCyberMintIcon size={metrics.icon} />
 
       {showText && (
-        <div className="flex flex-col leading-none">
+        <div className="flex flex-col leading-tight">
           <div className="flex items-center gap-1.5">
-            <span className={`font-extrabold tracking-tight text-slate-900 dark:text-white ${metrics.text}`}>
+            <span className={`font-extrabold tracking-tight text-[#173f32] dark:text-white ${metrics.text}`}>
               Folio
               <span className="text-[#10B981]">
                 Veda
@@ -123,11 +125,16 @@ export function FolioVedaLogo({
             </span>
 
             {showBadge && (
-              <span className={`rounded-full bg-emerald-500/15 text-emerald-400 font-semibold uppercase tracking-wider border border-emerald-500/30 ${metrics.badge}`}>
+              <span className={`rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-semibold uppercase tracking-wider border border-emerald-500/30 ${metrics.badge}`}>
                 Studio
               </span>
             )}
           </div>
+          {subtitle && (
+            <span className="text-[10px] tracking-wider uppercase text-[#5a6b60] dark:text-slate-400 font-bold mt-0.5">
+              {subtitle}
+            </span>
+          )}
         </div>
       )}
     </div>
