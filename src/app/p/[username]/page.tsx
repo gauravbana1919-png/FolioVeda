@@ -4,6 +4,7 @@ import prisma from "@/lib/db";
 import type { Metadata } from "next";
 import { getThemeById, mapUserToPortfolioContent } from "@/lib/themes/registry";
 import { ThemeRenderer } from "@/components/portfolio/engine/ThemeRenderer";
+import { PERSONA_PROFILES } from "@/lib/personas";
 
 interface PageProps {
   params: Promise<{ username: string }>;
@@ -75,14 +76,31 @@ export default async function PublicPortfolioPage({ params, searchParams }: Page
 
   const isDemo = !userRecord;
 
-  // Convert to standardized PortfolioContent
-  const content = mapUserToPortfolioContent(
-    userRecord,
-    decodedUsername === "demo" || decodedUsername === "alex" ? "Alex Developer" : decodedUsername
-  );
+  // Check if requested slug matches any rich preset persona
+  const matchedPersona = !userRecord
+    ? Object.values(PERSONA_PROFILES).find((p) => {
+        const pNorm = p.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+        const idNorm = p.id.toLowerCase().replace(/[^a-z0-9]/g, "");
+        const qNorm = lowerUsername.replace(/[^a-z0-9]/g, "");
+        return pNorm === qNorm || idNorm === qNorm || qNorm.includes(idNorm) || idNorm.includes(qNorm);
+      })
+    : null;
 
-  // Determine active theme (search param override > user portfolio themePackageId > templateId > default sudarvel)
-  const activeThemeId = query.theme || userRecord?.portfolio?.themePackageId || userRecord?.portfolio?.templateId || "sudarvel";
+  // Convert to standardized PortfolioContent
+  const content = matchedPersona
+    ? matchedPersona.content
+    : mapUserToPortfolioContent(
+        userRecord,
+        decodedUsername === "demo" || decodedUsername === "alex" ? "Alex Developer" : decodedUsername
+      );
+
+  // Determine active theme (search param override > user portfolio themePackageId > matched persona default > sudarvel)
+  const activeThemeId =
+    query.theme ||
+    userRecord?.portfolio?.themePackageId ||
+    userRecord?.portfolio?.templateId ||
+    (matchedPersona ? matchedPersona.recommendedThemeId : "sudarvel");
+
   const theme = getThemeById(activeThemeId);
 
   return (

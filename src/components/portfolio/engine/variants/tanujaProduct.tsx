@@ -5,8 +5,6 @@ import Link from "next/link";
 import { 
   Sparkles, 
   ExternalLink, 
-  Github, 
-  Linkedin, 
   Mail, 
   FileText, 
   Eye, 
@@ -187,11 +185,15 @@ export function TanujaProjects({ content, theme }: VariantProps) {
 
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2">
-                    {proj.tags?.map((tag, tIdx) => (
-                      <span key={tIdx} className="px-3 py-1 rounded-full text-xs font-medium bg-white text-slate-700 border border-slate-200">
-                        {tag}
-                      </span>
-                    ))}
+                    {(() => {
+                      const p = proj as any;
+                      const tags: string[] = p.tags || p.techStack || [];
+                      return tags.map((tag: string, tIdx: number) => (
+                        <span key={tIdx} className="px-3 py-1 rounded-full text-xs font-medium bg-white text-slate-700 border border-slate-200">
+                          {tag}
+                        </span>
+                      ));
+                    })()}
                   </div>
                 </div>
 
@@ -328,7 +330,12 @@ export function TanujaExperience({ content, theme }: VariantProps) {
                 </span>
                 <h3 className="text-xl font-extrabold text-slate-900">{exp.role}</h3>
                 <h4 className="text-sm font-semibold text-blue-600 mb-3">{exp.company}</h4>
-                <p className="text-xs text-slate-600 leading-relaxed max-w-2xl font-normal">{exp.description}</p>
+                <p className="text-xs text-slate-600 leading-relaxed max-w-2xl font-normal">
+                  {(() => {
+                    const e = exp as any;
+                    return e.description || (e.highlights ? e.highlights.join(". ") : "");
+                  })()}
+                </p>
               </div>
 
               <div className="shrink-0 flex items-center gap-2 text-xs font-semibold text-emerald-600">
@@ -338,6 +345,42 @@ export function TanujaExperience({ content, theme }: VariantProps) {
             </div>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+export function TanujaEducation({ content }: VariantProps) {
+  if (!content.education || content.education.length === 0) return null;
+
+  return (
+    <section id="education" className="max-w-6xl mx-auto px-6 py-12">
+      <div className="flex items-center gap-2 mb-6">
+        <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+        <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white uppercase">
+          Academic Credentials &amp; Degrees
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {content.education.map((edu, idx) => (
+          <div
+            key={idx}
+            className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between text-xs text-blue-400 font-mono mb-2">
+                <span>{edu.year}</span>
+                {edu.gpa && <span>GPA {edu.gpa}</span>}
+              </div>
+              <h3 className="text-base font-bold text-white">{edu.degree}</h3>
+              <p className="text-xs text-slate-400 mt-1">{edu.institution}</p>
+              {edu.honors && (
+                <p className="text-xs text-emerald-400 font-medium mt-2">{edu.honors}</p>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

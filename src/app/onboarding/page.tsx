@@ -27,6 +27,8 @@ import {
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import Link from "next/link";
 import { ProfileType, TargetGoal, ToneOfVoice, PreferredMood, IntakeAnswersInput } from "@/types/intake";
+import { PERSONA_PROFILES } from "@/lib/personas";
+import { getAllSystemThemes } from "@/lib/themes/registry";
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -38,6 +40,7 @@ function SmartIntakeOnboardingContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState<string | null>(null);
+  const [activePersonaId, setActivePersonaId] = useState<string | null>(null);
 
   // Form State
   const [candidateName, setCandidateName] = useState("Alex Developer");
@@ -62,10 +65,26 @@ function SmartIntakeOnboardingContent() {
   // AI Generated Draft State (Step 4)
   const [draftHeadline, setDraftHeadline] = useState("");
   const [draftBio, setDraftBio] = useState("");
-  const [recommendedThemeIds, setRecommendedThemeIds] = useState<string[]>(["wall-showcase", "craft-desk", "not-your-college"]);
-  const [selectedThemeId, setSelectedThemeId] = useState("wall-showcase");
+  const [recommendedThemeIds, setRecommendedThemeIds] = useState<string[]>(["sudarvel", "rolan-gomes", "developer-terminal"]);
+  const [selectedThemeId, setSelectedThemeId] = useState("sudarvel");
 
   // Rich Career Data State
+  const [projectsList, setProjectsList] = useState<any[]>([
+    {
+      title: "Distributed Telemetry & Edge Pipeline",
+      description: "Low-latency distributed caching and telemetry engine built with Next.js, Redis, and Prisma, serving 100k+ req/sec.",
+      techStack: ["Next.js 15", "TypeScript", "Redis", "Docker", "PostgreSQL"],
+      liveUrl: "https://github.com/gauravbana1919-png",
+      githubUrl: "https://github.com/gauravbana1919-png",
+      featured: true,
+      metrics: "100k req/sec • sub-5ms P99",
+      category: "Distributed Architecture",
+      impact: "+38% Query Throughput",
+      problem: "Monolithic APIs suffered latency spikes.",
+      solution: "Engineered an edge caching layer using Redis.",
+    },
+  ]);
+
   const [experienceList, setExperienceList] = useState<any[]>([
     {
       role: "Senior Full-Stack Engineer",
@@ -78,6 +97,7 @@ function SmartIntakeOnboardingContent() {
       ],
     },
   ]);
+
   const [educationList, setEducationList] = useState<any[]>([
     {
       degree: "B.Tech in Computer Science & Engineering",
@@ -86,9 +106,44 @@ function SmartIntakeOnboardingContent() {
       honors: "First Class with Distinction",
     },
   ]);
+
+  const [certificationsList, setCertificationsList] = useState<any[]>([
+    {
+      name: "AWS Certified Solutions Architect",
+      issuer: "Amazon Web Services",
+      year: "2024",
+    },
+  ]);
+
   const [isExtracting, setIsExtracting] = useState(false);
   const [extractSuccess, setExtractSuccess] = useState<string | null>(null);
   const [extractError, setExtractError] = useState<string | null>(null);
+
+  const handleSelectPersona = (personaKey: string) => {
+    const p = PERSONA_PROFILES[personaKey];
+    if (!p) return;
+
+    setActivePersonaId(p.id);
+    setCandidateName(p.name);
+    setProfileType(p.profileType);
+    setTargetGoal(p.targetGoal);
+    setTargetRoles(p.targetRoles);
+    setTopStrengths(p.topStrengths);
+    setTone(p.tone);
+    setPreferredMood(p.preferredMood);
+    setGithubUrl(p.content.contact?.github || "");
+    setLinkedinUrl(p.content.contact?.linkedin || "");
+    setPortfolioUrl(p.content.contact?.website || "");
+    setProjectsList(p.content.projects || []);
+    setExperienceList(p.content.experience || []);
+    setEducationList(p.content.education || []);
+    setCertificationsList(p.content.certifications || []);
+    setSelectedThemeId(p.recommendedThemeId);
+    setDraftHeadline(p.content.headline);
+    setDraftBio(p.content.bio);
+    setExtractSuccess(`✓ Loaded verified profile for ${p.name} (${p.title})!`);
+    setTimeout(() => setExtractSuccess(null), 4000);
+  };
 
   // Read URL query params (?handle=, ?name=, ?template=) & session
   useEffect(() => {
@@ -239,8 +294,10 @@ function SmartIntakeOnboardingContent() {
         portfolio: portfolioUrl || undefined,
       },
       rawResumeText: rawResumeText || undefined,
+      projects: projectsList,
       experience: experienceList,
       education: educationList,
+      certifications: certificationsList,
     };
 
     try {
@@ -290,8 +347,10 @@ function SmartIntakeOnboardingContent() {
         portfolio: portfolioUrl || undefined,
       },
       rawResumeText: rawResumeText || undefined,
+      projects: projectsList,
       experience: experienceList,
       education: educationList,
+      certifications: certificationsList,
     };
 
     try {
@@ -423,6 +482,43 @@ function SmartIntakeOnboardingContent() {
                   <p className="text-xs text-slate-500 mt-1 font-normal">
                     Takes under 2 minutes. We only collect details that make your portfolio stand out to recruiters.
                   </p>
+                </div>
+
+                {/* Quick Persona Demo Presets */}
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-blue-500/10 border border-emerald-500/30">
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-xs font-bold text-[#173f32] flex items-center gap-1.5">
+                      <Sparkles size={14} className="text-emerald-600" />
+                      1-Click Instant Persona Presets (Test High-Impact Roles)
+                    </span>
+                    <span className="text-[11px] font-mono text-slate-500">Auto-fills verified data</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { key: "ui-ux-designer", label: "🎨 UI/UX Designer", name: "Maya Chen" },
+                      { key: "fullstack-developer", label: "⚡ Full-Stack Engineer", name: "Gaurav Shekhawat" },
+                      { key: "aiml-engineer", label: "🧠 AI/ML Engineer", name: "Dr. Aris Thorne" },
+                      { key: "graphic-designer", label: "📐 Graphic Designer", name: "Leo Vasquez" },
+                      { key: "student-fresher", label: "🎓 Student / Fresher", name: "Kevin Zhang" },
+                    ].map((p) => {
+                      const isSelected = activePersonaId === p.key;
+                      return (
+                        <button
+                          key={p.key}
+                          type="button"
+                          onClick={() => handleSelectPersona(p.key)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                            isSelected
+                              ? "bg-[#173f32] text-white shadow-sm ring-2 ring-emerald-500"
+                              : "bg-white hover:bg-slate-100 text-slate-800 border border-slate-200"
+                          }`}
+                        >
+                          <span>{p.label}</span>
+                          <span className="text-[10px] opacity-75 font-normal hidden sm:inline">({p.name})</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* Candidate Name */}
@@ -922,56 +1018,116 @@ function SmartIntakeOnboardingContent() {
 
                 {/* Recommended Styles Picker */}
                 <div className="space-y-3">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Recommended Architecture For You
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                      Select Architectural Style Engine
+                    </label>
+                    <span className="text-[11px] font-semibold text-[#173f32] bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                      ✨ AI Pick: {selectedThemeId}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {[
-                      { 
-                        id: "rolan-gomes", 
-                        name: "Rolan Desk Mat", 
-                        badge: "Rolan Gomes", 
-                        desc: "Warm physical paper sheet floating on a green architect cutting mat, live yellow sticky note, and accredited credential strip" 
-                      },
                       { 
                         id: "sudarvel", 
                         name: "Sudarvel Dark Case Study", 
                         badge: "Sudarvel K", 
-                        desc: "Deep dark tactical canvas, live availability pill, outcome-driven case studies (+38% throughput, 65ms latency), and interactive breakdowns" 
+                        category: "Tech / Product",
+                        desc: "Obsidian canvas, live availability telemetry, numbered case study drawers (+38% throughput, 65ms latency), and interactive outcome telemetry." 
+                      },
+                      { 
+                        id: "rolan-gomes", 
+                        name: "Rolan Gomes Desk Mat", 
+                        badge: "Rolan Gomes", 
+                        category: "Physical Craft",
+                        desc: "Tactile paper sheet on an architect green cutting mat, floating yellow sticky notes, and accredited credentials shelf." 
                       },
                       { 
                         id: "himanshu-singh", 
                         name: "Himanshu Studio", 
                         badge: "Himanshu Singh", 
-                        desc: "Deep forest studio cutting board (#06392b), storytelling sequences, branding, and art direction showcase" 
+                        category: "Visual Storyteller",
+                        desc: "Deep forest studio cutting board (#06392b), cinematic storyboard sequences, branding, and art direction showcase." 
                       },
                       { 
                         id: "tanuja-design", 
-                        name: "Tanuja Microsoft Case Study", 
+                        name: "Tanuja Microsoft UX", 
                         badge: "Tanuja (Microsoft)", 
-                        desc: "High-clarity enterprise product canvas, AI integration workflows, FOX Icons, and structured problem-solution lifecycle" 
+                        category: "Enterprise Product",
+                        desc: "High-clarity enterprise product canvas, AI workflows, FOX Icons, and structured problem-solution drawers." 
+                      },
+                      { 
+                        id: "developer-terminal", 
+                        name: "Developer Terminal", 
+                        badge: "Systems & AI", 
+                        category: "Modern Developer",
+                        desc: "Interactive macOS/Linux terminal window with live shell commands, categorized technical stack, and commit logs." 
+                      },
+                      { 
+                        id: "minimal-editorial", 
+                        name: "Minimal & Elegant", 
+                        badge: "Quiet Luxury", 
+                        category: "Editorial Serif",
+                        desc: "Generous whitespace, refined Georgia/Playfair serif typography, warm paper tones, and understated elegance." 
+                      },
+                      { 
+                        id: "bold-poster", 
+                        name: "Bold Creative Poster", 
+                        badge: "Brutalist Impact", 
+                        category: "Creative Experimental",
+                        desc: "Oversized Swiss typography, high-contrast dark grid, and bold visual compositions with strong personality." 
+                      },
+                      { 
+                        id: "not-your-college", 
+                        name: "Not Your College Breakout", 
+                        badge: "Early Career", 
+                        category: "Fresher / Student",
+                        desc: "High-energy ambitious breakout portfolio highlighting verified GPA/honors, hackathons, open source, and projects." 
+                      },
+                      { 
+                        id: "luxe-creative", 
+                        name: "Luxe Agency Studio", 
+                        badge: "High Fashion", 
+                        category: "Creative Agency",
+                        desc: "Luxury dark aesthetic with asymmetrical grids, dual-tone typography, and premium presentation." 
+                      },
+                      { 
+                        id: "corporate-clean", 
+                        name: "Corporate Clean & PM", 
+                        badge: "Executive", 
+                        category: "Business / PM",
+                        desc: "Structured enterprise executive dossier with clean problem-solution metrics and institutional clarity." 
                       },
                     ].map((theme) => {
                       const isSelected = selectedThemeId === theme.id;
-                      const isTopMatch = selectedThemeId === theme.id || theme.id === "wall-showcase";
+                      const isAiRecommended = recommendedThemeIds.includes(theme.id);
                       return (
                         <button
                           key={theme.id}
                           type="button"
                           onClick={() => setSelectedThemeId(theme.id)}
-                          className={`p-4 rounded-2xl border text-left transition-all ${
+                          className={`p-4 rounded-2xl border text-left transition-all relative flex flex-col justify-between ${
                             isSelected
-                              ? "bg-emerald-50/80 border-[#173f32] text-[#173f32] shadow-sm ring-2 ring-[#173f32]"
-                              : "bg-slate-50 border-slate-200 text-slate-600 hover:text-black hover:border-slate-300"
+                              ? "bg-emerald-50/90 border-[#173f32] text-[#173f32] shadow-md ring-2 ring-[#173f32]"
+                              : "bg-slate-50 hover:bg-slate-100/80 border-slate-200 text-slate-700"
                           }`}
                         >
-                          <div className="flex items-center justify-between mb-1.5">
-                            <span className="text-xs font-bold text-[#1E293B]">{theme.name}</span>
-                            <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-[#173f32] text-white">
-                              {theme.badge}
-                            </span>
+                          <div>
+                            <div className="flex items-center justify-between mb-1.5 gap-1">
+                              <span className="text-xs font-bold text-[#1E293B] truncate">{theme.name}</span>
+                              <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-[#173f32] text-white shrink-0">
+                                {theme.badge}
+                              </span>
+                            </div>
+                            <div className="text-[10px] font-mono text-slate-500 mb-2 uppercase tracking-wider">{theme.category}</div>
+                            <div className="text-[11px] text-slate-600 font-normal leading-relaxed">{theme.desc}</div>
                           </div>
-                          <div className="text-[11px] text-slate-600 font-normal leading-relaxed">{theme.desc}</div>
+                          {isAiRecommended && (
+                            <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center gap-1 text-[10px] font-bold text-emerald-700">
+                              <Sparkles size={11} /> AI Match for Your Goals
+                            </div>
+                          )}
                         </button>
                       );
                     })}

@@ -5,8 +5,6 @@ import Link from "next/link";
 import { 
   Sparkles, 
   ExternalLink, 
-  Github, 
-  Linkedin, 
   Mail, 
   FileText, 
   Eye, 
@@ -130,7 +128,11 @@ export function HimanshuProjects({ content, theme }: VariantProps) {
     },
   ];
 
-  const filtered = filter === "all" ? projects : projects.filter(p => (p as any).category === filter || (p.tags && p.tags.some(t => t.toLowerCase().includes(filter.toLowerCase()))));
+  const filtered = filter === "all" ? projects : projects.filter((p: any) => 
+    p.category === filter || 
+    (p.tags && p.tags.some((t: string) => t.toLowerCase().includes(filter.toLowerCase()))) ||
+    (p.techStack && p.techStack.some((t: string) => t.toLowerCase().includes(filter.toLowerCase())))
+  );
 
   return (
     <section id="work" className="px-6 sm:px-10 py-16 text-[#eef3c8]">
@@ -195,25 +197,34 @@ export function HimanshuProjects({ content, theme }: VariantProps) {
               </div>
 
               <div>
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {proj.tags?.slice(0, 3).map((tag, tIdx) => (
-                    <span key={tIdx} className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#021a13] text-[#b7c47a] border border-[#c6d457]/15">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                {(() => {
+                  const p = proj as any;
+                  const tags: string[] = p.tags || p.techStack || [];
+                  const linkUrl = p.link || p.liveUrl || p.githubUrl;
+                  return (
+                    <>
+                      <div className="flex flex-wrap gap-1.5 mb-4">
+                        {tags.slice(0, 3).map((tag: string, tIdx: number) => (
+                          <span key={tIdx} className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#021a13] text-[#b7c47a] border border-[#c6d457]/15">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
 
-                {proj.link && (
-                  <a
-                    href={proj.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#c6d457] hover:underline"
-                  >
-                    <span>View Showcase</span>
-                    <ArrowUpRight size={13} />
-                  </a>
-                )}
+                      {linkUrl && (
+                        <a
+                          href={linkUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#c6d457] hover:underline"
+                        >
+                          <span>View Showcase</span>
+                          <ArrowUpRight size={13} />
+                        </a>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
             </div>
           ))}
@@ -272,7 +283,12 @@ export function HimanshuExperience({ content, theme }: VariantProps) {
                 </span>
                 <h3 className="text-lg font-bold text-[#eef3c8]">{exp.role}</h3>
                 <h4 className="text-sm font-medium text-[#b7c47a] mb-2">{exp.company}</h4>
-                <p className="text-xs text-[#b7c47a] leading-relaxed max-w-2xl">{exp.description}</p>
+                <p className="text-xs text-[#b7c47a] leading-relaxed max-w-2xl">
+                  {(() => {
+                    const e = exp as any;
+                    return e.description || (e.highlights ? e.highlights.join(". ") : "");
+                  })()}
+                </p>
               </div>
 
               <div className="shrink-0 flex items-center gap-2 text-xs font-mono text-[#c6d457]">

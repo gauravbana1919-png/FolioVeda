@@ -13,17 +13,21 @@ export interface GeneratedIntakeCopy {
  * Computes optimal section order based on candidate profile type.
  * e.g., Projects first for developers, Case Studies/Projects first for designers, Experience first for Business.
  */
-export function computeSectionOrder(profileType: ProfileType): ThemeSectionName[] {
+export function computeSectionOrder(profileType: ProfileType, targetGoal?: string): ThemeSectionName[] {
+  if (targetGoal === "internship" || targetGoal === "studies") {
+    return ["hero", "projects", "education", "skills", "experience", "contact"];
+  }
+
   switch (profileType) {
     case "tech":
-      return ["hero", "projects", "skills", "experience", "contact"];
+      return ["hero", "projects", "skills", "experience", "education", "contact"];
     case "designer":
-      return ["hero", "projects", "experience", "skills", "contact"];
+      return ["hero", "projects", "experience", "skills", "education", "contact"];
     case "bba":
-      return ["hero", "experience", "projects", "skills", "contact"];
+      return ["hero", "experience", "projects", "skills", "education", "contact"];
     case "other":
     default:
-      return ["hero", "projects", "skills", "experience", "contact"];
+      return ["hero", "projects", "experience", "skills", "education", "contact"];
   }
 }
 
@@ -90,20 +94,30 @@ export function generateIntakeCopy(
     }
   }
 
-  // 3. Recommended Theme IDs based on profile type
+  // 3. Recommended Theme IDs based on profile type and specific skills/roles
   let recommendedThemeIds: string[] = [];
-  if (answers.profileType === "tech") {
-    recommendedThemeIds = ["sudarvel", "rolan-gomes", "himanshu-singh", "tanuja-design"];
+  const lowerRoles = answers.targetRoles.map(r => r.toLowerCase()).join(" ");
+  const lowerStrengths = answers.topStrengths.map(s => s.toLowerCase()).join(" ");
+
+  if (answers.targetGoal === "internship" || answers.targetGoal === "studies" || lowerRoles.includes("student") || lowerRoles.includes("intern")) {
+    recommendedThemeIds = ["not-your-college", "developer-terminal", "minimal-editorial", "sudarvel"];
+  } else if (lowerRoles.includes("ai") || lowerRoles.includes("ml") || lowerStrengths.includes("pytorch") || lowerStrengths.includes("cuda")) {
+    recommendedThemeIds = ["developer-terminal", "sudarvel", "bold-poster", "tanuja-design"];
+  } else if (answers.profileType === "tech") {
+    recommendedThemeIds = ["sudarvel", "developer-terminal", "rolan-gomes", "corporate-clean"];
   } else if (answers.profileType === "designer") {
-    recommendedThemeIds = ["tanuja-design", "rolan-gomes", "himanshu-singh", "sudarvel"];
+    recommendedThemeIds = ["tanuja-design", "rolan-gomes", "minimal-editorial", "himanshu-singh"];
+  } else if (answers.profileType === "bba" || lowerRoles.includes("product manager") || lowerRoles.includes("pm")) {
+    recommendedThemeIds = ["corporate-clean", "tanuja-design", "minimal-editorial", "sudarvel"];
   } else {
-    recommendedThemeIds = ["himanshu-singh", "rolan-gomes", "tanuja-design", "sudarvel"];
+    // Creative / Graphic / Brand
+    recommendedThemeIds = ["himanshu-singh", "bold-poster", "luxe-creative", "rolan-gomes"];
   }
 
   return {
     suggestedHeadline: headline,
     suggestedBio: bio,
-    sectionOrder: computeSectionOrder(answers.profileType),
+    sectionOrder: computeSectionOrder(answers.profileType, answers.targetGoal),
     recommendedThemeIds,
     factualAnchors: [...answers.targetRoles, ...answers.topStrengths],
   };

@@ -34,16 +34,31 @@ export const IntakeCertificationSchema = z.object({
   year: z.string(),
 });
 
+export const IntakeProjectSchema = z.object({
+  title: z.string(),
+  description: z.string().default(""),
+  techStack: z.array(z.string()).or(z.string()).optional().default([]),
+  liveUrl: z.string().optional().nullable(),
+  githubUrl: z.string().optional().nullable(),
+  featured: z.boolean().optional().default(false),
+  metrics: z.string().optional().nullable(),
+  category: z.string().optional().nullable(),
+  impact: z.string().optional().nullable(),
+  problem: z.string().optional().nullable(),
+  solution: z.string().optional().nullable(),
+});
+
 export const IntakeAnswersInputSchema = z.object({
   profileType: ProfileTypeSchema,
   targetGoal: TargetGoalSchema,
   targetRoles: z.array(z.string()).min(1, "Please specify at least one target role"),
-  topStrengths: z.array(z.string()).min(1).max(3, "Select up to 3 core strengths"),
+  topStrengths: z.array(z.string()).min(1, "Select at least 1 core strength"),
   tone: ToneOfVoiceSchema,
   preferredMood: PreferredMoodSchema.optional(),
   preferredColors: z.array(z.string()).optional(),
   links: IntakeLinksSchema,
   rawResumeText: z.string().optional(),
+  projects: z.array(IntakeProjectSchema).optional(),
   experience: z.array(IntakeExperienceSchema).optional(),
   education: z.array(IntakeEducationSchema).optional(),
   certifications: z.array(IntakeCertificationSchema).optional(),

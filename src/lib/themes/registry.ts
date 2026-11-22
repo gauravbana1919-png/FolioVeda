@@ -16,17 +16,20 @@ import { himanshuSinghTheme } from "./definitions/himanshu-singh";
 import { tanujaDesignTheme } from "./definitions/tanuja-design";
 
 export const SYSTEM_THEMES: Record<string, ThemePackage> = {
+  // Flagship 4 Wall of Portfolios Standards
   "rolan-gomes": craftDeskTheme,
   "craft-desk": craftDeskTheme,
   "sudarvel": wallShowcaseTheme,
   "wall-showcase": wallShowcaseTheme,
   "himanshu-singh": himanshuSinghTheme,
   "tanuja-design": tanujaDesignTheme,
-  "not-your-college": notYourCollegeTheme,
-  "luxe-creative": luxeCreativeTheme,
+
+  // Multiple Premium Archetypes
   "developer-terminal": developerTerminalTheme,
   "minimal-editorial": minimalEditorialTheme,
   "bold-poster": boldPosterTheme,
+  "not-your-college": notYourCollegeTheme,
+  "luxe-creative": luxeCreativeTheme,
   "corporate-clean": corporateCleanTheme,
   "creative-collage": creativeCollageTheme,
   "case-study-heavy": caseStudyHeavyTheme,
@@ -44,37 +47,43 @@ for (const [key, theme] of Object.entries(SYSTEM_THEMES)) {
 }
 
 export function getAllSystemThemes(): ThemePackage[] {
-  // Exactly the 4 Wall of Portfolios flagship standards requested by the user
+  // Flagship 4 Wall of Portfolios standards + core distinct styles
   return [
-    SYSTEM_THEMES["rolan-gomes"],
     SYSTEM_THEMES["sudarvel"],
+    SYSTEM_THEMES["rolan-gomes"],
     SYSTEM_THEMES["himanshu-singh"],
     SYSTEM_THEMES["tanuja-design"],
+    SYSTEM_THEMES["developer-terminal"],
+    SYSTEM_THEMES["minimal-editorial"],
+    SYSTEM_THEMES["bold-poster"],
+    SYSTEM_THEMES["not-your-college"],
+    SYSTEM_THEMES["luxe-creative"],
+    SYSTEM_THEMES["corporate-clean"],
   ];
 }
 
 export function getThemeById(id: string): ThemePackage {
-  if (id === "rolan-gomes" || id === "craft-desk") return SYSTEM_THEMES["rolan-gomes"];
-  if (id === "sudarvel" || id === "sudar" || id === "wall-showcase") return SYSTEM_THEMES["sudarvel"];
-  if (id === "himanshu-singh" || id === "himanshu") return SYSTEM_THEMES["himanshu-singh"];
-  if (id === "tanuja-design" || id === "tanuja") return SYSTEM_THEMES["tanuja-design"];
-  if (id === "not-your-college") return SYSTEM_THEMES["not-your-college"];
+  if (!id) return SYSTEM_THEMES["sudarvel"];
+  const cleanId = id.trim().toLowerCase();
 
-  // Legacy mappings directly routing to the 4 approved Wall of Portfolios standards
-  if (id === "developer-terminal" || id === "dark-showcase" || id === "template1") {
-    return SYSTEM_THEMES["sudarvel"];
-  }
-  if (id === "minimal-editorial" || id === "template2" || id === "corporate-clean") {
-    return SYSTEM_THEMES["rolan-gomes"];
-  }
-  if (id === "bold-poster" || id === "creative-collage") {
-    return SYSTEM_THEMES["himanshu-singh"];
-  }
-  if (id === "case-study-heavy" || id === "luxe-creative") {
-    return SYSTEM_THEMES["tanuja-design"];
+  // Direct matches
+  if (SYSTEM_THEMES[cleanId]) {
+    return SYSTEM_THEMES[cleanId];
   }
 
-  // Default to Sudarvel Wall-Grade Showcase
+  // Common aliases
+  if (cleanId === "sudar" || cleanId === "wall" || cleanId === "dark") return SYSTEM_THEMES["sudarvel"];
+  if (cleanId === "rolan" || cleanId === "architect" || cleanId === "desk") return SYSTEM_THEMES["rolan-gomes"];
+  if (cleanId === "himanshu" || cleanId === "forest" || cleanId === "studio") return SYSTEM_THEMES["himanshu-singh"];
+  if (cleanId === "tanuja" || cleanId === "microsoft" || cleanId === "product") return SYSTEM_THEMES["tanuja-design"];
+  if (cleanId === "terminal" || cleanId === "dev" || cleanId === "code" || cleanId === "template1") return SYSTEM_THEMES["developer-terminal"];
+  if (cleanId === "editorial" || cleanId === "minimal" || cleanId === "clean" || cleanId === "template2") return SYSTEM_THEMES["minimal-editorial"];
+  if (cleanId === "poster" || cleanId === "bold" || cleanId === "brutalist") return SYSTEM_THEMES["bold-poster"];
+  if (cleanId === "nyc" || cleanId === "student" || cleanId === "fresher" || cleanId === "college") return SYSTEM_THEMES["not-your-college"];
+  if (cleanId === "luxe" || cleanId === "luxury") return SYSTEM_THEMES["luxe-creative"];
+  if (cleanId === "corporate" || cleanId === "executive" || cleanId === "business" || cleanId === "template3") return SYSTEM_THEMES["corporate-clean"];
+
+  // Default fallback
   return SYSTEM_THEMES["sudarvel"];
 }
 

@@ -18,6 +18,7 @@ import {
   Home,
   ArrowRight
 } from "lucide-react";
+import { Terminal, BookOpen } from "lucide-react";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 
 interface ViewTab {
@@ -61,6 +62,62 @@ const TABS: ViewTab[] = [
     icon: Sparkles,
     badge: "Link 4 // Tanuja",
     description: "Tanuja Microsoft enterprise product case studies: AI workflow integration, FOX Icons, Figma plugin tooling, and high-clarity problem-solution architecture.",
+  },
+  {
+    id: "maya-chen",
+    name: "Maya Chen (UI/UX Designer)",
+    path: "/p/maya-chen?theme=tanuja-design",
+    icon: Palette,
+    badge: "Persona 1 // UI/UX",
+    description: "Senior Product & Interaction Designer: Enterprise AI Co-Pilot, Aura Design System tokens, user research telemetry, and WCAG AA compliance.",
+  },
+  {
+    id: "aris-thorne",
+    name: "Dr. Aris Thorne (AI/ML Engineer)",
+    path: "/p/aris-thorne?theme=developer-terminal",
+    icon: Terminal,
+    badge: "Persona 2 // AI/ML",
+    description: "AI Research & Inference Systems Engineer: HyperFlash CUDA speculative decoding (2.8x speedup), Triton kernels, vLLM engine, and NeurIPS research.",
+  },
+  {
+    id: "leo-vasquez",
+    name: "Leo Vasquez (Graphic Designer)",
+    path: "/p/leo-vasquez?theme=himanshu-singh",
+    icon: Layers,
+    badge: "Persona 3 // Brand Art",
+    description: "Brand Identity & Visual Art Director: Scottish Highland botanical distillery packaging, kinetic film festival posters, and custom typography specimens.",
+  },
+  {
+    id: "kevin-zhang",
+    name: "Kevin Zhang (Student / Fresher)",
+    path: "/p/kevin-zhang?theme=not-your-college",
+    icon: FileText,
+    badge: "Persona 4 // Student",
+    description: "UC Berkeley CS Senior & 2x Hackathon Winner: CalHacks 1st place tutoring scheduler, 3.91 GPA Dean's List, Databricks intern, and open-source CLI.",
+  },
+  {
+    id: "terminal-style",
+    name: "Developer Terminal Style",
+    path: "/p/gaurav?theme=developer-terminal",
+    icon: Terminal,
+    badge: "Style D // Terminal",
+    description: "Interactive macOS/Linux terminal with live shell commands, categorized tech stack, commit logs, and CLI recruitment endpoint.",
+  },
+  {
+    id: "editorial-style",
+    name: "Minimal & Elegant Style",
+    path: "/p/maya-chen?theme=minimal-editorial",
+    icon: BookOpen,
+    badge: "Style A // Editorial",
+    description: "Understated luxury, generous whitespace, Georgia/Playfair serif typography, and curated work showcases.",
+  },
+  {
+    id: "poster-style",
+    name: "Bold Creative Poster Style",
+    path: "/p/leo-vasquez?theme=bold-poster",
+    icon: Layers,
+    badge: "Style B // Bold Poster",
+    description: "Oversized Swiss brutalist typography, high-contrast dark grid, and bold visual impact with strong personality.",
   },
   {
     id: "resume",

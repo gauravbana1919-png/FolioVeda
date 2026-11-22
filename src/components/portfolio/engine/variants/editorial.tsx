@@ -184,6 +184,42 @@ export function EditorialExperience({ content }: VariantProps) {
   );
 }
 
+export function EditorialEducation({ content }: VariantProps) {
+  if (!content.education || content.education.length === 0) return null;
+
+  return (
+    <section id="education" className="max-w-4xl mx-auto px-6 py-12">
+      <div className="border-t border-[#E4E1D9] pt-12">
+        <h2 className="font-serif text-2xl font-normal text-[#18181B] mb-8">
+          Academic Foundations
+        </h2>
+
+        <div className="space-y-6">
+          {content.education.map((edu, idx) => (
+            <div key={idx} className="grid grid-cols-1 md:grid-cols-12 gap-4 pb-6 border-b border-[#E4E1D9]/50 last:border-b-0">
+              <div className="md:col-span-4 text-xs uppercase tracking-wider text-[#71717A] font-medium pt-1">
+                {edu.year}
+              </div>
+              <div className="md:col-span-8">
+                <h3 className="font-serif text-lg font-bold text-[#18181B]">
+                  {edu.degree}
+                </h3>
+                <p className="text-sm text-[#C2410C] font-serif italic mt-0.5">{edu.institution}</p>
+                {edu.honors && (
+                  <p className="text-xs text-[#71717A] mt-1">{edu.honors}</p>
+                )}
+                {edu.gpa && (
+                  <p className="text-xs font-mono text-[#71717A] mt-1">GPA: {edu.gpa}</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function EditorialContact({ content }: VariantProps) {
   return (
     <footer id="contact" className="max-w-4xl mx-auto px-6 py-20 border-t border-[#E4E1D9] text-center">

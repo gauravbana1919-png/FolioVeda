@@ -166,8 +166,23 @@ export async function POST(req: Request) {
         },
       });
 
-      // 4. If GitHub link provided, ensure starter projects exist in SQLite
-      if (validAnswers.links?.github) {
+      // 4. If structured projects provided, save them directly to SQLite
+      if (validAnswers.projects && validAnswers.projects.length > 0) {
+        await prisma.project.deleteMany({ where: { userId: user.id } });
+        await prisma.project.createMany({
+          data: validAnswers.projects.map((p, idx) => ({
+            userId: user.id,
+            repoName: p.title.toLowerCase().replace(/[^a-z0-9]/g, "-").slice(0, 40) || `project-${idx + 1}`,
+            title: p.title,
+            description: p.description,
+            techStack: Array.isArray(p.techStack) ? p.techStack.join(", ") : (p.techStack || ""),
+            githubUrl: p.githubUrl || validAnswers.links?.github || "https://github.com",
+            liveUrl: p.liveUrl || null,
+            isPinned: p.featured ?? idx < 2,
+          })),
+        });
+      } else if (validAnswers.links?.github) {
+        // Fallback: If GitHub link provided and no projects exist, ensure starter projects exist in SQLite
         const existingCount = await prisma.project.count({ where: { userId: user.id } });
         if (existingCount === 0) {
           const rawGh = validAnswers.links.github;

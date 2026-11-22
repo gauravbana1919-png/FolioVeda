@@ -16,18 +16,30 @@ import {
   ExternalLink,
   Layers,
   FileText,
+  Monitor,
+  Laptop,
+  Tablet,
+  Smartphone,
+  Edit3,
+  X,
+  Plus,
+  Trash2,
+  Copy,
+  Globe,
+  Share2
 } from "lucide-react";
 import { ChatEditor } from "@/components/ui/ChatEditor";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import { getThemeById, getAllSystemThemes, mapUserToPortfolioContent } from "@/lib/themes/registry";
 import { ThemeRenderer } from "@/components/portfolio/engine/ThemeRenderer";
+import { PERSONA_PROFILES } from "@/lib/personas";
 
 const ACCENT_COLORS = [
   { id: "emerald", label: "Cyber Mint", bg: "bg-emerald-500", ring: "ring-emerald-500" },
-  { id: "blue", label: "Blue", bg: "bg-blue-500", ring: "ring-blue-500" },
-  { id: "purple", label: "Purple", bg: "bg-purple-500", ring: "ring-purple-500" },
-  { id: "amber", label: "Amber", bg: "bg-amber-500", ring: "ring-amber-500" },
-  { id: "rose", label: "Rose", bg: "bg-rose-500", ring: "ring-rose-500" },
+  { id: "blue", label: "Cobalt Blue", bg: "bg-blue-500", ring: "ring-blue-500" },
+  { id: "purple", label: "Electric Purple", bg: "bg-purple-500", ring: "ring-purple-500" },
+  { id: "amber", label: "Sunset Amber", bg: "bg-amber-500", ring: "ring-amber-500" },
+  { id: "rose", label: "Rose Quartz", bg: "bg-rose-500", ring: "ring-rose-500" },
 ];
 
 export default function PortfolioStudio() {
@@ -36,17 +48,23 @@ export default function PortfolioStudio() {
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "unsaved">("saved");
   const [aiNotice, setAiNotice] = useState<string | null>(null);
 
-  const [activeThemeId, setActiveThemeId] = useState<string>("wall-showcase");
+  const [activeThemeId, setActiveThemeId] = useState<string>("sudarvel");
   const [accentColor, setAccentColor] = useState<string>("emerald");
+  const [viewportMode, setViewportMode] = useState<"desktop" | "laptop" | "tablet" | "mobile">("desktop");
+  const [activePersonaId, setActivePersonaId] = useState<string>("fullstack-developer");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
 
-  const [userData, setUserData] = useState({
+  // User state
+  const [userData, setUserData] = useState<any>({
     name: "Gaurav Shekhawat",
     profile: {
-      headline: "Full-Stack Engineer & Systems Builder • AI & Next.js Specialist",
+      headline: "Senior Full-Stack Engineer • Systems Builder • AI & Next.js Specialist",
       bio: "I build high-throughput distributed systems, then direct AI to turn complex workflows into working products. Focused on sub-100ms APIs, resilient event pipelines, and outcome-driven design.",
       skills: "Next.js 15, TypeScript, React, Node.js, PostgreSQL, Docker, Prisma, Redis, Tailwind CSS, Gemini AI",
-      location: "Bengaluru, India",
-      availability: "Open to Staff / Senior Roles in Bengaluru / Remote",
+      location: "Bengaluru, India / Remote",
+      availability: "Open to Staff / Senior Roles",
       experience: JSON.stringify([
         {
           role: "Senior Full-Stack Engineer",
@@ -67,8 +85,16 @@ export default function PortfolioStudio() {
           highlights: [
             "Engineered core responsive customer onboarding workflows with React and Tailwind CSS, increasing lead conversion rate by 24%.",
             "Developed resilient background queue processors for payment reconciliation using Node.js and PostgreSQL.",
-            "Integrated automated GitHub Actions CI/CD workflows, reducing release deployment cycle times from 45m to 8m."
           ]
+        }
+      ]),
+      education: JSON.stringify([
+        {
+          degree: "B.Tech in Computer Science & Engineering",
+          institution: "Visvesvaraya Technological University",
+          year: "2021",
+          gpa: "8.8 / 10.0",
+          honors: "First Class with Distinction",
         }
       ]),
       certifications: JSON.stringify([
@@ -82,12 +108,6 @@ export default function PortfolioStudio() {
           name: "Enterprise Design Thinking Practitioner",
           issuer: "IBM",
           year: "2024",
-          status: "Completed"
-        },
-        {
-          name: "AI for Product Designers & Engineers",
-          issuer: "Interaction Design Foundation",
-          year: "2025",
           status: "Completed"
         }
       ]),
@@ -113,7 +133,7 @@ export default function PortfolioStudio() {
       {
         title: "AI Synthesis Canvas & Workflow Engine",
         description: "Interactive real-time collaboration canvas with LLM-powered diagram generation, AST streaming, and instant markdown previewing.",
-        techStack: ["Next.js", "TypeScript", "Tailwind", "WebSockets", "Gemini AI"],
+        techStack: ["Next.js", "TypeScript", "Tailwind CSS", "WebSockets", "Gemini AI"],
         liveUrl: "https://github.com/gauravbana1919-png",
         githubUrl: "https://github.com/gauravbana1919-png",
         featured: true,
@@ -123,12 +143,12 @@ export default function PortfolioStudio() {
         solution: "Built a collaborative canvas that streams LLM structured JSON into real-time interactive diagrams with sub-100ms render speeds."
       },
       {
-        title: "FolioVeda — Autonomous Portfolio & ATS Engineering Suite",
+        title: "FolioVeda — Autonomous Portfolio Compiler",
         description: "Autonomous career architecture compiler with zero-hallucination intake, dynamic Wall of Portfolios archetypes, and live ATS keyword auditing.",
         techStack: ["Next.js", "Prisma", "SQLite", "Framer Motion", "Tailwind CSS"],
         liveUrl: "https://folioveda.dev",
         githubUrl: "https://github.com/gauravbana1919-png",
-        featured: true,
+        featured: false,
         category: "Full-Stack SaaS Platform",
         impact: "Wall of Portfolios Standard • Sub-50ms TTFB",
         problem: "Developers and designers had fragmented, unattractive portfolios that failed ATS parsers and lacked outcome-driven case studies.",
@@ -139,24 +159,28 @@ export default function PortfolioStudio() {
 
   useEffect(() => {
     setMounted(true);
-    // Fetch initial profile from server / localStorage
+    // Fetch initial profile from server
     async function loadPortfolio() {
       try {
         const res = await fetch('/api/portfolio');
         if (res.ok) {
           const data = await res.json();
-          if (data.user) {
-            setUserData(prev => ({
+          if (data.user && !data.isMock) {
+            setUserData((prev: any) => ({
               ...prev,
               name: data.user.name || prev.name,
               profile: {
+                ...prev.profile,
+                headline: data.user.profile?.headline || prev.profile.headline,
                 bio: data.user.profile?.bio || prev.profile.bio,
                 skills: data.user.profile?.skills || prev.profile.skills,
+                location: data.user.profile?.location || prev.profile.location,
+                availability: data.user.profile?.availability || prev.profile.availability,
               },
               projects: data.user.projects?.length > 0 ? data.user.projects : prev.projects,
             }));
             const loadedTheme = data.user.portfolio?.themePackageId || data.user.portfolio?.themeId || data.user.portfolio?.templateId;
-            if (loadedTheme && loadedTheme !== "template1" && loadedTheme !== "template2" && loadedTheme !== "developer-terminal" && loadedTheme !== "minimal-editorial") {
+            if (loadedTheme) {
               setActiveThemeId(loadedTheme);
             }
             if (data.user.portfolio?.designPrefs) {
@@ -174,6 +198,40 @@ export default function PortfolioStudio() {
     loadPortfolio();
   }, []);
 
+  // Switch persona preset
+  const handleSelectPersona = (personaKey: string) => {
+    const p = PERSONA_PROFILES[personaKey];
+    if (!p) return;
+
+    setActivePersonaId(personaKey);
+    setUserData({
+      name: p.content.name,
+      profile: {
+        headline: p.content.headline,
+        bio: p.content.bio,
+        skills: p.content.skills.join(", "),
+        location: p.content.location || "San Francisco, CA / Remote",
+        availability: p.content.availability || "Open to Opportunities",
+        experience: JSON.stringify(p.content.experience || []),
+        education: JSON.stringify(p.content.education || []),
+        certifications: JSON.stringify(p.content.certifications || []),
+        socials: JSON.stringify(p.content.contact || {}),
+      },
+      projects: p.content.projects || [],
+    });
+
+    setActiveThemeId(p.recommendedThemeId);
+    setAiNotice(`Loaded ${p.name} (${p.title}) • Theme set to ${getThemeById(p.recommendedThemeId).name}`);
+    setTimeout(() => setAiNotice(null), 3500);
+
+    handleSave({
+      name: p.content.name,
+      bio: p.content.bio,
+      skills: p.content.skills.join(", "),
+      themeId: p.recommendedThemeId,
+    });
+  };
+
   // Save changes to backend
   const handleSave = async (overrides?: any) => {
     setSaveStatus("saving");
@@ -182,6 +240,7 @@ export default function PortfolioStudio() {
       bio: overrides?.bio || userData.profile.bio,
       skills: overrides?.skills || userData.profile.skills,
       templateId: overrides?.themeId || activeThemeId,
+      themeId: overrides?.themeId || activeThemeId,
       theme: overrides?.theme || theme,
       accentColor: overrides?.accentColor || accentColor,
     };
@@ -205,10 +264,11 @@ export default function PortfolioStudio() {
 
   // Handle AI updates from the floating ChatEditor
   const handleAiUpdate = (updates: any) => {
-    setUserData(prev => ({
+    setUserData((prev: any) => ({
       ...prev,
       name: updates.name || prev.name,
       profile: {
+        ...prev.profile,
         bio: updates.bio || prev.profile.bio,
         skills: updates.skills || prev.profile.skills,
       },
@@ -226,28 +286,36 @@ export default function PortfolioStudio() {
       setTheme(updates.theme);
     }
 
-    setAiNotice("AI applied your instructions!");
+    setAiNotice("AI applied your adjustments!");
     setTimeout(() => setAiNotice(null), 3500);
 
-    // Auto-save changes
     handleSave(updates);
   };
 
   const selectedThemePackage = getThemeById(activeThemeId);
   const normalizedContent = mapUserToPortfolioContent(userData);
+  const publicUrl = `/p/${encodeURIComponent(userData.name || "alex")}`;
+
+  const handleCopyShareLink = () => {
+    const fullUrl = `${window.location.origin}${publicUrl}`;
+    navigator.clipboard.writeText(fullUrl);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2500);
+  };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {/* Studio Top Control Bar */}
+    <div className="min-h-screen bg-background text-foreground flex flex-col antialiased selection:bg-emerald-500/20">
+      
+      {/* ─── PRIMARY STUDIO HEADER ──────────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/95 backdrop-blur-md px-4 py-2.5">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
           
-          {/* Left: Navigation & Branding */}
+          {/* Left: Hub Navigation & Logo */}
           <div className="flex items-center gap-3">
             <Link 
-              href="/"
-              className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
-              title="Return to Master Studio Hub"
+              href="/hub"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
+              title="Return to Master Central Hub"
             >
               <ArrowLeft size={14} /> Hub
             </Link>
@@ -255,19 +323,9 @@ export default function PortfolioStudio() {
             <FolioVedaLogo size="xs" showBadge={false} />
           </div>
 
-          {/* Center: Stage 2 Distinct Style Switcher */}
+          {/* Center: Flagship 4 Archetypes + Full Dropdown */}
           <div className="flex items-center gap-2">
-            <div className="flex items-center bg-muted/80 p-1 rounded-xl border border-border text-xs font-medium overflow-x-auto">
-              <button
-                onClick={() => { setActiveThemeId("rolan-gomes"); handleSave({ themeId: "rolan-gomes" }); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all shrink-0 ${
-                  activeThemeId === "rolan-gomes" || activeThemeId === "craft-desk"
-                    ? "bg-[#095848] text-[#FAF7F0] shadow-sm font-bold" 
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <FileText size={13} /> Rolan Gomes Desk
-              </button>
+            <div className="flex items-center bg-muted/80 p-1 rounded-xl border border-border text-xs font-medium overflow-x-auto max-w-[540px]">
               <button
                 onClick={() => { setActiveThemeId("sudarvel"); handleSave({ themeId: "sudarvel" }); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all shrink-0 ${
@@ -275,8 +333,20 @@ export default function PortfolioStudio() {
                     ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 shadow-sm font-bold" 
                     : "text-muted-foreground hover:text-foreground"
                 }`}
+                title="Sudarvel K: Obsidian Canvas & Outcome Telemetry"
               >
                 <Sparkles size={13} className="text-slate-950" /> Sudarvel Dark
+              </button>
+              <button
+                onClick={() => { setActiveThemeId("rolan-gomes"); handleSave({ themeId: "rolan-gomes" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+                  activeThemeId === "rolan-gomes" || activeThemeId === "craft-desk"
+                    ? "bg-[#095848] text-[#FAF7F0] shadow-sm font-bold" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                title="Rolan Gomes: Architect Cutting Mat & Paper Document"
+              >
+                <FileText size={13} /> Rolan Desk Mat
               </button>
               <button
                 onClick={() => { setActiveThemeId("himanshu-singh"); handleSave({ themeId: "himanshu-singh" }); }}
@@ -285,6 +355,7 @@ export default function PortfolioStudio() {
                     ? "bg-[#06392b] text-[#c6d457] border border-[#c6d457]/40 shadow-sm font-bold" 
                     : "text-muted-foreground hover:text-foreground"
                 }`}
+                title="Himanshu Singh: Deep Forest Visual Storytelling"
               >
                 Himanshu Studio
               </button>
@@ -295,13 +366,14 @@ export default function PortfolioStudio() {
                     ? "bg-blue-600 text-white shadow-sm font-bold" 
                     : "text-muted-foreground hover:text-foreground"
                 }`}
+                title="Tanuja: Enterprise Product Design & AI Workflows"
               >
                 Tanuja Microsoft
               </button>
             </div>
 
-            {/* Dropdown for all 10 themes */}
-            <div className="hidden lg:flex items-center">
+            {/* Dropdown for All 10 Distinct Styles */}
+            <div className="flex items-center">
               <select
                 value={activeThemeId}
                 onChange={(e) => {
@@ -314,22 +386,33 @@ export default function PortfolioStudio() {
               >
                 {getAllSystemThemes().map((t) => (
                   <option key={t.id} value={t.id}>
-                    {t.name}
+                    {t.name} ({t.category})
                   </option>
                 ))}
               </select>
             </div>
           </div>
 
-          {/* Right: Accents, Theme, & Cloud Save */}
-          <div className="flex items-center gap-2.5">
+          {/* Right: Actions, Responsive, Save, Publish */}
+          <div className="flex items-center gap-2">
+            
+            {/* Edit Content Button */}
+            <button
+              onClick={() => setIsEditModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-foreground text-xs font-semibold transition-colors border border-border"
+              title="Edit Profile & Project Information"
+            >
+              <Edit3 size={13} />
+              <span className="hidden sm:inline">Edit Content</span>
+            </button>
+
             {/* Color Swatches */}
-            <div className="hidden md:flex items-center gap-1 px-2 py-1 bg-muted/60 rounded-lg border border-border/50">
+            <div className="hidden lg:flex items-center gap-1 px-2 py-1 bg-muted/60 rounded-lg border border-border/50">
               {ACCENT_COLORS.map(c => (
                 <button
                   key={c.id}
                   onClick={() => { setAccentColor(c.id); handleSave({ accentColor: c.id }); }}
-                  className={`w-4 h-4 rounded-full ${c.bg} transition-transform ${
+                  className={`w-3.5 h-3.5 rounded-full ${c.bg} transition-transform ${
                     accentColor === c.id ? `scale-125 ring-2 ring-offset-1 ring-foreground` : "hover:scale-110 opacity-70 hover:opacity-100"
                   }`}
                   title={`${c.label} accent`}
@@ -357,7 +440,7 @@ export default function PortfolioStudio() {
             <button
               onClick={() => handleSave()}
               disabled={saveStatus === "saving"}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-600 text-white text-xs font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-colors disabled:opacity-50"
             >
               {saveStatus === "saving" ? (
                 <>
@@ -377,43 +460,147 @@ export default function PortfolioStudio() {
               )}
             </button>
 
-            {/* Public Share Link */}
-            <Link
-              href={`/p/${encodeURIComponent(userData.name || "alex")}`}
-              target="_blank"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-secondary hover:bg-secondary/80 text-foreground text-xs font-medium transition-colors border border-border"
-              title="Open public portfolio"
+            {/* Publish Live Button */}
+            <button
+              onClick={() => {
+                handleSave();
+                setIsShareModalOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 text-xs font-extrabold shadow-sm transition-all"
             >
-              <ExternalLink size={13} />
-              <span className="hidden sm:inline">Public Page</span>
-            </Link>
+              <Share2 size={13} />
+              <span>Publish Live</span>
+            </button>
           </div>
 
         </div>
       </header>
 
+      {/* ─── SECONDARY CONTROLS BAR: PERSONA SWITCHER & RESPONSIVE VIEWPORT ──── */}
+      <div className="w-full border-b border-border/60 bg-muted/30 px-4 py-2">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
+          
+          {/* Persona Switcher */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+              Test Persona:
+            </span>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {[
+                { key: "ui-ux-designer", label: "🎨 UI/UX Designer", name: "Maya Chen" },
+                { key: "fullstack-developer", label: "⚡ Full-Stack Dev", name: "Gaurav Shekhawat" },
+                { key: "aiml-engineer", label: "🧠 AI/ML Engineer", name: "Dr. Aris Thorne" },
+                { key: "graphic-designer", label: "📐 Graphic Designer", name: "Leo Vasquez" },
+                { key: "student-fresher", label: "🎓 Student / Fresher", name: "Kevin Zhang" },
+              ].map((p) => {
+                const isSelected = activePersonaId === p.key;
+                return (
+                  <button
+                    key={p.key}
+                    onClick={() => handleSelectPersona(p.key)}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
+                      isSelected
+                        ? "bg-emerald-600 text-white shadow-xs font-bold"
+                        : "bg-background/80 hover:bg-background text-foreground/80 border border-border/80"
+                    }`}
+                  >
+                    <span>{p.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Responsive Viewport Switcher */}
+          <div className="flex items-center gap-1 bg-background/80 border border-border/80 p-0.5 rounded-lg">
+            <button
+              onClick={() => setViewportMode("desktop")}
+              className={`p-1.5 rounded-md transition-all ${
+                viewportMode === "desktop" ? "bg-muted text-foreground font-bold shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              }`}
+              title="Desktop (100% full width)"
+            >
+              <Monitor size={14} />
+            </button>
+            <button
+              onClick={() => setViewportMode("laptop")}
+              className={`p-1.5 rounded-md transition-all ${
+                viewportMode === "laptop" ? "bg-muted text-foreground font-bold shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              }`}
+              title="Laptop (1024px container)"
+            >
+              <Laptop size={14} />
+            </button>
+            <button
+              onClick={() => setViewportMode("tablet")}
+              className={`p-1.5 rounded-md transition-all ${
+                viewportMode === "tablet" ? "bg-muted text-foreground font-bold shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              }`}
+              title="Tablet (768px container)"
+            >
+              <Tablet size={14} />
+            </button>
+            <button
+              onClick={() => setViewportMode("mobile")}
+              className={`p-1.5 rounded-md transition-all ${
+                viewportMode === "mobile" ? "bg-muted text-foreground font-bold shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              }`}
+              title="Mobile Device (390px phone container)"
+            >
+              <Smartphone size={14} />
+            </button>
+          </div>
+
+        </div>
+      </div>
+
       {/* Floating AI Toast */}
       {aiNotice && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-foreground text-background px-4 py-2 rounded-full text-xs font-medium shadow-xl flex items-center gap-2 animate-bounce">
-          <Sparkles size={14} className="text-yellow-400" />
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white border border-emerald-500/50 px-4 py-2 rounded-full text-xs font-medium shadow-2xl flex items-center gap-2 animate-bounce">
+          <Sparkles size={14} className="text-emerald-400" />
           <span>{aiNotice}</span>
         </div>
       )}
 
-      {/* Main Dynamic Style Engine Canvas */}
-      <main className="flex-1">
-        <ThemeRenderer
-          theme={selectedThemePackage}
-          content={normalizedContent}
-          isDemo={false}
-          hideBadge={true}
-        />
+      {/* ─── MAIN DYNAMIC PREVIEW CANVAS WITH VIEWPORT FRAMING ─────────────────── */}
+      <main className="flex-1 bg-muted/20 py-4 px-2 sm:px-4">
+        <div 
+          className={`mx-auto transition-all duration-300 ${
+            viewportMode === "desktop"
+              ? "w-full"
+              : viewportMode === "laptop"
+              ? "max-w-[1024px] rounded-2xl border-4 border-slate-700/40 shadow-2xl overflow-hidden bg-background"
+              : viewportMode === "tablet"
+              ? "max-w-[768px] rounded-3xl border-8 border-slate-800 shadow-2xl overflow-hidden bg-background"
+              : "max-w-[390px] rounded-[44px] border-[10px] border-slate-900 shadow-2xl overflow-hidden bg-background"
+          }`}
+        >
+          {viewportMode !== "desktop" && (
+            <div className="bg-slate-900 text-slate-400 text-[10px] font-mono px-4 py-1.5 flex items-center justify-between border-b border-slate-800">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+                {viewportMode.toUpperCase()} VIEWPORT
+              </span>
+              <span>
+                {viewportMode === "laptop" ? "1024px" : viewportMode === "tablet" ? "768px" : "390px × 844px"}
+              </span>
+            </div>
+          )}
+
+          <ThemeRenderer
+            theme={selectedThemePackage}
+            content={normalizedContent}
+            isDemo={false}
+            hideBadge={true}
+          />
+        </div>
       </main>
 
       {/* Platform Branding Badge */}
       <div className="fixed bottom-4 left-4 z-30">
-        <span className="px-3 py-1.5 bg-background/90 backdrop-blur-md border border-border text-foreground text-[11px] font-medium rounded-md shadow-md">
-          ⚡ FolioVeda Style Engine • {selectedThemePackage.name}
+        <span className="px-3 py-1.5 bg-background/90 backdrop-blur-md border border-border text-foreground text-[11px] font-medium rounded-md shadow-md flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-emerald-500" />
+          FolioVeda Engine • <strong>{selectedThemePackage.name}</strong>
         </span>
       </div>
 
@@ -423,6 +610,176 @@ export default function PortfolioStudio() {
         currentProfile={userData}
         templateId={activeThemeId}
       />
+
+      {/* ─── LIVE CONTENT EDIT MODAL ──────────────────────────────────────────── */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-background border border-border rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 space-y-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-border pb-4">
+              <div>
+                <h3 className="text-lg font-extrabold text-foreground">Edit Portfolio Information</h3>
+                <p className="text-xs text-muted-foreground">Changes update your live portfolio preview immediately.</p>
+              </div>
+              <button
+                onClick={() => setIsEditModalOpen(false)}
+                className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs font-semibold">
+              {/* Name */}
+              <div className="space-y-1.5">
+                <label className="text-muted-foreground uppercase tracking-wider text-[11px]">Display Name</label>
+                <input
+                  type="text"
+                  value={userData.name}
+                  onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-muted/50 border border-border text-foreground font-bold focus:outline-hidden focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+
+              {/* Headline */}
+              <div className="space-y-1.5">
+                <label className="text-muted-foreground uppercase tracking-wider text-[11px]">Professional Headline</label>
+                <input
+                  type="text"
+                  value={userData.profile.headline}
+                  onChange={(e) => setUserData({
+                    ...userData,
+                    profile: { ...userData.profile, headline: e.target.value }
+                  })}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-muted/50 border border-border text-foreground font-medium focus:outline-hidden focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+
+              {/* Bio */}
+              <div className="space-y-1.5">
+                <label className="text-muted-foreground uppercase tracking-wider text-[11px]">Personal Bio & Summary</label>
+                <textarea
+                  rows={4}
+                  value={userData.profile.bio}
+                  onChange={(e) => setUserData({
+                    ...userData,
+                    profile: { ...userData.profile, bio: e.target.value }
+                  })}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-muted/50 border border-border text-foreground font-normal leading-relaxed focus:outline-hidden focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+
+              {/* Skills */}
+              <div className="space-y-1.5">
+                <label className="text-muted-foreground uppercase tracking-wider text-[11px]">Technical & Design Skills (comma-separated)</label>
+                <input
+                  type="text"
+                  value={userData.profile.skills}
+                  onChange={(e) => setUserData({
+                    ...userData,
+                    profile: { ...userData.profile, skills: e.target.value }
+                  })}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-muted/50 border border-border text-foreground font-mono focus:outline-hidden focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+
+              {/* Location & Availability */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <label className="text-muted-foreground uppercase tracking-wider text-[11px]">Location</label>
+                  <input
+                    type="text"
+                    value={userData.profile.location || ""}
+                    onChange={(e) => setUserData({
+                      ...userData,
+                      profile: { ...userData.profile, location: e.target.value }
+                    })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-muted/50 border border-border text-foreground focus:outline-hidden focus:ring-1 focus:ring-emerald-500"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-muted-foreground uppercase tracking-wider text-[11px]">Availability Status</label>
+                  <input
+                    type="text"
+                    value={userData.profile.availability || ""}
+                    onChange={(e) => setUserData({
+                      ...userData,
+                      profile: { ...userData.profile, availability: e.target.value }
+                    })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-muted/50 border border-border text-foreground focus:outline-hidden focus:ring-1 focus:ring-emerald-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
+              <button
+                onClick={() => setIsEditModalOpen(false)}
+                className="px-4 py-2 rounded-xl bg-muted hover:bg-muted/80 text-foreground font-bold text-xs"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  handleSave();
+                  setIsEditModalOpen(false);
+                }}
+                className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md"
+              >
+                Apply &amp; Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── LIVE PUBLISH / SHARE MODAL ───────────────────────────────────────── */}
+      {isShareModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-background border border-border rounded-3xl max-w-md w-full p-6 space-y-6 shadow-2xl text-center">
+            <div className="w-14 h-14 rounded-full bg-emerald-500/10 border-2 border-emerald-500 text-emerald-500 flex items-center justify-center mx-auto">
+              <Sparkles size={28} />
+            </div>
+
+            <div>
+              <h3 className="text-xl font-extrabold text-foreground">Your Verified Portfolio is Live!</h3>
+              <p className="text-xs text-muted-foreground mt-1">
+                Published with style engine: <strong className="text-foreground">{selectedThemePackage.name}</strong>
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-muted border border-border flex items-center justify-between text-xs font-mono">
+              <span className="truncate text-foreground font-bold mr-2">
+                {typeof window !== "undefined" ? window.location.origin : ""}{publicUrl}
+              </span>
+              <button
+                onClick={handleCopyShareLink}
+                className="px-3 py-1.5 rounded-xl bg-primary text-primary-foreground font-bold shrink-0 flex items-center gap-1 transition-all"
+              >
+                {copiedLink ? <Check size={12} /> : <Copy size={12} />}
+                <span>{copiedLink ? "Copied" : "Copy"}</span>
+              </button>
+            </div>
+
+            <div className="flex items-center justify-center gap-3 pt-2">
+              <Link
+                href={publicUrl}
+                target="_blank"
+                className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5"
+              >
+                <span>Visit Live Portfolio</span>
+                <ExternalLink size={13} />
+              </Link>
+              <button
+                onClick={() => setIsShareModalOpen(false)}
+                className="px-4 py-2.5 rounded-xl bg-muted hover:bg-muted/80 text-foreground text-xs font-bold"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

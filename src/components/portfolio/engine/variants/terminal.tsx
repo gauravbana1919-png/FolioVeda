@@ -512,6 +512,49 @@ export function TerminalExperience({ content }: VariantProps) {
   );
 }
 
+// ─── Education & Credentials ────────────────────────────────────────────────
+
+export function TerminalEducation({ content }: VariantProps) {
+  if (!content.education || content.education.length === 0) return null;
+
+  return (
+    <section id="education" className="max-w-5xl mx-auto px-4 py-8 font-mono">
+      <SectionHeader command="cat ~/.academic_records.json" />
+
+      <div className="rounded-xl border border-[#30363D] bg-[#161B22] p-5 sm:p-6 space-y-4">
+        {content.education.map((edu, idx) => (
+          <div
+            key={idx}
+            className="pb-4 border-b border-[#30363D] last:border-b-0 last:pb-0 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2"
+          >
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#D2A8FF] font-semibold text-sm">
+                  {edu.degree}
+                </span>
+                {edu.gpa && (
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#2EA043]/10 text-[#7CE38B] border border-[#2EA043]/30">
+                    GPA: {edu.gpa}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-[#79C0FF] mt-1">{edu.institution}</p>
+              {edu.honors && (
+                <p className="text-xs text-[#8B949E] mt-1">
+                  Honors: <span className="text-[#E6EDF3]">{edu.honors}</span>
+                </p>
+              )}
+            </div>
+            <span className="text-xs text-[#8B949E] font-mono shrink-0">
+              {edu.year}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ─── Contact ────────────────────────────────────────────────────────────────
 
 export function TerminalContact({ content }: VariantProps) {

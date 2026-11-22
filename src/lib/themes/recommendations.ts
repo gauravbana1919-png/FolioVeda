@@ -28,37 +28,72 @@ export function getThemeRecommendations(
     let reason = "Well-balanced portfolio suitable for broad professional visibility.";
 
     // Specific Top Theme Boosts
-    if (profileType === "tech") {
-      if (theme.id === "sudarvel" || theme.id === "wall-showcase") {
-        score += 45;
-        reason = "Tactical dark case studies with clinical latency benchmarks and high-throughput telemetry inspired by Sudarvel K.";
-      } else if (theme.id === "rolan-gomes" || theme.id === "craft-desk") {
-        score += 35;
-        reason = "Architect cutting mat with floating physical paper and verified credentials shelf inspired by Rolan Gomes.";
-      } else if (theme.category === "tech") {
-        score += 30;
+    const pType = (profileType || "").toLowerCase();
+    const skillsStr = (params.skills || []).join(" ").toLowerCase();
+
+    if (pType === "tech" || pType.includes("dev") || pType.includes("software")) {
+      if (skillsStr.includes("pytorch") || skillsStr.includes("cuda") || skillsStr.includes("ai") || skillsStr.includes("llm")) {
+        // AI / ML Engineer
+        if (theme.id === "developer-terminal") {
+          score += 50;
+          reason = "Interactive terminal with CUDA/PyTorch telemetry and model deployment logs.";
+        } else if (theme.id === "sudarvel") {
+          score += 45;
+          reason = "Obsidian dark canvas with sub-12ms inference telemetry and research metrics.";
+        }
+      } else {
+        // Full-Stack / Systems Developer
+        if (theme.id === "sudarvel" || theme.id === "wall-showcase") {
+          score += 48;
+          reason = "Tactical dark case studies with clinical latency benchmarks and high-throughput telemetry inspired by Sudarvel K.";
+        } else if (theme.id === "developer-terminal") {
+          score += 44;
+          reason = "Interactive developer terminal with live commands, categorized stack, and GitHub pipeline metrics.";
+        } else if (theme.id === "rolan-gomes") {
+          score += 35;
+          reason = "Architect cutting mat with physical paper sheet and accredited credentials shelf.";
+        }
       }
-    } else if (profileType === "designer") {
+    } else if (pType === "designer" || pType.includes("ux") || pType.includes("product")) {
       if (theme.id === "tanuja-design") {
-        score += 45;
-        reason = "High-clarity enterprise product canvas, AI workflows, and structured case studies inspired by Tanuja (Microsoft).";
+        score += 48;
+        reason = "High-clarity enterprise product canvas, AI workflows, and structured problem-solution drawers inspired by Tanuja (Microsoft).";
       } else if (theme.id === "rolan-gomes" || theme.id === "craft-desk") {
-        score += 42;
+        score += 45;
         reason = "Award-winning physical cutting mat with sticky notes and design system tokens inspired by Rolan Gomes.";
-      } else if (theme.category === "design") {
-        score += 30;
+      } else if (theme.id === "minimal-editorial") {
+        score += 38;
+        reason = "Quiet luxury editorial layout with refined typography and generous whitespace.";
       }
-    } else if (profileType === "creative" || profileType === "other") {
+    } else if (pType === "creative" || pType === "other" || pType.includes("graphic") || pType.includes("brand") || pType.includes("art")) {
       if (theme.id === "himanshu-singh") {
-        score += 45;
-        reason = "Deep forest studio board, storyboard arcs, and visual storytelling cards inspired by Himanshu Singh Chauhan.";
-      } else if (theme.category === "creative") {
-        score += 35;
+        score += 48;
+        reason = "Deep forest studio board, storyboard arcs, and visual storytelling cards inspired by Himanshu Singh.";
+      } else if (theme.id === "bold-poster") {
+        score += 44;
+        reason = "Oversized Swiss typography and brutalist high-contrast grid for maximum creative visual impact.";
+      } else if (theme.id === "luxe-creative") {
+        score += 40;
+        reason = "High-fashion luxury studio layout with asymmetrical grids and motion styling.";
       }
-    } else if (profileType === "bba") {
-      if (theme.id === "tanuja-design") {
-        score += 45;
-        reason = "Structured executive enterprise dossier with clean problem-solution metrics.";
+    } else if (pType === "student" || pType === "fresher" || params.targetGoal === "internship" || params.targetGoal === "studies") {
+      if (theme.id === "not-your-college") {
+        score += 50;
+        reason = "High-energy ambitious breakout portfolio highlighting verified education, honors, hackathons, and projects.";
+      } else if (theme.id === "developer-terminal") {
+        score += 42;
+        reason = "Demonstrates hands-on engineering rigor and command-line craftsmanship to technical recruiters.";
+      } else if (theme.id === "minimal-editorial") {
+        score += 38;
+        reason = "Clean academic prestige with elegant typography and distinguished honors showcase.";
+      }
+    } else if (pType === "bba" || pType.includes("business") || pType.includes("pm")) {
+      if (theme.id === "corporate-clean") {
+        score += 48;
+        reason = "Structured executive enterprise dossier with clean problem-solution metrics and institutional clarity.";
+      } else if (theme.id === "tanuja-design") {
+        score += 42;
+        reason = "Executive product metrics with structured user journeys and business outcomes.";
       }
     }
 

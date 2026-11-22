@@ -13,6 +13,7 @@ import {
   TerminalProjects,
   TerminalSkills,
   TerminalExperience,
+  TerminalEducation,
   TerminalContact,
 } from "./variants/terminal";
 import {
@@ -21,6 +22,7 @@ import {
   EditorialProjects,
   EditorialSkills,
   EditorialExperience,
+  EditorialEducation,
   EditorialContact,
 } from "./variants/editorial";
 import {
@@ -102,6 +104,7 @@ import {
   TanujaHero,
   TanujaProjects,
   TanujaExperience,
+  TanujaEducation,
   TanujaContact,
 } from "./variants/tanujaProduct";
 
@@ -232,6 +235,9 @@ export function ThemeRenderer({
         if (pattern === "craft-desk") return <CraftDeskCredentials key={index} content={content} theme={theme} />;
         if (pattern === "wall-showcase") return <WallCredentials key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCEducation key={index} content={content} theme={theme} />;
+        if (pattern === "terminal-grid") return <TerminalEducation key={index} content={content} theme={theme} />;
+        if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialEducation key={index} content={content} theme={theme} />;
+        if (pattern === "tanuja-product") return <TanujaEducation key={index} content={content} theme={theme} />;
         return <LuxeEducation key={index} content={content} theme={theme} />;
 
       case "contact":
