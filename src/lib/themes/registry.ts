@@ -12,10 +12,16 @@ import { luxeCreativeTheme } from "./definitions/luxe-creative";
 import { notYourCollegeTheme } from "./definitions/not-your-college";
 import { wallShowcaseTheme } from "./definitions/wall-showcase";
 import { craftDeskTheme } from "./definitions/craft-desk";
+import { himanshuSinghTheme } from "./definitions/himanshu-singh";
+import { tanujaDesignTheme } from "./definitions/tanuja-design";
 
 export const SYSTEM_THEMES: Record<string, ThemePackage> = {
+  "rolan-gomes": craftDeskTheme,
   "craft-desk": craftDeskTheme,
+  "sudarvel": wallShowcaseTheme,
   "wall-showcase": wallShowcaseTheme,
+  "himanshu-singh": himanshuSinghTheme,
+  "tanuja-design": tanujaDesignTheme,
   "not-your-college": notYourCollegeTheme,
   "luxe-creative": luxeCreativeTheme,
   "developer-terminal": developerTerminalTheme,
@@ -38,32 +44,38 @@ for (const [key, theme] of Object.entries(SYSTEM_THEMES)) {
 }
 
 export function getAllSystemThemes(): ThemePackage[] {
-  // Only the 3 Wall of Portfolios flagship standards approved for production
+  // Exactly the 4 Wall of Portfolios flagship standards requested by the user
   return [
-    SYSTEM_THEMES["wall-showcase"],
-    SYSTEM_THEMES["craft-desk"],
-    SYSTEM_THEMES["not-your-college"],
+    SYSTEM_THEMES["rolan-gomes"],
+    SYSTEM_THEMES["sudarvel"],
+    SYSTEM_THEMES["himanshu-singh"],
+    SYSTEM_THEMES["tanuja-design"],
   ];
 }
 
 export function getThemeById(id: string): ThemePackage {
-  if (id === "craft-desk") return SYSTEM_THEMES["craft-desk"];
-  if (id === "wall-showcase") return SYSTEM_THEMES["wall-showcase"];
+  if (id === "rolan-gomes" || id === "craft-desk") return SYSTEM_THEMES["rolan-gomes"];
+  if (id === "sudarvel" || id === "sudar" || id === "wall-showcase") return SYSTEM_THEMES["sudarvel"];
+  if (id === "himanshu-singh" || id === "himanshu") return SYSTEM_THEMES["himanshu-singh"];
+  if (id === "tanuja-design" || id === "tanuja") return SYSTEM_THEMES["tanuja-design"];
   if (id === "not-your-college") return SYSTEM_THEMES["not-your-college"];
 
-  // Legacy mappings directly routing to the 3 approved Wall of Portfolios standards
+  // Legacy mappings directly routing to the 4 approved Wall of Portfolios standards
   if (id === "developer-terminal" || id === "dark-showcase" || id === "template1") {
-    return SYSTEM_THEMES["wall-showcase"];
+    return SYSTEM_THEMES["sudarvel"];
   }
   if (id === "minimal-editorial" || id === "template2" || id === "corporate-clean") {
-    return SYSTEM_THEMES["craft-desk"];
+    return SYSTEM_THEMES["rolan-gomes"];
   }
-  if (id === "bold-poster" || id === "template3" || id === "creative-collage" || id === "luxe-creative" || id === "playful-sticker") {
-    return SYSTEM_THEMES["not-your-college"];
+  if (id === "bold-poster" || id === "creative-collage") {
+    return SYSTEM_THEMES["himanshu-singh"];
+  }
+  if (id === "case-study-heavy" || id === "luxe-creative") {
+    return SYSTEM_THEMES["tanuja-design"];
   }
 
-  // Default to Wall-Grade Showcase
-  return SYSTEM_THEMES["wall-showcase"];
+  // Default to Sudarvel Wall-Grade Showcase
+  return SYSTEM_THEMES["sudarvel"];
 }
 
 export function filterThemes(filters?: {

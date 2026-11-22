@@ -46,6 +46,8 @@ export const ThemeTokensSchema = z.object({
 export const ThemeLayoutPatternSchema = z.enum([
   "craft-desk",
   "wall-showcase",
+  "himanshu-studio",
+  "tanuja-product",
   "split-hero",
   "centered-editorial",
   "terminal-grid",

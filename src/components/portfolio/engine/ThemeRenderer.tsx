@@ -90,6 +90,20 @@ import {
   CraftDeskCredentials,
   CraftDeskContact,
 } from "./variants/craftDesk";
+import {
+  HimanshuNav,
+  HimanshuHero,
+  HimanshuProjects,
+  HimanshuExperience,
+  HimanshuContact,
+} from "./variants/himanshuStudio";
+import {
+  TanujaNav,
+  TanujaHero,
+  TanujaProjects,
+  TanujaExperience,
+  TanujaContact,
+} from "./variants/tanujaProduct";
 
 interface ThemeRendererProps {
   theme: ThemePackage;
@@ -130,6 +144,10 @@ export function ThemeRenderer({
     switch (pattern) {
       case "craft-desk":
         return <CraftDeskNav content={content} theme={theme} />;
+      case "himanshu-studio":
+        return <HimanshuNav content={content} theme={theme} />;
+      case "tanuja-product":
+        return <TanujaNav content={content} theme={theme} />;
       case "wall-showcase":
         return <WallNav content={content} theme={theme} />;
       case "not-your-college":
@@ -159,6 +177,8 @@ export function ThemeRenderer({
     switch (sectionName) {
       case "hero":
         if (pattern === "craft-desk") return <CraftDeskHero key={index} content={content} theme={theme} />;
+        if (pattern === "himanshu-studio") return <HimanshuHero key={index} content={content} theme={theme} />;
+        if (pattern === "tanuja-product") return <TanujaHero key={index} content={content} theme={theme} />;
         if (pattern === "wall-showcase") return <WallHero key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCHero key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeHero key={index} content={content} theme={theme} />;
@@ -171,6 +191,8 @@ export function ThemeRenderer({
 
       case "projects":
         if (pattern === "craft-desk") return <CraftDeskProjects key={index} content={content} theme={theme} />;
+        if (pattern === "himanshu-studio") return <HimanshuProjects key={index} content={content} theme={theme} />;
+        if (pattern === "tanuja-product") return <TanujaProjects key={index} content={content} theme={theme} />;
         if (pattern === "wall-showcase") return <WallProjects key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCProjects key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeProjects key={index} content={content} theme={theme} />;
@@ -194,6 +216,8 @@ export function ThemeRenderer({
 
       case "experience":
         if (pattern === "craft-desk") return <CraftDeskExperience key={index} content={content} theme={theme} />;
+        if (pattern === "himanshu-studio") return <HimanshuExperience key={index} content={content} theme={theme} />;
+        if (pattern === "tanuja-product") return <TanujaExperience key={index} content={content} theme={theme} />;
         if (pattern === "wall-showcase") return <WallExperience key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCExperience key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeExperience key={index} content={content} theme={theme} />;
@@ -212,6 +236,8 @@ export function ThemeRenderer({
 
       case "contact":
         if (pattern === "craft-desk") return <CraftDeskContact key={index} content={content} theme={theme} />;
+        if (pattern === "himanshu-studio") return <HimanshuContact key={index} content={content} theme={theme} />;
+        if (pattern === "tanuja-product") return <TanujaContact key={index} content={content} theme={theme} />;
         if (pattern === "wall-showcase") return <WallContact key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCContact key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeContact key={index} content={content} theme={theme} />;

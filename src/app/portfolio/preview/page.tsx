@@ -257,36 +257,46 @@ export default function PortfolioStudio() {
 
           {/* Center: Stage 2 Distinct Style Switcher */}
           <div className="flex items-center gap-2">
-            <div className="flex items-center bg-muted/80 p-1 rounded-xl border border-border text-xs font-medium">
+            <div className="flex items-center bg-muted/80 p-1 rounded-xl border border-border text-xs font-medium overflow-x-auto">
               <button
-                onClick={() => { setActiveThemeId("wall-showcase"); handleSave({ themeId: "wall-showcase" }); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
-                  activeThemeId === "wall-showcase"
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 shadow-sm font-bold" 
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Sparkles size={13} className="text-slate-950" /> Wall-Grade (Sudarvel)
-              </button>
-              <button
-                onClick={() => { setActiveThemeId("craft-desk"); handleSave({ themeId: "craft-desk" }); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
-                  activeThemeId === "craft-desk"
+                onClick={() => { setActiveThemeId("rolan-gomes"); handleSave({ themeId: "rolan-gomes" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+                  activeThemeId === "rolan-gomes" || activeThemeId === "craft-desk"
                     ? "bg-[#095848] text-[#FAF7F0] shadow-sm font-bold" 
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <FileText size={13} /> Rolan Desk Mat
+                <FileText size={13} /> Rolan Gomes Desk
               </button>
               <button
-                onClick={() => { setActiveThemeId("not-your-college"); handleSave({ themeId: "not-your-college" }); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
-                  activeThemeId === "not-your-college"
-                    ? "bg-[#173f32] text-[#f7f4eb] shadow-sm font-semibold" 
+                onClick={() => { setActiveThemeId("sudarvel"); handleSave({ themeId: "sudarvel" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+                  activeThemeId === "sudarvel" || activeThemeId === "wall-showcase"
+                    ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 shadow-sm font-bold" 
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                NYC Editorial
+                <Sparkles size={13} className="text-slate-950" /> Sudarvel Dark
+              </button>
+              <button
+                onClick={() => { setActiveThemeId("himanshu-singh"); handleSave({ themeId: "himanshu-singh" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+                  activeThemeId === "himanshu-singh"
+                    ? "bg-[#06392b] text-[#c6d457] border border-[#c6d457]/40 shadow-sm font-bold" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Himanshu Studio
+              </button>
+              <button
+                onClick={() => { setActiveThemeId("tanuja-design"); handleSave({ themeId: "tanuja-design" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+                  activeThemeId === "tanuja-design"
+                    ? "bg-blue-600 text-white shadow-sm font-bold" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Tanuja Microsoft
               </button>
             </div>
 

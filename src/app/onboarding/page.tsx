@@ -925,25 +925,31 @@ function SmartIntakeOnboardingContent() {
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
                     Recommended Architecture For You
                   </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     {[
                       { 
-                        id: "wall-showcase", 
-                        name: "Wall-Grade Showcase", 
-                        badge: "Sudarvel & Tanuja", 
-                        desc: "Deep dark tactical canvas, live availability pill, outcome-driven case studies (+38% throughput, 65ms latency), and accredited credentials" 
-                      },
-                      { 
-                        id: "craft-desk", 
+                        id: "rolan-gomes", 
                         name: "Rolan Desk Mat", 
                         badge: "Rolan Gomes", 
-                        desc: "Warm physical paper sheet floating on a green architect cutting mat, live yellow sticky note, and monospaced credential strip" 
+                        desc: "Warm physical paper sheet floating on a green architect cutting mat, live yellow sticky note, and accredited credential strip" 
                       },
                       { 
-                        id: "not-your-college", 
-                        name: "NYC Editorial", 
-                        badge: "Not Your College", 
-                        desc: "High-density editorial magazine aesthetic, Instrument Serif headings, paper craft cards, and clean typography" 
+                        id: "sudarvel", 
+                        name: "Sudarvel Dark Case Study", 
+                        badge: "Sudarvel K", 
+                        desc: "Deep dark tactical canvas, live availability pill, outcome-driven case studies (+38% throughput, 65ms latency), and interactive breakdowns" 
+                      },
+                      { 
+                        id: "himanshu-singh", 
+                        name: "Himanshu Studio", 
+                        badge: "Himanshu Singh", 
+                        desc: "Deep forest studio cutting board (#06392b), storytelling sequences, branding, and art direction showcase" 
+                      },
+                      { 
+                        id: "tanuja-design", 
+                        name: "Tanuja Microsoft Case Study", 
+                        badge: "Tanuja (Microsoft)", 
+                        desc: "High-clarity enterprise product canvas, AI integration workflows, FOX Icons, and structured problem-solution lifecycle" 
                       },
                     ].map((theme) => {
                       const isSelected = selectedThemeId === theme.id;

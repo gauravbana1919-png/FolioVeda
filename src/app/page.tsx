@@ -31,36 +31,45 @@ export default function NotYourCollegeHomePage() {
   const { data: session } = useSession();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [handleInput, setHandleInput] = useState("");
-  const [activeTab, setActiveTab] = useState<"wall" | "rolan" | "nyc">("wall");
+  const [activeTab, setActiveTab] = useState<"rolan" | "sudar" | "himanshu" | "tanuja">("rolan");
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
 
   const showcaseThemes = {
-    wall: {
-      name: "Wall-Grade Showcase",
-      subtitle: "Inspired by Sudarvel & Tanuja. Deep graphite layout, case study breakdown drawers, real metric badges, and outcome telemetry.",
-      accent: "#10B981",
-      badge: "WALL OF PORTFOLIOS BENCHMARK",
-      previewUrl: "/p/gaurav?theme=wall-showcase",
-      bgClass: "bg-[#0c0d0e] text-[#f4f4f5]",
-      cardBorder: "border-white/10",
-    },
     rolan: {
-      name: "Rolan Desk Mat",
-      subtitle: "Inspired by Rolan Gomes. Architect green cutting mat, floating tactile paper canvas, yellow sticky notes, and certified credentials.",
+      name: "Rolan Gomes Desk Mat",
+      subtitle: "Exact architect green cutting mat, floating tactile paper sheet, yellow sticky notes, and accredited credentials.",
       accent: "#095848",
-      badge: "AWARD-WINNING PHYSICAL CRAFT",
-      previewUrl: "/p/gaurav?theme=craft-desk",
+      badge: "ROLAN GOMES • ARCHITECT DESK",
+      previewUrl: "/p/gaurav?theme=rolan-gomes",
       bgClass: "bg-[#095848] text-white",
       cardBorder: "border-[#14735f]",
     },
-    nyc: {
-      name: "Not Your College (Editorial)",
-      subtitle: "Warm cream paper aesthetic, Instrument Serif typography, and high-impact editorial cards.",
-      accent: "#173f32",
-      badge: "HIGH-DENSITY EDITORIAL",
-      previewUrl: "/p/gaurav?theme=not-your-college",
-      bgClass: "bg-[#f7f4eb] text-[#222e26]",
-      cardBorder: "border-[#173f32]/20",
+    sudar: {
+      name: "Sudarvel K Dark Case Study",
+      subtitle: "Deep graphite tactical layout, case study breakdown drawers, real outcome telemetry, and problem-solution architecture.",
+      accent: "#10B981",
+      badge: "SUDARVEL K • TACTICAL CASE STUDIES",
+      previewUrl: "/p/gaurav?theme=sudarvel",
+      bgClass: "bg-[#0c0d0e] text-[#f4f4f5]",
+      cardBorder: "border-white/10",
+    },
+    himanshu: {
+      name: "Himanshu Singh Studio",
+      subtitle: "Deep forest studio mat, visual storytelling cards, branding, art direction, and storyboard sequences.",
+      accent: "#c6d457",
+      badge: "HIMANSHU SINGH • VISUAL STORYTELLER",
+      previewUrl: "/p/gaurav?theme=himanshu-singh",
+      bgClass: "bg-[#021a13] text-[#eef3c8]",
+      cardBorder: "border-[#c6d457]/30",
+    },
+    tanuja: {
+      name: "Tanuja Microsoft Case Study",
+      subtitle: "Crisp modern enterprise product canvas, AI integration workflows, FOX Icons, and structured product lifecycle.",
+      accent: "#2563EB",
+      badge: "TANUJA • MICROSOFT AI & PRODUCT",
+      previewUrl: "/p/gaurav?theme=tanuja-design",
+      bgClass: "bg-white text-slate-900",
+      cardBorder: "border-slate-300",
     },
   };
 
@@ -79,7 +88,7 @@ export default function NotYourCollegeHomePage() {
     },
     {
       q: "Can I switch themes without losing my data?",
-      a: "Yes. All portfolio content is stored in a standardized schema. You can switch between Wall-Grade Showcase, Rolan Desk Mat, and NYC Editorial with zero data loss in one click.",
+      a: "Yes. All portfolio content is stored in a standardized schema. You can switch between Rolan Gomes Desk, Sudarvel Dark, Himanshu Studio, and Tanuja Microsoft with zero data loss in one click.",
     },
   ];
 
@@ -332,7 +341,7 @@ export default function NotYourCollegeHomePage() {
 
           {/* Theme Switcher Tabs */}
           <div className="flex flex-wrap gap-2">
-            {(["wall", "rolan", "nyc"] as const).map((key) => {
+            {(["rolan", "sudar", "himanshu", "tanuja"] as const).map((key) => {
               const active = activeTab === key;
               return (
                 <button

@@ -252,9 +252,10 @@ export default function StyleGalleryPage() {
 
           <div className="flex flex-wrap gap-2">
             {[
-              { label: "Wall-Grade Showcase • Sudarvel & Tanuja", category: "tech", mood: "bold", themeId: "wall-showcase" },
-              { label: "Rolan Desk Mat • Architect Green", category: "design", mood: "calm", themeId: "craft-desk" },
-              { label: "NYC Editorial • High-Density Magazine", category: "creative", mood: "bold", themeId: "not-your-college" },
+              { label: "Rolan Gomes • Architect Cutting Mat", category: "design", mood: "formal", themeId: "rolan-gomes" },
+              { label: "Sudarvel K • Tactical Dark Case Studies", category: "tech", mood: "bold", themeId: "sudarvel" },
+              { label: "Himanshu Singh • Visual Storyteller Studio", category: "creative", mood: "bold", themeId: "himanshu-singh" },
+              { label: "Tanuja • Microsoft Enterprise AI & Systems", category: "design", mood: "formal", themeId: "tanuja-design" },
             ].map((preset) => {
               const isMatch = selectedCategory === preset.category && selectedMood === preset.mood;
               return (

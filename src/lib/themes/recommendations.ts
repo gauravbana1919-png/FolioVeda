@@ -29,36 +29,36 @@ export function getThemeRecommendations(
 
     // Specific Top Theme Boosts
     if (profileType === "tech") {
-      if (theme.id === "developer-terminal") {
+      if (theme.id === "sudarvel" || theme.id === "wall-showcase") {
         score += 45;
-        reason = "Engineered specifically for technical roles with CLI prompts, bash window chrome, and Git commit logs.";
-      } else if (theme.id === "dark-showcase") {
-        score += 40;
-        reason = "High-tech obsidian and cyan glow showcasing deep systems architecture and live units.";
+        reason = "Tactical dark case studies with clinical latency benchmarks and high-throughput telemetry inspired by Sudarvel K.";
+      } else if (theme.id === "rolan-gomes" || theme.id === "craft-desk") {
+        score += 35;
+        reason = "Architect cutting mat with floating physical paper and verified credentials shelf inspired by Rolan Gomes.";
       } else if (theme.category === "tech") {
         score += 30;
       }
     } else if (profileType === "designer") {
-      if (theme.id === "minimal-editorial") {
+      if (theme.id === "tanuja-design") {
         score += 45;
-        reason = "Serif typography, generous negative space, and curated magazine-grade case studies.";
-      } else if (theme.id === "case-study-heavy") {
-        score += 40;
-        reason = "Comprehensive architectural narrative breaking down problem, solution, and impact metrics.";
+        reason = "High-clarity enterprise product canvas, AI workflows, and structured case studies inspired by Tanuja (Microsoft).";
+      } else if (theme.id === "rolan-gomes" || theme.id === "craft-desk") {
+        score += 42;
+        reason = "Award-winning physical cutting mat with sticky notes and design system tokens inspired by Rolan Gomes.";
       } else if (theme.category === "design") {
         score += 30;
       }
-    } else if (profileType === "bba") {
-      if (theme.id === "corporate-clean") {
+    } else if (profileType === "creative" || profileType === "other") {
+      if (theme.id === "himanshu-singh") {
         score += 45;
-        reason = "Structured executive dossier with clean typography, KPI metrics, and career timeline clarity.";
-      } else if (theme.category === "business") {
+        reason = "Deep forest studio board, storyboard arcs, and visual storytelling cards inspired by Himanshu Singh Chauhan.";
+      } else if (theme.category === "creative") {
         score += 35;
       }
-    } else if (profileType === "other") {
-      if (theme.id === "playful-sticker" || theme.id === "creative-collage") {
-        score += 40;
-        reason = "Warm, approachable, and expressive layout designed for creative makers and consultants.";
+    } else if (profileType === "bba") {
+      if (theme.id === "tanuja-design") {
+        score += 45;
+        reason = "Structured executive enterprise dossier with clean problem-solution metrics.";
       }
     }
 
