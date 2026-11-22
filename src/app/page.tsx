@@ -31,45 +31,36 @@ export default function NotYourCollegeHomePage() {
   const { data: session } = useSession();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [handleInput, setHandleInput] = useState("");
-  const [activeTab, setActiveTab] = useState<"nyc" | "luxe" | "terminal" | "minimal">("nyc");
+  const [activeTab, setActiveTab] = useState<"wall" | "rolan" | "nyc">("wall");
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
 
   const showcaseThemes = {
+    wall: {
+      name: "Wall-Grade Showcase",
+      subtitle: "Inspired by Sudarvel & Tanuja. Deep graphite layout, case study breakdown drawers, real metric badges, and outcome telemetry.",
+      accent: "#10B981",
+      badge: "WALL OF PORTFOLIOS BENCHMARK",
+      previewUrl: "/p/gaurav?theme=wall-showcase",
+      bgClass: "bg-[#0c0d0e] text-[#f4f4f5]",
+      cardBorder: "border-white/10",
+    },
+    rolan: {
+      name: "Rolan Desk Mat",
+      subtitle: "Inspired by Rolan Gomes. Architect green cutting mat, floating tactile paper canvas, yellow sticky notes, and certified credentials.",
+      accent: "#095848",
+      badge: "AWARD-WINNING PHYSICAL CRAFT",
+      previewUrl: "/p/gaurav?theme=craft-desk",
+      bgClass: "bg-[#095848] text-white",
+      cardBorder: "border-[#14735f]",
+    },
     nyc: {
       name: "Not Your College (Editorial)",
       subtitle: "Warm cream paper aesthetic, Instrument Serif typography, and high-impact editorial cards.",
       accent: "#173f32",
-      badge: "STUDENT & BUILDER FAVORITE",
+      badge: "HIGH-DENSITY EDITORIAL",
       previewUrl: "/p/gaurav?theme=not-your-college",
       bgClass: "bg-[#f7f4eb] text-[#222e26]",
       cardBorder: "border-[#173f32]/20",
-    },
-    luxe: {
-      name: "Luxe Creative (Dark Glow)",
-      subtitle: "Deep ambient gradient mesh, floating glass cards, and animated interactive telemetry.",
-      accent: "#10B981",
-      badge: "FLAGSHIP DARK THEME",
-      previewUrl: "/p/gaurav?theme=luxe-creative",
-      bgClass: "bg-[#0B0F19] text-white",
-      cardBorder: "border-white/10",
-    },
-    terminal: {
-      name: "Developer Terminal",
-      subtitle: "Monospace CLI prompt, real git commits, and verified systems latency benchmarks.",
-      accent: "#10B981",
-      badge: "HARDCORE ENGINEERING",
-      previewUrl: "/p/gaurav?theme=developer-terminal",
-      bgClass: "bg-[#0D1117] text-[#E6EDF3]",
-      cardBorder: "border-[#30363D]",
-    },
-    minimal: {
-      name: "Minimal Editorial",
-      subtitle: "High whitespace, classic typography, and museum monograph layout.",
-      accent: "#1E293B",
-      badge: "CLEAN & TIMELESS",
-      previewUrl: "/p/gaurav?theme=minimal-editorial",
-      bgClass: "bg-white text-slate-900",
-      cardBorder: "border-slate-200",
     },
   };
 
@@ -88,7 +79,7 @@ export default function NotYourCollegeHomePage() {
     },
     {
       q: "Can I switch themes without losing my data?",
-      a: "Yes. All portfolio content is stored in a standardized schema. You can switch between Not Your College, Luxe Creative, Developer Terminal, and Minimal Editorial with zero data loss in one click.",
+      a: "Yes. All portfolio content is stored in a standardized schema. You can switch between Wall-Grade Showcase, Rolan Desk Mat, and NYC Editorial with zero data loss in one click.",
     },
   ];
 
@@ -341,7 +332,7 @@ export default function NotYourCollegeHomePage() {
 
           {/* Theme Switcher Tabs */}
           <div className="flex flex-wrap gap-2">
-            {(["nyc", "luxe", "terminal", "minimal"] as const).map((key) => {
+            {(["wall", "rolan", "nyc"] as const).map((key) => {
               const active = activeTab === key;
               return (
                 <button

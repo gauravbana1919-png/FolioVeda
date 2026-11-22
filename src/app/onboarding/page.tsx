@@ -62,8 +62,8 @@ function SmartIntakeOnboardingContent() {
   // AI Generated Draft State (Step 4)
   const [draftHeadline, setDraftHeadline] = useState("");
   const [draftBio, setDraftBio] = useState("");
-  const [recommendedThemeIds, setRecommendedThemeIds] = useState<string[]>(["luxe-creative"]);
-  const [selectedThemeId, setSelectedThemeId] = useState("luxe-creative");
+  const [recommendedThemeIds, setRecommendedThemeIds] = useState<string[]>(["wall-showcase", "craft-desk", "not-your-college"]);
+  const [selectedThemeId, setSelectedThemeId] = useState("wall-showcase");
 
   // Rich Career Data State
   const [experienceList, setExperienceList] = useState<any[]>([
@@ -927,12 +927,27 @@ function SmartIntakeOnboardingContent() {
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {[
-                      { id: "luxe-creative", name: "Luxe Creative", desc: "Ambient glow, interactive motion, animated stats, filterable artifacts & timeline" },
-                      { id: "minimal-editorial", name: "Minimal Editorial", desc: "Editorial typography, generous whitespace, publication aesthetic" },
-                      { id: "dark-showcase", name: "Dark Showcase", desc: "High-contrast dark grid, neon cyan accents, system layout" },
+                      { 
+                        id: "wall-showcase", 
+                        name: "Wall-Grade Showcase", 
+                        badge: "Sudarvel & Tanuja", 
+                        desc: "Deep dark tactical canvas, live availability pill, outcome-driven case studies (+38% throughput, 65ms latency), and accredited credentials" 
+                      },
+                      { 
+                        id: "craft-desk", 
+                        name: "Rolan Desk Mat", 
+                        badge: "Rolan Gomes", 
+                        desc: "Warm physical paper sheet floating on a green architect cutting mat, live yellow sticky note, and monospaced credential strip" 
+                      },
+                      { 
+                        id: "not-your-college", 
+                        name: "NYC Editorial", 
+                        badge: "Not Your College", 
+                        desc: "High-density editorial magazine aesthetic, Instrument Serif headings, paper craft cards, and clean typography" 
+                      },
                     ].map((theme) => {
                       const isSelected = selectedThemeId === theme.id;
-                      const isTopMatch = selectedThemeId === theme.id || theme.id === "luxe-creative";
+                      const isTopMatch = selectedThemeId === theme.id || theme.id === "wall-showcase";
                       return (
                         <button
                           key={theme.id}
@@ -940,19 +955,17 @@ function SmartIntakeOnboardingContent() {
                           onClick={() => setSelectedThemeId(theme.id)}
                           className={`p-4 rounded-2xl border text-left transition-all ${
                             isSelected
-                              ? "bg-emerald-50/70 border-[#173f32] text-[#173f32] shadow-sm"
-                              : "bg-slate-50 border-slate-200 text-slate-600 hover:text-black"
+                              ? "bg-emerald-50/80 border-[#173f32] text-[#173f32] shadow-sm ring-2 ring-[#173f32]"
+                              : "bg-slate-50 border-slate-200 text-slate-600 hover:text-black hover:border-slate-300"
                           }`}
                         >
-                          <div className="flex items-center justify-between mb-1">
+                          <div className="flex items-center justify-between mb-1.5">
                             <span className="text-xs font-bold text-[#1E293B]">{theme.name}</span>
-                            {isTopMatch && (
-                              <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-[#173f32] text-white">
-                                TOP MATCH
-                              </span>
-                            )}
+                            <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-[#173f32] text-white">
+                              {theme.badge}
+                            </span>
                           </div>
-                          <div className="text-[11px] text-slate-500 font-normal">{theme.desc}</div>
+                          <div className="text-[11px] text-slate-600 font-normal leading-relaxed">{theme.desc}</div>
                         </button>
                       );
                     })}

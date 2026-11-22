@@ -259,8 +259,18 @@ export default function PortfolioStudio() {
           <div className="flex items-center gap-2">
             <div className="flex items-center bg-muted/80 p-1 rounded-xl border border-border text-xs font-medium">
               <button
+                onClick={() => { setActiveThemeId("wall-showcase"); handleSave({ themeId: "wall-showcase" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
+                  activeThemeId === "wall-showcase"
+                    ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 shadow-sm font-bold" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Sparkles size={13} className="text-slate-950" /> Wall-Grade (Sudarvel)
+              </button>
+              <button
                 onClick={() => { setActiveThemeId("craft-desk"); handleSave({ themeId: "craft-desk" }); }}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
                   activeThemeId === "craft-desk"
                     ? "bg-[#095848] text-[#FAF7F0] shadow-sm font-bold" 
                     : "text-muted-foreground hover:text-foreground"
@@ -269,44 +279,14 @@ export default function PortfolioStudio() {
                 <FileText size={13} /> Rolan Desk Mat
               </button>
               <button
-                onClick={() => { setActiveThemeId("wall-showcase"); handleSave({ themeId: "wall-showcase" }); }}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
-                  activeThemeId === "wall-showcase"
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 shadow-sm font-bold" 
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Sparkles size={13} className="text-slate-950" /> Wall-Grade
-              </button>
-              <button
                 onClick={() => { setActiveThemeId("not-your-college"); handleSave({ themeId: "not-your-college" }); }}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
                   activeThemeId === "not-your-college"
                     ? "bg-[#173f32] text-[#f7f4eb] shadow-sm font-semibold" 
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 NYC Editorial
-              </button>
-              <button
-                onClick={() => { setActiveThemeId("luxe-creative"); handleSave({ themeId: "luxe-creative" }); }}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
-                  activeThemeId === "luxe-creative"
-                    ? "bg-stone-900 text-stone-100 shadow-sm font-semibold" 
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Layers size={13} /> Luxe Creative
-              </button>
-              <button
-                onClick={() => { setActiveThemeId("developer-terminal"); handleSave({ themeId: "developer-terminal" }); }}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
-                  activeThemeId === "developer-terminal" || activeThemeId === "template1"
-                    ? "bg-emerald-600 text-white shadow-sm font-semibold" 
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Terminal size={13} /> Terminal
               </button>
             </div>
 

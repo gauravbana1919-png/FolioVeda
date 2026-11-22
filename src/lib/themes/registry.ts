@@ -38,22 +38,32 @@ for (const [key, theme] of Object.entries(SYSTEM_THEMES)) {
 }
 
 export function getAllSystemThemes(): ThemePackage[] {
-  return Object.values(SYSTEM_THEMES);
+  // Only the 3 Wall of Portfolios flagship standards approved for production
+  return [
+    SYSTEM_THEMES["wall-showcase"],
+    SYSTEM_THEMES["craft-desk"],
+    SYSTEM_THEMES["not-your-college"],
+  ];
 }
 
 export function getThemeById(id: string): ThemePackage {
-  // Check exact system theme ID
-  if (SYSTEM_THEMES[id]) {
-    return SYSTEM_THEMES[id];
+  if (id === "craft-desk") return SYSTEM_THEMES["craft-desk"];
+  if (id === "wall-showcase") return SYSTEM_THEMES["wall-showcase"];
+  if (id === "not-your-college") return SYSTEM_THEMES["not-your-college"];
+
+  // Legacy mappings directly routing to the 3 approved Wall of Portfolios standards
+  if (id === "developer-terminal" || id === "dark-showcase" || id === "template1") {
+    return SYSTEM_THEMES["wall-showcase"];
+  }
+  if (id === "minimal-editorial" || id === "template2" || id === "corporate-clean") {
+    return SYSTEM_THEMES["craft-desk"];
+  }
+  if (id === "bold-poster" || id === "template3" || id === "creative-collage" || id === "luxe-creative" || id === "playful-sticker") {
+    return SYSTEM_THEMES["not-your-college"];
   }
 
-  // Legacy fallback mapping
-  if (id === "template1") return SYSTEM_THEMES["developer-terminal"];
-  if (id === "template2") return SYSTEM_THEMES["minimal-editorial"];
-  if (id === "template3") return SYSTEM_THEMES["bold-poster"];
-
-  // Default fallback
-  return SYSTEM_THEMES["luxe-creative"] || SYSTEM_THEMES["developer-terminal"];
+  // Default to Wall-Grade Showcase
+  return SYSTEM_THEMES["wall-showcase"];
 }
 
 export function filterThemes(filters?: {

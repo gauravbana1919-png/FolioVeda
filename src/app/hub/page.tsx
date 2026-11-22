@@ -31,20 +31,28 @@ interface ViewTab {
 
 const TABS: ViewTab[] = [
   {
-    id: "rolan-desk",
-    name: "Rolan Gomes Desk",
-    path: "/p/gaurav?theme=craft-desk",
-    icon: Sparkles,
-    badge: "Cutting Mat Desk",
-    description: "Exact Rolan Gomes cutting mat archetype: physical paper sheet lying on an architect grid cutting mat, floating post-it note, and monospaced accredited credential list.",
-  },
-  {
     id: "portfolio",
     name: "Wall-Grade Portfolio",
     path: "/p/gaurav",
     icon: Layout,
-    badge: "Wall of Portfolios",
+    badge: "Sudarvel & Tanuja",
     description: "Flagship live portfolio engine inspired by Tanuja, Himanshu, Rolan Gomes, and Sudarvel: outcome-driven case studies, accredited credentials, telemetry footprint, and interactive breakdowns.",
+  },
+  {
+    id: "rolan-desk",
+    name: "Rolan Gomes Desk",
+    path: "/p/gaurav?theme=craft-desk",
+    icon: Sparkles,
+    badge: "Rolan Gomes",
+    description: "Exact Rolan Gomes cutting mat archetype: physical paper sheet lying on an architect grid cutting mat, floating post-it note, and monospaced accredited credential list.",
+  },
+  {
+    id: "nyc-editorial",
+    name: "NYC Editorial",
+    path: "/p/gaurav?theme=not-your-college",
+    icon: Layers,
+    badge: "NYC Magazine",
+    description: "High-density editorial magazine archetype: paper craft cards, Instrument Serif display typography, and real telemetry.",
   },
   {
     id: "resume",
@@ -59,8 +67,8 @@ const TABS: ViewTab[] = [
     name: "Style Archetypes",
     path: "/styles",
     icon: Layers,
-    badge: "10 Archetypes",
-    description: "Interactive showcase of all 10 signature design packages with native vector micro-viewports and live sandboxes.",
+    badge: "3 Flagships",
+    description: "Curated signature archetypes inspired directly by Wall of Portfolios standards (Wall-Grade Showcase, Rolan Desk Mat, and NYC Editorial).",
   },
   {
     id: "studio",
@@ -68,7 +76,7 @@ const TABS: ViewTab[] = [
     path: "/portfolio/preview",
     icon: Sparkles,
     badge: "Live Switcher",
-    description: "Live editor canvas with instant 10-archetype selector, accent color palettes, and AI ChatEditor.",
+    description: "Live editor canvas with instant 3-archetype selector (Wall-Grade, Rolan Desk Mat, NYC Editorial), accent color palettes, and AI ChatEditor.",
   },
   {
     id: "landing",

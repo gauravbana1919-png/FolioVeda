@@ -28,7 +28,7 @@ import { ThemePackage } from "@/types/theme";
 
 export default function StyleGalleryPage() {
   const [userData, setUserData] = useState<any>(null);
-  const [activeThemeId, setActiveThemeId] = useState<string>("developer-terminal");
+  const [activeThemeId, setActiveThemeId] = useState<string>("wall-showcase");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedMood, setSelectedMood] = useState<string>("all");
   const [applyingThemeId, setApplyingThemeId] = useState<string | null>(null);
@@ -177,14 +177,14 @@ export default function StyleGalleryPage() {
       <main className="max-w-7xl mx-auto px-6 py-12">
         {/* Title & Explainer (Bold, attractive, zero italic) */}
         <div className="max-w-3xl mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-50 border border-red-200 text-[#173f32] text-xs font-bold tracking-wide uppercase mb-4">
-            <Sparkles size={13} /> LIVE ARCHITECTURAL STYLES
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#173f32] text-xs font-bold tracking-wide uppercase mb-4">
+            <Sparkles size={13} /> WALL OF PORTFOLIOS STANDARDS
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1E293B] mb-4">
-            Choose Your Presentation DNA.
+            Curated Signature Archetypes
           </h1>
           <p className="text-base text-slate-600 font-normal leading-relaxed">
-            All 8 system themes render your verified data—projects, skills, bio, and experience—with zero data loss. Switch anytime; your content stays permanently intact while the layout, typography, and motion completely transform.
+            Three award-winning portfolio archetypes inspired directly by the top designs on Wall of Portfolios (Rolan Gomes, Sudarvel, Tanuja, and Himanshu). Switch between them anytime with complete visual transformation.
           </p>
         </div>
 
@@ -252,13 +252,9 @@ export default function StyleGalleryPage() {
 
           <div className="flex flex-wrap gap-2">
             {[
-              { label: "tech • formal", category: "tech", mood: "formal", themeId: "developer-terminal" },
-              { label: "design • calm", category: "design", mood: "calm", themeId: "minimal-editorial" },
-              { label: "creative • bold", category: "creative", mood: "bold", themeId: "bold-poster" },
-              { label: "business • formal", category: "business", mood: "formal", themeId: "corporate-clean" },
-              { label: "creative • playful", category: "creative", mood: "playful", themeId: "creative-collage" },
-              { label: "design • formal", category: "design", mood: "formal", themeId: "case-study-heavy" },
-              { label: "tech • bold", category: "tech", mood: "bold", themeId: "dark-showcase" },
+              { label: "Wall-Grade Showcase • Sudarvel & Tanuja", category: "tech", mood: "bold", themeId: "wall-showcase" },
+              { label: "Rolan Desk Mat • Architect Green", category: "design", mood: "calm", themeId: "craft-desk" },
+              { label: "NYC Editorial • High-Density Magazine", category: "creative", mood: "bold", themeId: "not-your-college" },
             ].map((preset) => {
               const isMatch = selectedCategory === preset.category && selectedMood === preset.mood;
               return (
