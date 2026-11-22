@@ -83,8 +83,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         },
         portfolio: {
           create: {
-            templateId: "developer-terminal",
-            themePackageId: "developer-terminal",
+            templateId: "sudarvel",
+            themePackageId: "sudarvel",
             theme: "dark",
           },
         },
@@ -115,7 +115,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     take: 6,
   });
 
-  const activeTheme = user.portfolio?.themePackageId || user.portfolio?.templateId || "developer-terminal";
+  const activeTheme = user.portfolio?.themePackageId || user.portfolio?.templateId || "sudarvel";
   const userSlug = encodeURIComponent(user.name || "alex");
 
   return (

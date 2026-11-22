@@ -93,11 +93,11 @@ export function generateIntakeCopy(
   // 3. Recommended Theme IDs based on profile type
   let recommendedThemeIds: string[] = [];
   if (answers.profileType === "tech") {
-    recommendedThemeIds = ["developer-terminal", "bold-poster", "minimal-editorial"];
+    recommendedThemeIds = ["sudarvel", "rolan-gomes", "himanshu-singh", "tanuja-design"];
   } else if (answers.profileType === "designer") {
-    recommendedThemeIds = ["minimal-editorial", "bold-poster", "developer-terminal"];
+    recommendedThemeIds = ["tanuja-design", "rolan-gomes", "himanshu-singh", "sudarvel"];
   } else {
-    recommendedThemeIds = ["bold-poster", "minimal-editorial", "developer-terminal"];
+    recommendedThemeIds = ["himanshu-singh", "rolan-gomes", "tanuja-design", "sudarvel"];
   }
 
   return {

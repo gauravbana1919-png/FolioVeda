@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     if (action === "approve") {
       const finalHeadline = approvedHeadline || generateIntakeCopy(validAnswers).suggestedHeadline;
       const finalBio = approvedBio || generateIntakeCopy(validAnswers).suggestedBio;
-      const finalThemeId = themeId || "luxe-creative";
+      const finalThemeId = themeId || "sudarvel";
 
       // Locate or create user
       const targetName = userName || session?.user?.name || "Alex Developer";

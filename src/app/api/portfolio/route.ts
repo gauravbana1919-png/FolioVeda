@@ -89,8 +89,8 @@ export async function GET(req: Request) {
             skills: "React, Next.js, TypeScript, Tailwind CSS, Node.js, Prisma, SQLite",
           },
           portfolio: {
-            templateId: "developer-terminal",
-            themePackageId: "developer-terminal",
+            templateId: "sudarvel",
+            themePackageId: "sudarvel",
             theme: "dark",
             designPrefs: JSON.stringify({ accentColor: "emerald" }),
           },
@@ -118,8 +118,8 @@ export async function GET(req: Request) {
           skills: "Full-Stack Development, React, Node.js",
         },
         portfolio: user.portfolio || {
-          templateId: "developer-terminal",
-          themePackageId: "developer-terminal",
+          templateId: "sudarvel",
+          themePackageId: "sudarvel",
           theme: "system",
           designPrefs: JSON.stringify({ accentColor: "emerald" }),
         },
@@ -198,7 +198,7 @@ export async function POST(req: Request) {
     }
 
     // Update or create Portfolio with themePackageId
-    const finalTemplateId = themeId || templateId || "developer-terminal";
+    const finalTemplateId = themeId || templateId || "sudarvel";
     await prisma.portfolio.upsert({
       where: { userId: user.id },
       create: {
