@@ -153,10 +153,13 @@ function SmartIntakeOnboardingContent() {
       if (!res.ok) throw new Error(data.error || "Failed to extract");
 
       if (data.extracted) {
+        if (data.extracted.name && data.extracted.name.trim().length > 2) {
+          setCandidateName(data.extracted.name.trim());
+        }
         if (data.extracted.headline) setDraftHeadline(data.extracted.headline);
         if (data.extracted.bio) setDraftBio(data.extracted.bio);
         if (data.extracted.skills && data.extracted.skills.length > 0) {
-          setTopStrengths(data.extracted.skills.slice(0, 3));
+          setTopStrengths(data.extracted.skills.slice(0, 4));
         }
         if (data.extracted.experience && data.extracted.experience.length > 0) {
           setExperienceList(data.extracted.experience);
@@ -164,7 +167,16 @@ function SmartIntakeOnboardingContent() {
         if (data.extracted.education && data.extracted.education.length > 0) {
           setEducationList(data.extracted.education);
         }
-        setExtractSuccess(`✓ Extracted ${data.extracted.experience?.length || 0} career roles, ${data.extracted.education?.length || 0} academic credentials, and skills!`);
+        if (data.extracted.contact?.linkedin) {
+          setLinkedinUrl(data.extracted.contact.linkedin);
+        }
+        if (data.extracted.contact?.github) {
+          setGithubUrl(data.extracted.contact.github);
+        }
+        const roleCount = data.extracted.experience?.length || 0;
+        const projCount = data.extracted.projects?.length || 0;
+        const certCount = data.extracted.certifications?.length || 0;
+        setExtractSuccess(`✓ Extracted ${roleCount} roles, ${projCount} projects, ${certCount} credentials & skills!`);
       }
     } catch (err: any) {
       setExtractError(err.message || "Failed to extract career data.");
@@ -736,8 +748,20 @@ function SmartIntakeOnboardingContent() {
                       </span>
                     </div>
                     <p className="text-xs text-slate-600 font-normal leading-relaxed">
-                      Copy and paste your LinkedIn &ldquo;About&rdquo; + &ldquo;Experience&rdquo; text or your full resume below. Gemini will automatically extract your verified roles, achievements, education, and skills.
+                      Copy and paste your LinkedIn profile text or full resume below. Gemini will automatically extract your verified roles, achievements, education, and skills.
                     </p>
+
+                    <div className="p-3.5 bg-white rounded-xl border border-emerald-200/80 text-[11px] text-slate-700 flex items-start gap-2.5 shadow-xs">
+                      <span className="text-base leading-none">💡</span>
+                      <div className="space-y-0.5">
+                        <strong className="text-slate-900 font-bold block">
+                          How to export your full LinkedIn profile in 5 seconds:
+                        </strong>
+                        <p className="leading-relaxed text-slate-600">
+                          On your LinkedIn profile, click <strong>More (...)</strong> → select <strong>&quot;Save to PDF&quot;</strong>. Open the PDF, select all text (<kbd className="bg-slate-100 px-1 py-0.5 rounded border border-slate-300 font-mono">Ctrl+A</kbd> / <kbd className="bg-slate-100 px-1 py-0.5 rounded border border-slate-300 font-mono">Cmd+A</kbd>), and paste it below. FolioVeda extracts your complete career timeline, metrics, and credentials.
+                        </p>
+                      </div>
+                    </div>
                     <textarea
                       rows={5}
                       value={rawResumeText}

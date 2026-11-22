@@ -44,6 +44,7 @@ export const ThemeTokensSchema = z.object({
 });
 
 export const ThemeLayoutPatternSchema = z.enum([
+  "wall-showcase",
   "split-hero",
   "centered-editorial",
   "terminal-grid",

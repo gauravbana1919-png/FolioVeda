@@ -35,7 +35,7 @@ export default function PortfolioStudio() {
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "unsaved">("saved");
   const [aiNotice, setAiNotice] = useState<string | null>(null);
 
-  const [activeThemeId, setActiveThemeId] = useState<string>("not-your-college");
+  const [activeThemeId, setActiveThemeId] = useState<string>("wall-showcase");
   const [accentColor, setAccentColor] = useState<string>("emerald");
 
   const [userData, setUserData] = useState({
@@ -184,6 +184,16 @@ export default function PortfolioStudio() {
           <div className="flex items-center gap-2">
             <div className="flex items-center bg-muted/80 p-1 rounded-xl border border-border text-xs font-medium">
               <button
+                onClick={() => { setActiveThemeId("wall-showcase"); handleSave({ themeId: "wall-showcase" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
+                  activeThemeId === "wall-showcase"
+                    ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 shadow-sm font-bold" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Sparkles size={13} className="text-slate-950" /> Wall-Grade
+              </button>
+              <button
                 onClick={() => { setActiveThemeId("not-your-college"); handleSave({ themeId: "not-your-college" }); }}
                 className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
                   activeThemeId === "not-your-college"
@@ -191,7 +201,7 @@ export default function PortfolioStudio() {
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Sparkles size={13} className="text-[#ebd800]" /> Not Your College
+                NYC Editorial
               </button>
               <button
                 onClick={() => { setActiveThemeId("luxe-creative"); handleSave({ themeId: "luxe-creative" }); }}

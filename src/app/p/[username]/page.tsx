@@ -81,8 +81,8 @@ export default async function PublicPortfolioPage({ params, searchParams }: Page
     decodedUsername === "demo" || decodedUsername === "alex" ? "Alex Developer" : decodedUsername
   );
 
-  // Determine active theme (search param override > user portfolio themePackageId > templateId > default not-your-college)
-  const activeThemeId = query.theme || userRecord?.portfolio?.themePackageId || userRecord?.portfolio?.templateId || "not-your-college";
+  // Determine active theme (search param override > user portfolio themePackageId > templateId > default wall-showcase)
+  const activeThemeId = query.theme || userRecord?.portfolio?.themePackageId || userRecord?.portfolio?.templateId || "wall-showcase";
   const theme = getThemeById(activeThemeId);
 
   return (

@@ -8,6 +8,10 @@ export const PortfolioProjectSchema = z.object({
   githubUrl: z.string().optional().nullable(),
   featured: z.boolean().default(false),
   metrics: z.string().optional().nullable(),
+  category: z.string().optional().nullable(),
+  impact: z.string().optional().nullable(),
+  problem: z.string().optional().nullable(),
+  solution: z.string().optional().nullable(),
 });
 
 export const PortfolioExperienceSchema = z.object({
@@ -30,6 +34,8 @@ export const PortfolioCertificationSchema = z.object({
   name: z.string(),
   issuer: z.string(),
   year: z.string(),
+  status: z.string().optional().nullable().default("Completed"),
+  credentialUrl: z.string().optional().nullable(),
 });
 
 export const PortfolioContactSchema = z.object({
@@ -38,6 +44,8 @@ export const PortfolioContactSchema = z.object({
   linkedin: z.string().optional().nullable().or(z.literal("")),
   twitter: z.string().optional().nullable().or(z.literal("")),
   website: z.string().optional().nullable().or(z.literal("")),
+  phone: z.string().optional().nullable(),
+  resumeUrl: z.string().optional().nullable(),
 });
 
 export const PortfolioContentSchema = z.object({
@@ -45,6 +53,8 @@ export const PortfolioContentSchema = z.object({
   headline: z.string().default("Software Engineer & Creator"),
   bio: z.string().default(""),
   avatarUrl: z.string().optional().nullable(),
+  location: z.string().optional().nullable().default("Bengaluru, India"),
+  availability: z.string().optional().nullable().default("Open to Staff / Senior Roles"),
   skills: z.array(z.string()).default([]),
   projects: z.array(PortfolioProjectSchema).default([]),
   experience: z.array(PortfolioExperienceSchema).default([]),

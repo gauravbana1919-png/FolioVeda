@@ -73,6 +73,15 @@ import {
   NYCEducation,
   NYCContact,
 } from "./variants/nyc";
+import {
+  WallNav,
+  WallHero,
+  WallProjects,
+  WallExperience,
+  WallSkills,
+  WallCredentials,
+  WallContact,
+} from "./variants/wallShowcase";
 
 interface ThemeRendererProps {
   theme: ThemePackage;
@@ -111,6 +120,8 @@ export function ThemeRenderer({
   // Render navigation based on layout pattern
   const renderNav = () => {
     switch (pattern) {
+      case "wall-showcase":
+        return <WallNav content={content} theme={theme} />;
       case "not-your-college":
         return <NYCNav content={content} theme={theme} />;
       case "luxe-creative":
@@ -137,6 +148,7 @@ export function ThemeRenderer({
   const renderSection = (sectionName: string, index: number) => {
     switch (sectionName) {
       case "hero":
+        if (pattern === "wall-showcase") return <WallHero key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCHero key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeHero key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalHero key={index} content={content} theme={theme} />;
@@ -147,6 +159,7 @@ export function ThemeRenderer({
         return <NYCHero key={index} content={content} theme={theme} />;
 
       case "projects":
+        if (pattern === "wall-showcase") return <WallProjects key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCProjects key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeProjects key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalProjects key={index} content={content} theme={theme} />;
@@ -157,6 +170,7 @@ export function ThemeRenderer({
         return <NYCProjects key={index} content={content} theme={theme} />;
 
       case "skills":
+        if (pattern === "wall-showcase") return <WallSkills key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCSkills key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeSkills key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalSkills key={index} content={content} theme={theme} />;
@@ -167,6 +181,7 @@ export function ThemeRenderer({
         return <NYCSkills key={index} content={content} theme={theme} />;
 
       case "experience":
+        if (pattern === "wall-showcase") return <WallExperience key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCExperience key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeExperience key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalExperience key={index} content={content} theme={theme} />;
@@ -177,10 +192,12 @@ export function ThemeRenderer({
         return <NYCExperience key={index} content={content} theme={theme} />;
 
       case "education":
+        if (pattern === "wall-showcase") return <WallCredentials key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCEducation key={index} content={content} theme={theme} />;
         return <LuxeEducation key={index} content={content} theme={theme} />;
 
       case "contact":
+        if (pattern === "wall-showcase") return <WallContact key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCContact key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeContact key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalContact key={index} content={content} theme={theme} />;
