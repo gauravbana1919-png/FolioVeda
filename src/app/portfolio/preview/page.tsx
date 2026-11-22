@@ -509,6 +509,26 @@ export default function PortfolioStudio() {
           {/* Right: Actions, Responsive, Save, Publish */}
           <div className="flex items-center gap-2">
             
+            {/* Quick Upload PDF Button */}
+            <label
+              htmlFor="studioQuickPdfInput"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#173f32] hover:bg-[#13352a] text-white text-xs font-bold transition-all shadow-sm cursor-pointer border border-emerald-500/30"
+              title="Upload your LinkedIn PDF or Resume to auto-fill everything instantly"
+            >
+              <input
+                id="studioQuickPdfInput"
+                type="file"
+                accept=".pdf,application/pdf"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImportPdf(file);
+                }}
+              />
+              <FileUp size={13} />
+              <span>{isImportingPdf ? "Parsing PDF..." : "Upload LinkedIn/Resume PDF"}</span>
+            </label>
+
             {/* Edit Content Button */}
             <button
               onClick={() => setIsEditModalOpen(true)}

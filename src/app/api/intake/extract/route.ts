@@ -35,6 +35,7 @@ function extractProfileFromText(rawText: string) {
 
   // 3. Section Slicing
   const sections: Record<string, string[]> = {
+    header: [],
     summary: [],
     experience: [],
     education: [],
@@ -43,7 +44,7 @@ function extractProfileFromText(rawText: string) {
     skills: [],
   };
 
-  let currentSection = "summary";
+  let currentSection = "header";
   for (const line of lines) {
     const lower = line.toLowerCase();
     if (lower === "summary" || lower === "about" || lower === "profile" || lower.startsWith("about me")) {
@@ -64,9 +65,9 @@ function extractProfileFromText(rawText: string) {
   }
 
   // 4. Bio synthesis
-  let bio = sections.summary.slice(0, 3).join(" ").trim();
-  if (!bio || bio.length < 30) {
-    bio = `${headline} with proven track record architecting resilient systems, leading cross-functional delivery, and delivering measurable user impact.`;
+  let bio = sections.summary.join(" ").trim();
+  if (!bio || bio.length < 20) {
+    bio = `${headline} with proven track record leading delivery, driving high-impact initiatives, and designing resilient solutions.`;
   }
 
   // 5. Experience extraction
@@ -175,17 +176,29 @@ function extractProfileFromText(rawText: string) {
 
   // 8. Skills extraction
   const extractedSkills: string[] = [];
+  if (sections.skills && sections.skills.length > 0) {
+    for (const s of sections.skills) {
+      if (s.length > 1 && s.length < 35 && !s.includes(":") && !s.includes("@")) {
+        extractedSkills.push(s.trim());
+      }
+    }
+  }
+
   const techKeywords = [
     "React", "TypeScript", "Next.js", "Node.js", "Python", "Prisma", "PostgreSQL",
     "Figma", "Design Systems", "Tailwind CSS", "GraphQL", "AWS", "Docker", "UI/UX",
-    "Prototyping", "Distributed Systems", "Performance", "REST APIs", "CI/CD"
+    "Prototyping", "Distributed Systems", "Performance", "REST APIs", "CI/CD",
+    "User Research", "Wireframing", "Interaction Design", "Product Strategy"
   ];
   for (const kw of techKeywords) {
-    if (new RegExp(`\\b${kw}\\b`, "i").test(rawText)) {
+    if (new RegExp(`\\b${kw}\\b`, "i").test(rawText) && !extractedSkills.includes(kw)) {
       extractedSkills.push(kw);
     }
   }
-  const skills = extractedSkills.length >= 4 ? extractedSkills : ["Next.js", "TypeScript", "React", "Node.js", "Design Systems", "Performance Optimization", "PostgreSQL"];
+  const defaultSkills = headline.toLowerCase().includes("design") || headline.toLowerCase().includes("ux")
+    ? ["Figma", "Design Systems", "UI/UX", "User Research", "Prototyping", "Interaction Design"]
+    : ["Next.js", "TypeScript", "React", "Node.js", "Systems Architecture", "PostgreSQL"];
+  const skills = extractedSkills.length >= 2 ? extractedSkills : defaultSkills;
 
   // 9. Projects with Smart Impact Enhancer
   const projectsList: any[] = [];
@@ -391,23 +404,31 @@ export async function POST(req: Request) {
       }
     }
 
-    // High-fidelity fallback trajectory extractor
+    // High-fidelity trajectory extractor with unpdf
     let textToParse = rawText || "";
-    if (!textToParse && pdfBase64) {
-      // Decode printable ASCII strings from base64 buffer for fallback
+    if (!textToParse && pdfBase64 && typeof pdfBase64 === "string") {
       try {
+        const { extractText } = await import("unpdf");
         const cleanBase64 = pdfBase64.replace(/^data:[^;]+;base64,/, "");
         const buf = Buffer.from(cleanBase64, "base64");
-        const rawPdfString = buf.toString("latin1");
-        // Extract visible text stream fragments
-        const matches = rawPdfString.match(/\(([^()]{3,})\)T[jJ]/g) || [];
-        textToParse = matches.map((m) => m.slice(1, -3)).join(" ");
-        if (textToParse.length < 50) {
-          // Alternative: extract alphanumeric character sequences
-          textToParse = rawPdfString.replace(/[^\x20-\x7E\n\r]/g, " ").replace(/\s+/g, " ");
+        const pdfRes = await extractText(new Uint8Array(buf));
+        const combinedText = Array.isArray(pdfRes.text) ? pdfRes.text.join("\n") : (pdfRes.text || "");
+        if (combinedText && combinedText.trim().length > 10) {
+          textToParse = combinedText.trim();
         }
-      } catch (e) {
-        console.warn("Could not extract raw text from PDF buffer, using default profile extractor");
+      } catch (pdfErr) {
+        console.warn("unpdf extraction warning:", pdfErr);
+      }
+
+      // Secondary fallback if binary stream extraction is needed
+      if (!textToParse || textToParse.length < 20) {
+        try {
+          const cleanBase64 = pdfBase64.replace(/^data:[^;]+;base64,/, "");
+          const buf = Buffer.from(cleanBase64, "base64");
+          const rawPdfString = buf.toString("latin1");
+          const matches = rawPdfString.match(/\(([^()]{3,})\)T[jJ]/g) || [];
+          textToParse = matches.map((m) => m.slice(1, -3)).join(" ");
+        } catch (e) {}
       }
     }
 
