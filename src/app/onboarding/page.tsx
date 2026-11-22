@@ -22,7 +22,10 @@ import {
   Send, 
   Layers, 
   HeartHandshake,
-  GraduationCap 
+  GraduationCap,
+  Upload,
+  FileUp,
+  FileCheck
 } from "lucide-react";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import Link from "next/link";
@@ -118,6 +121,97 @@ function SmartIntakeOnboardingContent() {
   const [isExtracting, setIsExtracting] = useState(false);
   const [extractSuccess, setExtractSuccess] = useState<string | null>(null);
   const [extractError, setExtractError] = useState<string | null>(null);
+  const [isDraggingPdf, setIsDraggingPdf] = useState(false);
+  const [pdfFileName, setPdfFileName] = useState<string | null>(null);
+
+  const handlePdfUpload = async (file: File) => {
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith(".pdf") && file.type !== "application/pdf") {
+      setExtractError("Please upload a valid PDF file (e.g. your LinkedIn 'Save to PDF' export or resume).");
+      return;
+    }
+
+    setPdfFileName(file.name);
+    setIsExtracting(true);
+    setExtractError(null);
+    setExtractSuccess(null);
+
+    try {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64String = reader.result as string;
+
+        try {
+          const res = await fetch("/api/intake/extract", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              pdfBase64: base64String,
+              mimeType: file.type || "application/pdf",
+            }),
+          });
+
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed to parse PDF");
+
+          if (data.extracted) {
+            if (data.extracted.name && data.extracted.name.trim().length > 1) {
+              setCandidateName(data.extracted.name.trim());
+            }
+            if (data.extracted.headline) setDraftHeadline(data.extracted.headline);
+            if (data.extracted.bio) setDraftBio(data.extracted.bio);
+            if (data.extracted.skills && data.extracted.skills.length > 0) {
+              setTopStrengths(data.extracted.skills.slice(0, 4));
+            }
+            if (data.extracted.experience && data.extracted.experience.length > 0) {
+              setExperienceList(data.extracted.experience);
+            }
+            if (data.extracted.education && data.extracted.education.length > 0) {
+              setEducationList(data.extracted.education);
+            }
+            if (data.extracted.certifications && data.extracted.certifications.length > 0) {
+              setCertificationsList(data.extracted.certifications);
+            }
+            if (data.extracted.projects && data.extracted.projects.length > 0) {
+              setProjectsList(data.extracted.projects);
+            }
+            if (data.extracted.contact?.linkedin) {
+              setLinkedinUrl(data.extracted.contact.linkedin);
+            }
+            if (data.extracted.contact?.github) {
+              setGithubUrl(data.extracted.contact.github);
+            }
+            if (data.extracted.contact?.website) {
+              setPortfolioUrl(data.extracted.contact.website);
+            }
+
+            const rolesCount = data.extracted.experience?.length || 0;
+            const certsCount = data.extracted.certifications?.length || 0;
+            const eduCount = data.extracted.education?.length || 0;
+            const projCount = data.extracted.projects?.length || 0;
+
+            setExtractSuccess(
+              `✓ Successfully parsed ${file.name}! Extracted ${rolesCount} positions, ${certsCount} certifications, ${eduCount} degrees & ${projCount} projects with smart outcome metrics.`
+            );
+          }
+        } catch (fetchErr: any) {
+          setExtractError(fetchErr.message || "Failed to process PDF with Gemini AI.");
+        } finally {
+          setIsExtracting(false);
+        }
+      };
+
+      reader.onerror = () => {
+        setExtractError("Error reading local PDF file.");
+        setIsExtracting(false);
+      };
+
+      reader.readAsDataURL(file);
+    } catch (err: any) {
+      setExtractError(err.message || "Failed to read file.");
+      setIsExtracting(false);
+    }
+  };
 
   const handleSelectPersona = (personaKey: string) => {
     const p = PERSONA_PROFILES[personaKey];
@@ -833,87 +927,162 @@ function SmartIntakeOnboardingContent() {
                     />
                   </div>
 
-                  {/* AI Resume & LinkedIn Extractor */}
-                  <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-50/60 to-slate-50 border-2 border-emerald-100 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold uppercase tracking-wider text-[#173f32] flex items-center gap-1.5">
-                        <Sparkles size={14} /> AI Resume &amp; LinkedIn Career Importer
-                      </label>
-                      <span className="text-[10px] font-bold text-slate-500 bg-white px-2 py-0.5 rounded-full border">
-                        Zero Hallucinations
+                  {/* PART 1: 1-CLICK LINKEDIN PDF DROP & RESUME DEEP EXTRACTION */}
+                  <div className="p-6 rounded-3xl bg-gradient-to-br from-emerald-50/70 via-white to-blue-50/50 border-2 border-emerald-200/80 space-y-4 shadow-sm">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="p-1.5 rounded-lg bg-[#0077b5] text-white">
+                          <FileUp size={16} />
+                        </span>
+                        <div>
+                          <h3 className="text-sm font-extrabold text-[#1E293B]">
+                            1-Click LinkedIn &amp; Resume Deep Extraction
+                          </h3>
+                          <p className="text-[11px] text-slate-500 font-normal">
+                            Direct PDF trajectory parsing with verified metrics &amp; zero hallucinations.
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100/80 px-2.5 py-1 rounded-full border border-emerald-300/60">
+                        ⚡ Part 1 Engine
                       </span>
                     </div>
-                    <p className="text-xs text-slate-600 font-normal leading-relaxed">
-                      Copy and paste your LinkedIn profile text or full resume below. Gemini will automatically extract your verified roles, achievements, education, and skills.
-                    </p>
 
-                    <div className="p-3.5 bg-white rounded-xl border border-emerald-200/80 text-[11px] text-slate-700 flex items-start gap-2.5 shadow-xs">
+                    {/* Step-by-Step LinkedIn Guide Banner */}
+                    <div className="p-3.5 bg-blue-50/80 rounded-2xl border border-blue-200 text-xs text-slate-700 flex items-start gap-2.5">
                       <span className="text-base leading-none">💡</span>
-                      <div className="space-y-0.5">
-                        <strong className="text-slate-900 font-bold block">
-                          How to export your full LinkedIn profile in 5 seconds:
+                      <div className="space-y-0.5 text-[11px]">
+                        <strong className="text-blue-950 font-bold block">
+                          How to get your LinkedIn PDF export in 5 seconds:
                         </strong>
-                        <p className="leading-relaxed text-slate-600">
-                          On your LinkedIn profile, click <strong>More (...)</strong> → select <strong>&quot;Save to PDF&quot;</strong>. Open the PDF, select all text (<kbd className="bg-slate-100 px-1 py-0.5 rounded border border-slate-300 font-mono">Ctrl+A</kbd> / <kbd className="bg-slate-100 px-1 py-0.5 rounded border border-slate-300 font-mono">Cmd+A</kbd>), and paste it below. FolioVeda extracts your complete career timeline, metrics, and credentials.
+                        <p className="leading-relaxed text-blue-900/80">
+                          On LinkedIn, open your Profile → Click <strong>More (•••)</strong> right below your photo → Select <strong>&quot;Save to PDF&quot;</strong>. Drag &amp; drop that file below!
                         </p>
                       </div>
                     </div>
-                    <textarea
-                      rows={5}
-                      value={rawResumeText}
-                      onChange={(e) => setRawResumeText(e.target.value)}
-                      placeholder="Paste your resume or LinkedIn profile text here (Work history, education, projects, skills)..."
-                      className="w-full p-4 rounded-xl bg-white border border-slate-200 text-[#1E293B] text-xs leading-relaxed focus:border-[#173f32] focus:outline-none shadow-inner"
-                    />
 
-                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-                      <button
-                        type="button"
-                        onClick={handleAutoExtract}
-                        disabled={isExtracting || !rawResumeText.trim()}
-                        className="px-5 py-2.5 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 shadow-md shadow-red-950/20"
-                      >
-                        {isExtracting ? (
-                          <>
-                            <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                            <span>Extracting with Gemini...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles size={13} />
-                            <span>Extract Career &amp; Education →</span>
-                          </>
-                        )}
-                      </button>
+                    {/* Drag-and-Drop Dropzone */}
+                    <div
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        setIsDraggingPdf(true);
+                      }}
+                      onDragLeave={(e) => {
+                        e.preventDefault();
+                        setIsDraggingPdf(false);
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        setIsDraggingPdf(false);
+                        const file = e.dataTransfer.files?.[0];
+                        if (file) handlePdfUpload(file);
+                      }}
+                      onClick={() => document.getElementById("linkedinPdfInput")?.click()}
+                      className={`p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center space-y-2 ${
+                        isDraggingPdf
+                          ? "border-emerald-500 bg-emerald-50 scale-[1.01] shadow-md"
+                          : "border-slate-300 hover:border-emerald-500 bg-white hover:bg-emerald-50/30"
+                      }`}
+                    >
+                      <input
+                        id="linkedinPdfInput"
+                        type="file"
+                        accept=".pdf,application/pdf"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handlePdfUpload(file);
+                        }}
+                      />
 
-                      {extractSuccess && (
-                        <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 flex items-center gap-1">
-                          <Check size={12} /> {extractSuccess}
+                      <div className="w-12 h-12 rounded-full bg-emerald-100 text-[#173f32] flex items-center justify-center">
+                        <Upload size={20} />
+                      </div>
+
+                      <div>
+                        <span className="text-xs font-bold text-slate-800 block">
+                          Drop your LinkedIn or Resume PDF here
                         </span>
-                      )}
-                      {extractError && (
-                        <span className="text-xs font-bold text-rose-700 bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
-                          ⚠ {extractError}
+                        <span className="text-[11px] text-slate-500 font-normal">
+                          or click to browse files from your device (.pdf)
                         </span>
+                      </div>
+
+                      {pdfFileName && (
+                        <div className="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 font-bold">
+                          Selected: {pdfFileName}
+                        </div>
                       )}
                     </div>
-                  </div>
 
-                  {/* Career & Education Previews */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Extraction Status Feedback */}
+                    {isExtracting && (
+                      <div className="p-3 rounded-xl bg-slate-900 text-white text-xs font-mono flex items-center gap-3 animate-pulse">
+                        <div className="w-3.5 h-3.5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin shrink-0" />
+                        <span>AI Trajectory Parser extracting companies, dates, credentials &amp; impact metrics...</span>
+                      </div>
+                    )}
+
+                    {extractSuccess && (
+                      <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-xs text-emerald-900 font-medium flex items-start gap-2">
+                        <CheckCircle2 size={16} className="text-emerald-600 shrink-0 mt-0.5" />
+                        <span>{extractSuccess}</span>
+                      </div>
+                    )}
+
+                    {extractError && (
+                      <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-300 text-xs text-rose-900 font-medium flex items-start gap-2">
+                        <span className="text-rose-600 font-bold">⚠</span>
+                        <span>{extractError}</span>
+                      </div>
+                    )}
+
+                    {/* Alternative: Text Paste Accordion / Input */}
+                    <div className="pt-2 border-t border-slate-200">
+                      <details className="group">
+                        <summary className="text-[11px] font-bold text-slate-500 hover:text-slate-800 cursor-pointer list-none flex items-center gap-1.5">
+                          <span className="text-slate-400 group-open:rotate-90 transition-transform">▸</span>
+                          <span>Or paste resume / LinkedIn profile text manually</span>
+                        </summary>
+                        <div className="mt-3 space-y-2">
+                          <textarea
+                            rows={4}
+                            value={rawResumeText}
+                            onChange={(e) => setRawResumeText(e.target.value)}
+                            placeholder="Paste your raw career history or resume text..."
+                            className="w-full p-3.5 rounded-xl bg-white border border-slate-200 text-[#1E293B] text-xs leading-relaxed focus:border-[#173f32] focus:outline-none"
+                          />
+                          <button
+                            type="button"
+                            onClick={handleAutoExtract}
+                            disabled={isExtracting || !rawResumeText.trim()}
+                            className="px-4 py-2 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white text-xs font-bold transition flex items-center gap-1.5 disabled:opacity-50"
+                          >
+                            <Sparkles size={12} />
+                            <span>Extract from Pasted Text</span>
+                          </button>
+                        </div>
+                      </details>
+                    </div>
+
+                  </div>
+                </div>
+
+                  {/* Career & Credentials Live Telemetry Previews */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {/* Experience Preview */}
                     <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                       <div className="flex items-center justify-between text-xs font-bold text-slate-700">
                         <span className="flex items-center gap-1.5">
-                          <Briefcase size={13} className="text-[#173f32]" /> Work Experience
+                          <Briefcase size={13} className="text-[#173f32]" /> Experience
                         </span>
-                        <span className="text-slate-400 font-mono text-[11px]">{experienceList.length} items</span>
+                        <span className="text-slate-400 font-mono text-[11px]">{experienceList.length} roles</span>
                       </div>
                       <div className="space-y-1.5 max-h-36 overflow-y-auto">
                         {experienceList.map((exp, i) => (
                           <div key={i} className="text-[11px] p-2 bg-white rounded-lg border border-slate-200">
-                            <div className="font-bold text-slate-900">{exp.role}</div>
-                            <div className="text-slate-500">{exp.company} • {exp.period}</div>
+                            <div className="font-bold text-slate-900 truncate">{exp.role}</div>
+                            <div className="text-slate-500 text-[10px]">{exp.company} • {exp.period}</div>
                           </div>
                         ))}
                       </div>
@@ -925,19 +1094,36 @@ function SmartIntakeOnboardingContent() {
                         <span className="flex items-center gap-1.5">
                           <GraduationCap size={13} className="text-[#173f32]" /> Education
                         </span>
-                        <span className="text-slate-400 font-mono text-[11px]">{educationList.length} items</span>
+                        <span className="text-slate-400 font-mono text-[11px]">{educationList.length} degrees</span>
                       </div>
                       <div className="space-y-1.5 max-h-36 overflow-y-auto">
                         {educationList.map((edu, i) => (
                           <div key={i} className="text-[11px] p-2 bg-white rounded-lg border border-slate-200">
-                            <div className="font-bold text-slate-900">{edu.degree}</div>
-                            <div className="text-slate-500">{edu.institution} ({edu.year})</div>
+                            <div className="font-bold text-slate-900 truncate">{edu.degree}</div>
+                            <div className="text-slate-500 text-[10px]">{edu.institution} ({edu.year})</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Certifications Preview */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-700">
+                        <span className="flex items-center gap-1.5">
+                          <ShieldCheck size={13} className="text-[#173f32]" /> Certifications
+                        </span>
+                        <span className="text-slate-400 font-mono text-[11px]">{certificationsList.length} items</span>
+                      </div>
+                      <div className="space-y-1.5 max-h-36 overflow-y-auto">
+                        {certificationsList.map((c, i) => (
+                          <div key={i} className="text-[11px] p-2 bg-white rounded-lg border border-slate-200">
+                            <div className="font-bold text-slate-900 truncate">{c.name}</div>
+                            <div className="text-slate-500 text-[10px]">{c.issuer} {c.year && `• ${c.year}`}</div>
                           </div>
                         ))}
                       </div>
                     </div>
                   </div>
-                </div>
 
                 <div className="flex justify-between pt-4">
                   <button

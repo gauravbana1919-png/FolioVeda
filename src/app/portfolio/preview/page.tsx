@@ -26,7 +26,10 @@ import {
   Trash2,
   Copy,
   Globe,
-  Share2
+  Share2,
+  Upload,
+  FileUp,
+  CheckCircle2
 } from "lucide-react";
 import { ChatEditor } from "@/components/ui/ChatEditor";
 import { FolioVedaLogo } from "@/components/ui/Logo";
@@ -55,6 +58,8 @@ export default function PortfolioStudio() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [isImportingPdf, setIsImportingPdf] = useState(false);
+  const [importStatus, setImportStatus] = useState<string | null>(null);
 
   // User state
   const [userData, setUserData] = useState<any>({
@@ -230,6 +235,61 @@ export default function PortfolioStudio() {
       skills: p.content.skills.join(", "),
       themeId: p.recommendedThemeId,
     });
+  };
+
+  // 1-Click Import from LinkedIn / Resume PDF
+  const handleImportPdf = async (file: File) => {
+    if (!file) return;
+    setIsImportingPdf(true);
+    setImportStatus("Extracting career telemetry with AI...");
+
+    try {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const base64 = e.target?.result as string;
+        try {
+          const res = await fetch("/api/intake/extract", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ pdfBase64: base64, mimeType: file.type }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed to extract");
+
+          if (data.extracted) {
+            const ext = data.extracted;
+            setUserData((prev: any) => ({
+              ...prev,
+              name: ext.name || prev.name,
+              profile: {
+                ...prev.profile,
+                headline: ext.headline || prev.profile.headline,
+                bio: ext.bio || prev.profile.bio,
+                skills: ext.skills ? ext.skills.join(", ") : prev.profile.skills,
+                location: ext.location || prev.profile.location,
+                availability: ext.availability || prev.profile.availability,
+                experience: JSON.stringify(ext.experience || []),
+                education: JSON.stringify(ext.education || []),
+                certifications: JSON.stringify(ext.certifications || []),
+                socials: JSON.stringify(ext.contact || {}),
+              },
+              projects: ext.projects && ext.projects.length > 0 ? ext.projects : prev.projects,
+            }));
+            setImportStatus(`✓ Extracted ${file.name} successfully!`);
+            setAiNotice(`Imported ${ext.name || "profile"} (${ext.experience?.length || 0} roles, ${ext.projects?.length || 0} projects)!`);
+            setTimeout(() => setImportStatus(null), 4000);
+          }
+        } catch (fetchErr: any) {
+          setImportStatus(`Error: ${fetchErr.message}`);
+        } finally {
+          setIsImportingPdf(false);
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch (err: any) {
+      setImportStatus("Failed to read file.");
+      setIsImportingPdf(false);
+    }
   };
 
   // Save changes to backend
@@ -629,6 +689,47 @@ export default function PortfolioStudio() {
             </div>
 
             <div className="space-y-4 text-xs font-semibold">
+              {/* 1-Click LinkedIn / Resume PDF Import Banner */}
+              <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-foreground flex items-center gap-2">
+                    <FileUp size={15} className="text-emerald-500" />
+                    1-Click Auto-Fill from LinkedIn PDF
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full font-bold">
+                    AI Deep Parser
+                  </span>
+                </div>
+                <p className="text-[11px] text-muted-foreground font-normal">
+                  Drop your LinkedIn PDF export (Profile → More → Save to PDF) or Resume to auto-populate all fields and outcomes instantly.
+                </p>
+                <div
+                  onClick={() => document.getElementById("studioPdfInput")?.click()}
+                  className="p-3 rounded-xl border border-dashed border-emerald-500/40 hover:border-emerald-500 bg-background/50 hover:bg-emerald-500/5 cursor-pointer text-center transition flex items-center justify-center gap-2"
+                >
+                  <input
+                    id="studioPdfInput"
+                    type="file"
+                    accept=".pdf,application/pdf"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleImportPdf(file);
+                    }}
+                  />
+                  <Upload size={14} className="text-emerald-500" />
+                  <span className="text-xs font-semibold text-foreground">
+                    {isImportingPdf ? "Parsing with AI Trajectory Engine..." : "Drop or click to upload PDF (.pdf)"}
+                  </span>
+                </div>
+                {importStatus && (
+                  <div className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                    <CheckCircle2 size={13} />
+                    <span>{importStatus}</span>
+                  </div>
+                )}
+              </div>
+
               {/* Name */}
               <div className="space-y-1.5">
                 <label className="text-muted-foreground uppercase tracking-wider text-[11px]">Display Name</label>

@@ -716,6 +716,47 @@ export function WallContact({ content }: VariantProps) {
         </div>
 
       </div>
+
+      {/* Interactive Sticky Contact Bar (Floating Bottom Dock) */}
+      <aside aria-label="Quick Contact Actions" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[95%] max-w-xl bg-[#0F1420]/90 backdrop-blur-xl border border-white/15 rounded-full px-4 py-2.5 shadow-2xl shadow-black/80 flex items-center justify-between gap-2 text-xs font-mono">
+        <div className="flex items-center gap-2 truncate">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          <span className="font-bold text-white truncate hidden sm:inline">{content.name}</span>
+          <span className="text-[11px] text-emerald-400 font-mono hidden md:inline">• {content.availability || "Available"}</span>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          {content.contact?.email && (
+            <button
+              onClick={handleCopyEmail}
+              className="px-3 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition-all shadow-sm flex items-center gap-1.5 cursor-pointer text-[11px]"
+            >
+              {copied ? <Check size={12} /> : <Mail size={12} />}
+              <span>{copied ? "Copied" : "Email"}</span>
+            </button>
+          )}
+
+          {content.contact?.linkedin && (
+            <a
+              href={content.contact.linkedin.startsWith("http") ? content.contact.linkedin : `https://${content.contact.linkedin}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/10 transition-colors flex items-center gap-1 text-[11px]"
+            >
+              <LinkedinIcon size={12} className="text-[#38bdf8]" />
+              <span className="hidden sm:inline">LinkedIn</span>
+            </a>
+          )}
+
+          <a
+            href={content.contact?.resumeUrl || "/resume"}
+            className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 border border-white/10 transition-colors flex items-center gap-1 text-[11px]"
+          >
+            <Download size={12} className="text-emerald-400" />
+            <span>PDF</span>
+          </a>
+        </div>
+      </aside>
     </footer>
   );
 }
