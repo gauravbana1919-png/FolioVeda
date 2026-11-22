@@ -82,6 +82,14 @@ import {
   WallCredentials,
   WallContact,
 } from "./variants/wallShowcase";
+import {
+  CraftDeskNav,
+  CraftDeskHero,
+  CraftDeskProjects,
+  CraftDeskExperience,
+  CraftDeskCredentials,
+  CraftDeskContact,
+} from "./variants/craftDesk";
 
 interface ThemeRendererProps {
   theme: ThemePackage;
@@ -120,6 +128,8 @@ export function ThemeRenderer({
   // Render navigation based on layout pattern
   const renderNav = () => {
     switch (pattern) {
+      case "craft-desk":
+        return <CraftDeskNav content={content} theme={theme} />;
       case "wall-showcase":
         return <WallNav content={content} theme={theme} />;
       case "not-your-college":
@@ -148,6 +158,7 @@ export function ThemeRenderer({
   const renderSection = (sectionName: string, index: number) => {
     switch (sectionName) {
       case "hero":
+        if (pattern === "craft-desk") return <CraftDeskHero key={index} content={content} theme={theme} />;
         if (pattern === "wall-showcase") return <WallHero key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCHero key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeHero key={index} content={content} theme={theme} />;
@@ -159,6 +170,7 @@ export function ThemeRenderer({
         return <NYCHero key={index} content={content} theme={theme} />;
 
       case "projects":
+        if (pattern === "craft-desk") return <CraftDeskProjects key={index} content={content} theme={theme} />;
         if (pattern === "wall-showcase") return <WallProjects key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCProjects key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeProjects key={index} content={content} theme={theme} />;
@@ -181,6 +193,7 @@ export function ThemeRenderer({
         return <NYCSkills key={index} content={content} theme={theme} />;
 
       case "experience":
+        if (pattern === "craft-desk") return <CraftDeskExperience key={index} content={content} theme={theme} />;
         if (pattern === "wall-showcase") return <WallExperience key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCExperience key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeExperience key={index} content={content} theme={theme} />;
@@ -192,11 +205,13 @@ export function ThemeRenderer({
         return <NYCExperience key={index} content={content} theme={theme} />;
 
       case "education":
+        if (pattern === "craft-desk") return <CraftDeskCredentials key={index} content={content} theme={theme} />;
         if (pattern === "wall-showcase") return <WallCredentials key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCEducation key={index} content={content} theme={theme} />;
         return <LuxeEducation key={index} content={content} theme={theme} />;
 
       case "contact":
+        if (pattern === "craft-desk") return <CraftDeskContact key={index} content={content} theme={theme} />;
         if (pattern === "wall-showcase") return <WallContact key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCContact key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeContact key={index} content={content} theme={theme} />;
@@ -211,6 +226,55 @@ export function ThemeRenderer({
         return null;
     }
   };
+
+  if (pattern === "craft-desk") {
+    return (
+      <div
+        data-theme-id={theme.id}
+        data-theme-pattern={pattern}
+        style={{
+          backgroundColor: "#095848",
+          backgroundImage: `
+            linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+            linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px)
+          `,
+          backgroundSize: "24px 24px, 24px 24px, 120px 120px, 120px 120px",
+          backgroundPosition: "-1px -1px",
+        }}
+        className="min-h-screen py-8 sm:py-12 px-4 sm:px-6 selection:bg-[#095848] selection:text-white"
+      >
+        {isDemo && (
+          <div className="max-w-4xl mx-auto mb-4 bg-white/95 backdrop-blur-md border border-white/20 rounded-xl px-4 py-2 text-center text-xs font-mono font-medium text-slate-800 shadow-lg">
+            ✨ Rolan Gomes Cutting Mat Metaphor for <strong className="font-bold">{content.name}</strong> • Theme: <span className="text-[#095848] font-bold">{theme.name}</span>
+          </div>
+        )}
+
+        {/* Floating Physical Paper Sheet with realistic drop shadow */}
+        <div className="max-w-4xl mx-auto rounded-3xl shadow-[0_30px_70px_-15px_rgba(0,0,0,0.6)] border border-black/20 overflow-hidden bg-[#FAF7F0] transition-transform">
+          {renderNav()}
+          <main>
+            {theme.layout.sectionOrder.map((sectionName, index) =>
+              renderSection(sectionName, index)
+            )}
+          </main>
+        </div>
+
+        {!hideBadge && (
+          <footer className="fixed bottom-4 right-4 z-40">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-900 border border-slate-700/60 shadow-xl text-xs font-medium text-slate-200 backdrop-blur-md transition-all hover:scale-105"
+            >
+              <OrigamiCyberMintIcon size={16} />
+              <span>Built with <strong className="font-semibold text-white">Folio<span className="text-[#10B981]">Veda</span></strong></span>
+            </Link>
+          </footer>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div

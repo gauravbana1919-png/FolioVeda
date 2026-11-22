@@ -11,8 +11,10 @@ import { playfulStickerTheme } from "./definitions/playful-sticker";
 import { luxeCreativeTheme } from "./definitions/luxe-creative";
 import { notYourCollegeTheme } from "./definitions/not-your-college";
 import { wallShowcaseTheme } from "./definitions/wall-showcase";
+import { craftDeskTheme } from "./definitions/craft-desk";
 
 export const SYSTEM_THEMES: Record<string, ThemePackage> = {
+  "craft-desk": craftDeskTheme,
   "wall-showcase": wallShowcaseTheme,
   "not-your-college": notYourCollegeTheme,
   "luxe-creative": luxeCreativeTheme,

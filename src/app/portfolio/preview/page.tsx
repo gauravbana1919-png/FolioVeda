@@ -15,6 +15,7 @@ import {
   Flame,
   ExternalLink,
   Layers,
+  FileText,
 } from "lucide-react";
 import { ChatEditor } from "@/components/ui/ChatEditor";
 import { FolioVedaLogo } from "@/components/ui/Logo";
@@ -257,6 +258,16 @@ export default function PortfolioStudio() {
           {/* Center: Stage 2 Distinct Style Switcher */}
           <div className="flex items-center gap-2">
             <div className="flex items-center bg-muted/80 p-1 rounded-xl border border-border text-xs font-medium">
+              <button
+                onClick={() => { setActiveThemeId("craft-desk"); handleSave({ themeId: "craft-desk" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
+                  activeThemeId === "craft-desk"
+                    ? "bg-[#095848] text-[#FAF7F0] shadow-sm font-bold" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <FileText size={13} /> Rolan Desk Mat
+              </button>
               <button
                 onClick={() => { setActiveThemeId("wall-showcase"); handleSave({ themeId: "wall-showcase" }); }}
                 className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${

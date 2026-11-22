@@ -31,6 +31,14 @@ interface ViewTab {
 
 const TABS: ViewTab[] = [
   {
+    id: "rolan-desk",
+    name: "Rolan Gomes Desk",
+    path: "/p/gaurav?theme=craft-desk",
+    icon: Sparkles,
+    badge: "Cutting Mat Desk",
+    description: "Exact Rolan Gomes cutting mat archetype: physical paper sheet lying on an architect grid cutting mat, floating post-it note, and monospaced accredited credential list.",
+  },
+  {
     id: "portfolio",
     name: "Wall-Grade Portfolio",
     path: "/p/gaurav",
