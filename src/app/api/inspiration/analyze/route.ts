@@ -9,46 +9,93 @@ import { extractAbstractStyleProfile } from "@/lib/inspiration/analyzer";
 // Fallback: derive abstract style profile from URL patterns when direct fetch is blocked
 function deriveStyleFromUrl(url: string) {
   const lower = url.toLowerCase();
-  const isPinterest = lower.includes('pinterest');
-  const isDribbble = lower.includes('dribbble');
-  const isDark = lower.includes('dark') || lower.includes('night') || lower.includes('black');
-  const isPlayful = lower.includes('playful') || lower.includes('creative') || lower.includes('fun');
 
-  const detectedMood: 'calm' | 'bold' | 'playful' | 'formal' = isPlayful
-    ? 'playful'
-    : isDark || isPinterest
-    ? 'bold'
-    : isDribbble
-    ? 'calm'
-    : 'formal';
+  if (lower.includes("rolan") || lower.includes("craft") || lower.includes("architect")) {
+    return {
+      detectedMood: "calm" as const,
+      layoutPattern: "craft-desk" as const,
+      fontCategory: "editorial-serif" as const,
+      dominantColors: ["#095848", "#FAF7F0", "#1c1917", "#e7e5e4"],
+      accentColor: "#facc15",
+      surfaceBrightness: "dark" as const,
+      density: "spacious" as const,
+      motionCadence: "subtle" as const,
+      sectionOrder: ["hero" as const, "projects" as const, "experience" as const, "skills" as const, "contact" as const],
+      borderStyle: "rounded" as const,
+    };
+  }
 
-  const layoutPattern: any = isPinterest
-    ? 'masonry'
-    : isDribbble
-    ? 'centered-editorial'
-    : isDark
-    ? 'dark-showcase'
-    : 'split-hero';
+  if (lower.includes("himanshu") || lower.includes("studio") || lower.includes("forest") || lower.includes("story")) {
+    return {
+      detectedMood: "bold" as const,
+      layoutPattern: "himanshu-studio" as const,
+      fontCategory: "editorial-serif" as const,
+      dominantColors: ["#021a13", "#06392b", "#FAF8F5", "#0c4d3b"],
+      accentColor: "#c6d457",
+      surfaceBrightness: "dark" as const,
+      density: "comfortable" as const,
+      motionCadence: "expressive" as const,
+      sectionOrder: ["hero" as const, "projects" as const, "experience" as const, "skills" as const, "contact" as const],
+      borderStyle: "rounded" as const,
+    };
+  }
 
-  const fontCategory: any = isDribbble
-    ? 'editorial-serif'
-    : isPinterest
-    ? 'expressive-display'
-    : 'modern-grotesk';
+  if (lower.includes("tanuja") || lower.includes("microsoft") || lower.includes("enterprise") || lower.includes("product")) {
+    return {
+      detectedMood: "formal" as const,
+      layoutPattern: "tanuja-product" as const,
+      fontCategory: "modern-grotesk" as const,
+      dominantColors: ["#F8FAFC", "#FFFFFF", "#0F172A", "#E2E8F0"],
+      accentColor: "#2563EB",
+      surfaceBrightness: "light" as const,
+      density: "comfortable" as const,
+      motionCadence: "subtle" as const,
+      sectionOrder: ["hero" as const, "projects" as const, "experience" as const, "skills" as const, "contact" as const],
+      borderStyle: "rounded" as const,
+    };
+  }
+
+  if (lower.includes("sudar") || lower.includes("obsidian") || lower.includes("telemetry") || lower.includes("dark")) {
+    return {
+      detectedMood: "bold" as const,
+      layoutPattern: "wall-showcase" as const,
+      fontCategory: "modern-grotesk" as const,
+      dominantColors: ["#0c0d0e", "#16181a", "#F8FAFC", "#232629"],
+      accentColor: "#10B981",
+      surfaceBrightness: "dark" as const,
+      density: "comfortable" as const,
+      motionCadence: "subtle" as const,
+      sectionOrder: ["hero" as const, "projects" as const, "experience" as const, "skills" as const, "contact" as const],
+      borderStyle: "rounded" as const,
+    };
+  }
+
+  if (lower.includes("luxe") || lower.includes("minimal") || lower.includes("editorial")) {
+    return {
+      detectedMood: "calm" as const,
+      layoutPattern: "luxe-creative" as const,
+      fontCategory: "editorial-serif" as const,
+      dominantColors: ["#FAF8F5", "#F4F1EA", "#18181B", "#E4E1D9"],
+      accentColor: "#D97706",
+      surfaceBrightness: "light" as const,
+      density: "spacious" as const,
+      motionCadence: "subtle" as const,
+      sectionOrder: ["hero" as const, "projects" as const, "experience" as const, "skills" as const, "contact" as const],
+      borderStyle: "subtle" as const,
+    };
+  }
 
   return {
-    detectedMood,
-    layoutPattern,
-    fontCategory,
-    dominantColors: isDark
-      ? ['#030712', '#0B0F19', '#111827', '#1F2937']
-      : ['#F8F9FA', '#FFFFFF', '#E2E8F0', '#1E293B'],
-    accentColor: isPinterest ? '#E60023' : isDribbble ? '#EA4C89' : '#06B6D4',
-    surfaceBrightness: isDark ? ('dark' as const) : ('light' as const),
-    density: 'comfortable' as const,
-    motionCadence: 'expressive' as const,
-    sectionOrder: ['hero' as const, 'projects' as const, 'skills' as const, 'experience' as const, 'contact' as const],
-    borderStyle: isPinterest ? ('rounded' as const) : ('subtle' as const),
+    detectedMood: "bold" as const,
+    layoutPattern: "wall-showcase" as const,
+    fontCategory: "modern-grotesk" as const,
+    dominantColors: ["#0c0d0e", "#16181a", "#F8FAFC", "#232629"],
+    accentColor: "#10B981",
+    surfaceBrightness: "dark" as const,
+    density: "comfortable" as const,
+    motionCadence: "subtle" as const,
+    sectionOrder: ["hero" as const, "projects" as const, "skills" as const, "experience" as const, "contact" as const],
+    borderStyle: "rounded" as const,
   };
 }
 

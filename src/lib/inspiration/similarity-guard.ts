@@ -120,9 +120,18 @@ export function enforceSimilarityGuard(
       ? "#0F172A"
       : theme.tokens.colors.bg;
 
-  // 3. Diversify layout pattern to a distinct original variant if identical to source
+  // 3. Diversify layout pattern to a distinct original variant if identical to source (preserve our native flagship archetypes)
   let safePattern = theme.layout.pattern;
-  if (safePattern === sourceProfile.layoutPattern) {
+  const isFlagship = [
+    "craft-desk",
+    "wall-showcase",
+    "himanshu-studio",
+    "tanuja-product",
+    "luxe-creative",
+    "not-your-college",
+  ].includes(safePattern);
+
+  if (!isFlagship && safePattern === sourceProfile.layoutPattern) {
     if (safePattern === "poster") safePattern = "split-hero";
     else if (safePattern === "terminal-grid") safePattern = "split-hero";
     else if (safePattern === "centered-editorial") safePattern = "case-study";

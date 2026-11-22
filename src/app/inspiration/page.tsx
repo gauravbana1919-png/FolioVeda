@@ -132,12 +132,29 @@ export default function InspirationPage() {
     if (!generatedTheme) return;
     setIsApplying(true);
     try {
+      // Map layout pattern to genuine system archetype package
+      let targetTemplateId = "sudarvel";
+      const pat = generatedTheme.layout.pattern;
+      if (pat === "craft-desk") targetTemplateId = "rolan-gomes";
+      else if (pat === "wall-showcase") targetTemplateId = "sudarvel";
+      else if (pat === "himanshu-studio") targetTemplateId = "himanshu-singh";
+      else if (pat === "tanuja-product") targetTemplateId = "tanuja-design";
+      else if (pat === "luxe-creative") targetTemplateId = "luxe-creative";
+      else if (pat === "not-your-college") targetTemplateId = "not-your-college";
+      else if (pat === "terminal-grid") targetTemplateId = "developer-terminal";
+      else if (pat === "centered-editorial") targetTemplateId = "minimal-editorial";
+      else if (pat === "split-hero") targetTemplateId = "corporate-clean";
+      else if (pat === "dark-showcase") targetTemplateId = "dark-showcase";
+      else if (pat === "playful-sticker") targetTemplateId = "playful-sticker";
+      else if (pat === "poster") targetTemplateId = "bold-poster";
+
       const res = await fetch("/api/portfolio", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          templateId: generatedTheme.layout.pattern === "terminal-grid" ? "developer-terminal" : generatedTheme.layout.pattern === "centered-editorial" ? "minimal-editorial" : "bold-poster",
-          themeId: generatedTheme.id,
+          templateId: targetTemplateId,
+          themeId: targetTemplateId,
+          theme: generatedTheme.tokens.colors.bg.toLowerCase().includes("#0") || generatedTheme.tokens.colors.bg.toLowerCase().includes("#1") ? "dark" : "light",
           name: normalizedContent.name,
         }),
       });
@@ -283,6 +300,37 @@ export default function InspirationPage() {
               💡 Works with Pinterest, Dribbble, Behance, personal portfolio sites, and more.
               If the site blocks direct access, we extract style signals from the URL itself.
             </p>
+
+            {/* Quick 1-Click Wall of Portfolios References */}
+            <div className="pt-2">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
+                Quick Wall of Portfolios References (Click to Auto-Fill &amp; Synthesize):
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { label: "🌲 Rolan Gomes (Desk Mat)", url: "https://www.wallofportfolios.in/portfolios/rolan-gomes/" },
+                  { label: "⚡ Sudarvel K (Obsidian Telemetry)", url: "https://www.wallofportfolios.in/portfolios/sudar/" },
+                  { label: "🎬 Himanshu Singh (Forest Studio)", url: "https://www.wallofportfolios.in/portfolios/himanshu-singh/" },
+                  { label: "💼 Tanuja (Enterprise Product)", url: "https://www.wallofportfolios.in/portfolios/tanuja/" },
+                ].map((ref) => (
+                  <button
+                    key={ref.url}
+                    type="button"
+                    onClick={() => {
+                      setInputUrl(ref.url);
+                      setUserConsent(true);
+                    }}
+                    className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
+                      inputUrl === ref.url
+                        ? "bg-[#173f32] text-white border-[#173f32] font-bold shadow-xs"
+                        : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200"
+                    }`}
+                  >
+                    {ref.label}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             {/* Mandatory User Consent Checkbox */}
             <div className="flex items-start gap-2.5 pt-1">

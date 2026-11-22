@@ -11,6 +11,10 @@ export const AbstractFontCategorySchema = z.enum([
 ]);
 
 export const AbstractLayoutPatternSchema = z.enum([
+  "craft-desk",
+  "wall-showcase",
+  "himanshu-studio",
+  "tanuja-product",
   "split-hero",
   "centered-editorial",
   "terminal-grid",
@@ -19,6 +23,8 @@ export const AbstractLayoutPatternSchema = z.enum([
   "case-study",
   "dark-showcase",
   "playful-sticker",
+  "luxe-creative",
+  "not-your-college",
 ]);
 
 export const StyleProfileSchema = z.object({
