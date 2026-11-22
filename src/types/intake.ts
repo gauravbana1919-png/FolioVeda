@@ -6,37 +6,41 @@ export const ToneOfVoiceSchema = z.enum(["formal", "friendly", "bold"]);
 export const PreferredMoodSchema = z.enum(["calm", "bold", "playful", "formal"]);
 
 export const IntakeLinksSchema = z.object({
-  github: z.string().url().optional().or(z.literal("")),
-  linkedin: z.string().url().optional().or(z.literal("")),
-  behance: z.string().url().optional().or(z.literal("")),
-  portfolio: z.string().url().optional().or(z.literal("")),
-}).optional();
+  github: z.string().optional().nullable().or(z.literal("")),
+  linkedin: z.string().optional().nullable().or(z.literal("")),
+  behance: z.string().optional().nullable().or(z.literal("")),
+  portfolio: z.string().optional().nullable().or(z.literal("")),
+  website: z.string().optional().nullable().or(z.literal("")),
+  email: z.string().optional().nullable().or(z.literal("")),
+  phone: z.string().optional().nullable().or(z.literal("")),
+}).optional().nullable();
 
 export const IntakeExperienceSchema = z.object({
   role: z.string(),
   company: z.string(),
-  period: z.string(),
-  location: z.string().optional(),
-  highlights: z.array(z.string()).default([]),
+  period: z.string().optional().default("Present"),
+  location: z.string().optional().nullable(),
+  highlights: z.array(z.string()).optional().default([]),
 });
 
 export const IntakeEducationSchema = z.object({
   degree: z.string(),
-  institution: z.string(),
-  year: z.string(),
-  gpa: z.string().optional(),
-  honors: z.string().optional(),
+  institution: z.string().optional().default("University"),
+  year: z.string().optional().default(""),
+  gpa: z.string().optional().nullable(),
+  honors: z.string().optional().nullable(),
 });
 
 export const IntakeCertificationSchema = z.object({
   name: z.string(),
-  issuer: z.string(),
-  year: z.string(),
+  issuer: z.string().optional().default("Accredited"),
+  year: z.string().optional().default(""),
+  status: z.string().optional().nullable(),
 });
 
 export const IntakeProjectSchema = z.object({
   title: z.string(),
-  description: z.string().default(""),
+  description: z.string().optional().default(""),
   techStack: z.array(z.string()).or(z.string()).optional().default([]),
   liveUrl: z.string().optional().nullable(),
   githubUrl: z.string().optional().nullable(),
@@ -49,15 +53,17 @@ export const IntakeProjectSchema = z.object({
 });
 
 export const IntakeAnswersInputSchema = z.object({
-  profileType: ProfileTypeSchema,
-  targetGoal: TargetGoalSchema,
-  targetRoles: z.array(z.string()).min(1, "Please specify at least one target role"),
-  topStrengths: z.array(z.string()).min(1, "Select at least 1 core strength"),
-  tone: ToneOfVoiceSchema,
+  profileType: ProfileTypeSchema.optional().default("tech"),
+  targetGoal: TargetGoalSchema.optional().default("job"),
+  targetRoles: z.array(z.string()).optional().default(["Software Professional"]),
+  topStrengths: z.array(z.string()).optional().default(["Systems Architecture"]),
+  tone: ToneOfVoiceSchema.optional().default("formal"),
   preferredMood: PreferredMoodSchema.optional(),
   preferredColors: z.array(z.string()).optional(),
   links: IntakeLinksSchema,
   rawResumeText: z.string().optional(),
+  location: z.string().optional(),
+  skills: z.array(z.string()).optional(),
   projects: z.array(IntakeProjectSchema).optional(),
   experience: z.array(IntakeExperienceSchema).optional(),
   education: z.array(IntakeEducationSchema).optional(),

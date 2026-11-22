@@ -185,13 +185,37 @@ function SmartIntakeOnboardingContent() {
               setPortfolioUrl(data.extracted.contact.website);
             }
 
+            // Infer profile type & recommendations from authentic extracted data
+            const titleLower = ((data.extracted.headline || "") + " " + (data.extracted.name || "")).toLowerCase();
+            if (titleLower.includes("design") || titleLower.includes("ux") || titleLower.includes("ui") || titleLower.includes("creative") || titleLower.includes("brand") || titleLower.includes("art")) {
+              setProfileType("designer");
+              setSelectedThemeId("rolan-gomes");
+              setRecommendedThemeIds(["rolan-gomes", "tanuja-design", "himanshu-singh"]);
+            } else if (titleLower.includes("manager") || titleLower.includes("product manager") || titleLower.includes("growth") || titleLower.includes("operations")) {
+              setProfileType("bba");
+              setSelectedThemeId("corporate-clean");
+              setRecommendedThemeIds(["corporate-clean", "tanuja-design", "luxe-creative"]);
+            } else {
+              setProfileType("tech");
+              setSelectedThemeId("sudarvel");
+              setRecommendedThemeIds(["sudarvel", "developer-terminal", "minimal-editorial"]);
+            }
+
+            if (data.extracted.headline) {
+              setTargetRoles([data.extracted.headline.split(/[•|&,-]/)[0].trim()]);
+            }
+
+            try {
+              localStorage.setItem("folioveda_active_profile", JSON.stringify(data.extracted));
+            } catch (e) {}
+
             const rolesCount = data.extracted.experience?.length || 0;
             const certsCount = data.extracted.certifications?.length || 0;
             const eduCount = data.extracted.education?.length || 0;
             const projCount = data.extracted.projects?.length || 0;
 
             setExtractSuccess(
-              `✓ Successfully parsed ${file.name}! Extracted ${rolesCount} positions, ${certsCount} certifications, ${eduCount} degrees & ${projCount} projects with smart outcome metrics.`
+              `✓ Successfully parsed ${file.name}! Loaded ${data.extracted.name || "profile"}: ${rolesCount} roles, ${certsCount} credentials, ${eduCount} degrees & ${projCount} projects with authentic metrics.`
             );
           }
         } catch (fetchErr: any) {
@@ -316,12 +340,41 @@ function SmartIntakeOnboardingContent() {
         if (data.extracted.education && data.extracted.education.length > 0) {
           setEducationList(data.extracted.education);
         }
+        if (data.extracted.certifications && data.extracted.certifications.length > 0) {
+          setCertificationsList(data.extracted.certifications);
+        }
+        if (data.extracted.projects && data.extracted.projects.length > 0) {
+          setProjectsList(data.extracted.projects);
+        }
         if (data.extracted.contact?.linkedin) {
           setLinkedinUrl(data.extracted.contact.linkedin);
         }
         if (data.extracted.contact?.github) {
           setGithubUrl(data.extracted.contact.github);
         }
+        if (data.extracted.contact?.website) {
+          setPortfolioUrl(data.extracted.contact.website);
+        }
+
+        const titleLower = ((data.extracted.headline || "") + " " + (data.extracted.name || "")).toLowerCase();
+        if (titleLower.includes("design") || titleLower.includes("ux") || titleLower.includes("ui") || titleLower.includes("creative") || titleLower.includes("brand")) {
+          setProfileType("designer");
+          setSelectedThemeId("rolan-gomes");
+          setRecommendedThemeIds(["rolan-gomes", "tanuja-design", "himanshu-singh"]);
+        } else if (titleLower.includes("manager") || titleLower.includes("product") || titleLower.includes("growth")) {
+          setProfileType("bba");
+          setSelectedThemeId("corporate-clean");
+          setRecommendedThemeIds(["corporate-clean", "tanuja-design", "luxe-creative"]);
+        } else {
+          setProfileType("tech");
+          setSelectedThemeId("sudarvel");
+          setRecommendedThemeIds(["sudarvel", "developer-terminal", "minimal-editorial"]);
+        }
+
+        try {
+          localStorage.setItem("folioveda_active_profile", JSON.stringify(data.extracted));
+        } catch (e) {}
+
         const roleCount = data.extracted.experience?.length || 0;
         const projCount = data.extracted.projects?.length || 0;
         const certCount = data.extracted.certifications?.length || 0;
@@ -408,11 +461,18 @@ function SmartIntakeOnboardingContent() {
       if (res.ok) {
         const data = await res.json();
         if (data.draft) {
-          setDraftHeadline(data.draft.suggestedHeadline);
-          setDraftBio(data.draft.suggestedBio);
-          setRecommendedThemeIds(data.draft.recommendedThemeIds);
-          if (data.draft.recommendedThemeIds[0]) {
-            setSelectedThemeId(data.draft.recommendedThemeIds[0]);
+          // Preserve extracted headline and bio from LinkedIn / Resume PDF
+          if (!draftHeadline || draftHeadline.length < 5) {
+            setDraftHeadline(data.draft.suggestedHeadline);
+          }
+          if (!draftBio || draftBio.length < 20) {
+            setDraftBio(data.draft.suggestedBio);
+          }
+          if (data.draft.recommendedThemeIds && data.draft.recommendedThemeIds.length > 0) {
+            setRecommendedThemeIds(data.draft.recommendedThemeIds);
+            if (!selectedThemeId || selectedThemeId === "sudarvel") {
+              setSelectedThemeId(data.draft.recommendedThemeIds[0]);
+            }
           }
           setStep(4);
         }
@@ -576,6 +636,99 @@ function SmartIntakeOnboardingContent() {
                   <p className="text-xs text-slate-500 mt-1 font-normal">
                     Takes under 2 minutes. We only collect details that make your portfolio stand out to recruiters.
                   </p>
+                </div>
+
+                {/* 1-Click LinkedIn / Resume PDF Dropzone in Step 1 */}
+                <div className="p-6 rounded-3xl bg-gradient-to-br from-emerald-50 via-white to-blue-50/50 border-2 border-emerald-300 shadow-sm space-y-3">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="p-2 rounded-xl bg-[#0077b5] text-white shadow-xs">
+                        <FileUp size={18} />
+                      </span>
+                      <div>
+                        <h3 className="text-sm font-extrabold text-[#1E293B]">
+                          Drop your LinkedIn PDF or Resume to Auto-Fill Everything
+                        </h3>
+                        <p className="text-[11px] text-slate-500 font-normal">
+                          Instantly loads your exact name, headline, real companies, dates, credentials, and achievements.
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-full border border-emerald-300">
+                      ⚡ Instant Trajectory Auto-Fill
+                    </span>
+                  </div>
+
+                  <div
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setIsDraggingPdf(true);
+                    }}
+                    onDragLeave={(e) => {
+                      e.preventDefault();
+                      setIsDraggingPdf(false);
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setIsDraggingPdf(false);
+                      const file = e.dataTransfer.files?.[0];
+                      if (file) handlePdfUpload(file);
+                    }}
+                    onClick={() => document.getElementById("step1PdfUpload")?.click()}
+                    className={`p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center space-y-2 ${
+                      isDraggingPdf
+                        ? "border-emerald-500 bg-emerald-50 scale-[1.01] shadow-md"
+                        : "border-slate-300 hover:border-emerald-500 bg-white hover:bg-emerald-50/20"
+                    }`}
+                  >
+                    <input
+                      id="step1PdfUpload"
+                      type="file"
+                      accept=".pdf,application/pdf"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handlePdfUpload(file);
+                      }}
+                    />
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 text-[#173f32] flex items-center justify-center">
+                      <Upload size={18} />
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-800 block">
+                        Drop LinkedIn PDF (Profile → More → Save to PDF) or Resume
+                      </span>
+                      <span className="text-[11px] text-slate-500 font-normal">
+                        or click to select .pdf file from your device
+                      </span>
+                    </div>
+                    {pdfFileName && (
+                      <div className="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 font-bold">
+                        Uploaded: {pdfFileName}
+                      </div>
+                    )}
+                  </div>
+
+                  {isExtracting && (
+                    <div className="p-3 rounded-xl bg-slate-900 text-white text-xs font-mono flex items-center gap-3 animate-pulse">
+                      <div className="w-3.5 h-3.5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin shrink-0" />
+                      <span>AI Trajectory Parser extracting companies, dates, credentials &amp; impact metrics...</span>
+                    </div>
+                  )}
+
+                  {extractSuccess && (
+                    <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-xs text-emerald-900 font-medium flex items-start gap-2">
+                      <CheckCircle2 size={16} className="text-emerald-600 shrink-0 mt-0.5" />
+                      <span>{extractSuccess}</span>
+                    </div>
+                  )}
+
+                  {extractError && (
+                    <div className="p-3 rounded-xl bg-rose-50 border border-rose-300 text-xs text-rose-900 font-medium flex items-start gap-2">
+                      <span className="text-rose-600 font-bold">⚠</span>
+                      <span>{extractError}</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Quick Persona Demo Presets */}

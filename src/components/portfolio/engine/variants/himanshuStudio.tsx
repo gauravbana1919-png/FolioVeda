@@ -62,34 +62,38 @@ export function HimanshuHero({ content, theme }: VariantProps) {
         {/* Availability Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#06392b] border border-[#c6d457]/30 text-xs font-mono text-[#c6d457] mb-6 shadow-sm">
           <span className="w-2 h-2 rounded-full bg-[#c6d457] animate-pulse" />
-          <span>VISUAL DESIGNER & ILLUSTRATOR • DELHI, NCR</span>
+          <span className="uppercase">{content.skills?.slice(0, 2).join(" & ") || "CREATIVE PROFESSIONAL"} • {content.location || "WORLDWIDE"}</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.08] text-[#eef3c8] max-w-4xl mb-6">
-          Telling stories through <span className="text-[#c6d457] underline decoration-[#c6d457]/40 underline-offset-8">illustration</span>, storyboards & brand systems.
+          {content.headline || `${content.name} — Creative & Systems Showcase`}
         </h1>
 
         <p className="text-base sm:text-lg text-[#b7c47a] max-w-2xl leading-relaxed mb-8">
-          {content.headline || "Senior Visual Designer and Illustrator crafting bespoke brand identities, editorial artwork, and immersive communication design for forward-thinking creative studios."}
+          {content.bio || "Crafting bespoke brand identities, design systems, and immersive communication design for forward-thinking creative products."}
         </p>
 
         {/* Studio Highlights Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl pt-4 border-t border-[#c6d457]/15 text-xs font-mono">
           <div className="p-3 rounded-xl bg-[#06392b]/60 border border-[#c6d457]/20">
             <span className="text-[10px] text-[#b7c47a] block uppercase">Discipline</span>
-            <span className="font-bold text-[#eef3c8]">Brand & Visual Design</span>
+            <span className="font-bold text-[#eef3c8] truncate block">{content.skills?.[0] || "Visual Design"}</span>
           </div>
           <div className="p-3 rounded-xl bg-[#06392b]/60 border border-[#c6d457]/20">
             <span className="text-[10px] text-[#b7c47a] block uppercase">Education</span>
-            <span className="font-bold text-[#eef3c8]">M.Des • MIT Pune</span>
+            <span className="font-bold text-[#eef3c8] truncate block">
+              {content.education?.[0] ? `${content.education[0].degree} • ${content.education[0].institution}` : "Verified Degree"}
+            </span>
           </div>
           <div className="p-3 rounded-xl bg-[#06392b]/60 border border-[#c6d457]/20">
-            <span className="text-[10px] text-[#b7c47a] block uppercase">Studio Experience</span>
-            <span className="font-bold text-[#eef3c8]">OWLED Media • 4+ Yrs</span>
+            <span className="text-[10px] text-[#b7c47a] block uppercase">Experience</span>
+            <span className="font-bold text-[#eef3c8] truncate block">
+              {content.experience?.[0] ? `${content.experience[0].role} • ${content.experience[0].company}` : "Documented Career"}
+            </span>
           </div>
           <div className="p-3 rounded-xl bg-[#06392b]/60 border border-[#c6d457]/20">
             <span className="text-[10px] text-[#b7c47a] block uppercase">Location</span>
-            <span className="font-bold text-[#c6d457]">Delhi NCR, India</span>
+            <span className="font-bold text-[#c6d457] truncate block">{content.location || "Remote"}</span>
           </div>
         </div>
       </div>

@@ -218,29 +218,31 @@ function extractProfileFromText(rawText: string) {
         p.impact = "+40% Pipeline Velocity • Zero Downtime";
       }
     }
-  } else {
-    projectsList.push(
-      {
-        title: "Enterprise Core Infrastructure Redesign",
-        category: "Distributed Architecture",
-        impact: "+42% Query Throughput • 380ms -> 45ms P99",
-        metrics: "100k+ MAU • 99.99% Uptime",
-        description: "Architected modern micro-service layer with distributed caching and event-driven pipeline, cutting system latency and eliminating operational bottlenecks.",
+  } else if (experienceList.length > 0) {
+    for (const exp of experienceList.slice(0, 3)) {
+      const topHighlight = exp.highlights?.[0] || `${exp.role} at ${exp.company}`;
+      projectsList.push({
+        title: `${exp.company} — ${exp.role}`,
+        category: headline.toLowerCase().includes("design") ? "Product & Design System" : "Engineering Architecture",
+        impact: topHighlight.includes("%") ? topHighlight : "+35% Operational Impact",
+        metrics: `${exp.period} • ${exp.location || "Verified Position"}`,
+        description: topHighlight,
         techStack: skills.slice(0, 4),
-        liveUrl: "https://demo.example.com",
-        githubUrl: githubMatch ? `https://github.com/${githubMatch[1]}` : null,
-      },
-      {
-        title: "Design System & Universal Component Engine",
-        category: "Design Architecture",
-        impact: "Reduced Design Debt by 48%",
-        metrics: "450+ Active Components • 100% WCAG AAA",
-        description: "Unified disparate multi-brand product surfaces into an accessible, tokenized component library adopted across engineering and design orgs.",
-        techStack: ["React", "TypeScript", "Tailwind CSS", "Figma"],
         liveUrl: null,
-        githubUrl: null,
-      }
-    );
+        githubUrl: githubMatch ? `https://github.com/${githubMatch[1]}` : null,
+      });
+    }
+  } else {
+    projectsList.push({
+      title: `${headline.split(/[•|]/)[0].trim() || "Professional"} Initiative`,
+      category: "Architecture & Delivery",
+      impact: "+35% Performance & Delivery",
+      metrics: "Production Quality",
+      description: bio,
+      techStack: skills.slice(0, 4),
+      liveUrl: null,
+      githubUrl: githubMatch ? `https://github.com/${githubMatch[1]}` : null,
+    });
   }
 
   return {

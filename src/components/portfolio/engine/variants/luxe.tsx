@@ -177,14 +177,10 @@ export function LuxeHero({ content }: VariantProps) {
           className="space-y-4"
         >
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight leading-[1.1]">
-            Transforming Complex Ideas Into{" "}
             <span className="bg-gradient-to-r from-rose-400 via-amber-300 to-rose-500 bg-clip-text text-transparent">
-              Exceptional Software.
+              {content.headline || `${content.name} — Portfolio`}
             </span>
           </h1>
-          <p className="text-lg sm:text-xl font-bold text-rose-300/90 tracking-wide max-w-2xl mx-auto">
-            {content.headline}
-          </p>
         </motion.div>
 
         {/* Bio */}

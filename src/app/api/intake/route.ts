@@ -110,9 +110,10 @@ export async function POST(req: Request) {
       });
 
       // 2. Update user Profile with approved factual bio and skills
-      const combinedSkills = Array.from(
-        new Set([...validAnswers.topStrengths, ...validAnswers.targetRoles])
-      ).join(", ");
+      const allSkills = validAnswers.skills && validAnswers.skills.length > 0
+        ? validAnswers.skills
+        : [...validAnswers.topStrengths, ...validAnswers.targetRoles];
+      const combinedSkills = Array.from(new Set(allSkills)).join(", ");
 
       const socialsJson = validAnswers.links ? JSON.stringify(validAnswers.links) : null;
 
@@ -135,6 +136,7 @@ export async function POST(req: Request) {
           bio: finalBio,
           headline: finalHeadline,
           skills: combinedSkills,
+          location: validAnswers.location || "San Francisco, CA / Remote",
           socials: socialsJson,
           experience: experienceJson,
           education: educationJson,
@@ -144,6 +146,7 @@ export async function POST(req: Request) {
           bio: finalBio,
           headline: finalHeadline,
           skills: combinedSkills,
+          ...(validAnswers.location && { location: validAnswers.location }),
           ...(socialsJson && { socials: socialsJson }),
           ...(experienceJson !== null && { experience: experienceJson }),
           ...(educationJson !== null && { education: educationJson }),

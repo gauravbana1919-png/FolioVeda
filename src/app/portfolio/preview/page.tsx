@@ -164,10 +164,44 @@ export default function PortfolioStudio() {
 
   useEffect(() => {
     setMounted(true);
-    // Fetch initial profile from server
+
+    // 1. Check if user recently extracted a PDF in Onboarding
+    try {
+      const cached = localStorage.getItem("folioveda_active_profile");
+      if (cached) {
+        const ext = JSON.parse(cached);
+        if (ext && ext.name) {
+          setUserData((prev: any) => ({
+            ...prev,
+            name: ext.name || prev.name,
+            profile: {
+              ...prev.profile,
+              headline: ext.headline || prev.profile.headline,
+              bio: ext.bio || prev.profile.bio,
+              skills: ext.skills ? (Array.isArray(ext.skills) ? ext.skills.join(", ") : ext.skills) : prev.profile.skills,
+              location: ext.location || prev.profile.location,
+              availability: ext.availability || prev.profile.availability,
+              experience: JSON.stringify(ext.experience || []),
+              education: JSON.stringify(ext.education || []),
+              certifications: JSON.stringify(ext.certifications || []),
+              socials: JSON.stringify(ext.contact || {}),
+            },
+            projects: ext.projects && ext.projects.length > 0 ? ext.projects : prev.projects,
+          }));
+        }
+      }
+    } catch (e) {}
+
+    // 2. Fetch profile from database (support ?name= and ?username= query params)
     async function loadPortfolio() {
       try {
-        const res = await fetch('/api/portfolio');
+        const params = new URLSearchParams(window.location.search);
+        const nameParam = params.get('name') || params.get('username') || params.get('handle');
+        const themeParam = params.get('theme') || params.get('template');
+        if (themeParam) setActiveThemeId(themeParam);
+
+        const fetchUrl = nameParam ? `/api/portfolio?name=${encodeURIComponent(nameParam)}` : '/api/portfolio';
+        const res = await fetch(fetchUrl);
         if (res.ok) {
           const data = await res.json();
           if (data.user && !data.isMock) {
@@ -181,11 +215,15 @@ export default function PortfolioStudio() {
                 skills: data.user.profile?.skills || prev.profile.skills,
                 location: data.user.profile?.location || prev.profile.location,
                 availability: data.user.profile?.availability || prev.profile.availability,
+                experience: data.user.profile?.experience || prev.profile.experience,
+                education: data.user.profile?.education || prev.profile.education,
+                certifications: data.user.profile?.certifications || prev.profile.certifications,
+                socials: data.user.profile?.socials || prev.profile.socials,
               },
               projects: data.user.projects?.length > 0 ? data.user.projects : prev.projects,
             }));
             const loadedTheme = data.user.portfolio?.themePackageId || data.user.portfolio?.themeId || data.user.portfolio?.templateId;
-            if (loadedTheme) {
+            if (loadedTheme && !themeParam) {
               setActiveThemeId(loadedTheme);
             }
             if (data.user.portfolio?.designPrefs) {
@@ -275,6 +313,21 @@ export default function PortfolioStudio() {
               },
               projects: ext.projects && ext.projects.length > 0 ? ext.projects : prev.projects,
             }));
+
+            // Adapt theme according to extracted profession
+            const hl = (ext.headline || "").toLowerCase();
+            if (hl.includes("design") || hl.includes("ux") || hl.includes("ui") || hl.includes("creative") || hl.includes("art")) {
+              setActiveThemeId("rolan-gomes");
+            } else if (hl.includes("manager") || hl.includes("product") || hl.includes("growth")) {
+              setActiveThemeId("corporate-clean");
+            } else {
+              setActiveThemeId("sudarvel");
+            }
+
+            try {
+              localStorage.setItem("folioveda_active_profile", JSON.stringify(ext));
+            } catch (e) {}
+
             setImportStatus(`✓ Extracted ${file.name} successfully!`);
             setAiNotice(`Imported ${ext.name || "profile"} (${ext.experience?.length || 0} roles, ${ext.projects?.length || 0} projects)!`);
             setTimeout(() => setImportStatus(null), 4000);

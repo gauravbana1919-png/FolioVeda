@@ -185,7 +185,7 @@ export function WallHero({ content }: VariantProps) {
         {/* Narrative Headline (Tanuja / Rolan Gomes standard) */}
         <div className="space-y-4 max-w-4xl">
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.12]">
-            I build <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">scalable software systems</span>, then direct AI to turn complex workflows into working products.
+            {content.headline || `${content.name} — Portfolio & Verified Trajectory`}
           </h1>
           <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal max-w-3xl">
             {content.bio || "Full-stack engineer and product systems designer focused on high-throughput architectures, sub-100ms APIs, and frictionless user experiences."}
@@ -199,7 +199,7 @@ export function WallHero({ content }: VariantProps) {
               Primary Focus
             </span>
             <span className="text-sm font-bold text-white block">
-              {content.skills?.[0] || "Next.js"} &amp; {content.skills?.[1] || "TypeScript"}
+              {content.skills && content.skills.length > 0 ? content.skills.slice(0, 2).join(" & ") : "Engineering & Design"}
             </span>
           </div>
 

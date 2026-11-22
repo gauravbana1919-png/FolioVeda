@@ -130,17 +130,17 @@ export function CraftDeskHero({ content }: VariantProps) {
         
         {/* Eyebrow & Status */}
         <div className="flex items-center gap-3">
-          <span className="px-2.5 py-0.5 rounded-full bg-[#095848]/10 text-[#095848] border border-[#095848]/20 text-[11px] font-mono font-bold">
-            DESIGN SYSTEMS · AI-DIRECTED DELIVERY
+          <span className="px-2.5 py-0.5 rounded-full bg-[#095848]/10 text-[#095848] border border-[#095848]/20 text-[11px] font-mono font-bold uppercase">
+            {content.skills && content.skills.length > 0 ? content.skills.slice(0, 3).join(" · ") : "VERIFIED PORTFOLIO"}
           </span>
           <span className="text-xs font-mono text-slate-500 hidden sm:inline">
-            // WCAG 2.2 · ACCREDITED
+            // ACCREDITED DOSSIER
           </span>
         </div>
 
         {/* Hero Title */}
         <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-950 leading-[1.15]">
-          I design systems, then direct AI to build them into working software.
+          {content.headline || `${content.name} — Portfolio & Verified Works`}
         </h1>
 
         <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal max-w-2xl">

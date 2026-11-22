@@ -59,36 +59,36 @@ export function TanujaHero({ content, theme }: VariantProps) {
     <section className="px-6 sm:px-10 pt-16 pb-12 bg-gradient-to-b from-slate-50 to-white border-b border-slate-100">
       <div className="max-w-6xl mx-auto">
         {/* Role Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/60 text-xs font-semibold text-blue-700 mb-6">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/60 text-xs font-semibold text-blue-700 mb-6 uppercase">
           <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-          <span>PRODUCT DESIGNER @ MICROSOFT • 3.5+ YRS EXPERIENCE</span>
+          <span>{content.experience?.[0] ? `${content.experience[0].role} @ ${content.experience[0].company}` : (content.headline || "VERIFIED PROFESSIONAL")}</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-slate-950 max-w-4xl leading-[1.08] mb-6 font-sans">
-          Transforming complex tasks into <span className="text-blue-600">compelling stories</span> through AI.
+          {content.headline || `${content.name} — Portfolio & Systems Architecture`}
         </h1>
 
         <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed mb-8">
-          {content.headline || "Specializing in crafting intuitive, human-centered digital experiences by seamlessly embedding AI into design and enterprise workflows at scale."}
+          {content.bio || "Specializing in crafting intuitive, human-centered digital experiences by seamlessly embedding AI into design and enterprise workflows at scale."}
         </p>
 
         {/* Highlights Pills */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl pt-6 border-t border-slate-200/70 text-xs">
           <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
             <span className="text-[10px] text-slate-400 font-semibold uppercase block">Core Focus</span>
-            <span className="font-bold text-slate-800">AI Integration & UX</span>
+            <span className="font-bold text-slate-800 truncate block">{content.skills?.[0] || "Product Systems"}</span>
           </div>
           <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
-            <span className="text-[10px] text-slate-400 font-semibold uppercase block">Enterprise Work</span>
-            <span className="font-bold text-slate-800">Microsoft PowerPoint</span>
+            <span className="text-[10px] text-slate-400 font-semibold uppercase block">Organization</span>
+            <span className="font-bold text-slate-800 truncate block">{content.experience?.[0]?.company || "Enterprise Practice"}</span>
           </div>
           <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
-            <span className="text-[10px] text-slate-400 font-semibold uppercase block">Flagship Tools</span>
-            <span className="font-bold text-blue-600">FOX Icons & Figma AI</span>
+            <span className="text-[10px] text-slate-400 font-semibold uppercase block">Top Tools</span>
+            <span className="font-bold text-blue-600 truncate block">{content.skills?.slice(1, 3).join(" & ") || "Modern Stack"}</span>
           </div>
           <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
-            <span className="text-[10px] text-slate-400 font-semibold uppercase block">Methodology</span>
-            <span className="font-bold text-slate-800">Human-in-the-Loop</span>
+            <span className="text-[10px] text-slate-400 font-semibold uppercase block">Location</span>
+            <span className="font-bold text-slate-800 truncate block">{content.location || "Remote"}</span>
           </div>
         </div>
       </div>

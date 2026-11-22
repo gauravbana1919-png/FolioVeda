@@ -150,14 +150,8 @@ export function NYCHero({ content }: VariantProps) {
         {/* Grand Headline in Instrument Serif */}
         <div className="space-y-4">
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-normal text-[#222e26] font-editorial tracking-tight leading-[1.08]">
-            Built with proof. <br />
-            <span className="font-editorial-italic text-[#173f32]">
-              Shipped with modern engineering.
-            </span>
+            {content.headline || `${content.name} — Portfolio`}
           </h1>
-          <p className="text-xl sm:text-2xl font-bold text-[#173f32] tracking-tight">
-            {content.headline}
-          </p>
         </div>
 
         {/* Bio */}

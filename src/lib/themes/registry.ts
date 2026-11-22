@@ -266,6 +266,26 @@ export function mapUserToPortfolioContent(userRecord: any, fallbackName = "Alex 
     parsedExperience = userRecord.experience;
   }
 
+  // If projects is empty but user has authentic experience, synthesize project case studies from real roles
+  if (projects.length === 0 && parsedExperience.length > 0) {
+    for (const exp of parsedExperience.slice(0, 4)) {
+      const topHighlight = exp.highlights?.[0] || `${exp.role} at ${exp.company}`;
+      projects.push({
+        title: `${exp.company} — ${exp.role}`,
+        description: typeof topHighlight === "string" ? topHighlight : `${exp.role} at ${exp.company}`,
+        techStack: skillsArray.slice(0, 3),
+        liveUrl: null,
+        githubUrl: null,
+        featured: true,
+        metrics: exp.period || null,
+        category: "Enterprise Practice",
+        impact: topHighlight.includes("%") ? topHighlight : "Key Initiative",
+        problem: null,
+        solution: null,
+      });
+    }
+  }
+
   // Parse education from profile or user
   let parsedEducation: any[] = [];
   if (Array.isArray(userRecord.profile?.education)) {
