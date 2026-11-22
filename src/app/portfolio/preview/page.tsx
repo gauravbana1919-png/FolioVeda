@@ -29,13 +29,19 @@ import {
   Share2,
   Upload,
   FileUp,
-  CheckCircle2
+  CheckCircle2,
+  Rocket,
+  DownloadCloud
 } from "lucide-react";
-import { ChatEditor } from "@/components/ui/ChatEditor";
+import { AiAgentWidget } from "@/components/portfolio/AiAgentWidget";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import { getThemeById, getAllSystemThemes, mapUserToPortfolioContent } from "@/lib/themes/registry";
 import { ThemeRenderer } from "@/components/portfolio/engine/ThemeRenderer";
 import { PERSONA_PROFILES } from "@/lib/personas";
+import { DeployModal } from "@/components/portfolio/DeployModal";
+import { GithubImporter } from "@/components/portfolio/GithubImporter";
+import { ReadinessScorecard } from "@/components/portfolio/ReadinessScorecard";
+import { exportStandaloneHtml, exportPortfolioZip, generateProfileReadme } from "@/lib/export/exportPortfolio";
 
 const ACCENT_COLORS = [
   { id: "emerald", label: "Cyber Mint", bg: "bg-emerald-500", ring: "ring-emerald-500" },
@@ -57,6 +63,9 @@ export default function PortfolioStudio() {
   const [activePersonaId, setActivePersonaId] = useState<string>("fullstack-developer");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
+  const [isGithubImportOpen, setIsGithubImportOpen] = useState(false);
+  const [showReadiness, setShowReadiness] = useState(true);
   const [copiedLink, setCopiedLink] = useState(false);
   const [isImportingPdf, setIsImportingPdf] = useState(false);
   const [importStatus, setImportStatus] = useState<string | null>(null);
@@ -360,6 +369,23 @@ export default function PortfolioStudio() {
     }
   };
 
+  const handleGithubImportSuccess = (imported: any) => {
+    setUserData((prev: any) => ({
+      ...prev,
+      name: prev.name || imported.profile?.name || prev.name,
+      profile: {
+        ...prev.profile,
+        bio: prev.profile?.bio || imported.profile?.bio || prev.profile.bio,
+        skills: imported.skills?.length > 0 ? imported.skills.join(", ") : prev.profile.skills,
+        github: imported.profile?.github || prev.profile.github,
+      },
+      projects: imported.projects?.length > 0 ? [...imported.projects, ...prev.projects] : prev.projects,
+    }));
+    setAiNotice(`Imported ${imported.projects?.length || 0} repositories from GitHub!`);
+    setTimeout(() => setAiNotice(null), 3500);
+    setIsGithubImportOpen(false);
+  };
+
   // Save changes to backend
   const handleSave = async (overrides?: any) => {
     setSaveStatus("saving");
@@ -505,6 +531,50 @@ export default function PortfolioStudio() {
               >
                 Tanuja Microsoft
               </button>
+              <button
+                onClick={() => { setActiveThemeId("neo-brutalist"); handleSave({ themeId: "neo-brutalist" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+                  activeThemeId === "neo-brutalist"
+                    ? "bg-yellow-400 text-black border-2 border-black font-black shadow-[2px_2px_0_rgba(0,0,0,1)]" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                title="Neo-Brutalist Pop: 90s Retro Bold Borders & High Contrast"
+              >
+                ⚡ Neo-Brutalist
+              </button>
+              <button
+                onClick={() => { setActiveThemeId("glass"); handleSave({ themeId: "glass" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+                  activeThemeId === "glass"
+                    ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400 shadow-sm font-bold" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                title="Glassmorphism Cyber: Frosted Glass & Translucent Glow"
+              >
+                💎 Glassmorphism
+              </button>
+              <button
+                onClick={() => { setActiveThemeId("claymorphic"); handleSave({ themeId: "claymorphic" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+                  activeThemeId === "claymorphic"
+                    ? "bg-indigo-600 text-white shadow-md font-extrabold" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                title="Claymorphic 3D: Tactile Pastel Pill Cards & Embossed Shadows"
+              >
+                🫧 Claymorphic 3D
+              </button>
+              <button
+                onClick={() => { setActiveThemeId("bento-grid"); handleSave({ themeId: "bento-grid" }); }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+                  activeThemeId === "bento-grid"
+                    ? "bg-sky-600 text-white shadow-md font-extrabold" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                title="BentoGrid Studio: Aceternity 3D Cards, Live Terminal Console, & Modular Grid"
+              >
+                🍱 BentoGrid Studio
+              </button>
             </div>
 
             {/* Dropdown for All 10 Distinct Styles */}
@@ -615,6 +685,26 @@ export default function PortfolioStudio() {
               )}
             </button>
 
+            {/* Auto-Import GitHub Button */}
+            <button
+              onClick={() => setIsEditModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:bg-slate-800 text-slate-200 text-xs font-semibold transition-all shadow-xs"
+              title="Auto-Import from GitHub or upload LinkedIn PDF"
+            >
+              <DownloadCloud size={13} className="text-cyan-400" />
+              <span className="hidden sm:inline">Import GitHub</span>
+            </button>
+
+            {/* 1-Click Deploy to GitHub Pages */}
+            <button
+              onClick={() => setIsDeployModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white text-xs font-bold transition-all shadow-md shadow-cyan-600/20"
+              title="1-Click Deploy to GitHub Pages (username.github.io)"
+            >
+              <Rocket size={13} />
+              <span>Deploy Pages</span>
+            </button>
+
             {/* Publish Live Button */}
             <button
               onClick={() => {
@@ -717,6 +807,22 @@ export default function PortfolioStudio() {
         </div>
       )}
 
+      {/* ─── GAMIFIED PORTFOLIO READINESS SCORECARD & EXPORT DOCK ──────────────── */}
+      <div className="max-w-7xl mx-auto w-full px-4 pt-3">
+        <ReadinessScorecard
+          content={normalizedContent}
+          onOpenDeploy={() => setIsDeployModalOpen(true)}
+          onDownloadHtml={() => exportStandaloneHtml(selectedThemePackage, normalizedContent)}
+          onDownloadZip={() => exportPortfolioZip(selectedThemePackage, normalizedContent)}
+          onCopyReadme={() => {
+            const md = generateProfileReadme(normalizedContent);
+            navigator.clipboard.writeText(md);
+            setAiNotice("Copied GitHub Profile README to clipboard!");
+            setTimeout(() => setAiNotice(null), 3000);
+          }}
+        />
+      </div>
+
       {/* ─── MAIN DYNAMIC PREVIEW CANVAS WITH VIEWPORT FRAMING ─────────────────── */}
       <main className="flex-1 bg-muted/20 py-4 px-2 sm:px-4">
         <div 
@@ -759,11 +865,10 @@ export default function PortfolioStudio() {
         </span>
       </div>
 
-      {/* Floating AI Chat Editor with Full Reactive State Binding */}
-      <ChatEditor 
+      {/* Floating AI Assistant with Full Reactive State Binding */}
+      <AiAgentWidget 
         onUpdate={handleAiUpdate}
-        currentProfile={userData}
-        templateId={activeThemeId}
+        portfolioContext={normalizedContent}
       />
 
       {/* ─── LIVE CONTENT EDIT MODAL ──────────────────────────────────────────── */}
@@ -824,6 +929,9 @@ export default function PortfolioStudio() {
                   </div>
                 )}
               </div>
+
+              {/* 1-Click GitHub Repository Auto-Import */}
+              <GithubImporter onImportSuccess={handleGithubImportSuccess} />
 
               {/* Name */}
               <div className="space-y-1.5">
@@ -975,6 +1083,14 @@ export default function PortfolioStudio() {
           </div>
         </div>
       )}
+
+      {/* ─── 1-CLICK GITHUB PAGES DEPLOY MODAL ─────────────────────────────────── */}
+      <DeployModal
+        isOpen={isDeployModalOpen}
+        onClose={() => setIsDeployModalOpen(false)}
+        theme={selectedThemePackage}
+        content={normalizedContent}
+      />
 
     </div>
   );

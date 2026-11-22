@@ -77,8 +77,8 @@ function SmartIntakeOnboardingContent() {
       title: "Distributed Telemetry & Edge Pipeline",
       description: "Low-latency distributed caching and telemetry engine built with Next.js, Redis, and Prisma, serving 100k+ req/sec.",
       techStack: ["Next.js 15", "TypeScript", "Redis", "Docker", "PostgreSQL"],
-      liveUrl: "https://github.com/gauravbana1919-png",
-      githubUrl: "https://github.com/gauravbana1919-png",
+      liveUrl: "https://folioveda.dev/sample-pipeline",
+      githubUrl: "https://github.com/folioveda/sample-pipeline",
       featured: true,
       metrics: "100k req/sec • sub-5ms P99",
       category: "Distributed Architecture",
@@ -269,6 +269,16 @@ function SmartIntakeOnboardingContent() {
     const templateParam = searchParams.get("template");
 
     if (handleParam) {
+      if (
+        handleParam.startsWith("http://") || 
+        handleParam.startsWith("https://") || 
+        handleParam.includes("wallofportfolios.in") ||
+        handleParam.includes(".com") ||
+        handleParam.includes(".in/")
+      ) {
+        window.location.href = `/inspiration?url=${encodeURIComponent(handleParam)}`;
+        return;
+      }
       setCandidateName(handleParam);
     } else if (session?.user?.name) {
       setCandidateName(session.user.name);

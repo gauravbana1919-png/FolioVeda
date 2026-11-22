@@ -75,8 +75,8 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
     threadOffset: "top-4",
     accentColor: "#173f32",
     cardBg: "from-white to-emerald-50/50",
-    image: "/images/portfolios/portfolio-1.jpg",
-    livePreviewUrl: "/p/gaurav?theme=not-your-college",
+    image: "/images/portfolios/portfolio-1.png",
+    livePreviewUrl: "/p/Elena%20Vance?theme=not-your-college",
     themeTag: "NYC Editorial Standard",
     metrics: [
       { label: "Design Awards", value: "24 Cannes & D&AD" },
@@ -129,8 +129,8 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
     threadOffset: "top-12",
     accentColor: "#2563EB",
     cardBg: "from-white to-blue-50/40",
-    image: "/images/portfolios/portfolio-2.jpg",
-    livePreviewUrl: "/p/gaurav?theme=editorial",
+    image: "/images/portfolios/portfolio-2.png",
+    livePreviewUrl: "/p/Kaito%20Tanaka?theme=editorial",
     themeTag: "Modern Product Systems",
     metrics: [
       { label: "Design Systems", value: "100+ Components" },
@@ -183,8 +183,8 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
     threadOffset: "top-2",
     accentColor: "#0284C7",
     cardBg: "from-white to-sky-50/40",
-    image: "/images/portfolios/portfolio-3.jpg",
-    livePreviewUrl: "/p/gaurav?theme=developer-terminal",
+    image: "/images/portfolios/portfolio-3.png",
+    livePreviewUrl: "/p/Marcus%20Vance?theme=developer-terminal",
     themeTag: "AI & Distributed Systems",
     metrics: [
       { label: "NeurIPS & ICML", value: "14 First-Author" },
@@ -237,8 +237,8 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
     threadOffset: "top-10",
     accentColor: "#10B981",
     cardBg: "from-slate-900 to-slate-950",
-    image: "/images/portfolios/portfolio-4.jpg",
-    livePreviewUrl: "/p/gaurav?theme=luxe-creative",
+    image: "/images/portfolios/portfolio-4.png",
+    livePreviewUrl: "/p/Chloe%20Moreau?theme=luxe-creative",
     themeTag: "Luxe Obsidian Glow",
     metrics: [
       { label: "Throughput", value: "400M Events/Day" },
@@ -291,8 +291,8 @@ const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
     threadOffset: "top-5",
     accentColor: "#D97706",
     cardBg: "from-white to-amber-50/40",
-    image: "/images/portfolios/portfolio-5.jpg",
-    livePreviewUrl: "/p/gaurav?theme=corporate",
+    image: "/images/portfolios/portfolio-5.png",
+    livePreviewUrl: "/p/Julian%20Vance?theme=corporate",
     themeTag: "Executive Venture Showcase",
     metrics: [
       { label: "ARR Scaled", value: "$400M Global" },
@@ -561,48 +561,44 @@ export function HangingResumesGallery() {
                     <span className="w-2 h-2 rounded-full bg-[#173f32] animate-pulse" />
                   </div>
 
-                  {/* Crisp Native Vector Portfolio Preview Canvas */}
+                  {/* Crisp Real Portfolio Photo Preview */}
                   <div className="p-3 pb-0">
-                    <div className="relative w-full h-36 sm:h-40 overflow-hidden rounded-2xl bg-[#0F172A] border border-slate-200/20 shadow-inner group/thumb select-none">
+                    <div className="relative w-full h-44 sm:h-48 overflow-hidden rounded-2xl bg-slate-950 border border-slate-200/50 shadow-md group/thumb select-none">
                       
                       {/* Mini Browser Header */}
-                      <div className="h-6 bg-slate-900/90 px-3 flex items-center justify-between border-b border-white/10">
+                      <div className="absolute top-0 inset-x-0 h-6 bg-slate-950/90 backdrop-blur-md px-3 flex items-center justify-between border-b border-white/10 z-20">
                         <div className="flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-rose-500/80 inline-block" />
-                          <span className="w-2 h-2 rounded-full bg-amber-400/80 inline-block" />
-                          <span className="w-2 h-2 rounded-full bg-emerald-400/80 inline-block" />
+                          <span className="w-2 h-2 rounded-full bg-rose-500/90 inline-block" />
+                          <span className="w-2 h-2 rounded-full bg-amber-400/90 inline-block" />
+                          <span className="w-2 h-2 rounded-full bg-emerald-400/90 inline-block" />
                         </div>
-                        <span className="text-[9px] font-mono text-slate-400 truncate max-w-[140px]">
+                        <span className="text-[9px] font-mono text-slate-300 truncate max-w-[130px]">
                           folioveda.dev/p/{resume.id}
                         </span>
                       </div>
 
-                      {/* Mini Viewport Body Customized to Persona */}
-                      <div className="p-3 text-white flex flex-col justify-between h-[calc(100%-24px)] transition-transform duration-500 group-hover/thumb:scale-105">
-                        <div className="space-y-1.5">
-                          <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-400 inline-block">
-                            ● Verified Live Site
+                      {/* Real High-Resolution Portfolio Photo */}
+                      <img
+                        src={resume.image}
+                        alt={`${resume.name} Live Portfolio`}
+                        className="w-full h-full pt-6 object-cover object-top transition-transform duration-700 ease-out group-hover/thumb:scale-110"
+                        loading="lazy"
+                      />
+
+                      {/* Frosted Bottom Overlay */}
+                      <div className="absolute inset-x-0 bottom-0 p-2.5 bg-gradient-to-t from-slate-950/95 via-slate-950/70 to-transparent flex items-center justify-between text-white z-20">
+                        <div className="space-y-0.5 max-w-[68%]">
+                          <span className="text-[8px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                            Live Portfolio
                           </span>
-                          <div className="text-xs font-extrabold text-white leading-tight line-clamp-1">
+                          <div className="text-[11px] font-bold text-white truncate">
                             {resume.liveProject.title}
                           </div>
-                          <p className="text-[10px] text-slate-300 line-clamp-2 leading-relaxed">
-                            {resume.liveProject.description}
-                          </p>
                         </div>
-
-                        <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[9px] text-slate-400 font-mono">
-                          <span className="text-[#ebd800] font-bold">{resume.liveProject.tag}</span>
-                          <span className="text-white font-bold group-hover/thumb:text-[#ebd800] transition-colors">
-                            Preview ↗
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Live Template Tag */}
-                      <div className="absolute top-8 left-2 px-2 py-0.5 rounded-full bg-slate-950/80 backdrop-blur-md text-white text-[9px] font-bold tracking-wider uppercase flex items-center gap-1 shadow-xs pointer-events-none border border-white/10">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        <span>FolioVeda Standard</span>
+                        <span className="px-2 py-1 rounded-md bg-white/15 group-hover/thumb:bg-emerald-500 group-hover/thumb:text-slate-950 text-white text-[10px] font-bold tracking-tight transition-all flex items-center gap-1">
+                          Preview ↗
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -805,6 +801,26 @@ export function HangingResumesGallery() {
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 bg-emerald-950/80 border border-emerald-800/80 px-2 py-0.5 rounded-full">
                       ● Active Deployment
                     </span>
+                  </div>
+                </div>
+
+                {/* Real High-Resolution Portfolio Photo */}
+                <div className="relative rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 shadow-2xl">
+                  <img
+                    src={expandedResume.image}
+                    alt={`${expandedResume.name} Full Portfolio Preview`}
+                    className="w-full h-auto max-h-[460px] object-cover object-top"
+                  />
+                  <div className="absolute bottom-3 right-3">
+                    {expandedResume.livePreviewUrl && (
+                      <Link
+                        href={expandedResume.livePreviewUrl}
+                        target="_blank"
+                        className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs flex items-center gap-1.5 transition-all shadow-xl"
+                      >
+                        <ExternalLink size={13} /> Open Live Site ↗
+                      </Link>
+                    )}
                   </div>
                 </div>
 

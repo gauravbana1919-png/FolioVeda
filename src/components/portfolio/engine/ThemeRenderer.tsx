@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ThemePackage } from "@/types/theme";
 import { PortfolioContent } from "@/types/content";
 import { OrigamiCyberMintIcon } from "@/components/ui/Logo";
+import { AiAgentWidget } from "@/components/portfolio/AiAgentWidget";
 
 // Variants
 import {
@@ -107,6 +108,39 @@ import {
   TanujaEducation,
   TanujaContact,
 } from "./variants/tanujaProduct";
+import {
+  NeoBrutalistNav,
+  NeoBrutalistHero,
+  NeoBrutalistProjects,
+  NeoBrutalistSkills,
+  NeoBrutalistExperience,
+  NeoBrutalistContact,
+} from "./variants/neoBrutalist";
+import {
+  GlassNav,
+  GlassHero,
+  GlassProjects,
+  GlassSkills,
+  GlassExperience,
+  GlassContact,
+} from "./variants/glass";
+import {
+  ClaymorphicNav,
+  ClaymorphicHero,
+  ClaymorphicProjects,
+  ClaymorphicSkills,
+  ClaymorphicExperience,
+  ClaymorphicContact,
+} from "./variants/claymorphic";
+import {
+  BentoGridNav,
+  BentoGridHero,
+  BentoGridProjects,
+  BentoGridSkills,
+  BentoGridExperience,
+  BentoGridEducation,
+  BentoGridContact,
+} from "./variants/bentoGrid";
 
 interface ThemeRendererProps {
   theme: ThemePackage;
@@ -157,6 +191,14 @@ export function ThemeRenderer({
         return <NYCNav content={content} theme={theme} />;
       case "luxe-creative":
         return <LuxeNav content={content} theme={theme} />;
+      case "neo-brutalist":
+        return <NeoBrutalistNav content={content} theme={theme} />;
+      case "glass":
+        return <GlassNav content={content} theme={theme} />;
+      case "claymorphic":
+        return <ClaymorphicNav content={content} theme={theme} />;
+      case "bento-grid":
+        return <BentoGridNav content={content} theme={theme} />;
       case "terminal-grid":
         return <TerminalNav content={content} theme={theme} />;
       case "centered-editorial":
@@ -185,6 +227,10 @@ export function ThemeRenderer({
         if (pattern === "wall-showcase") return <WallHero key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCHero key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeHero key={index} content={content} theme={theme} />;
+        if (pattern === "neo-brutalist") return <NeoBrutalistHero key={index} content={content} theme={theme} />;
+        if (pattern === "glass") return <GlassHero key={index} content={content} theme={theme} />;
+        if (pattern === "claymorphic") return <ClaymorphicHero key={index} content={content} theme={theme} />;
+        if (pattern === "bento-grid") return <BentoGridHero key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalHero key={index} content={content} theme={theme} />;
         if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialHero key={index} content={content} theme={theme} />;
         if (pattern === "split-hero") return <CorporateHero key={index} content={content} theme={theme} />;
@@ -199,6 +245,10 @@ export function ThemeRenderer({
         if (pattern === "wall-showcase") return <WallProjects key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCProjects key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeProjects key={index} content={content} theme={theme} />;
+        if (pattern === "neo-brutalist") return <NeoBrutalistProjects key={index} content={content} theme={theme} />;
+        if (pattern === "glass") return <GlassProjects key={index} content={content} theme={theme} />;
+        if (pattern === "claymorphic") return <ClaymorphicProjects key={index} content={content} theme={theme} />;
+        if (pattern === "bento-grid") return <BentoGridProjects key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalProjects key={index} content={content} theme={theme} />;
         if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialProjects key={index} content={content} theme={theme} />;
         if (pattern === "split-hero") return <CorporateProjects key={index} content={content} theme={theme} />;
@@ -210,6 +260,10 @@ export function ThemeRenderer({
         if (pattern === "wall-showcase") return <WallSkills key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCSkills key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeSkills key={index} content={content} theme={theme} />;
+        if (pattern === "neo-brutalist") return <NeoBrutalistSkills key={index} content={content} theme={theme} />;
+        if (pattern === "glass") return <GlassSkills key={index} content={content} theme={theme} />;
+        if (pattern === "claymorphic") return <ClaymorphicSkills key={index} content={content} theme={theme} />;
+        if (pattern === "bento-grid") return <BentoGridSkills key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalSkills key={index} content={content} theme={theme} />;
         if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialSkills key={index} content={content} theme={theme} />;
         if (pattern === "split-hero") return <CorporateSkills key={index} content={content} theme={theme} />;
@@ -224,6 +278,10 @@ export function ThemeRenderer({
         if (pattern === "wall-showcase") return <WallExperience key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCExperience key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeExperience key={index} content={content} theme={theme} />;
+        if (pattern === "neo-brutalist") return <NeoBrutalistExperience key={index} content={content} theme={theme} />;
+        if (pattern === "glass") return <GlassExperience key={index} content={content} theme={theme} />;
+        if (pattern === "claymorphic") return <ClaymorphicExperience key={index} content={content} theme={theme} />;
+        if (pattern === "bento-grid") return <BentoGridExperience key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalExperience key={index} content={content} theme={theme} />;
         if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialExperience key={index} content={content} theme={theme} />;
         if (pattern === "split-hero") return <CorporateExperience key={index} content={content} theme={theme} />;
@@ -247,6 +305,10 @@ export function ThemeRenderer({
         if (pattern === "wall-showcase") return <WallContact key={index} content={content} theme={theme} />;
         if (pattern === "not-your-college") return <NYCContact key={index} content={content} theme={theme} />;
         if (pattern === "luxe-creative") return <LuxeContact key={index} content={content} theme={theme} />;
+        if (pattern === "neo-brutalist") return <NeoBrutalistContact key={index} content={content} theme={theme} />;
+        if (pattern === "glass") return <GlassContact key={index} content={content} theme={theme} />;
+        if (pattern === "claymorphic") return <ClaymorphicContact key={index} content={content} theme={theme} />;
+        if (pattern === "bento-grid") return <BentoGridContact key={index} content={content} theme={theme} />;
         if (pattern === "terminal-grid") return <TerminalContact key={index} content={content} theme={theme} />;
         if (pattern === "centered-editorial" || pattern === "case-study") return <EditorialContact key={index} content={content} theme={theme} />;
         if (pattern === "split-hero") return <CorporateContact key={index} content={content} theme={theme} />;
@@ -293,6 +355,8 @@ export function ThemeRenderer({
           </main>
         </div>
 
+        <AiAgentWidget portfolioContext={content} />
+
         {!hideBadge && (
           <footer className="fixed bottom-4 right-4 z-40">
             <Link
@@ -335,6 +399,9 @@ export function ThemeRenderer({
           renderSection(sectionName, index)
         )}
       </main>
+
+      {/* Interactive AI Portfolio Assistant */}
+      <AiAgentWidget portfolioContext={content} />
 
       {/* Platform Badge */}
       {!hideBadge && (

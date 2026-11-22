@@ -58,6 +58,11 @@ export const ThemeLayoutPatternSchema = z.enum([
   "playful-sticker",
   "luxe-creative",
   "not-your-college",
+  "neo-brutalist",
+  "claymorphic",
+  "glass",
+  "nordic-forest",
+  "bento-grid",
 ]);
 
 export const ThemeSectionNameSchema = z.enum([

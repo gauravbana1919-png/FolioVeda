@@ -23,9 +23,12 @@ import { StyleProfile, ClosenessLevel } from "@/types/inspiration";
 import { ThemePackage } from "@/types/theme";
 import { ThemeRenderer } from "@/components/portfolio/engine/ThemeRenderer";
 import { mapUserToPortfolioContent } from "@/lib/themes/registry";
+import { InspirationClonePreview } from "@/components/portfolio/InspirationClonePreview";
+import { AiAgentWidget } from "@/components/portfolio/AiAgentWidget";
 
 export default function InspirationPage() {
   const [userData, setUserData] = useState<any>(null);
+  const [studioMode, setStudioMode] = useState<"clone" | "archetype">("clone");
   const [inputUrl, setInputUrl] = useState("https://pattin.design");
   const [userConsent, setUserConsent] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -141,6 +144,9 @@ export default function InspirationPage() {
       else if (pat === "tanuja-product") targetTemplateId = "tanuja-design";
       else if (pat === "luxe-creative") targetTemplateId = "luxe-creative";
       else if (pat === "not-your-college") targetTemplateId = "not-your-college";
+      else if (pat === "neo-brutalist") targetTemplateId = "neo-brutalist";
+      else if (pat === "glass") targetTemplateId = "glass";
+      else if (pat === "claymorphic") targetTemplateId = "claymorphic";
       else if (pat === "terminal-grid") targetTemplateId = "developer-terminal";
       else if (pat === "centered-editorial") targetTemplateId = "minimal-editorial";
       else if (pat === "split-hero") targetTemplateId = "corporate-clean";
@@ -235,29 +241,63 @@ export default function InspirationPage() {
       )}
 
       {/* Main Container */}
-      <main className="max-w-7xl mx-auto px-6 py-12">
-        {/* Hero Explainer & Non-Negotiable Copyright Disclaimer */}
-        <div className="max-w-3xl mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#173f32] text-xs font-bold tracking-wide uppercase mb-3">
-            <Sparkles size={13} /> &quot;MAKE MINE FEEL LIKE THIS&quot; ENGINE
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1E293B] mb-3">
-            Extract Aesthetic DNA. Keep 100% Originality.
-          </h1>
-          <p className="text-base text-slate-600 font-normal leading-relaxed mb-4">
-            Paste any public portfolio or website you love. Our system extracts the abstract layout rhythm, typography category, and color mood into a custom theme package filled with <strong className="text-slate-900 font-bold">your own verified data</strong>.
-          </p>
-
-          <div className="p-4 rounded-2xl bg-white border border-[#1E293B]/10 shadow-xs flex items-start gap-3 text-xs text-slate-700">
-            <ShieldCheck size={20} className="text-[#173f32] mt-0.5 shrink-0" />
-            <p className="leading-relaxed">
-              <strong className="text-[#1E293B] font-bold">Copyright &amp; Legal Safety Promise:</strong> We never copy HTML, CSS, JavaScript, text, images, or proprietary font files. Fonts are matched to licensed Google Fonts, and components are rendered strictly from our own modular engine.
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        {/* Streamlined Above-The-Fold Modern Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-100 border border-emerald-300 text-[#173f32] text-xs font-black tracking-wide uppercase mb-2">
+              <Sparkles size={13} className="text-emerald-700" /> AI LAYOUT SYNTHESIS ENGINE (GEMINI 2.5)
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-[#1E293B]">
+              Clone Any Portfolio Layout &amp; Aesthetic
+            </h1>
+            <p className="text-sm text-slate-600 font-medium mt-1 max-w-2xl">
+              Paste any URL (Loveleen Pereira, Dribbble, or personal sites). FolioVeda synthesizes the exact visual structure, colors, and typography using <strong className="text-slate-900 font-bold">{normalizedContent.name}&apos;s verified career data</strong>.
             </p>
+          </div>
+
+          {/* Mode Switcher */}
+          <div className="flex items-center gap-1.5 p-1 bg-slate-200/90 rounded-2xl border border-slate-300 shrink-0">
+            <button
+              type="button"
+              onClick={() => setStudioMode("clone")}
+              className={`px-4 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                studioMode === "clone"
+                  ? "bg-[#173f32] text-white shadow-md"
+                  : "text-slate-700 hover:text-slate-900"
+              }`}
+            >
+              <Sparkles size={13} className={studioMode === "clone" ? "text-emerald-300" : ""} />
+              <span>⚡ Bespoke AI Clone</span>
+              <span className="px-1.5 py-0.5 rounded text-[9px] bg-emerald-400 text-slate-950 font-black">LIVE</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setStudioMode("archetype")}
+              className={`px-4 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                studioMode === "archetype"
+                  ? "bg-[#173f32] text-white shadow-md"
+                  : "text-slate-700 hover:text-slate-900"
+              }`}
+            >
+              <Sliders size={13} />
+              <span>🎨 Classic Archetypes</span>
+            </button>
           </div>
         </div>
 
-        {/* Input & URL Form */}
-        <div className="rounded-3xl border border-slate-200 bg-white p-8 mb-10 shadow-lg">
+        {/* TAB 1: BESPOKE AI LAYOUT SYNTHESIS (EXACT CLONE WITH REAL USER DATA) */}
+        {studioMode === "clone" && (
+          <div className="mb-12 animate-in fade-in duration-300">
+            <InspirationClonePreview userContent={normalizedContent} />
+          </div>
+        )}
+
+        {/* TAB 2: ARCHETYPE THEME ENGINE */}
+        {studioMode === "archetype" && (
+          <div className="animate-in fade-in duration-300">
+            {/* Input & URL Form */}
+            <div className="rounded-3xl border border-slate-200 bg-white p-8 mb-10 shadow-lg">
           <form onSubmit={handleAnalyze} className="space-y-4">
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">
@@ -524,6 +564,16 @@ export default function InspirationPage() {
             </div>
           </div>
         )}
+          </div>
+        )}
+
+        {/* Floating PortBot AI Assistant */}
+        <AiAgentWidget
+          portfolioContext={normalizedContent}
+          onUpdate={(updates) => {
+            console.log("PortBot update in inspiration studio:", updates);
+          }}
+        />
       </main>
     </div>
   );

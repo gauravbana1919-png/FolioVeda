@@ -37,8 +37,8 @@ Requirements:
   );
 
   const [originalResume, setOriginalResume] = useState(
-    `# Gaurav Sharma
-Bengaluru, India • gaurav.sharma.dev@gmail.com • +91 98765 43210 • github.com/gaurav-dev • linkedin.com/in/gaurav-sharma
+    `# Aarav Sharma
+Bengaluru, India • aarav.sharma.dev@gmail.com • +91 98765 43210 • github.com/aarav-dev • linkedin.com/in/aarav-sharma
 
 ## PROFESSIONAL SUMMARY
 Results-driven Full-Stack Engineer with 3+ years of experience engineering scalable web applications and distributed backend microservices. Proven expertise in Next.js, TypeScript, Node.js, and database performance optimization. Built production systems supporting over 200,000 monthly active users with 99.9% uptime.
@@ -104,7 +104,7 @@ Visvesvaraya Technological University — First Class with Distinction (GPA: 8.8
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Gaurav_Sharma_Tailored_Resume.pdf`);
+      pdf.save(`Aarav_Sharma_Tailored_Resume.pdf`);
     } catch (err) {
       console.error("PDF Export failed", err);
     } finally {

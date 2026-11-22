@@ -14,6 +14,10 @@ import { wallShowcaseTheme } from "./definitions/wall-showcase";
 import { craftDeskTheme } from "./definitions/craft-desk";
 import { himanshuSinghTheme } from "./definitions/himanshu-singh";
 import { tanujaDesignTheme } from "./definitions/tanuja-design";
+import { neoBrutalistTheme } from "./definitions/neo-brutalist";
+import { glassTheme } from "./definitions/glass";
+import { claymorphicTheme } from "./definitions/claymorphic";
+import { bentoGridTheme } from "./definitions/bento-grid";
 
 export const SYSTEM_THEMES: Record<string, ThemePackage> = {
   // Flagship 4 Wall of Portfolios Standards
@@ -35,6 +39,10 @@ export const SYSTEM_THEMES: Record<string, ThemePackage> = {
   "case-study-heavy": caseStudyHeavyTheme,
   "dark-showcase": darkShowcaseTheme,
   "playful-sticker": playfulStickerTheme,
+  "neo-brutalist": neoBrutalistTheme,
+  "glass": glassTheme,
+  "claymorphic": claymorphicTheme,
+  "bento-grid": bentoGridTheme,
 };
 
 // Validate that all system themes satisfy ThemePackageSchema at module load
@@ -58,6 +66,10 @@ export function getAllSystemThemes(): ThemePackage[] {
     SYSTEM_THEMES["bold-poster"],
     SYSTEM_THEMES["not-your-college"],
     SYSTEM_THEMES["luxe-creative"],
+    SYSTEM_THEMES["neo-brutalist"],
+    SYSTEM_THEMES["glass"],
+    SYSTEM_THEMES["claymorphic"],
+    SYSTEM_THEMES["bento-grid"],
     SYSTEM_THEMES["corporate-clean"],
   ];
 }
@@ -78,7 +90,10 @@ export function getThemeById(id: string): ThemePackage {
   if (cleanId === "tanuja" || cleanId === "microsoft" || cleanId === "product") return SYSTEM_THEMES["tanuja-design"];
   if (cleanId === "terminal" || cleanId === "dev" || cleanId === "code" || cleanId === "template1") return SYSTEM_THEMES["developer-terminal"];
   if (cleanId === "editorial" || cleanId === "minimal" || cleanId === "clean" || cleanId === "template2") return SYSTEM_THEMES["minimal-editorial"];
-  if (cleanId === "poster" || cleanId === "bold" || cleanId === "brutalist") return SYSTEM_THEMES["bold-poster"];
+  if (cleanId === "poster" || cleanId === "bold") return SYSTEM_THEMES["bold-poster"];
+  if (cleanId === "neobrutalist" || cleanId === "neo-brutalist" || cleanId === "brutalist") return SYSTEM_THEMES["neo-brutalist"];
+  if (cleanId === "glass" || cleanId === "glassmorphic" || cleanId === "cyber") return SYSTEM_THEMES["glass"];
+  if (cleanId === "clay" || cleanId === "claymorphic" || cleanId === "3d") return SYSTEM_THEMES["claymorphic"];
   if (cleanId === "nyc" || cleanId === "student" || cleanId === "fresher" || cleanId === "college") return SYSTEM_THEMES["not-your-college"];
   if (cleanId === "luxe" || cleanId === "luxury") return SYSTEM_THEMES["luxe-creative"];
   if (cleanId === "corporate" || cleanId === "executive" || cleanId === "business" || cleanId === "template3") return SYSTEM_THEMES["corporate-clean"];

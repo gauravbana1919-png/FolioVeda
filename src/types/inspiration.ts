@@ -25,6 +25,11 @@ export const AbstractLayoutPatternSchema = z.enum([
   "playful-sticker",
   "luxe-creative",
   "not-your-college",
+  "neo-brutalist",
+  "claymorphic",
+  "glass",
+  "nordic-forest",
+  "bento-grid",
 ]);
 
 export const StyleProfileSchema = z.object({

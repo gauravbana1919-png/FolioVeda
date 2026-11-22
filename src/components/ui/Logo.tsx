@@ -12,6 +12,7 @@ interface LogoProps {
   subtitle?: string;
   className?: string;
   glow?: boolean;
+  inverted?: boolean;
 }
 
 const SIZE_MAP = {
@@ -107,6 +108,7 @@ export function FolioVedaLogo({
   showBadge = false,
   subtitle,
   className = "",
+  inverted = false,
 }: LogoProps) {
   const metrics = SIZE_MAP[size];
 
@@ -117,21 +119,23 @@ export function FolioVedaLogo({
       {showText && (
         <div className="flex flex-col leading-tight">
           <div className="flex items-center gap-1.5">
-            <span className={`font-extrabold tracking-tight text-[#173f32] dark:text-white ${metrics.text}`}>
-              Folio
-              <span className="text-[#10B981]">
+            <span className={`font-black tracking-tight ${metrics.text}`}>
+              <span className={inverted ? "text-white" : "text-[#111827] drop-shadow-2xs"}>
+                Folio
+              </span>
+              <span className="text-[#059669]">
                 Veda
               </span>
             </span>
 
             {showBadge && (
-              <span className={`rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-semibold uppercase tracking-wider border border-emerald-500/30 ${metrics.badge}`}>
+              <span className={`rounded-full bg-emerald-500/15 text-emerald-700 font-semibold uppercase tracking-wider border border-emerald-500/30 ${metrics.badge}`}>
                 Studio
               </span>
             )}
           </div>
           {subtitle && (
-            <span className="text-[10px] tracking-wider uppercase text-[#5a6b60] dark:text-slate-400 font-bold mt-0.5">
+            <span className={`text-[10px] tracking-wider uppercase font-bold mt-0.5 ${inverted ? "text-slate-400" : "text-[#5a6b60]"}`}>
               {subtitle}
             </span>
           )}

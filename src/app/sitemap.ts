@@ -16,7 +16,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/security',
     '/legal/terms',
     '/legal/takedown',
-    '/p/gaurav',
+    '/p/demo',
+    '/p/Aarav%20Sharma',
   ];
 
   return publicRoutes.map((route) => ({
