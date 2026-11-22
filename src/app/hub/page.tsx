@@ -32,11 +32,11 @@ interface ViewTab {
 const TABS: ViewTab[] = [
   {
     id: "portfolio",
-    name: "Generated Portfolio",
+    name: "Wall-Grade Portfolio",
     path: "/p/gaurav",
     icon: Layout,
-    badge: "Not Your College",
-    description: "Flagship live portfolio engine featuring Not-Your-College editorial archetype, zero-hallucination real profile telemetry, and card scannability.",
+    badge: "Wall of Portfolios",
+    description: "Flagship live portfolio engine inspired by Tanuja, Himanshu, Rolan Gomes, and Sudarvel: outcome-driven case studies, accredited credentials, telemetry footprint, and interactive breakdowns.",
   },
   {
     id: "resume",
