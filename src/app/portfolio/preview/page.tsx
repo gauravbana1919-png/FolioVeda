@@ -316,17 +316,32 @@ export default function PortfolioStudio() {
 
             // Adapt theme according to extracted profession
             const hl = (ext.headline || "").toLowerCase();
+            let adaptedTheme = "sudarvel";
             if (hl.includes("design") || hl.includes("ux") || hl.includes("ui") || hl.includes("creative") || hl.includes("art")) {
-              setActiveThemeId("rolan-gomes");
+              adaptedTheme = "rolan-gomes";
             } else if (hl.includes("manager") || hl.includes("product") || hl.includes("growth")) {
-              setActiveThemeId("corporate-clean");
-            } else {
-              setActiveThemeId("sudarvel");
+              adaptedTheme = "tanuja-design";
             }
+            setActiveThemeId(adaptedTheme);
 
             try {
               localStorage.setItem("folioveda_active_profile", JSON.stringify(ext));
             } catch (e) {}
+
+            // Save immediately to backend SQLite so /p/[username] is in sync
+            await handleSave({
+              name: ext.name,
+              headline: ext.headline,
+              bio: ext.bio,
+              skills: ext.skills,
+              location: ext.location,
+              experience: ext.experience,
+              education: ext.education,
+              certifications: ext.certifications,
+              projects: ext.projects,
+              socials: ext.contact,
+              themeId: adaptedTheme,
+            });
 
             setImportStatus(`✓ Extracted ${file.name} successfully!`);
             setAiNotice(`Imported ${ext.name || "profile"} (${ext.experience?.length || 0} roles, ${ext.projects?.length || 0} projects)!`);
@@ -350,8 +365,15 @@ export default function PortfolioStudio() {
     setSaveStatus("saving");
     const payload = {
       name: overrides?.name || userData.name,
+      headline: overrides?.headline || userData.profile.headline,
       bio: overrides?.bio || userData.profile.bio,
       skills: overrides?.skills || userData.profile.skills,
+      location: overrides?.location || userData.profile.location,
+      experience: overrides?.experience !== undefined ? overrides.experience : userData.profile.experience,
+      education: overrides?.education !== undefined ? overrides.education : userData.profile.education,
+      certifications: overrides?.certifications !== undefined ? overrides.certifications : userData.profile.certifications,
+      projects: overrides?.projects !== undefined ? overrides.projects : userData.projects,
+      socials: overrides?.socials !== undefined ? overrides.socials : userData.profile.socials,
       templateId: overrides?.themeId || activeThemeId,
       themeId: overrides?.themeId || activeThemeId,
       theme: overrides?.theme || theme,

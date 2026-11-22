@@ -149,7 +149,7 @@ export const PERSONA_PROFILES: Record<string, PersonaProfile> = {
   // 2. FULL-STACK DEVELOPER
   "fullstack-developer": {
     id: "fullstack-developer",
-    name: "Gaurav Shekhawat",
+    name: "Devon Vance",
     title: "Senior Full-Stack & Systems Engineer",
     profileType: "tech",
     targetGoal: "job",
@@ -159,7 +159,7 @@ export const PERSONA_PROFILES: Record<string, PersonaProfile> = {
     preferredMood: "bold",
     recommendedThemeId: "sudarvel",
     content: {
-      name: "Gaurav Shekhawat",
+      name: "Devon Vance",
       headline: "Senior Full-Stack Engineer • Systems Builder • AI & Next.js Specialist",
       bio: "I architect high-throughput distributed systems, then direct AI to turn complex workflows into working products. Focused on sub-100ms APIs, resilient event pipelines, and outcome-driven design.",
       avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80",

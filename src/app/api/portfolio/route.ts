@@ -51,11 +51,29 @@ export async function GET(req: Request) {
 
     // 2. If requested by username/name query param
     if (!user && requestedUsername) {
+      const allUsers = await prisma.user.findMany({
+        orderBy: { id: "desc" },
+        include: {
+          profile: true,
+          portfolio: true,
+          projects: true,
+        },
+      });
+      const reqNorm = requestedUsername.toLowerCase().replace(/[^a-z0-9]/g, "");
+      user = allUsers.find((u) => {
+        if (!u.name) return false;
+        const uNorm = u.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+        return uNorm === reqNorm || uNorm.includes(reqNorm) || reqNorm.includes(uNorm);
+      }) || null;
+    }
+
+    // 3. Fallback: Find the primary active candidate or latest active user
+    if (!user) {
       user = await prisma.user.findFirst({
         where: {
           OR: [
-            { name: { equals: requestedUsername } },
-            { id: { equals: requestedUsername } },
+            { email: "anayshekhawat.7773@gmail.com" },
+            { name: { contains: "Gaurav" } },
           ],
         },
         include: {
@@ -66,7 +84,6 @@ export async function GET(req: Request) {
       });
     }
 
-    // 3. Fallback: Find the most recently active user in the database
     if (!user) {
       user = await prisma.user.findFirst({
         orderBy: { id: 'desc' },
@@ -141,7 +158,22 @@ export async function POST(req: Request) {
       // Unit test or non-request scope
     }
     const body = await req.json();
-    const { name, bio, skills, templateId, themeId, theme, accentColor } = body;
+    const {
+      name,
+      bio,
+      skills,
+      headline,
+      location,
+      experience,
+      education,
+      certifications,
+      projects,
+      socials,
+      templateId,
+      themeId,
+      theme,
+      accentColor,
+    } = body;
 
     let user = null;
     if (session?.user?.email) {
@@ -155,6 +187,7 @@ export async function POST(req: Request) {
       const targetName = name || "Alex Developer";
       user = await prisma.user.findFirst({
         where: { name: targetName },
+        orderBy: { id: "desc" },
       });
 
       if (!user) {
@@ -179,21 +212,53 @@ export async function POST(req: Request) {
       });
     }
 
+    // Format fields for SQLite
+    const formattedSkills = typeof skills === 'string' ? skills : Array.isArray(skills) ? skills.join(', ') : undefined;
+    const formattedExperience = typeof experience === 'string' ? experience : experience ? JSON.stringify(experience) : undefined;
+    const formattedEducation = typeof education === 'string' ? education : education ? JSON.stringify(education) : undefined;
+    const formattedCertifications = typeof certifications === 'string' ? certifications : certifications ? JSON.stringify(certifications) : undefined;
+    const formattedSocials = typeof socials === 'string' ? socials : socials ? JSON.stringify(socials) : undefined;
+
     // Update or create Profile
-    if (bio !== undefined || skills !== undefined) {
-      await prisma.profile.upsert({
-        where: { userId: user.id },
-        create: {
+    await prisma.profile.upsert({
+      where: { userId: user.id },
+      create: {
+        userId: user.id,
+        bio: bio || null,
+        headline: headline || null,
+        location: location || null,
+        skills: formattedSkills || null,
+        experience: formattedExperience || null,
+        education: formattedEducation || null,
+        certifications: formattedCertifications || null,
+        socials: formattedSocials || null,
+      },
+      update: {
+        ...(bio !== undefined && { bio }),
+        ...(headline !== undefined && { headline }),
+        ...(location !== undefined && { location }),
+        ...(formattedSkills !== undefined && { skills: formattedSkills }),
+        ...(formattedExperience !== undefined && { experience: formattedExperience }),
+        ...(formattedEducation !== undefined && { education: formattedEducation }),
+        ...(formattedCertifications !== undefined && { certifications: formattedCertifications }),
+        ...(formattedSocials !== undefined && { socials: formattedSocials }),
+      },
+    });
+
+    // Update projects if provided
+    if (Array.isArray(projects) && projects.length > 0) {
+      await prisma.project.deleteMany({ where: { userId: user.id } });
+      await prisma.project.createMany({
+        data: projects.map((p: any, idx: number) => ({
           userId: user.id,
-          bio: bio || null,
-          skills: typeof skills === 'string' ? skills : Array.isArray(skills) ? skills.join(', ') : null,
-        },
-        update: {
-          ...(bio !== undefined && { bio }),
-          ...(skills !== undefined && {
-            skills: typeof skills === 'string' ? skills : Array.isArray(skills) ? skills.join(', ') : null,
-          }),
-        },
+          repoName: p.repoName || p.title?.toLowerCase().replace(/[^a-z0-9]/g, "-").slice(0, 40) || `project-${idx + 1}`,
+          title: p.title || `Project ${idx + 1}`,
+          description: p.description || "",
+          techStack: Array.isArray(p.techStack) ? p.techStack.join(", ") : (p.techStack || ""),
+          githubUrl: p.githubUrl || "https://github.com",
+          liveUrl: p.liveUrl || null,
+          isPinned: p.featured ?? idx < 2,
+        })),
       });
     }
 

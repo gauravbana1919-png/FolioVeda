@@ -35,23 +35,39 @@ export default async function PublicPortfolioPage({ params, searchParams }: Page
   // Look up user by name or id in Prisma
   let userRecord = null;
   try {
-    userRecord = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { name: { equals: decodedUsername } },
-          { id: { equals: decodedUsername } },
-        ],
-      },
-      include: {
-        profile: true,
-        portfolio: true,
-        projects: true,
-      },
-    });
+    // If requesting special keywords 'me' or 'latest', find the most recently active portfolio
+    if (lowerUsername === "me" || lowerUsername === "latest") {
+      userRecord = await prisma.user.findFirst({
+        orderBy: { id: "desc" },
+        include: {
+          profile: true,
+          portfolio: true,
+          projects: true,
+        },
+      });
+    }
 
-    // Flexible match for slug variations (e.g. "gauravsingh" matching "GAURAV SINGH ")
+    if (!userRecord) {
+      userRecord = await prisma.user.findFirst({
+        where: {
+          OR: [
+            { name: { equals: decodedUsername } },
+            { id: { equals: decodedUsername } },
+          ],
+        },
+        orderBy: { id: "desc" },
+        include: {
+          profile: true,
+          portfolio: true,
+          projects: true,
+        },
+      });
+    }
+
+    // Flexible match for slug variations (prioritize newest users first)
     if (!userRecord) {
       const allUsers = await prisma.user.findMany({
+        orderBy: { id: "desc" },
         include: {
           profile: true,
           portfolio: true,
@@ -60,13 +76,13 @@ export default async function PublicPortfolioPage({ params, searchParams }: Page
       });
       userRecord = allUsers.find((u) => {
         if (!u.name) return false;
-        const normalizedDb = u.name.trim().toLowerCase().replace(/\s+/g, "");
-        const queryNorm = lowerUsername.replace(/\s+/g, "");
+        const normalizedDb = u.name.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+        const queryNorm = lowerUsername.replace(/[^a-z0-9]/g, "");
         return (
           normalizedDb === queryNorm ||
           u.name.trim().toLowerCase() === lowerUsername ||
-          u.name.trim().toLowerCase().includes(lowerUsername) ||
-          lowerUsername.includes(normalizedDb)
+          normalizedDb.includes(queryNorm) ||
+          queryNorm.includes(normalizedDb)
         );
       }) || null;
     }

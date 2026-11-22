@@ -717,9 +717,28 @@ function SmartIntakeOnboardingContent() {
                   )}
 
                   {extractSuccess && (
-                    <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-xs text-emerald-900 font-medium flex items-start gap-2">
-                      <CheckCircle2 size={16} className="text-emerald-600 shrink-0 mt-0.5" />
-                      <span>{extractSuccess}</span>
+                    <div className="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-400 text-xs text-emerald-950 font-medium space-y-3 shadow-sm">
+                      <div className="flex items-start gap-2">
+                        <CheckCircle2 size={18} className="text-emerald-700 shrink-0 mt-0.5" />
+                        <span className="font-semibold text-emerald-900 leading-relaxed">{extractSuccess}</span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-emerald-200">
+                        <Link
+                          href={`/p/${encodeURIComponent(candidateName)}`}
+                          target="_blank"
+                          className="px-4 py-2 rounded-xl bg-[#173f32] hover:bg-[#123328] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm"
+                        >
+                          <span>🚀 View Live Portfolio ({candidateName})</span>
+                          <ExternalLink size={13} />
+                        </Link>
+                        <Link
+                          href="/portfolio/preview"
+                          className="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 border border-emerald-300 text-emerald-900 text-xs font-bold transition flex items-center gap-1.5"
+                        >
+                          <span>Open in 4-Theme Studio</span>
+                          <Sparkles size={13} className="text-emerald-600" />
+                        </Link>
+                      </div>
                     </div>
                   )}
 
@@ -743,7 +762,7 @@ function SmartIntakeOnboardingContent() {
                   <div className="flex flex-wrap gap-2">
                     {[
                       { key: "ui-ux-designer", label: "🎨 UI/UX Designer", name: "Maya Chen" },
-                      { key: "fullstack-developer", label: "⚡ Full-Stack Engineer", name: "Gaurav Shekhawat" },
+                      { key: "fullstack-developer", label: "⚡ Full-Stack Engineer", name: "Devon Vance" },
                       { key: "aiml-engineer", label: "🧠 AI/ML Engineer", name: "Dr. Aris Thorne" },
                       { key: "graphic-designer", label: "📐 Graphic Designer", name: "Leo Vasquez" },
                       { key: "student-fresher", label: "🎓 Student / Fresher", name: "Kevin Zhang" },
