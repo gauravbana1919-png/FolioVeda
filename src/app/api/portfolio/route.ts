@@ -67,25 +67,12 @@ export async function GET(req: Request) {
       }) || null;
     }
 
-    // 3. Fallback: Find the primary active candidate or latest active user
+    // 3. Fallback: Find the latest active user in the database
     if (!user) {
       user = await prisma.user.findFirst({
         where: {
-          OR: [
-            { email: "anayshekhawat.7773@gmail.com" },
-            { name: { contains: "Gaurav" } },
-          ],
+          profile: { isNot: null },
         },
-        include: {
-          profile: true,
-          portfolio: true,
-          projects: true,
-        },
-      });
-    }
-
-    if (!user) {
-      user = await prisma.user.findFirst({
         orderBy: { id: 'desc' },
         include: {
           profile: true,

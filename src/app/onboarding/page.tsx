@@ -612,7 +612,7 @@ function SmartIntakeOnboardingContent() {
                 Go to Dashboard →
               </Link>
               <Link
-                href="/portfolio/preview"
+                href={`/portfolio/preview?name=${encodeURIComponent(candidateName)}&theme=${encodeURIComponent(selectedThemeId)}`}
                 className="px-5 py-2.5 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 transition-colors shadow-2xs"
               >
                 Open in AI Studio →
@@ -742,7 +742,7 @@ function SmartIntakeOnboardingContent() {
                           <ExternalLink size={13} />
                         </Link>
                         <Link
-                          href="/portfolio/preview"
+                          href={`/portfolio/preview?name=${encodeURIComponent(candidateName)}&theme=${encodeURIComponent(selectedThemeId)}`}
                           className="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 border border-emerald-300 text-emerald-900 text-xs font-bold transition flex items-center gap-1.5"
                         >
                           <span>Open in 4-Theme Studio</span>

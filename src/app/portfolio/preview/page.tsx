@@ -201,12 +201,23 @@ export default function PortfolioStudio() {
       }
     } catch (e) {}
 
-    // 2. Fetch profile from database (support ?name= and ?username= query params)
+    // 2. Fetch profile from database (support ?name= and ?username= query params, or active profile in localStorage)
     async function loadPortfolio() {
       try {
         const params = new URLSearchParams(window.location.search);
-        const nameParam = params.get('name') || params.get('username') || params.get('handle');
-        const themeParam = params.get('theme') || params.get('template');
+        let cachedName = "";
+        let cachedTheme = "";
+        try {
+          const c = localStorage.getItem("folioveda_active_profile");
+          if (c) {
+            const parsed = JSON.parse(c);
+            if (parsed?.name) cachedName = parsed.name;
+            if (parsed?.recommendedTheme) cachedTheme = parsed.recommendedTheme;
+          }
+        } catch {}
+
+        const nameParam = params.get('name') || params.get('username') || params.get('handle') || cachedName;
+        const themeParam = params.get('theme') || params.get('template') || cachedTheme;
         if (themeParam) setActiveThemeId(themeParam);
 
         const fetchUrl = nameParam ? `/api/portfolio?name=${encodeURIComponent(nameParam)}` : '/api/portfolio';

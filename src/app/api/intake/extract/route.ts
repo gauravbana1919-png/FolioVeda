@@ -479,22 +479,35 @@ export async function POST(req: Request) {
           You are an expert career trajectory parser and portfolio architect for FolioVeda.
           Analyze the provided document (LinkedIn PDF export, resume, or profile text) and extract accurate, structured professional data to compile an elite, award-winning portfolio.
           
-          SPECIAL LINKEDIN PDF DETECTION:
-          - LinkedIn PDF exports have distinct sections: Contact, Top Skills, Certifications, Summary, Experience, Education.
-          - Extract candidate's exact name (not "Contact" or skills).
-          - Extract candidate's headline and location.
-          - Extract complete work history with exact company names, exact job titles, dates, locations, and achievements.
-          - Extract education with degree, institution, and graduation year.
-          - Extract contact links (LinkedIn URL, email, phone, location, personal website).
+          RULES & STANDARDS:
+          - ZERO HALLUCINATION: Do NOT invent unmentioned companies, fake credentials, or fake metrics.
+          - HIGH-CRAFT ELEVATION: Do NOT merely copy-paste raw unstructured sentence fragments. Write clean, compelling, recruiter-grade prose.
+          - HEADLINE: Craft a magnetic, high-impact 1-line professional title positioning them at the peak of their craft.
+          - BIO: Write an engaging, story-driven 2-3 sentence narrative bio highlighting their genuine superpowers, architectural craft, and trajectory.
+          - SKILLS: Extract their top 8-15 technical or design skills cleanly.
+          - PROJECTS: If projects are mentioned, formulate outcome-driven summaries (Title, Category, Impact, Description, TechStack).
+          - THEME ARCHETYPE:
+            * "sudarvel" for backend / full-stack / systems engineering
+            * "developer-terminal" for low-level / devops / CLI hackers
+            * "rolan-gomes" for creative technologists / UI developers / paper craft
+            * "tanuja-design" for product designers / UX / interaction designers
+            * "corporate-clean" for product managers / enterprise / fintech
+            * "minimal-editorial" for clean modern software craftsmen
+            * "bold-poster" or "luxe-creative" for creative directors & visual storytellers
+          - FONT FAMILY: "sans" | "serif" | "mono" | "editorial"
+          - ACCENT COLOR: "emerald" | "blue" | "purple" | "amber" | "rose"
           
           Return valid JSON matching this exact structure:
           {
             "name": "Candidate Full Name",
-            "headline": "Punchy 1-line professional title",
-            "bio": "Engaging 2-3 sentence narrative bio highlighting actual strengths, architectural focus, and career trajectory",
+            "headline": "Magnetic 1-line professional title",
+            "bio": "Compelling 2-3 sentence narrative bio highlighting actual strengths, architectural craft, and career trajectory",
             "location": "City, State/Country",
             "availability": "Open to High-Impact Opportunities",
             "skills": ["Skill1", "Skill2", "Skill3", "Skill4", "Skill5", "Skill6"],
+            "recommendedTheme": "sudarvel",
+            "fontFamily": "sans",
+            "accentColor": "emerald",
             "projects": [
               {
                 "title": "Outcome-driven project title",
@@ -558,25 +571,32 @@ export async function POST(req: Request) {
           });
         }
 
-        const response = await ai.models.generateContent({
-          model: "gemini-flash-lite-latest",
-          contents: contentParts,
-          config: {
-            responseMimeType: "application/json",
-            temperature: 0.1,
-          },
-        });
+        const models = ["gemini-flash-lite-latest", "gemini-3.5-flash-lite", "gemini-3.8-flash"];
+        for (const model of models) {
+          try {
+            const response = await ai.models.generateContent({
+              model,
+              contents: contentParts,
+              config: {
+                responseMimeType: "application/json",
+                temperature: 0.1,
+              },
+            });
 
-        if (response.text) {
-          const extracted = JSON.parse(response.text);
-          await persistExtractedUser(extracted);
-          return NextResponse.json({
-            success: true,
-            extracted,
-            username: extracted.name,
-            liveUrl: `/p/${encodeURIComponent(extracted.name)}`,
-            source: "gemini-2.5-flash",
-          });
+            if (response.text) {
+              const extracted = JSON.parse(response.text);
+              await persistExtractedUser(extracted);
+              return NextResponse.json({
+                success: true,
+                extracted,
+                username: extracted.name,
+                liveUrl: `/p/${encodeURIComponent(extracted.name)}`,
+                source: model,
+              });
+            }
+          } catch (modelErr: any) {
+            console.warn(`[Extract AI] Model ${model} failed, trying next:`, modelErr.message);
+          }
         }
       } catch (geminiError) {
         console.warn("Gemini parsing fallback to trajectory engine:", geminiError);
@@ -666,14 +686,21 @@ async function persistExtractedUser(extracted: any) {
       });
     }
 
-    // Determine theme archetype from extracted persona
+    // Determine theme archetype and design preferences from extracted persona
     const titleLower = ((extracted.headline || "") + " " + (extracted.bio || "")).toLowerCase();
-    let recommendedTheme = "sudarvel";
-    if (titleLower.includes("design") || titleLower.includes("ux") || titleLower.includes("ui") || titleLower.includes("creative")) {
-      recommendedTheme = "rolan-gomes";
-    } else if (titleLower.includes("manager") || titleLower.includes("product") || titleLower.includes("growth")) {
-      recommendedTheme = "tanuja-design";
+    let recommendedTheme = extracted.recommendedTheme || "sudarvel";
+    if (!extracted.recommendedTheme) {
+      if (titleLower.includes("design") || titleLower.includes("ux") || titleLower.includes("ui") || titleLower.includes("creative")) {
+        recommendedTheme = "rolan-gomes";
+      } else if (titleLower.includes("manager") || titleLower.includes("product") || titleLower.includes("growth")) {
+        recommendedTheme = "tanuja-design";
+      }
     }
+
+    const designPrefs = JSON.stringify({
+      accentColor: extracted.accentColor || "emerald",
+      fontFamily: extracted.fontFamily || "sans",
+    });
 
     // Upsert Profile with authentic data
     await prisma.profile.upsert({
@@ -709,12 +736,13 @@ async function persistExtractedUser(extracted: any) {
         templateId: recommendedTheme,
         themePackageId: recommendedTheme,
         theme: "system",
-        designPrefs: JSON.stringify({ accentColor: "emerald" }),
+        designPrefs: designPrefs,
         isPublished: true,
       },
       update: {
         templateId: recommendedTheme,
         themePackageId: recommendedTheme,
+        designPrefs: designPrefs,
         isPublished: true,
       },
     });

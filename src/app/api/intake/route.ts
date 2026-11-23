@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { IntakeAnswersInputSchema } from "@/types/intake";
-import { generateIntakeCopy, verifyZeroHallucination } from "@/lib/ai/intake-copy";
+import { generateIntakeCopy, generateIntakeCopyWithAI, verifyZeroHallucination } from "@/lib/ai/intake-copy";
 
 export async function POST(req: Request) {
   try {
@@ -28,9 +28,9 @@ export async function POST(req: Request) {
 
     const validAnswers = parseResult.data;
 
-    // ACTION: DRAFT COPY
+    // ACTION: DRAFT COPY (AI-Powered synthesis)
     if (action === "draft") {
-      const generated = generateIntakeCopy(validAnswers, userName || session?.user?.name || "Alex Developer");
+      const generated = await generateIntakeCopyWithAI(validAnswers, userName || session?.user?.name || "Alex Developer");
       const compliance = verifyZeroHallucination(generated.suggestedBio, generated.factualAnchors);
 
       return NextResponse.json({
@@ -42,8 +42,9 @@ export async function POST(req: Request) {
 
     // ACTION: APPROVE AND PUBLISH
     if (action === "approve") {
-      const finalHeadline = approvedHeadline || generateIntakeCopy(validAnswers).suggestedHeadline;
-      const finalBio = approvedBio || generateIntakeCopy(validAnswers).suggestedBio;
+      const fallbackCopy = generateIntakeCopy(validAnswers);
+      const finalHeadline = approvedHeadline || fallbackCopy.suggestedHeadline;
+      const finalBio = approvedBio || fallbackCopy.suggestedBio;
       const finalThemeId = themeId || "sudarvel";
 
       // Locate or create user
