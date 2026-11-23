@@ -210,7 +210,7 @@ User Query: ${query}
 Respond in concise, clean markdown. If the user asks for a bio or advice, give an inspiring, high-impact answer.`;
 
         const response = await ai.models.generateContent({
-          model: "gemini-2.5-flash",
+          model: "gemini-flash-lite-latest",
           contents: [{ role: "user", parts: [{ text: systemPrompt }] }],
         });
 
