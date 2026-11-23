@@ -9,12 +9,11 @@ export interface LLMProvider {
   tailorResume(originalResume: string, jobDescription: string): Promise<TailoredResumeResult>;
 }
 
-// Models to try in order — start with most stable, then newer ones
+// Models to try in order — start with most capable, then lighter fallbacks
 const MODEL_CHAIN = [
   'gemini-2.5-flash',
   'gemini-3.5-flash',
-  'gemini-3.6-flash',
-  'gemini-3.7-flash',
+  'gemini-2.0-flash-lite',
 ];
 
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
@@ -109,9 +108,13 @@ export class GeminiProvider implements LLMProvider {
         
         console.log(`[Resume Tailor] ✅ Success with model: ${model}`);
 
+        if (!parsed.tailoredContent || parsed.tailoredContent.trim().length < 20) {
+          throw new Error("AI returned empty or invalid tailored content — retrying next model.");
+        }
+
         return {
-          tailoredContent: parsed.tailoredContent || originalResume,
-          keywordMatchScore: parsed.keywordMatchScore || 0,
+          tailoredContent: parsed.tailoredContent,
+          keywordMatchScore: typeof parsed.keywordMatchScore === 'number' ? parsed.keywordMatchScore : 0,
         };
       } catch (error: any) {
         lastError = error;

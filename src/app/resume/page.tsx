@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import * as Diff from "diff";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import Link from "next/link";
 import { FolioVedaLogo } from "@/components/ui/Logo";
+import { markdownFromRecord, namesMatch, parsePastedResume } from "@/lib/resume/from-text";
+import { PERSONA_PROFILES } from "@/lib/personas";
 import { 
   FileText, 
   Sparkles, 
@@ -24,57 +26,13 @@ import {
 } from "lucide-react";
 
 export default function ResumeTailorPage() {
-  const [jobDescription, setJobDescription] = useState(
-    `Target Role: Senior Full-Stack Software Engineer
-Company: CloudScale Technologies
-
-Requirements:
-- Strong experience in Next.js, React, and TypeScript architecture.
-- Demonstrated experience building high-throughput REST / GraphQL APIs.
-- Relational and document databases (PostgreSQL, Prisma, SQLite, Redis).
-- Proven track record of improving latency, database query optimization, and test automation.
-- Excellent system design communication and clean code practices.`
-  );
-
-  const [originalResume, setOriginalResume] = useState(
-    `# Aarav Sharma
-Bengaluru, India • aarav.sharma.dev@gmail.com • +91 98765 43210 • github.com/aarav-dev • linkedin.com/in/aarav-sharma
-
-## PROFESSIONAL SUMMARY
-Results-driven Full-Stack Engineer with 3+ years of experience engineering scalable web applications and distributed backend microservices. Proven expertise in Next.js, TypeScript, Node.js, and database performance optimization. Built production systems supporting over 200,000 monthly active users with 99.9% uptime.
-
-## TECHNICAL SKILLS
-- Languages & Frameworks: TypeScript, JavaScript, React, Next.js, Node.js, Express, Python
-- Databases & Systems: PostgreSQL, SQLite, Prisma ORM, Redis, Docker, RESTful APIs, WebSockets
-- Engineering Practices: CI/CD Pipelines, Jest, Unit Testing, System Architecture, Agile/Scrum
-
-## WORK EXPERIENCE
-### Senior Full-Stack Engineer — NexaStream Solutions | Jun 2023 – Present | Bengaluru, India
-* Architected and shipped a multi-tenant enterprise telemetry portal using Next.js 14, TypeScript, and Prisma, improving query throughput by 38%.
-* Implemented distributed Redis caching layers for high-frequency dashboard routes, reducing P99 latency from 420ms to 65ms.
-* Mentored 4 junior engineers on state management, asynchronous data fetching, and automated testing standards.
-
-### Software Engineer — CloudForge Tech | Aug 2021 – May 2023 | Hyderabad, India
-* Engineered core responsive customer onboarding workflows with React and Tailwind CSS, increasing lead conversion rate by 24%.
-* Developed resilient background queue processors for payment reconciliation using Node.js and PostgreSQL.
-* Integrated automated GitHub Actions CI/CD workflows, reducing release deployment cycle times from 45 minutes to 8 minutes.
-
-## KEY PROJECTS
-### FolioVeda — Autonomous Portfolio & ATS Engineering Engine | Next.js, TypeScript, Prisma, Gemini AI
-* Built an intelligent developer portfolio compiler featuring zero-hallucination intake extraction and live dynamic theme engines.
-* Deployed WebGL-accelerated interactive portfolio canvases with sub-100ms first contentful paint.
-
-### Indic ATS Parser — High-Precision Resume Verification Suite | Python, FastAPI, Next.js
-* Designed a dual-column token extraction engine tailored for high-volume multinational recruiting pipelines with 98.4% parser accuracy.
-
-## EDUCATION
-### Bachelor of Technology in Computer Science & Engineering | 2017 – 2021
-Visvesvaraya Technological University — First Class with Distinction (GPA: 8.8 / 10.0)`
-  );
+  const [jobDescription, setJobDescription] = useState("");
+  const [originalResume, setOriginalResume] = useState("");
 
   const [tailoredResume, setTailoredResume] = useState("");
   const [score, setScore] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<"preview" | "diff">("preview");
   const [fontFamily, setFontStyle] = useState<"sans" | "serif">("sans");
@@ -82,6 +40,51 @@ Visvesvaraya Technological University — First Class with Distinction (GPA: 8.8
   const [exporting, setExporting] = useState(false);
   const [copied, setCopied] = useState(false);
   const resumeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const requestedName = params.get("name") || params.get("username") || "";
+
+    const applyMarkdown = (markdown: string) => {
+      if (!markdown.trim()) return;
+      setOriginalResume(markdown);
+      setTailoredResume("");
+      setScore(null);
+    };
+
+    try {
+      const cached = localStorage.getItem("folioveda_active_profile");
+      if (cached) {
+        const extracted = JSON.parse(cached);
+        if (extracted?.name && (!requestedName || namesMatch(extracted.name, requestedName))) {
+          applyMarkdown(markdownFromRecord(extracted));
+        }
+      }
+    } catch {
+      // Ignore unreadable local drafts.
+    }
+
+    if (!requestedName) return;
+
+    const persona = Object.values(PERSONA_PROFILES).find((profile) => namesMatch(profile.name, requestedName));
+    if (persona) applyMarkdown(markdownFromRecord(persona.content));
+
+    let cancelled = false;
+    fetch(`/api/portfolio?name=${encodeURIComponent(requestedName)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled || data?.isMock || !data?.user?.name) return;
+        if (!namesMatch(data.user.name, requestedName)) return;
+        applyMarkdown(markdownFromRecord(data.user));
+      })
+      .catch(() => {
+        // The pasted or saved draft remains on screen.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handlePrint = () => {
     window.print();
@@ -104,7 +107,9 @@ Visvesvaraya Technological University — First Class with Distinction (GPA: 8.8
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Aarav_Sharma_Tailored_Resume.pdf`);
+      const nameMatch = (tailoredResume || originalResume).match(/^#\s+(.+)$/m);
+      const safeName = (nameMatch?.[1] || "Resume").replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "_");
+      pdf.save(`${safeName || "Resume"}_Resume.pdf`);
     } catch (err) {
       console.error("PDF Export failed", err);
     } finally {
@@ -112,7 +117,54 @@ Visvesvaraya Technological University — First Class with Distinction (GPA: 8.8
     }
   };
 
+  const handleGenerate = async () => {
+    if (!originalResume.trim()) {
+      setError("Please paste your resume details, LinkedIn summary, or career history first.");
+      return;
+    }
+    setGenerating(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/intake/extract", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rawText: originalResume }),
+      });
+      const data = await res.json();
+      if (data?.extracted) {
+        const formatted = markdownFromRecord(data.extracted);
+        if (formatted && formatted.trim().length > 30) {
+          setOriginalResume(formatted);
+          setTailoredResume("");
+          setScore(null);
+          setActiveTab("preview");
+          return;
+        }
+      }
+      // Fallback to local parsing
+      const built = parsePastedResume(originalResume);
+      setOriginalResume(built.markdown);
+      setTailoredResume("");
+      setScore(null);
+      setActiveTab("preview");
+    } catch {
+      const built = parsePastedResume(originalResume);
+      setOriginalResume(built.markdown);
+      setTailoredResume("");
+      setScore(null);
+      setActiveTab("preview");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   const handleTailor = async () => {
+    const source = parsePastedResume(originalResume);
+    if (!source.markdown.trim() || !originalResume.trim()) {
+      setError("Paste this person's details before tailoring the resume.");
+      return;
+    }
     setLoading(true);
     setError("");
 
@@ -122,8 +174,8 @@ Visvesvaraya Technological University — First Class with Distinction (GPA: 8.8
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId: "clq123",
-          originalResume,
-          jobDescription,
+          originalResume: source.markdown,
+          jobDescription: jobDescription.trim() || "Keep the candidate's real experience. Do not add employers, titles, dates, or metrics that are not in the original resume.",
         }),
       });
 
@@ -418,15 +470,32 @@ Visvesvaraya Technological University — First Class with Distinction (GPA: 8.8
               value={originalResume}
               onChange={(e) => setOriginalResume(e.target.value)}
               rows={12}
-              placeholder="Paste your existing resume..."
+              placeholder="Paste your existing resume, LinkedIn summary, or career history..."
               className="w-full text-xs font-mono p-3.5 rounded-xl border border-slate-200 focus:outline-hidden focus:border-[#173f32] focus:ring-1 focus:ring-[#173f32] bg-slate-50 text-slate-800 leading-relaxed"
             />
+            <button
+              onClick={handleGenerate}
+              disabled={generating || !originalResume.trim()}
+              className="w-full py-3 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs tracking-wide transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+            >
+              {generating ? (
+                <>
+                  <RefreshCw size={14} className="animate-spin" />
+                  <span>Structuring &amp; Extracting Experience...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={14} className="text-[#ebd800]" />
+                  <span>⚡ Generate &amp; Format ATS Resume from Text</span>
+                </>
+              )}
+            </button>
           </div>
 
           {/* Action Button */}
           <button
             onClick={handleTailor}
-            disabled={loading}
+            disabled={loading || !originalResume.trim()}
             className="w-full py-4 rounded-2xl bg-[#173f32] hover:bg-[#13352a] text-[#f7f4eb] font-bold text-sm tracking-wide transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
             {loading ? (
@@ -436,8 +505,8 @@ Visvesvaraya Technological University — First Class with Distinction (GPA: 8.8
               </>
             ) : (
               <>
-                <Sparkles size={16} className="text-[#ebd800]" />
-                <span>Tailor Resume for this Job (Zero Fluff)</span>
+                <Briefcase size={16} className="text-[#ebd800]" />
+                <span>🎯 Tailor Resume for Target Job (Zero Fluff)</span>
               </>
             )}
           </button>

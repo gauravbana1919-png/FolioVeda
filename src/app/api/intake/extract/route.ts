@@ -72,21 +72,25 @@ function extractProfileFromText(rawText: string) {
         const words = l.split(/\s+/).filter(Boolean);
         if (words.length >= 1 && words.length <= 4) {
           name = toTitleCase(l.replace(/^#+\s*/, ""));
-          // Candidate headline is almost always the very next line in a LinkedIn PDF
+          // Candidate headline is almost always the very next line in a LinkedIn PDF (excluding contact info)
           if (i + 1 < lines.length && lines[i + 1].length < 120 && !sectionKeywords.includes(lines[i + 1].toLowerCase())) {
-            headline = lines[i + 1];
+            const nextL = lines[i + 1];
+            if (!nextL.includes("@") && !nextL.includes("http") && !/^\+?\d/.test(nextL) && !nextL.includes(".com")) {
+              headline = nextL;
+            }
           }
           // Location is typically 1 or 2 lines after headline
           if (i + 2 < lines.length) {
             const possibleLoc = lines[i + 2];
             if (
-              possibleLoc.includes(",") ||
+              !possibleLoc.includes("@") &&
+              (possibleLoc.includes(",") ||
               possibleLoc.includes("India") ||
               possibleLoc.includes("USA") ||
               possibleLoc.includes("United States") ||
               possibleLoc.includes("CA") ||
               possibleLoc.includes("NY") ||
-              possibleLoc.includes("Remote")
+              possibleLoc.includes("Remote"))
             ) {
               location = possibleLoc;
             }
@@ -153,11 +157,11 @@ function extractProfileFromText(rawText: string) {
   if (!headline) {
     const titleRegex = /([A-Z][A-Za-z\s]+(Engineer|Developer|Designer|Architect|Specialist|Manager|Consultant|Lead))/;
     const foundTitle = rawText.match(titleRegex);
-    headline = foundTitle ? foundTitle[1].trim() : "Full-Stack Engineer & AI Systems Builder";
+    headline = foundTitle ? foundTitle[1].trim() : "Software Professional";
   }
   if (!location) {
     const locMatch = rawText.match(/([A-Z][a-zA-Z\s]+,\s*[A-Z][a-zA-Z\s]+,\s*(?:India|USA|United States|UK|Canada|Germany|Remote))/i);
-    location = locMatch ? locMatch[0].trim() : (rawText.includes("India") ? "Jaipur, Rajasthan, India" : "San Francisco, CA / Remote");
+    location = locMatch ? locMatch[0].trim() : "";
   }
 
   // 3. Section Slicing
@@ -222,7 +226,7 @@ function extractProfileFromText(rawText: string) {
     .trim();
 
   if (!bio || bio.length < 25) {
-    bio = `Developer and builder focused on ${headline} — turning ideas into production-ready software that solves real-world challenges.`;
+    bio = headline ? `Focused on ${headline} — building production-ready software and solving real-world challenges.` : "";
   }
 
   // 5. Skills extraction
@@ -302,14 +306,17 @@ function extractProfileFromText(rawText: string) {
   if (currentEdu) educationList.push(currentEdu);
 
   if (educationList.length === 0) {
-    // Check if JECRC or another university mentioned anywhere
+    // Check if a university is mentioned anywhere in the text
     const uniMatch = rawText.match(/([A-Z][a-zA-Z\s]+University|[A-Z][a-zA-Z\s]+Institute)/i);
-    educationList.push({
-      degree: "Bachelor of Technology, Artificial Intelligence & Machine Learning",
-      institution: uniMatch ? uniMatch[0].trim() : "JECRC University",
-      year: "2022 - 2026",
-      honors: "First Class with Distinction",
-    });
+    if (uniMatch) {
+      educationList.push({
+        degree: "Degree not specified",
+        institution: uniMatch[0].trim(),
+        year: "",
+        honors: "",
+      });
+    }
+    // If no university found at all, leave educationList empty — do NOT fabricate
   }
 
   // 7. Certifications extraction
@@ -327,14 +334,7 @@ function extractProfileFromText(rawText: string) {
     }
   }
 
-  if (certificationsList.length === 0) {
-    certificationsList.push({
-      name: "AI & Full-Stack Systems Architecture",
-      issuer: "Industry Accredited",
-      year: "2024",
-      status: "Verified",
-    });
-  }
+  // If no certifications found, leave the list empty — do NOT fabricate
 
   // 8. Experience extraction
   const experienceList: any[] = [];
@@ -342,21 +342,22 @@ function extractProfileFromText(rawText: string) {
   let currentExp: any = null;
 
   for (const el of expLines) {
-    const isDateLine = /\b(20\d\d|19\d\d)\b.*(Present|present|20\d\d|19\d\d)/i.test(el) || /^\d{4}\s*-\s*(\d{4}|Present)/i.test(el);
-    const hasCompanySeparator = (el.includes("|") || el.includes(" · ") || el.includes(" at ")) && !isDateLine;
+    const isDateOnlyLine = /^\s*(?:(?:19|20)\d\d|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s*(?:19|20)\d\d)\s*(?:-|–|—|to)\s*(?:Present|(?:19|20)\d\d|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s*(?:19|20)\d\d)\s*$/i.test(el);
+    const hasSeparator = el.includes("|") || el.includes(" · ") || el.includes(" — ") || el.includes(" - ") || el.includes(" at ");
 
-    if (isDateLine && currentExp) {
-      const dateParts = el.split(/[|·]/).map((s) => s.trim());
-      currentExp.period = dateParts[0] || currentExp.period;
-      if (dateParts[1]) currentExp.location = dateParts[1];
-    } else if (hasCompanySeparator) {
+    if (isDateOnlyLine && currentExp) {
+      currentExp.period = el;
+    } else if (hasSeparator && !el.startsWith("-") && !el.startsWith("•") && !el.startsWith("*")) {
       if (currentExp) experienceList.push(currentExp);
-      const parts = el.split(/[|·]| at /).map((s) => s.trim());
+      const parts = el.split(/[|·—]| at /).map((s) => s.trim()).filter(Boolean);
+      const role = parts[0] || "Software Engineer";
+      const company = parts[1] || "";
+      const period = parts[2] || "2023 - Present";
       currentExp = {
-        role: parts[0] || "Software & AI Developer",
-        company: parts[1] || "Technology Systems",
-        period: "2023 - Present",
-        location: location,
+        role,
+        company,
+        period,
+        location: location || "",
         highlights: [],
       };
     } else if (el.startsWith("-") || el.startsWith("•") || el.startsWith("*")) {
@@ -365,32 +366,20 @@ function extractProfileFromText(rawText: string) {
         currentExp.highlights.push(cleanHighlight);
       } else {
         currentExp = {
-          role: headline.split(/[•|&,-]/)[0].trim() || "Full-Stack & AI Builder",
-          company: "Independent Projects & Development",
-          period: "2023 - Present",
-          location: location,
+          role: headline && !headline.includes("@") ? headline.split(/[•|&,-]/)[0].trim() : "Software Professional",
+          company: "",
+          period: "Recent",
+          location: location || "",
           highlights: [cleanHighlight],
         };
       }
-    } else if (currentExp && currentExp.highlights.length < 3 && el.length > 20) {
+    } else if (currentExp && currentExp.highlights.length < 5 && el.length > 15) {
       currentExp.highlights.push(el);
     }
   }
   if (currentExp) experienceList.push(currentExp);
 
-  // If no formal corporate employers, anchor experience in real freelance/development initiatives
-  if (experienceList.length === 0) {
-    experienceList.push({
-      role: headline.split(/[•|&,-]/)[0].trim() || "Full-Stack Developer & AI Systems Builder",
-      company: "Independent Product Development",
-      period: "2023 - Present",
-      location: location,
-      highlights: [
-        `Architected end-to-end applications leveraging ${skills.slice(0, 3).join(", ")}, turning prototypes into working production tools.`,
-        "Engineered scalable backend APIs and high-performance frontend interfaces with focus on sub-100ms response times.",
-      ],
-    });
-  }
+  // If no formal experience found, leave the list empty — do NOT fabricate fake roles
 
   // 9. Authentic Projects Synthesis
   const projectsList: any[] = [];
@@ -483,7 +472,7 @@ export async function POST(req: Request) {
 
     // Try Gemini Multimodal / Text Parser if GEMINI_API_KEY is configured
     const apiKey = process.env.GEMINI_API_KEY;
-    if (apiKey && apiKey.length > 20 && !apiKey.startsWith("AIzaSyAK9twgK8XDu0qsj_DrkIJ5AadB3s7TBqQ")) {
+    if (apiKey && apiKey.length > 20 && !apiKey.includes('dummy')) {
       try {
         const ai = new GoogleGenAI({ apiKey });
         const prompt = `
