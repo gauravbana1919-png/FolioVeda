@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import * as Diff from "diff";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import html2canvas from "html2canvas-pro";
 import Link from "next/link";
 import { FolioVedaLogo } from "@/components/ui/Logo";
 import { markdownFromRecord, namesMatch, parsePastedResume } from "@/lib/resume/from-text";
@@ -91,16 +91,34 @@ export default function ResumeTailorPage() {
   };
 
   const handleExportPDF = async () => {
-    if (!resumeRef.current) return;
+    if (!originalResume.trim() && !tailoredResume.trim()) {
+      setError("Please paste or generate your resume before exporting to PDF.");
+      return;
+    }
+
+    // If currently on diff view, switch to document sheet so canvas element is mounted
+    if (activeTab === "diff") {
+      setActiveTab("preview");
+      await new Promise((r) => setTimeout(r, 200));
+    }
+
+    if (!resumeRef.current) {
+      window.print();
+      return;
+    }
+
     setExporting(true);
+    setError("");
 
     try {
-      await new Promise((r) => setTimeout(r, 150));
+      await new Promise((r) => setTimeout(r, 200));
       const canvas = await html2canvas(resumeRef.current, {
         scale: 2,
         useCORS: true,
         logging: false,
+        backgroundColor: "#ffffff",
       });
+
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
       const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -111,7 +129,9 @@ export default function ResumeTailorPage() {
       const safeName = (nameMatch?.[1] || "Resume").replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "_");
       pdf.save(`${safeName || "Resume"}_Resume.pdf`);
     } catch (err) {
-      console.error("PDF Export failed", err);
+      console.warn("Canvas-based export had an issue, opening print-to-PDF:", err);
+      // Seamless fallback to browser native print-to-PDF dialog
+      window.print();
     } finally {
       setExporting(false);
     }
