@@ -252,6 +252,37 @@ export default function ResumeBuilderStudio() {
   const [jobDescription, setJobDescription] = useState("");
   const [tailoredResumeMarkdown, setTailoredResumeMarkdown] = useState("");
   const [keywordMatchScore, setKeywordMatchScore] = useState<number | null>(null);
+  const [matchedJobSkills, setMatchedJobSkills] = useState<string[]>([]);
+  const [missingJobSkills, setMissingJobSkills] = useState<string[]>([]);
+
+  // Helper: check if a skill matches the target job described in Job Tailor
+  const isSkillMatchedForJob = (skillName: string): boolean => {
+    if (!jobDescription || !jobDescription.trim()) return false;
+    const sLower = skillName.toLowerCase().trim();
+    const jdLower = jobDescription.toLowerCase();
+
+    // 1. Direct match against AI returned matched skills
+    if (matchedJobSkills.some((ms) => ms.toLowerCase() === sLower || ms.toLowerCase().includes(sLower))) {
+      return true;
+    }
+
+    // 2. Direct string inclusion
+    if (jdLower.includes(sLower)) {
+      return true;
+    }
+
+    // 3. Clean token check (e.g. Next.js vs Nextjs, React vs React.js)
+    const cleanS = sLower.replace(/[^a-z0-9]/g, "");
+    const cleanJd = jdLower.replace(/[^a-z0-9]/g, " ");
+    if (cleanS.length >= 3 && cleanJd.includes(cleanS)) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const activeMatchedCount = skills.filter((s) => isSkillMatchedForJob(s)).length;
+  const activeMatchedSkills = skills.filter((s) => isSkillMatchedForJob(s));
 
   // Status & Loaders
   const [isParsingRaw, setIsParsingRaw] = useState(false);
@@ -425,7 +456,13 @@ export default function ResumeBuilderStudio() {
       if (data.tailoredContent) {
         setTailoredResumeMarkdown(data.tailoredContent);
         setKeywordMatchScore(data.keywordMatchScore || 88);
-        setStatusMessage(`✓ Aligned resume to Job Specs with a ${data.keywordMatchScore || 88}% ATS Match Score!`);
+        if (Array.isArray(data.matchedSkills) && data.matchedSkills.length > 0) {
+          setMatchedJobSkills(data.matchedSkills);
+        }
+        if (Array.isArray(data.missingSkills) && data.missingSkills.length > 0) {
+          setMissingJobSkills(data.missingSkills);
+        }
+        setStatusMessage(`✓ Aligned resume to Job Specs with a ${data.keywordMatchScore || 88}% ATS Match Score! Role-specific skills highlighted.`);
         setTimeout(() => setStatusMessage(null), 4000);
       }
     } catch (err: any) {
@@ -922,17 +959,33 @@ export default function ResumeBuilderStudio() {
 
       {skills.length > 0 && (
         <div className={densityStyles.sectionMargin}>
-          <div className="border-b border-slate-900 pb-0.5 mb-1.5">
+          <div className="border-b border-slate-900 pb-0.5 mb-1.5 flex items-center justify-between">
             <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
               Skills
             </h2>
-          </div>
-          <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs text-slate-800">
-            {skills.map((s, idx) => (
-              <span key={idx} className="after:content-['•'] after:ml-2 after:text-slate-400 last:after:content-none">
-                {s}
+            {jobDescription && activeMatchedCount > 0 && (
+              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                🎯 {activeMatchedCount} Target Skills Matched
               </span>
-            ))}
+            )}
+          </div>
+          <div className="flex flex-wrap gap-1.5 text-xs text-slate-800">
+            {skills.map((s, idx) => {
+              const isMatched = isSkillMatchedForJob(s);
+              return (
+                <span
+                  key={idx}
+                  className={`px-2 py-0.5 rounded-md transition-all ${
+                    isMatched
+                      ? "bg-emerald-100 text-emerald-950 font-bold border border-emerald-400 shadow-2xs ring-1 ring-emerald-500 flex items-center gap-1"
+                      : "bg-slate-100 text-slate-800 border border-slate-200"
+                  }`}
+                >
+                  {isMatched && <span className="text-[10px]">🎯</span>}
+                  <span>{s}</span>
+                </span>
+              );
+            })}
           </div>
         </div>
       )}
@@ -1030,16 +1083,35 @@ export default function ResumeBuilderStudio() {
 
       {skills.length > 0 && (
         <div className="space-y-1.5">
-          <h2 className="text-[11px] font-extrabold uppercase tracking-wider text-blue-900 border-b border-blue-200 pb-0.5">
-            Core Competencies &amp; Skills
-          </h2>
+          <div className="border-b border-blue-200 pb-0.5 flex items-center justify-between">
+            <h2 className="text-[11px] font-extrabold uppercase tracking-wider text-blue-900">
+              Core Competencies &amp; Skills
+            </h2>
+            {jobDescription && activeMatchedCount > 0 && (
+              <span className="text-[10px] font-bold text-blue-900 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+                🎯 {activeMatchedCount} Role Matched
+              </span>
+            )}
+          </div>
           <div className="grid grid-cols-3 gap-1 text-[11px] text-slate-700 font-medium">
-            {skills.map((s, idx) => (
-              <div key={idx} className="flex items-center gap-1">
-                <span className="text-blue-600 font-bold">▪</span>
-                <span className="truncate">{s}</span>
-              </div>
-            ))}
+            {skills.map((s, idx) => {
+              const isMatched = isSkillMatchedForJob(s);
+              return (
+                <div
+                  key={idx}
+                  className={`flex items-center gap-1 px-1.5 py-0.5 rounded transition-all ${
+                    isMatched
+                      ? "bg-blue-100/90 text-blue-950 font-bold border border-blue-300 ring-1 ring-blue-400"
+                      : ""
+                  }`}
+                >
+                  <span className={isMatched ? "text-blue-800 font-bold" : "text-blue-600 font-bold"}>
+                    {isMatched ? "🎯" : "▪"}
+                  </span>
+                  <span className="truncate">{s}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
@@ -1362,18 +1434,33 @@ export default function ResumeBuilderStudio() {
 
             {skills.length > 0 && (
               <div className="space-y-2">
-                <h3 className={`text-[10px] font-extrabold uppercase tracking-widest ${config.sidebarSub} border-b ${config.accentBorder} pb-1`}>
-                  Core Competencies
-                </h3>
-                <div className="flex flex-wrap gap-1.5">
-                  {skills.map((s, idx) => (
-                    <span
-                      key={idx}
-                      className={`px-2 py-0.5 rounded-md ${config.badgeBg} text-[10px] font-semibold border`}
-                    >
-                      {s}
+                <div className={`flex items-center justify-between border-b ${config.accentBorder} pb-1`}>
+                  <h3 className={`text-[10px] font-extrabold uppercase tracking-widest ${config.sidebarSub}`}>
+                    Core Competencies
+                  </h3>
+                  {jobDescription && activeMatchedCount > 0 && (
+                    <span className="text-[9px] font-bold text-emerald-300 bg-emerald-950/70 px-1.5 py-0.5 rounded border border-emerald-500/40">
+                      🎯 {activeMatchedCount}
                     </span>
-                  ))}
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {skills.map((s, idx) => {
+                    const isMatched = isSkillMatchedForJob(s);
+                    return (
+                      <span
+                        key={idx}
+                        className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border transition-all ${
+                          isMatched
+                            ? "bg-emerald-500/25 text-emerald-300 border-emerald-400 font-bold ring-1 ring-emerald-400/70 flex items-center gap-1 shadow-xs"
+                            : `${config.badgeBg}`
+                        }`}
+                      >
+                        {isMatched && <span className="text-[9px]">🎯</span>}
+                        <span>{s}</span>
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -1529,15 +1616,33 @@ export default function ResumeBuilderStudio() {
 
       <div className="grid grid-cols-2 gap-4 pt-3 border-t border-slate-200">
         <div className="space-y-2">
-          <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-1">
-            Top Skills
-          </h3>
-          <div className="flex flex-wrap gap-1.5">
-            {skills.map((s, idx) => (
-              <span key={idx} className="px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 text-[11px] font-medium border border-slate-200">
-                {s}
+          <div className="border-b border-slate-200 pb-1 flex items-center justify-between">
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
+              Top Skills
+            </h3>
+            {jobDescription && activeMatchedCount > 0 && (
+              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                🎯 {activeMatchedCount} Matched
               </span>
-            ))}
+            )}
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {skills.map((s, idx) => {
+              const isMatched = isSkillMatchedForJob(s);
+              return (
+                <span
+                  key={idx}
+                  className={`px-2.5 py-1 rounded-full text-[11px] font-medium border transition-all ${
+                    isMatched
+                      ? "bg-emerald-100 text-emerald-950 font-bold border-emerald-400 ring-1 ring-emerald-500 shadow-2xs flex items-center gap-1"
+                      : "bg-slate-100 text-slate-800 border-slate-200"
+                  }`}
+                >
+                  {isMatched && <span className="text-[10px]">🎯</span>}
+                  <span>{s}</span>
+                </span>
+              );
+            })}
           </div>
         </div>
         <div className="space-y-2">
@@ -1626,15 +1731,33 @@ export default function ResumeBuilderStudio() {
 
         <div className="grid grid-cols-2 gap-6 pt-2 border-t border-slate-200">
           <div className="space-y-2">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-900 border-b border-blue-200 pb-1">
-              Skills &amp; Competencies
-            </h3>
-            <div className="flex flex-wrap gap-1.5">
-              {skills.map((s, idx) => (
-                <span key={idx} className="px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-900 text-[11px] font-medium border border-blue-200">
-                  {s}
+            <div className="border-b border-blue-200 pb-1 flex items-center justify-between">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-900">
+                Skills &amp; Competencies
+              </h3>
+              {jobDescription && activeMatchedCount > 0 && (
+                <span className="text-[10px] font-bold text-blue-900 bg-blue-100 px-2 py-0.5 rounded-full border border-blue-300">
+                  🎯 {activeMatchedCount} Role Matched
                 </span>
-              ))}
+              )}
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {skills.map((s, idx) => {
+                const isMatched = isSkillMatchedForJob(s);
+                return (
+                  <span
+                    key={idx}
+                    className={`px-2.5 py-0.5 rounded-md text-[11px] font-medium border transition-all ${
+                      isMatched
+                        ? "bg-blue-100 text-blue-950 font-bold border-blue-400 ring-1 ring-blue-500 shadow-2xs flex items-center gap-1"
+                        : "bg-blue-50 text-blue-900 border-blue-200"
+                    }`}
+                  >
+                    {isMatched && <span className="text-[10px]">🎯</span>}
+                    <span>{s}</span>
+                  </span>
+                );
+              })}
             </div>
           </div>
           <div className="space-y-2">
@@ -2909,10 +3032,79 @@ export default function ResumeBuilderStudio() {
                 className="w-full text-xs font-mono p-3.5 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-1 focus:ring-[#173f32] outline-hidden leading-relaxed"
               />
 
-              {keywordMatchScore !== null && (
-                <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs font-bold text-emerald-900">
-                  <span>ATS Keyword Match Score</span>
-                  <span className="text-base font-extrabold text-emerald-700">{keywordMatchScore}%</span>
+              {/* Role Skill Matching Dashboard */}
+              {jobDescription.trim().length > 0 && (
+                <div className="space-y-3 p-4 rounded-2xl bg-gradient-to-br from-emerald-50/80 to-slate-50 border border-emerald-200/80">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-xs font-extrabold text-emerald-950 uppercase tracking-wider">
+                      <span>🎯 Target Role Skills Analysis</span>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                      {activeMatchedCount} Highlighted
+                    </span>
+                  </div>
+
+                  {/* Matched Skills Chips */}
+                  {activeMatchedSkills.length > 0 ? (
+                    <div className="space-y-1.5">
+                      <div className="text-[11px] font-bold text-emerald-800 flex items-center justify-between">
+                        <span>✓ Matched on Your Resume (Highlighted):</span>
+                        <span className="text-[10px] text-slate-500 font-normal">Active in Live Preview</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {activeMatchedSkills.map((s, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-950 font-bold border border-emerald-300 text-[11px] flex items-center gap-1 shadow-2xs"
+                          >
+                            <span>🎯</span>
+                            <span>{s}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-[11px] text-slate-500 italic">
+                      No matching skills found in description yet. Click 'Tailor Resume' or add relevant skills below.
+                    </p>
+                  )}
+
+                  {/* Missing In-Demand Skills from Job Spec */}
+                  {missingJobSkills.length > 0 && (
+                    <div className="space-y-1.5 pt-2 border-t border-emerald-200/60">
+                      <div className="text-[11px] font-bold text-amber-900 flex items-center justify-between">
+                        <span>⚡ Recommended Skills (Click to Add):</span>
+                        <span className="text-[10px] text-amber-700">From Job Post</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {missingJobSkills.map((s, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => {
+                              if (!skills.includes(s)) {
+                                setSkills([...skills, s]);
+                                setStatusMessage(`Added "${s}" to your resume skills!`);
+                                setTimeout(() => setStatusMessage(null), 2500);
+                              }
+                            }}
+                            className="px-2 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-[10.5px] font-bold transition flex items-center gap-1 cursor-pointer"
+                            title="Click to add to your resume"
+                          >
+                            <Plus size={10} />
+                            <span>{s}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {keywordMatchScore !== null && (
+                    <div className="p-3 rounded-xl bg-white border border-emerald-200 flex items-center justify-between text-xs font-bold text-emerald-900 shadow-2xs">
+                      <span>ATS Keyword Match Score</span>
+                      <span className="text-base font-extrabold text-emerald-700">{keywordMatchScore}%</span>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -2934,12 +3126,22 @@ export default function ResumeBuilderStudio() {
                 )}
               </button>
 
-              {tailoredResumeMarkdown && (
+              {/* Reset & Clear Tailoring button to restore normal resume display */}
+              {jobDescription.trim().length > 0 && (
                 <button
-                  onClick={() => setTailoredResumeMarkdown("")}
-                  className="w-full py-2 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800 transition"
+                  onClick={() => {
+                    setJobDescription("");
+                    setTailoredResumeMarkdown("");
+                    setMatchedJobSkills([]);
+                    setMissingJobSkills([]);
+                    setKeywordMatchScore(null);
+                    setStatusMessage("Target job cleared — resume skills restored to standard display.");
+                    setTimeout(() => setStatusMessage(null), 3000);
+                  }}
+                  className="w-full py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
                 >
-                  Reset to Original Master Resume
+                  <Trash2 size={13} />
+                  <span>Clear Job Tailor &amp; Restore Standard Resume</span>
                 </button>
               )}
             </div>

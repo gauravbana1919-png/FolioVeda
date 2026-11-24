@@ -3,6 +3,8 @@ import { GoogleGenAI } from '@google/genai';
 export interface TailoredResumeResult {
   tailoredContent: string;
   keywordMatchScore: number;
+  matchedSkills?: string[];
+  missingSkills?: string[];
 }
 
 export interface LLMProvider {
@@ -62,9 +64,34 @@ function deterministicTailor(originalResume: string, jobDescription: string): Ta
     }
   }
 
+  // Extract matched and missing tech skills
+  const commonTechSkills = [
+    "react", "next.js", "nextjs", "typescript", "javascript", "flutter", "dart",
+    "node.js", "nodejs", "python", "tailwind css", "tailwind", "css", "html", "firebase",
+    "postgresql", "sql", "docker", "aws", "gcp", "rest apis", "rest api", "graphql", "git",
+    "figma", "redux", "riverpod", "ci/cd", "agile", "scrum", "jira"
+  ];
+  
+  const matchedSkills: string[] = [];
+  const missingSkills: string[] = [];
+
+  for (const skill of commonTechSkills) {
+    const inJd = jobDescription.toLowerCase().includes(skill);
+    if (inJd) {
+      const formatted = skill.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+      if (resumeLower.includes(skill)) {
+        if (!matchedSkills.includes(formatted)) matchedSkills.push(formatted);
+      } else {
+        if (!missingSkills.includes(formatted)) missingSkills.push(formatted);
+      }
+    }
+  }
+
   return {
     tailoredContent: reordered.join("\n").trim(),
     keywordMatchScore,
+    matchedSkills,
+    missingSkills: missingSkills.slice(0, 5),
   };
 }
 
@@ -122,9 +149,11 @@ export class GeminiProvider implements LLMProvider {
          ## EDUCATION
          ### [Degree] — [Institution] | [Graduation Year]
       4. DO NOT wrap "tailoredContent" in markdown code fences or backticks. Return raw markdown text inside the JSON string.
-      5. Return a JSON object with exactly two fields:
+      5. Return a JSON object with:
          - "tailoredContent": The new resume text.
          - "keywordMatchScore": An integer from 0 to 100 representing how well the original resume matched the job description keywords before modification.
+         - "matchedSkills": Array of strings of candidate skills that directly match the job description.
+         - "missingSkills": Array of strings (up to 5) of required or preferred skills mentioned in the job description that the candidate could add.
       
       ORIGINAL RESUME:
       ${originalResume}
@@ -167,6 +196,8 @@ export class GeminiProvider implements LLMProvider {
         return {
           tailoredContent: parsed.tailoredContent,
           keywordMatchScore: typeof parsed.keywordMatchScore === 'number' ? parsed.keywordMatchScore : 0,
+          matchedSkills: Array.isArray(parsed.matchedSkills) ? parsed.matchedSkills : [],
+          missingSkills: Array.isArray(parsed.missingSkills) ? parsed.missingSkills : [],
         };
       } catch (error: any) {
         lastError = error;

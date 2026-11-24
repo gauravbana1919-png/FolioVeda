@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 
     // Call LLM
     const llm = getLLMProvider();
-    const { tailoredContent, keywordMatchScore } = await llm.tailorResume(originalResume, jobDescription);
+    const { tailoredContent, keywordMatchScore, matchedSkills, missingSkills } = await llm.tailorResume(originalResume, jobDescription);
 
     // Update user quota and save to DB
     let resumeId = "mock-resume-id";
@@ -81,6 +81,8 @@ export async function POST(req: Request) {
       resumeId: resumeId,
       tailoredContent,
       keywordMatchScore,
+      matchedSkills: matchedSkills || [],
+      missingSkills: missingSkills || [],
     });
   } catch (error: any) {
     console.error('Tailor Resume Error:', error);
