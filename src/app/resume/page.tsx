@@ -11,7 +11,6 @@ import {
   FileText, 
   Sparkles, 
   Download, 
-  Printer, 
   Copy, 
   Check, 
   ShieldCheck, 
@@ -24,8 +23,34 @@ import {
   User,
   GraduationCap,
   Layers,
-  Code
+  Code,
+  Layout,
+  Camera,
+  MapPin,
+  Mail,
+  Phone,
+  Link as LinkIcon,
+  Globe,
+  Award
 } from "lucide-react";
+
+// Inline brand icons for high fidelity
+const LinkedinIcon = ({ size = 12, className = "" }: { size?: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect x="2" y="9" width="4" height="12" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
+
+const GithubIcon = ({ size = 12, className = "" }: { size?: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+    <path d="M9 18c-4.51 2-5-2-7-2" />
+  </svg>
+);
+
+export type ResumeTemplateId = "classic-ats" | "modern-sidebar" | "creative-header" | "minimal-compact";
 
 interface PersonalDetails {
   name: string;
@@ -36,6 +61,7 @@ interface PersonalDetails {
   linkedin: string;
   github: string;
   website: string;
+  avatarUrl: string;
 }
 
 interface WorkExperience {
@@ -65,86 +91,111 @@ interface ProjectItem {
 
 export default function ResumeBuilderStudio() {
   // Navigation / active left panel view
-  const [editorTab, setEditorTab] = useState<"form" | "import" | "tailor">("form");
+  const [editorTab, setEditorTab] = useState<"form" | "import" | "tailor" | "templates">("form");
   const [activeFormSection, setActiveFormSection] = useState<"personal" | "summary" | "experience" | "skills" | "education" | "projects">("personal");
+
+  // Active Template State (Emily Carter, Brian Wayne, Camila Rivera, Daniel Mercer)
+  const [selectedTemplate, setSelectedTemplate] = useState<ResumeTemplateId>("classic-ats");
 
   // Structured Content State
   const [personal, setPersonal] = useState<PersonalDetails>({
-    name: "Siddharth Malhotra",
-    headline: "Lead Product Designer & Design Systems Architect",
-    email: "sid.ux@example.com",
-    phone: "+91 94140 77889",
-    location: "Jaipur, Rajasthan, India",
-    linkedin: "https://linkedin.com/in/siddharth-designs",
-    github: "https://github.com/siddharth-designs",
-    website: "https://siddharthdesigns.in",
+    name: "Emily Carter",
+    headline: "Senior Project Manager & Operations Lead",
+    email: "emily.carter@example.com",
+    phone: "+1 (416) 555-0182",
+    location: "Toronto, Ontario, Canada",
+    linkedin: "https://linkedin.com/in/emily-carter",
+    github: "https://github.com/emily-carter",
+    website: "https://emilycarter.dev",
+    avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=300&fit=crop&crop=faces",
   });
 
   const [summary, setSummary] = useState(
-    "Multidisciplinary UI/UX designer with 5 years of experience architecting scalable design systems and mobile-first consumer applications. Specializes in bridging design and engineering to accelerate handoff times and deliver high-converting user experiences."
+    "Project Manager with 6+ years of experience leading cross-functional teams in technology and business operations. Skilled in stakeholder management, predictive sprint planning, risk mitigation, and delivery governance across enterprise ecosystems. Known for building high-trust work environments, improving team alignment, and keeping complex projects moving under tight deadlines."
   );
 
   const [experience, setExperience] = useState<WorkExperience[]>([
     {
       id: "exp-1",
-      role: "Senior Product Designer",
-      company: "CraftCart India",
-      period: "August 2023 – Present",
-      location: "Jaipur, Rajasthan, India",
+      role: "Project Manager",
+      company: "TechNova Global",
+      period: "05/2022 – Present",
+      location: "Toronto, Canada",
       highlights: [
-        "Architected and maintained 'Kala', a multi-brand Figma design system with 200+ accessible components, cutting handoff time by 50%.",
-        "Led user research interviews with 60+ vernacular-speaking shoppers to optimize the mobile search experience, driving a 24% lift in add-to-cart conversions.",
+        "Managed release plans across product, engineering, and operations workstreams, delivering 14 major feature releases with zero downtime.",
+        "Coordinated stakeholder updates, risk reviews, and milestone reporting, reducing delivery variance by 28%.",
+        "Improved cross-team delivery velocity by introducing automated Jira sprint metrics and blocker SLAs.",
       ],
     },
     {
       id: "exp-2",
-      role: "UI/UX Designer",
-      company: "StudioVerve",
-      period: "July 2021 – July 2023",
-      location: "New Delhi, India",
+      role: "Project Coordinator",
+      company: "CloudPulse Solutions",
+      period: "03/2020 – 04/2022",
+      location: "Toronto, Canada",
       highlights: [
-        "Designed comprehensive end-to-end web dashboards for three distinct healthcare startups.",
-        "Created advanced interactive prototypes using Principle and Framer to validate user flows and stakeholder alignment.",
+        "Supported schedule, budgets, and documentation for enterprise transformation initiatives.",
+        "Facilitated daily standups and maintained cross-department action logs with 98% resolution compliance.",
+        "Resolved delivery bottlenecks before they impacted client delivery commitments.",
+      ],
+    },
+    {
+      id: "exp-3",
+      role: "Operations Analyst",
+      company: "Apex Strategy Group",
+      period: "08/2018 – 02/2020",
+      location: "Montreal, Canada",
+      highlights: [
+        "Analyzed operational workflows to identify service delivery bottlenecks.",
+        "Authored executive SOPs and training materials for 120+ team members.",
       ],
     },
   ]);
 
   const [skills, setSkills] = useState<string[]>([
-    "Figma", "Framer", "Design Systems", "User Research", "Mobile-First UX", 
-    "Prototyping", "Design Tokens", "Usability Testing", "HTML/CSS"
+    "Project Planning", "Stakeholder Management", "Agile Delivery", 
+    "Risk Management", "Process Improvement", "Budget Tracking", 
+    "Jira & Confluence", "Cross-Functional Leadership", "Scrum"
   ]);
   const [newSkillInput, setNewSkillInput] = useState("");
 
   const [education, setEducation] = useState<EducationItem[]>([
     {
       id: "edu-1",
-      degree: "Bachelor of Design (B.Des) in Communication Design",
-      institution: "National Institute of Design (NID), Ahmedabad",
-      year: "2021",
+      degree: "Bachelor of Commerce in Management",
+      institution: "University of Toronto",
+      year: "2018",
       gpa: "First Class with Distinction",
+    },
+    {
+      id: "edu-2",
+      degree: "Diploma in Business Administration",
+      institution: "Apsley College",
+      year: "2015",
+      gpa: "Honors",
     },
   ]);
 
   const [projects, setProjects] = useState<ProjectItem[]>([
     {
       id: "proj-1",
-      title: "Kala Design System",
-      techStack: "Figma, Design Tokens, Accessibility",
-      description: "Built and maintained a multi-brand Figma design system comprising over 200 accessible components to streamline cross-team development.",
+      title: "Enterprise Cloud Migration Governance",
+      techStack: "Jira, Confluence, AWS, Agile",
+      description: "Led the governance framework for migrating 40+ legacy on-premise services into AWS with zero customer outage.",
       link: "https://github.com",
     },
     {
       id: "proj-2",
-      title: "Mobile Search & Vernacular UX Redesign",
-      techStack: "Figma, Maze, User Research",
-      description: "Led comprehensive user research interviews to optimize the consumer discovery funnel for tier-2/3 Indian shoppers.",
+      title: "Automated Sprint Telemetry Dashboard",
+      techStack: "Next.js, React, REST APIs",
+      description: "Engineered real-time burndown chart visualization helping 8 development squads eliminate sprint rollover by 34%.",
       link: "https://github.com",
     },
   ]);
 
   // Design Formatting & Layout Controls
   const [fontFamily, setFontFamily] = useState<"sans" | "serif">("sans");
-  const [density, setDensity] = useState<"compact" | "standard" | "spacious">("compact");
+  const [density, setDensity] = useState<"compact" | "standard" | "spacious">("standard");
 
   // Raw Import / AI Tailoring state
   const [rawPastedText, setRawPastedText] = useState("");
@@ -407,12 +458,12 @@ export default function ResumeBuilderStudio() {
       ...experience,
       {
         id: `exp-${Date.now()}`,
-        role: "Software Engineer",
+        role: "Project Manager",
         company: "Company Name",
         period: "2023 – Present",
-        location: "City, Country",
+        location: "Toronto, Canada",
         highlights: [
-          "Engineered high-performance service endpoints reducing average response latency by 35%.",
+          "Coordinated cross-functional workflows to achieve on-time sprint completions.",
         ],
       },
     ]);
@@ -426,7 +477,7 @@ export default function ResumeBuilderStudio() {
     setExperience(
       experience.map((e) =>
         e.id === expId
-          ? { ...e, highlights: [...e.highlights, "Collaborated with cross-functional teams to deliver feature milestones on schedule."] }
+          ? { ...e, highlights: [...e.highlights, "Engineered structured delivery plans that reduced delivery cycle times."] }
           : e
       )
     );
@@ -479,7 +530,7 @@ export default function ResumeBuilderStudio() {
 
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
       const safeName = (personal.name || "Resume").replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "_");
-      pdf.save(`${safeName || "Resume"}_ATS_Resume.pdf`);
+      pdf.save(`${safeName}_${selectedTemplate}.pdf`);
     } catch (err) {
       console.warn("Canvas PDF export fallback to print dialog:", err);
       window.print();
@@ -497,27 +548,615 @@ export default function ResumeBuilderStudio() {
   // Density styles mapping
   const densityStyles = {
     compact: {
-      padding: "p-8 sm:p-10",
+      padding: "p-6 sm:p-8",
       sectionMargin: "mt-3 mb-1.5",
       bulletLeading: "leading-snug my-0.5",
-      fontSize: "text-[12px]",
+      fontSize: "text-[11.5px]",
       titleSize: "text-2xl",
     },
     standard: {
-      padding: "p-10 sm:p-12",
+      padding: "p-8 sm:p-10",
       sectionMargin: "mt-4 mb-2",
       bulletLeading: "leading-normal my-1",
       fontSize: "text-[12.5px]",
       titleSize: "text-3xl",
     },
     spacious: {
-      padding: "p-12 sm:p-14",
+      padding: "p-10 sm:p-12",
       sectionMargin: "mt-5 mb-2.5",
       bulletLeading: "leading-relaxed my-1.5",
       fontSize: "text-[13px]",
       titleSize: "text-3xl",
     },
   }[density];
+
+  // Template options catalog
+  const TEMPLATE_OPTIONS: Array<{
+    id: ResumeTemplateId;
+    title: string;
+    subtitle: string;
+    badge: string;
+    color: string;
+  }> = [
+    {
+      id: "classic-ats",
+      title: "Emily Carter Classic",
+      subtitle: "Single-Column ATS Clean",
+      badge: "100% ATS Safe",
+      color: "border-slate-300 bg-white",
+    },
+    {
+      id: "modern-sidebar",
+      title: "Brian Wayne Duo",
+      subtitle: "Executive Navy Sidebar",
+      badge: "High Impact",
+      color: "border-[#1e293b] bg-[#1e293b] text-white",
+    },
+    {
+      id: "creative-header",
+      title: "Camila Rivera Banner",
+      subtitle: "Avatar Header & Timeline",
+      badge: "Modern Creative",
+      color: "border-slate-200 bg-slate-100",
+    },
+    {
+      id: "minimal-compact",
+      title: "Daniel Mercer Grid",
+      subtitle: "Compact Multi-Column",
+      badge: "Executive PM",
+      color: "border-emerald-700 bg-emerald-50",
+    },
+  ];
+
+  /* ──────────────────────────────────────────────────────────────
+     TEMPLATE 1: EMILY CARTER (CLASSIC SINGLE-COLUMN ATS CLEAN)
+  ────────────────────────────────────────────────────────────── */
+  const renderClassicAts = () => (
+    <div className="w-full text-slate-900 select-text">
+      {/* 1. Candidate Name */}
+      <div className="text-center pb-1">
+        <h1 className={`${densityStyles.titleSize} font-extrabold uppercase tracking-tight text-slate-900`}>
+          {personal.name || "Candidate Name"}
+        </h1>
+        {personal.headline && (
+          <p className="text-xs sm:text-sm font-bold text-slate-700 tracking-wide mt-0.5">
+            {personal.headline}
+          </p>
+        )}
+      </div>
+
+      {/* 2. Contact Details Line */}
+      <div className="text-center text-[11px] sm:text-xs text-slate-600 font-medium pb-2 border-b border-slate-300 flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 mt-1">
+        {personal.location && <span>{personal.location}</span>}
+        {personal.phone && (
+          <>
+            <span className="text-slate-300">•</span>
+            <span>{personal.phone}</span>
+          </>
+        )}
+        {personal.email && (
+          <>
+            <span className="text-slate-300">•</span>
+            <a href={`mailto:${personal.email}`} className="text-slate-900 hover:underline">
+              {personal.email}
+            </a>
+          </>
+        )}
+        {personal.linkedin && (
+          <>
+            <span className="text-slate-300">•</span>
+            <span className="text-slate-700 font-semibold">{personal.linkedin.replace(/^https?:\/\/(?:www\.)?linkedin\.com\/in\//i, "linkedin.com/in/")}</span>
+          </>
+        )}
+        {personal.github && (
+          <>
+            <span className="text-slate-300">•</span>
+            <span className="text-slate-700 font-semibold">{personal.github.replace(/^https?:\/\/(?:www\.)?github\.com\//i, "github.com/")}</span>
+          </>
+        )}
+      </div>
+
+      {/* 3. Professional Summary */}
+      {summary && summary.trim() && (
+        <div className={densityStyles.sectionMargin}>
+          <div className="border-b border-slate-900 pb-0.5 mb-1.5">
+            <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
+              Professional Summary
+            </h2>
+          </div>
+          <p className={`${densityStyles.fontSize} leading-relaxed text-slate-800 font-normal`}>
+            {summary}
+          </p>
+        </div>
+      )}
+
+      {/* 4. Professional Experience */}
+      {experience.length > 0 && (
+        <div className={densityStyles.sectionMargin}>
+          <div className="border-b border-slate-900 pb-0.5 mb-2">
+            <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
+              Professional Experience
+            </h2>
+          </div>
+
+          <div className="space-y-3">
+            {experience.map((exp) => (
+              <div key={exp.id}>
+                <div className="flex items-baseline justify-between text-xs sm:text-sm font-bold text-slate-900">
+                  <span>
+                    {exp.role} <span className="font-normal text-slate-600">— {exp.company}</span>
+                  </span>
+                  <span className="text-[11px] sm:text-xs font-semibold text-slate-600 shrink-0">
+                    {exp.period} {exp.location && `• ${exp.location}`}
+                  </span>
+                </div>
+
+                {exp.highlights.length > 0 && (
+                  <ul className="mt-1 pl-4 list-disc text-slate-800 space-y-0.5 marker:text-slate-600">
+                    {exp.highlights.map((h, i) => (
+                      <li key={i} className={`${densityStyles.fontSize} ${densityStyles.bulletLeading}`}>
+                        {h}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 5. Education */}
+      {education.length > 0 && (
+        <div className={densityStyles.sectionMargin}>
+          <div className="border-b border-slate-900 pb-0.5 mb-1.5">
+            <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
+              Education
+            </h2>
+          </div>
+
+          <div className="space-y-2">
+            {education.map((edu) => (
+              <div key={edu.id} className="flex items-baseline justify-between text-xs sm:text-sm">
+                <span className="font-bold text-slate-900">
+                  {edu.degree} <span className="font-normal text-slate-600">— {edu.institution}</span>
+                </span>
+                <span className="text-[11px] sm:text-xs font-semibold text-slate-600 shrink-0">
+                  {edu.year} {edu.gpa && `• ${edu.gpa}`}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 6. Core Skills */}
+      {skills.length > 0 && (
+        <div className={densityStyles.sectionMargin}>
+          <div className="border-b border-slate-900 pb-0.5 mb-1.5">
+            <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
+              Skills
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 text-[11.5px] text-slate-800">
+            {skills.map((s, idx) => (
+              <div key={idx} className="flex items-center gap-1.5">
+                <span className="text-slate-400">•</span>
+                <span>{s}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 7. Key Projects */}
+      {projects.length > 0 && (
+        <div className={densityStyles.sectionMargin}>
+          <div className="border-b border-slate-900 pb-0.5 mb-1.5">
+            <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
+              Key Projects
+            </h2>
+          </div>
+
+          <div className="space-y-2">
+            {projects.map((proj) => (
+              <div key={proj.id}>
+                <div className="flex items-baseline justify-between text-xs sm:text-sm font-bold text-slate-900">
+                  <span>{proj.title}</span>
+                  {proj.techStack && (
+                    <span className="text-[11px] font-normal text-slate-500">{proj.techStack}</span>
+                  )}
+                </div>
+                {proj.description && (
+                  <p className={`${densityStyles.fontSize} text-slate-700 leading-snug mt-0.5`}>
+                    {proj.description}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  /* ──────────────────────────────────────────────────────────────
+     TEMPLATE 2: BRIAN T. WAYNE (TWO-COLUMN NAVY SIDEBAR)
+  ────────────────────────────────────────────────────────────── */
+  const renderModernSidebar = () => (
+    <div className="w-full grid grid-cols-12 min-h-[1050px] bg-white text-slate-900 select-text overflow-hidden -m-6 sm:-m-10">
+      
+      {/* ── LEFT NAVY SIDEBAR (35%) ── */}
+      <div className="col-span-4 bg-[#1E293B] text-slate-100 p-6 sm:p-7 flex flex-col justify-between space-y-6">
+        <div className="space-y-6">
+          
+          {/* Avatar Photo */}
+          {personal.avatarUrl && (
+            <div className="flex justify-center pt-2">
+              <img
+                src={personal.avatarUrl}
+                alt={personal.name}
+                className="w-24 h-24 rounded-full object-cover border-2 border-slate-400/40 shadow-md"
+              />
+            </div>
+          )}
+
+          {/* Contact Details */}
+          <div className="space-y-2.5 text-[11px]">
+            <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 border-b border-slate-700 pb-1">
+              Contact
+            </h3>
+            {personal.email && (
+              <div className="flex items-center gap-2 text-slate-200">
+                <Mail size={12} className="text-emerald-400 shrink-0" />
+                <span className="truncate">{personal.email}</span>
+              </div>
+            )}
+            {personal.phone && (
+              <div className="flex items-center gap-2 text-slate-200">
+                <Phone size={12} className="text-emerald-400 shrink-0" />
+                <span>{personal.phone}</span>
+              </div>
+            )}
+            {personal.location && (
+              <div className="flex items-center gap-2 text-slate-200">
+                <MapPin size={12} className="text-emerald-400 shrink-0" />
+                <span>{personal.location}</span>
+              </div>
+            )}
+            {personal.linkedin && (
+              <div className="flex items-center gap-2 text-slate-200">
+                <LinkedinIcon size={12} className="text-emerald-400 shrink-0" />
+                <span className="truncate">{personal.linkedin.replace(/^https?:\/\//i, "")}</span>
+              </div>
+            )}
+            {personal.github && (
+              <div className="flex items-center gap-2 text-slate-200">
+                <GithubIcon size={12} className="text-emerald-400 shrink-0" />
+                <span className="truncate">{personal.github.replace(/^https?:\/\//i, "")}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Education in Sidebar */}
+          {education.length > 0 && (
+            <div className="space-y-2">
+              <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 border-b border-slate-700 pb-1">
+                Education
+              </h3>
+              {education.map((edu) => (
+                <div key={edu.id} className="text-[11px] leading-snug">
+                  <div className="font-bold text-white">{edu.degree}</div>
+                  <div className="text-slate-300 text-[10px]">{edu.institution}</div>
+                  <div className="text-emerald-400 text-[10px]">{edu.year}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Skills Badges in Sidebar */}
+          {skills.length > 0 && (
+            <div className="space-y-2">
+              <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 border-b border-slate-700 pb-1">
+                Core Competencies
+              </h3>
+              <div className="flex flex-wrap gap-1.5">
+                {skills.map((s, idx) => (
+                  <span
+                    key={idx}
+                    className="px-2 py-0.5 rounded-md bg-slate-800 text-slate-200 text-[10px] font-semibold border border-slate-700"
+                  >
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer Stamp */}
+        <div className="pt-4 border-t border-slate-700/60 text-[9px] text-slate-400">
+          Executive Portfolio Certified
+        </div>
+      </div>
+
+      {/* ── RIGHT MAIN BODY (65%) ── */}
+      <div className="col-span-8 p-7 sm:p-9 space-y-5">
+        {/* Name Header */}
+        <div className="border-b border-slate-200 pb-3">
+          <h1 className="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-slate-900">
+            {personal.name}
+          </h1>
+          <p className="text-xs sm:text-sm font-bold text-emerald-800 tracking-wide mt-0.5">
+            {personal.headline}
+          </p>
+        </div>
+
+        {/* Profile / Summary */}
+        {summary && (
+          <div className="space-y-1">
+            <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-1">
+              Executive Profile
+            </h2>
+            <p className="text-[12px] leading-relaxed text-slate-700 pt-1">
+              {summary}
+            </p>
+          </div>
+        )}
+
+        {/* Experience */}
+        {experience.length > 0 && (
+          <div className="space-y-3">
+            <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-1">
+              Work Experience
+            </h2>
+
+            <div className="space-y-3.5">
+              {experience.map((exp) => (
+                <div key={exp.id} className="space-y-1">
+                  <div className="flex items-baseline justify-between text-xs font-bold text-slate-900">
+                    <span>
+                      {exp.role} <span className="font-semibold text-slate-600">— {exp.company}</span>
+                    </span>
+                    <span className="text-[11px] font-medium text-slate-500">{exp.period}</span>
+                  </div>
+
+                  {exp.highlights.length > 0 && (
+                    <ul className="pl-4 list-disc text-slate-700 text-[11.5px] leading-snug space-y-1 marker:text-emerald-700">
+                      {exp.highlights.map((h, i) => (
+                        <li key={i}>{h}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Selected Projects */}
+        {projects.length > 0 && (
+          <div className="space-y-2.5">
+            <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-1">
+              Key Projects &amp; Initiatives
+            </h2>
+
+            <div className="space-y-2">
+              {projects.map((proj) => (
+                <div key={proj.id} className="text-xs">
+                  <div className="font-bold text-slate-900 flex items-center justify-between">
+                    <span>{proj.title}</span>
+                    <span className="text-[10px] text-slate-400 font-normal">{proj.techStack}</span>
+                  </div>
+                  <p className="text-[11.5px] text-slate-700 leading-snug mt-0.5">{proj.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  /* ──────────────────────────────────────────────────────────────
+     TEMPLATE 3: CAMILA RIVERA (CREATIVE HEADER BANNER & TIMELINE)
+  ────────────────────────────────────────────────────────────── */
+  const renderCreativeHeader = () => (
+    <div className="w-full text-slate-900 select-text space-y-4">
+      {/* ── TOP HEADER CARD BANNER ── */}
+      <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-100 via-slate-50 to-emerald-50/50 border border-slate-200 flex flex-col sm:flex-row items-center gap-5">
+        {personal.avatarUrl && (
+          <img
+            src={personal.avatarUrl}
+            alt={personal.name}
+            className="w-20 h-20 rounded-full object-cover border-2 border-white shadow-sm shrink-0"
+          />
+        )}
+        <div className="space-y-1 text-center sm:text-left flex-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight">
+            {personal.name}
+          </h1>
+          <p className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
+            {personal.headline}
+          </p>
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1 text-[11px] text-slate-600 pt-1 font-medium">
+            {personal.location && <span>📍 {personal.location}</span>}
+            {personal.email && <span>✉️ {personal.email}</span>}
+            {personal.phone && <span>📞 {personal.phone}</span>}
+          </div>
+        </div>
+      </div>
+
+      {/* Summary */}
+      {summary && (
+        <div className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/80 text-[12px] text-slate-700 leading-relaxed">
+          {summary}
+        </div>
+      )}
+
+      {/* ── TIMELINE WORK EXPERIENCE ── */}
+      {experience.length > 0 && (
+        <div className="space-y-3 pt-2">
+          <div className="flex items-center gap-2 border-b border-slate-200 pb-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-700" />
+            <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
+              Professional Timeline &amp; Experience
+            </h2>
+          </div>
+
+          <div className="space-y-4">
+            {experience.map((exp) => (
+              <div key={exp.id} className="grid grid-cols-12 gap-3 text-xs">
+                {/* Left Date Column */}
+                <div className="col-span-3 text-[11px] font-bold text-slate-500 pt-0.5">
+                  <div>{exp.period}</div>
+                  <div className="text-[10px] text-slate-400 font-normal">{exp.location}</div>
+                </div>
+
+                {/* Right Role Content */}
+                <div className="col-span-9 space-y-1 border-l-2 border-slate-200 pl-3">
+                  <div className="font-bold text-slate-900 text-xs">
+                    {exp.role} <span className="font-semibold text-emerald-800">@ {exp.company}</span>
+                  </div>
+                  {exp.highlights.length > 0 && (
+                    <ul className="list-disc pl-3 text-[11.5px] text-slate-700 space-y-0.5 leading-snug marker:text-slate-400">
+                      {exp.highlights.map((h, i) => (
+                        <li key={i}>{h}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Bottom 2-Column Section: Skills & Education */}
+      <div className="grid grid-cols-2 gap-4 pt-3 border-t border-slate-200">
+        {/* Skills */}
+        <div className="space-y-2">
+          <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-1">
+            Top Skills
+          </h3>
+          <div className="flex flex-wrap gap-1.5">
+            {skills.map((s, idx) => (
+              <span
+                key={idx}
+                className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 text-[10.5px] font-semibold border border-slate-200"
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Education */}
+        <div className="space-y-2">
+          <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-1">
+            Education
+          </h3>
+          {education.map((edu) => (
+            <div key={edu.id} className="text-xs leading-snug">
+              <div className="font-bold text-slate-900">{edu.degree}</div>
+              <div className="text-slate-600 text-[11px]">{edu.institution} • {edu.year}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  /* ──────────────────────────────────────────────────────────────
+     TEMPLATE 4: DANIEL MERCER (EXECUTIVE COMPACT GRID)
+  ────────────────────────────────────────────────────────────── */
+  const renderMinimalCompact = () => (
+    <div className="w-full text-slate-900 select-text space-y-3.5">
+      {/* Top Header */}
+      <div className="border-b-2 border-slate-900 pb-2">
+        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 uppercase">
+          {personal.name}
+        </h1>
+        <div className="flex items-center justify-between text-xs font-bold text-slate-700 mt-0.5">
+          <span>{personal.headline}</span>
+          <div className="text-[11px] text-slate-500 font-normal">
+            {personal.location} • {personal.phone} • {personal.email}
+          </div>
+        </div>
+      </div>
+
+      {/* Summary */}
+      {summary && (
+        <div className="space-y-1">
+          <h2 className="text-[11px] font-extrabold uppercase tracking-wider text-slate-900">
+            Executive Summary
+          </h2>
+          <p className="text-[12px] leading-relaxed text-slate-700">
+            {summary}
+          </p>
+        </div>
+      )}
+
+      {/* Experience */}
+      {experience.length > 0 && (
+        <div className="space-y-2.5">
+          <h2 className="text-[11px] font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-0.5">
+            Professional Experience
+          </h2>
+
+          <div className="space-y-3">
+            {experience.map((exp) => (
+              <div key={exp.id} className="space-y-0.5">
+                <div className="flex items-baseline justify-between text-xs font-bold text-slate-900">
+                  <span>{exp.role}, <span className="font-normal text-slate-600">{exp.company}</span></span>
+                  <span className="text-[11px] text-slate-500 font-normal">{exp.period}</span>
+                </div>
+                {exp.highlights.length > 0 && (
+                  <ul className="list-disc pl-4 text-[11.5px] text-slate-700 space-y-0.5 marker:text-slate-500 leading-snug">
+                    {exp.highlights.map((h, i) => (
+                      <li key={i}>{h}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Skills 3-Column Compact Grid */}
+      {skills.length > 0 && (
+        <div className="space-y-1.5">
+          <h2 className="text-[11px] font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-0.5">
+            Core Competencies &amp; Skills
+          </h2>
+          <div className="grid grid-cols-3 gap-1 text-[11px] text-slate-700 font-medium">
+            {skills.map((s, idx) => (
+              <div key={idx} className="flex items-center gap-1">
+                <span className="text-slate-400">▪</span>
+                <span className="truncate">{s}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Education */}
+      {education.length > 0 && (
+        <div className="space-y-1 pt-1">
+          <h2 className="text-[11px] font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-0.5">
+            Education
+          </h2>
+          {education.map((edu) => (
+            <div key={edu.id} className="flex justify-between text-xs">
+              <span className="font-bold text-slate-800">{edu.degree}, <span className="font-normal text-slate-600">{edu.institution}</span></span>
+              <span className="text-[11px] text-slate-500">{edu.year}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-[#F1F3F5] text-slate-900 flex flex-col antialiased selection:bg-[#173f32] selection:text-white">
@@ -531,7 +1170,7 @@ export default function ResumeBuilderStudio() {
           <span className="text-slate-300">/</span>
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-bold">
             <ShieldCheck size={14} className="text-emerald-700" />
-            <span>FlowCV-Grade ATS Resume Studio</span>
+            <span>FlowCV-Grade Resume Builder</span>
           </div>
         </div>
 
@@ -605,6 +1244,45 @@ export default function ResumeBuilderStudio() {
           </div>
         </div>
       )}
+
+      {/* ── TEMPLATE SELECTOR CAROUSEL BAR ── */}
+      <section className="bg-white border-b border-slate-200 px-6 py-4 shadow-2xs print:hidden">
+        <div className="max-w-[1580px] mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 shrink-0">
+            <Layout size={16} className="text-[#173f32]" />
+            <span className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
+              Select Resume Template:
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3 overflow-x-auto pb-1">
+            {TEMPLATE_OPTIONS.map((tmpl) => {
+              const isSelected = selectedTemplate === tmpl.id;
+              return (
+                <button
+                  key={tmpl.id}
+                  onClick={() => {
+                    setSelectedTemplate(tmpl.id);
+                    setStatusMessage(`Switched to ${tmpl.title} template!`);
+                    setTimeout(() => setStatusMessage(null), 2500);
+                  }}
+                  className={`px-3.5 py-2 rounded-xl border text-left flex items-center gap-2.5 transition-all shrink-0 cursor-pointer ${
+                    isSelected
+                      ? "border-[#173f32] bg-emerald-50 text-[#173f32] ring-2 ring-[#173f32] shadow-sm font-bold"
+                      : "border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
+                  }`}
+                >
+                  <div className={`w-3.5 h-3.5 rounded-full border ${tmpl.color} shrink-0`} />
+                  <div>
+                    <div className="text-xs font-bold leading-tight">{tmpl.title}</div>
+                    <div className="text-[10px] text-slate-500 font-normal">{tmpl.subtitle}</div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       {/* ── MAIN FLOWCV SPLIT-SCREEN WORKSPACE ── */}
       <div className="flex-1 max-w-[1580px] w-full mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -753,6 +1431,15 @@ export default function ResumeBuilderStudio() {
                         className="w-full text-xs font-medium p-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-1 focus:ring-[#173f32] outline-hidden"
                       />
                     </div>
+                    <div className="col-span-2 space-y-1">
+                      <label className="text-[11px] font-bold text-slate-700">Profile Avatar Photo URL (for Creative &amp; Sidebar Templates)</label>
+                      <input
+                        type="text"
+                        value={personal.avatarUrl}
+                        onChange={(e) => setPersonal({ ...personal, avatarUrl: e.target.value })}
+                        className="w-full text-xs font-medium p-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-1 focus:ring-[#173f32] outline-hidden font-mono text-[10.5px]"
+                      />
+                    </div>
                   </div>
                 </div>
               )}
@@ -858,7 +1545,7 @@ export default function ResumeBuilderStudio() {
                         />
                         <input
                           type="text"
-                          placeholder="Location (e.g. Bengaluru / Remote)"
+                          placeholder="Location (e.g. Toronto / Remote)"
                           value={exp.location}
                           onChange={(e) =>
                             setExperience(
@@ -964,7 +1651,7 @@ export default function ResumeBuilderStudio() {
                   <div className="flex items-center gap-2">
                     <input
                       type="text"
-                      placeholder="Add a new skill (e.g. Next.js, Docker, Figma)..."
+                      placeholder="Add a new skill (e.g. Next.js, Docker, Agile)..."
                       value={newSkillInput}
                       onChange={(e) => setNewSkillInput(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && handleAddSkill()}
@@ -1003,7 +1690,7 @@ export default function ResumeBuilderStudio() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-500">
-                      Selected Projects &amp; Case Studies ({projects.length})
+                      Selected Projects &amp; Initiatives ({projects.length})
                     </h3>
                     <button
                       onClick={() =>
@@ -1011,9 +1698,9 @@ export default function ResumeBuilderStudio() {
                           ...projects,
                           {
                             id: `proj-${Date.now()}`,
-                            title: "Distributed Cache Daemon",
-                            techStack: "Rust, Redis, Docker",
-                            description: "Engineered zero-copy high-throughput cache daemon serving 50k+ req/sec.",
+                            title: "Enterprise Transformation",
+                            techStack: "Jira, Agile, Scrum",
+                            description: "Coordinated digital initiatives across teams.",
                             link: "https://github.com",
                           },
                         ])
@@ -1088,9 +1775,9 @@ export default function ResumeBuilderStudio() {
                           ...education,
                           {
                             id: `edu-${Date.now()}`,
-                            degree: "B.Tech in Computer Science",
-                            institution: "Institute of Technology",
-                            year: "2023",
+                            degree: "Bachelor of Business Administration",
+                            institution: "University",
+                            year: "2018",
                             gpa: "First Class with Distinction",
                           },
                         ])
@@ -1109,7 +1796,7 @@ export default function ResumeBuilderStudio() {
                       <div className="flex items-center justify-between">
                         <input
                           type="text"
-                          placeholder="Degree (e.g. B.Tech in Computer Science)"
+                          placeholder="Degree (e.g. B.Com / B.Tech)"
                           value={edu.degree}
                           onChange={(e) =>
                             setEducation(
@@ -1276,178 +1963,11 @@ export default function ResumeBuilderStudio() {
                     : "var(--font-sans-main), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
               }}
             >
-              {/* 1. Candidate Name */}
-              <div className="text-center pb-1">
-                <h1 className={`${densityStyles.titleSize} font-extrabold uppercase tracking-tight text-slate-900`}>
-                  {personal.name || "Candidate Name"}
-                </h1>
-                {personal.headline && (
-                  <p className="text-xs sm:text-sm font-bold text-slate-700 tracking-wide mt-0.5">
-                    {personal.headline}
-                  </p>
-                )}
-              </div>
-
-              {/* 2. Contact Details Line */}
-              <div className="text-center text-[11px] sm:text-xs text-slate-600 font-medium pb-2.5 border-b border-slate-300 flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 mt-1">
-                {personal.location && <span>{personal.location}</span>}
-                {personal.phone && (
-                  <>
-                    <span className="text-slate-300">•</span>
-                    <span>{personal.phone}</span>
-                  </>
-                )}
-                {personal.email && (
-                  <>
-                    <span className="text-slate-300">•</span>
-                    <a href={`mailto:${personal.email}`} className="text-slate-900 hover:underline">
-                      {personal.email}
-                    </a>
-                  </>
-                )}
-                {personal.linkedin && (
-                  <>
-                    <span className="text-slate-300">•</span>
-                    <span className="text-slate-700 font-semibold">{personal.linkedin.replace(/^https?:\/\/(?:www\.)?linkedin\.com\/in\//i, "linkedin.com/in/")}</span>
-                  </>
-                )}
-                {personal.github && (
-                  <>
-                    <span className="text-slate-300">•</span>
-                    <span className="text-slate-700 font-semibold">{personal.github.replace(/^https?:\/\/(?:www\.)?github\.com\//i, "github.com/")}</span>
-                  </>
-                )}
-                {personal.website && (
-                  <>
-                    <span className="text-slate-300">•</span>
-                    <span className="text-slate-700 font-semibold">{personal.website.replace(/^https?:\/\//i, "")}</span>
-                  </>
-                )}
-              </div>
-
-              {/* 3. Professional Summary */}
-              {summary && summary.trim() && (
-                <div className={densityStyles.sectionMargin}>
-                  <div className="border-b border-slate-900 pb-0.5 mb-1.5">
-                    <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
-                      Professional Summary
-                    </h2>
-                  </div>
-                  <p className={`${densityStyles.fontSize} leading-relaxed text-slate-800 font-normal`}>
-                    {summary}
-                  </p>
-                </div>
-              )}
-
-              {/* 4. Professional Experience */}
-              {experience.length > 0 && (
-                <div className={densityStyles.sectionMargin}>
-                  <div className="border-b border-slate-900 pb-0.5 mb-2">
-                    <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
-                      Professional Experience
-                    </h2>
-                  </div>
-
-                  <div className="space-y-3">
-                    {experience.map((exp) => (
-                      <div key={exp.id}>
-                        <div className="flex items-baseline justify-between text-xs sm:text-sm font-bold text-slate-900">
-                          <span>
-                            {exp.role} <span className="font-normal text-slate-600">— {exp.company}</span>
-                          </span>
-                          <span className="text-[11px] sm:text-xs font-semibold text-slate-600 shrink-0">
-                            {exp.period} {exp.location && `• ${exp.location}`}
-                          </span>
-                        </div>
-
-                        {exp.highlights.length > 0 && (
-                          <ul className="mt-1 pl-4 list-disc text-slate-800 space-y-0.5 marker:text-slate-600">
-                            {exp.highlights.map((h, i) => (
-                              <li key={i} className={`${densityStyles.fontSize} ${densityStyles.bulletLeading}`}>
-                                {h}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* 5. Core Technical Skills */}
-              {skills.length > 0 && (
-                <div className={densityStyles.sectionMargin}>
-                  <div className="border-b border-slate-900 pb-0.5 mb-1.5">
-                    <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
-                      Core Technical Skills
-                    </h2>
-                  </div>
-                  <p className={`${densityStyles.fontSize} leading-relaxed text-slate-800 font-medium`}>
-                    {skills.join(" • ")}
-                  </p>
-                </div>
-              )}
-
-              {/* 6. Selected Projects */}
-              {projects.length > 0 && (
-                <div className={densityStyles.sectionMargin}>
-                  <div className="border-b border-slate-900 pb-0.5 mb-2">
-                    <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
-                      Key Projects &amp; Case Studies
-                    </h2>
-                  </div>
-
-                  <div className="space-y-2.5">
-                    {projects.map((proj) => (
-                      <div key={proj.id}>
-                        <div className="flex items-baseline justify-between text-xs sm:text-sm font-bold text-slate-900">
-                          <span>{proj.title}</span>
-                          {proj.link && (
-                            <span className="text-[11px] text-slate-500 font-mono">
-                              {proj.link.replace(/^https?:\/\//i, "")}
-                            </span>
-                          )}
-                        </div>
-                        {proj.techStack && (
-                          <div className="text-[11px] font-semibold text-slate-600">
-                            Stack: {proj.techStack}
-                          </div>
-                        )}
-                        {proj.description && (
-                          <p className={`${densityStyles.fontSize} ${densityStyles.bulletLeading} text-slate-800`}>
-                            {proj.description}
-                          </p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* 7. Education */}
-              {education.length > 0 && (
-                <div className={densityStyles.sectionMargin}>
-                  <div className="border-b border-slate-900 pb-0.5 mb-1.5">
-                    <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
-                      Education &amp; Credentials
-                    </h2>
-                  </div>
-
-                  <div className="space-y-2">
-                    {education.map((edu) => (
-                      <div key={edu.id} className="flex items-baseline justify-between text-xs sm:text-sm">
-                        <span className="font-bold text-slate-900">
-                          {edu.degree} <span className="font-normal text-slate-600">— {edu.institution}</span>
-                        </span>
-                        <span className="text-[11px] sm:text-xs font-semibold text-slate-600 shrink-0">
-                          {edu.year} {edu.gpa && `• ${edu.gpa}`}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/* Dynamic Template Dispatcher */}
+              {selectedTemplate === "classic-ats" && renderClassicAts()}
+              {selectedTemplate === "modern-sidebar" && renderModernSidebar()}
+              {selectedTemplate === "creative-header" && renderCreativeHeader()}
+              {selectedTemplate === "minimal-compact" && renderMinimalCompact()}
             </div>
           </div>
         </div>
