@@ -118,6 +118,35 @@ export default function ResumeBuilderStudio() {
   const [selectedTemplate, setSelectedTemplate] = useState<ResumeTemplateId>("atlantic-blue");
   const [templateCategory, setTemplateCategory] = useState<ResumeTemplateCategory>("all");
 
+  // Local Photo Upload Ref & Handler
+  const photoInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setStatusMessage("Please select a valid image file (PNG, JPG, WebP).");
+      setTimeout(() => setStatusMessage(null), 3000);
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setStatusMessage("Photo size exceeds 5MB limit. Please choose a smaller image.");
+      setTimeout(() => setStatusMessage(null), 3000);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64 = event.target?.result as string;
+      setPersonal((prev) => ({ ...prev, avatarUrl: base64 }));
+      setStatusMessage("Profile photo uploaded and applied to your selected resume template!");
+      setTimeout(() => setStatusMessage(null), 3000);
+    };
+    reader.readAsDataURL(file);
+  };
+
   // Structured Content State
   const [personal, setPersonal] = useState<PersonalDetails>({
     name: "Emily Carter",
@@ -771,14 +800,26 @@ export default function ResumeBuilderStudio() {
   ────────────────────────────────────────────────────────────── */
   const renderClassicClear = () => (
     <div className="w-full text-slate-900 select-text">
-      <div className="text-center pb-1">
-        <h1 className={`${densityStyles.titleSize} font-extrabold uppercase tracking-tight text-slate-900`}>
-          {personal.name || "Candidate Name"}
-        </h1>
-        {personal.headline && (
-          <p className="text-xs sm:text-sm font-bold text-slate-700 tracking-wide mt-0.5">
-            {personal.headline}
-          </p>
+      {/* Header with Adaptive Photo */}
+      <div className="flex items-center justify-between pb-1 gap-4">
+        <div className={personal.avatarUrl ? "text-left flex-1" : "text-center w-full"}>
+          <h1 className={`${densityStyles.titleSize} font-extrabold uppercase tracking-tight text-slate-900`}>
+            {personal.name || "Candidate Name"}
+          </h1>
+          {personal.headline && (
+            <p className="text-xs sm:text-sm font-bold text-slate-700 tracking-wide mt-0.5">
+              {personal.headline}
+            </p>
+          )}
+        </div>
+        {personal.avatarUrl && (
+          <div className="shrink-0">
+            <img
+              src={personal.avatarUrl}
+              alt={personal.name}
+              className="w-16 h-16 rounded-full object-cover border-2 border-slate-300 shadow-xs"
+            />
+          </div>
         )}
       </div>
 
@@ -930,16 +971,25 @@ export default function ResumeBuilderStudio() {
   ────────────────────────────────────────────────────────────── */
   const renderTrueBlue = () => (
     <div className="w-full text-slate-900 select-text space-y-3.5">
-      <div className="border-b-2 border-blue-900 pb-2">
-        <h1 className="text-3xl font-extrabold tracking-tight text-blue-950 uppercase">
-          {personal.name}
-        </h1>
-        <div className="flex items-center justify-between text-xs font-bold text-slate-700 mt-0.5">
-          <span className="text-blue-900">{personal.headline}</span>
-          <div className="text-[11px] text-slate-500 font-normal">
-            {personal.location} • {personal.phone} • {personal.email}
+      <div className="border-b-2 border-blue-900 pb-2 flex items-center justify-between gap-4">
+        <div className="space-y-0.5 flex-1">
+          <h1 className="text-3xl font-extrabold tracking-tight text-blue-950 uppercase">
+            {personal.name}
+          </h1>
+          <div className="flex items-center justify-between text-xs font-bold text-slate-700 mt-0.5 pr-2">
+            <span className="text-blue-900">{personal.headline}</span>
+            <div className="text-[11px] text-slate-500 font-normal">
+              {personal.location} • {personal.phone} • {personal.email}
+            </div>
           </div>
         </div>
+        {personal.avatarUrl && (
+          <img
+            src={personal.avatarUrl}
+            alt={personal.name}
+            className="w-16 h-16 rounded-full object-cover border-2 border-blue-900 shadow-xs shrink-0"
+          />
+        )}
       </div>
 
       {summary && (
@@ -2290,14 +2340,103 @@ export default function ResumeBuilderStudio() {
                         className="w-full text-xs font-medium p-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-1 focus:ring-[#173f32] outline-hidden"
                       />
                     </div>
-                    <div className="col-span-2 space-y-1">
-                      <label className="text-[11px] font-bold text-slate-700">Profile Avatar Photo URL (for Creative &amp; Sidebar Templates)</label>
-                      <input
-                        type="text"
-                        value={personal.avatarUrl}
-                        onChange={(e) => setPersonal({ ...personal, avatarUrl: e.target.value })}
-                        className="w-full text-xs font-medium p-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-1 focus:ring-[#173f32] outline-hidden font-mono text-[10.5px]"
-                      />
+                    {/* ── PHOTO UPLOAD & AVATAR STUDIO ── */}
+                    <div className="col-span-2 p-4 rounded-2xl bg-gradient-to-br from-slate-50 to-emerald-50/40 border border-slate-200 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Camera size={15} className="text-[#173f32]" />
+                          <label className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
+                            Resume Profile Photo
+                          </label>
+                        </div>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                          {personal.avatarUrl ? "Photo Active" : "No Photo (Text-Only ATS)"}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        {/* Live Avatar Preview */}
+                        <div className="relative shrink-0">
+                          {personal.avatarUrl ? (
+                            <img
+                              src={personal.avatarUrl}
+                              alt="Avatar preview"
+                              className="w-16 h-16 rounded-2xl object-cover border-2 border-white shadow-sm ring-2 ring-emerald-500"
+                            />
+                          ) : (
+                            <div className="w-16 h-16 rounded-2xl border-2 border-dashed border-slate-300 bg-white flex flex-col items-center justify-center text-slate-400">
+                              <User size={20} />
+                              <span className="text-[9px] font-semibold mt-0.5">No Photo</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Upload Controls & Actions */}
+                        <div className="flex-1 space-y-2">
+                          <input
+                            type="file"
+                            ref={photoInputRef}
+                            accept="image/png, image/jpeg, image/webp"
+                            className="hidden"
+                            onChange={handlePhotoUpload}
+                          />
+
+                          <div className="flex flex-wrap items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => photoInputRef.current?.click()}
+                              className="px-3.5 py-2 rounded-xl bg-[#173f32] hover:bg-[#13352a] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer"
+                            >
+                              <Camera size={13} />
+                              <span>Upload Photo</span>
+                            </button>
+
+                            {personal.avatarUrl && (
+                              <button
+                                type="button"
+                                onClick={() => setPersonal({ ...personal, avatarUrl: "" })}
+                                className="px-3 py-2 rounded-xl bg-white border border-slate-200 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-700 text-slate-600 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                                title="Remove photo for pure text ATS format"
+                              >
+                                <Trash2 size={13} />
+                                <span>Remove</span>
+                              </button>
+                            )}
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setPersonal({
+                                  ...personal,
+                                  avatarUrl:
+                                    "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=300&fit=crop&crop=faces",
+                                })
+                              }
+                              className="px-3 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 text-xs font-bold transition cursor-pointer"
+                            >
+                              Sample Headshot
+                            </button>
+                          </div>
+
+                          <p className="text-[10px] text-slate-500 leading-tight">
+                            Supports PNG, JPG, WebP up to 5MB. Photo automatically formats to your chosen coverpage &amp; template layout.
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Optional URL Fallback */}
+                      <div className="pt-2 border-t border-slate-200/80">
+                        <label className="text-[10px] font-bold text-slate-500 block mb-1">
+                          Or paste photo direct URL:
+                        </label>
+                        <input
+                          type="text"
+                          value={personal.avatarUrl}
+                          onChange={(e) => setPersonal({ ...personal, avatarUrl: e.target.value })}
+                          placeholder="https://images.unsplash.com/... or paste image link"
+                          className="w-full text-xs font-mono p-2 rounded-xl border border-slate-200 bg-white focus:ring-1 focus:ring-[#173f32] outline-hidden text-[11px]"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
