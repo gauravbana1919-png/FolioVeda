@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/db";
 
 /**
@@ -634,10 +636,15 @@ export async function POST(req: Request) {
       }
     }
 
+    let session = null;
+    try {
+      session = await getServerSession(authOptions);
+    } catch {}
+
     const extracted = extractProfileFromText(textToParse);
 
     // Persist immediately to SQLite so the user's authentic portfolio is instantly live
-    await persistExtractedUser(extracted);
+    await persistExtractedUser(extracted, session);
 
     return NextResponse.json({
       success: true,
@@ -659,31 +666,42 @@ export async function POST(req: Request) {
  * Persist the parsed authentic user into SQLite immediately.
  * Ensures that visiting /p/[name], /p/gaurav, or /portfolio/preview renders their REAL data.
  */
-async function persistExtractedUser(extracted: any) {
+async function persistExtractedUser(extracted: any, session: any = null) {
   try {
     const rawTargetName = extracted.name || "Candidate";
     const targetName = rawTargetName.replace(/[*_#`~]/g, "").trim() || "Candidate";
-    const email = extracted.contact?.email || `${targetName.toLowerCase().replace(/[^a-z0-9]/g, "")}_${Date.now()}@folioveda.local`;
-
-    // Locate existing user or create
-    let user = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { name: { equals: targetName } },
-          { email: { equals: email } },
-        ],
-      },
-      orderBy: { id: "desc" },
-    });
+    
+    // Locate existing user by authenticated session first, or by name/email
+    let user = null;
+    if (session?.user?.email) {
+      user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+      });
+    }
 
     if (!user) {
-      user = await prisma.user.create({
-        data: {
-          name: targetName,
-          email: email,
+      const email = extracted.contact?.email || `${targetName.toLowerCase().replace(/[^a-z0-9]/g, "")}_${Date.now()}@folioveda.local`;
+      user = await prisma.user.findFirst({
+        where: {
+          OR: [
+            { name: { equals: targetName } },
+            { email: { equals: email } },
+          ],
         },
+        orderBy: { id: "desc" },
       });
-    } else {
+
+      if (!user) {
+        user = await prisma.user.create({
+          data: {
+            name: targetName,
+            email: email,
+          },
+        });
+      }
+    }
+
+    if (user) {
       await prisma.user.update({
         where: { id: user.id },
         data: { name: targetName },
@@ -766,6 +784,39 @@ async function persistExtractedUser(extracted: any) {
           isPinned: p.featured ?? idx < 2,
         })),
       });
+    }
+
+    // Also sync IntakeAnswers so any intake questions or generation reflect the authentic profile
+    try {
+      const skillsArr = Array.isArray(extracted.skills) ? extracted.skills : (extracted.skills ? [extracted.skills] : []);
+      await prisma.intakeAnswers.upsert({
+        where: { userId: user.id },
+        create: {
+          userId: user.id,
+          profileType: titleLower.includes("design") ? "designer" : "tech",
+          targetGoal: "job",
+          targetRoles: JSON.stringify([extracted.headline || targetName]),
+          topStrengths: JSON.stringify(skillsArr.slice(0, 5)),
+          tone: "formal",
+          preferredMood: "formal",
+          links: JSON.stringify(extracted.contact || {}),
+          rawResumeText: extracted.bio || null,
+          suggestedBio: extracted.bio,
+          suggestedHeadline: extracted.headline,
+          isApproved: true,
+        },
+        update: {
+          profileType: titleLower.includes("design") ? "designer" : "tech",
+          targetRoles: JSON.stringify([extracted.headline || targetName]),
+          topStrengths: JSON.stringify(skillsArr.slice(0, 5)),
+          links: JSON.stringify(extracted.contact || {}),
+          suggestedBio: extracted.bio,
+          suggestedHeadline: extracted.headline,
+          isApproved: true,
+        },
+      });
+    } catch (intakeErr) {
+      console.warn("Could not sync intakeAnswers:", intakeErr);
     }
   } catch (err) {
     console.warn("Could not automatically persist extracted user to DB:", err);

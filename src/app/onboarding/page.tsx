@@ -536,6 +536,15 @@ function SmartIntakeOnboardingContent() {
       if (res.ok) {
         const data = await res.json();
         setPublishedUrl(data.liveUrl || `/p/${encodeURIComponent(candidateName)}`);
+        try {
+          const cached = localStorage.getItem("folioveda_active_profile");
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            parsed.recommendedTheme = selectedThemeId;
+            parsed.themeId = selectedThemeId;
+            localStorage.setItem("folioveda_active_profile", JSON.stringify(parsed));
+          }
+        } catch {}
       }
     } catch (err) {
       console.error("Failed to approve and publish:", err);
@@ -1526,6 +1535,34 @@ function SmartIntakeOnboardingContent() {
                         badge: "Executive", 
                         category: "Business / PM",
                         desc: "Structured enterprise executive dossier with clean problem-solution metrics and institutional clarity." 
+                      },
+                      { 
+                        id: "neo-brutalist", 
+                        name: "Neo-Brutalist Pop", 
+                        badge: "90s Retro Bold", 
+                        category: "High Contrast",
+                        desc: "Bold thick borders, bright contrast badges, hard drop-shadows, and raw high-energy developer attitude." 
+                      },
+                      { 
+                        id: "glass", 
+                        name: "Glassmorphism Cyber", 
+                        badge: "Futuristic", 
+                        category: "Frosted Glass",
+                        desc: "Translucent frosted-glass panels, soft backdrops, modern cyber glowing borders, and atmospheric gradients." 
+                      },
+                      { 
+                        id: "claymorphic", 
+                        name: "Claymorphic 3D", 
+                        badge: "Tactile 3D", 
+                        category: "Soft Volume",
+                        desc: "Soft embossed 3D pastel pill cards, tactile buttons, and friendly rounded design aesthetics." 
+                      },
+                      { 
+                        id: "bento-grid", 
+                        name: "BentoGrid Studio", 
+                        badge: "Modular", 
+                        category: "Aceternity Bento",
+                        desc: "Modern Apple-style bento grid layout with live terminal metrics, modular skill cards, and project drawers." 
                       },
                     ].map((theme) => {
                       const isSelected = selectedThemeId === theme.id;

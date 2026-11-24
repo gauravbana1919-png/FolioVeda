@@ -230,8 +230,12 @@ export default function PortfolioStudio() {
         if (cachedFont) setFontFamily(cachedFont);
 
         const nameParam = params.get('name') || params.get('username') || params.get('handle') || cachedName;
-        const themeParam = params.get('theme') || params.get('template') || cachedTheme;
-        if (themeParam) setActiveThemeId(themeParam);
+        const urlTheme = params.get('theme') || params.get('template');
+        if (urlTheme) {
+          setActiveThemeId(urlTheme);
+        } else if (cachedTheme) {
+          setActiveThemeId(cachedTheme);
+        }
 
         const fetchUrl = nameParam ? `/api/portfolio?name=${encodeURIComponent(nameParam)}` : '/api/portfolio';
         const res = await fetch(fetchUrl);
@@ -257,7 +261,7 @@ export default function PortfolioStudio() {
               projects: data.user.projects && data.user.projects.length > 0 ? data.user.projects : prev.projects,
             }));
             const loadedTheme = data.user.portfolio?.themePackageId || data.user.portfolio?.themeId || data.user.portfolio?.templateId;
-            if (loadedTheme && !themeParam) {
+            if (loadedTheme && !urlTheme) {
               setActiveThemeId(loadedTheme);
             }
             if (data.user.portfolio?.designPrefs) {
@@ -518,6 +522,15 @@ export default function PortfolioStudio() {
       });
       if (res.ok) {
         setSaveStatus("saved");
+        try {
+          const c = localStorage.getItem("folioveda_active_profile");
+          const parsed = c ? JSON.parse(c) : {};
+          parsed.recommendedTheme = payload.themeId;
+          parsed.themeId = payload.themeId;
+          parsed.fontFamily = payload.fontFamily;
+          parsed.accentColor = payload.accentColor;
+          localStorage.setItem("folioveda_active_profile", JSON.stringify(parsed));
+        } catch {}
       } else {
         setSaveStatus("unsaved");
       }

@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/db";
 import type { Metadata } from "next";
 import { getThemeById, mapUserToPortfolioContent } from "@/lib/themes/registry";
@@ -32,12 +34,43 @@ export default async function PublicPortfolioPage({ params, searchParams }: Page
   const decodedUsername = decodeURIComponent(username).trim();
   const lowerUsername = decodedUsername.toLowerCase();
 
-  // Look up user by name or id in Prisma
+  // Look up user by session, name or id in Prisma
   let userRecord = null;
   try {
-    // If requesting special keywords 'me' or 'latest', find the most recently active portfolio
-    if (lowerUsername === "me" || lowerUsername === "latest") {
+    let session = null;
+    try {
+      session = await getServerSession(authOptions);
+    } catch {}
+
+    // 1. If user is logged in and viewing their own portfolio or /p/me
+    if (session?.user?.email) {
+      const sessionUser = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        include: {
+          profile: true,
+          portfolio: true,
+          projects: true,
+        },
+      });
+
+      if (sessionUser) {
+        const sessNorm = (sessionUser.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        const queryNorm = lowerUsername.replace(/[^a-z0-9]/g, "");
+        if (
+          lowerUsername === "me" ||
+          lowerUsername === "latest" ||
+          sessNorm === queryNorm ||
+          (sessionUser.name && sessionUser.name.toLowerCase() === lowerUsername)
+        ) {
+          userRecord = sessionUser;
+        }
+      }
+    }
+
+    // 2. If requesting special keywords 'me' or 'latest', find the most recently active portfolio
+    if (!userRecord && (lowerUsername === "me" || lowerUsername === "latest")) {
       userRecord = await prisma.user.findFirst({
+        where: { portfolio: { isNot: null } },
         orderBy: { id: "desc" },
         include: {
           profile: true,
@@ -47,6 +80,30 @@ export default async function PublicPortfolioPage({ params, searchParams }: Page
       });
     }
 
+    // 3. Find by exact name or ID (prefer users with an active portfolio)
+    if (!userRecord) {
+      userRecord = await prisma.user.findFirst({
+        where: {
+          AND: [
+            {
+              OR: [
+                { name: { equals: decodedUsername } },
+                { id: { equals: decodedUsername } },
+              ],
+            },
+            { portfolio: { isNot: null } },
+          ],
+        },
+        orderBy: { id: "desc" },
+        include: {
+          profile: true,
+          portfolio: true,
+          projects: true,
+        },
+      });
+    }
+
+    // Fallback if no portfolio relation required
     if (!userRecord) {
       userRecord = await prisma.user.findFirst({
         where: {

@@ -76,6 +76,15 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Could not initialize user" }, { status: 500 });
       }
 
+      // Ensure user name reflects targetName
+      if (targetName && user.name !== targetName) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { name: targetName },
+        });
+        user.name = targetName;
+      }
+
       // 1. Save or update IntakeAnswers record in DB
       await prisma.intakeAnswers.upsert({
         where: { userId: user.id },

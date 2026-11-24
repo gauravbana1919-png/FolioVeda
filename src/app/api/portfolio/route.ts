@@ -37,20 +37,8 @@ export async function GET(req: Request) {
 
     let user = null;
 
-    // 1. If authenticated via session, find by email
-    if (session?.user?.email) {
-      user = await prisma.user.findUnique({
-        where: { email: session.user.email },
-        include: {
-          profile: true,
-          portfolio: true,
-          projects: true,
-        },
-      });
-    }
-
-    // 2. If requested by username/name query param
-    if (!user && requestedUsername) {
+    // 1. If explicit username/name query param is provided, prioritize it
+    if (requestedUsername) {
       const allUsers = await prisma.user.findMany({
         orderBy: { id: "desc" },
         include: {
@@ -65,6 +53,18 @@ export async function GET(req: Request) {
         const uNorm = u.name.toLowerCase().replace(/[^a-z0-9]/g, "");
         return uNorm === reqNorm || uNorm.includes(reqNorm) || reqNorm.includes(uNorm);
       }) || null;
+    }
+
+    // 2. If not found by query param, check authenticated session
+    if (!user && session?.user?.email) {
+      user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        include: {
+          profile: true,
+          portfolio: true,
+          projects: true,
+        },
+      });
     }
 
     // 3. Fallback: Find the latest active user in the database
