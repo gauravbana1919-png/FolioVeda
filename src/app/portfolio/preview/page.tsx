@@ -69,6 +69,11 @@ export default function PortfolioStudio() {
   const [copiedLink, setCopiedLink] = useState(false);
   const [isImportingPdf, setIsImportingPdf] = useState(false);
   const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [fontFamily, setFontFamily] = useState<string>("sans");
+  const [isPasteModalOpen, setIsPasteModalOpen] = useState(false);
+  const [pastedResumeText, setPastedResumeText] = useState("");
+  const [isExtractingPaste, setIsExtractingPaste] = useState(false);
+  const [pasteExtractError, setPasteExtractError] = useState<string | null>(null);
 
   // User state
   const [userData, setUserData] = useState<any>({
@@ -174,15 +179,16 @@ export default function PortfolioStudio() {
   useEffect(() => {
     setMounted(true);
 
-    // 1. Check if user recently extracted a PDF in Onboarding
+    // 1. Check if user recently extracted a PDF or Text in Onboarding
     try {
       const cached = localStorage.getItem("folioveda_active_profile");
       if (cached) {
         const ext = JSON.parse(cached);
         if (ext && ext.name) {
+          const cleanName = ext.name.replace(/[*_#`~]/g, "").trim();
           setUserData((prev: any) => ({
             ...prev,
-            name: ext.name || prev.name,
+            name: cleanName || prev.name,
             profile: {
               ...prev.profile,
               headline: ext.headline || prev.profile.headline,
@@ -197,6 +203,9 @@ export default function PortfolioStudio() {
             },
             projects: ext.projects && ext.projects.length > 0 ? ext.projects : prev.projects,
           }));
+          if (ext.recommendedTheme) setActiveThemeId(ext.recommendedTheme);
+          if (ext.fontFamily) setFontFamily(ext.fontFamily);
+          if (ext.accentColor) setAccentColor(ext.accentColor);
         }
       }
     } catch (e) {}
@@ -207,14 +216,18 @@ export default function PortfolioStudio() {
         const params = new URLSearchParams(window.location.search);
         let cachedName = "";
         let cachedTheme = "";
+        let cachedFont = "";
         try {
           const c = localStorage.getItem("folioveda_active_profile");
           if (c) {
             const parsed = JSON.parse(c);
-            if (parsed?.name) cachedName = parsed.name;
+            if (parsed?.name) cachedName = parsed.name.replace(/[*_#`~]/g, "").trim();
             if (parsed?.recommendedTheme) cachedTheme = parsed.recommendedTheme;
+            if (parsed?.fontFamily) cachedFont = parsed.fontFamily;
           }
         } catch {}
+
+        if (cachedFont) setFontFamily(cachedFont);
 
         const nameParam = params.get('name') || params.get('username') || params.get('handle') || cachedName;
         const themeParam = params.get('theme') || params.get('template') || cachedTheme;
@@ -225,9 +238,10 @@ export default function PortfolioStudio() {
         if (res.ok) {
           const data = await res.json();
           if (data.user && !data.isMock) {
+            const cleanUserName = (data.user.name || "Candidate").replace(/[*_#`~]/g, "").trim();
             setUserData((prev: any) => ({
               ...prev,
-              name: data.user.name || prev.name,
+              name: cleanUserName,
               profile: {
                 ...prev.profile,
                 headline: data.user.profile?.headline || prev.profile.headline,
@@ -240,7 +254,7 @@ export default function PortfolioStudio() {
                 certifications: data.user.profile?.certifications || prev.profile.certifications,
                 socials: data.user.profile?.socials || prev.profile.socials,
               },
-              projects: data.user.projects?.length > 0 ? data.user.projects : prev.projects,
+              projects: data.user.projects && data.user.projects.length > 0 ? data.user.projects : prev.projects,
             }));
             const loadedTheme = data.user.portfolio?.themePackageId || data.user.portfolio?.themeId || data.user.portfolio?.templateId;
             if (loadedTheme && !themeParam) {
@@ -250,6 +264,7 @@ export default function PortfolioStudio() {
               try {
                 const prefs = JSON.parse(data.user.portfolio.designPrefs);
                 if (prefs.accentColor) setAccentColor(prefs.accentColor);
+                if (prefs.fontFamily) setFontFamily(prefs.fontFamily);
               } catch (e) {}
             }
           }
@@ -397,6 +412,83 @@ export default function PortfolioStudio() {
     setIsGithubImportOpen(false);
   };
 
+  // 1-Click Synthesize from Pasted Resume / Career Text with Gemini AI
+  const handleExtractPastedTextInStudio = async () => {
+    if (!pastedResumeText.trim() || pastedResumeText.trim().length < 15) {
+      setPasteExtractError("Please paste at least a few lines of your career history or resume.");
+      return;
+    }
+    setIsExtractingPaste(true);
+    setPasteExtractError(null);
+
+    try {
+      const res = await fetch("/api/intake/extract", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rawText: pastedResumeText }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to extract with Gemini AI");
+
+      if (data.extracted) {
+        const ext = data.extracted;
+        const cleanName = (ext.name || "Candidate").replace(/[*_#`~]/g, "").trim();
+
+        setUserData((prev: any) => ({
+          ...prev,
+          name: cleanName,
+          profile: {
+            ...prev.profile,
+            headline: ext.headline || prev.profile.headline,
+            bio: ext.bio || prev.profile.bio,
+            skills: ext.skills ? (Array.isArray(ext.skills) ? ext.skills.join(", ") : ext.skills) : prev.profile.skills,
+            location: ext.location || prev.profile.location,
+            availability: ext.availability || prev.profile.availability,
+            experience: JSON.stringify(ext.experience || []),
+            education: JSON.stringify(ext.education || []),
+            certifications: JSON.stringify(ext.certifications || []),
+            socials: JSON.stringify(ext.contact || {}),
+          },
+          projects: ext.projects && ext.projects.length > 0 ? ext.projects : prev.projects,
+        }));
+
+        const chosenTheme = ext.recommendedTheme || "sudarvel";
+        setActiveThemeId(chosenTheme);
+        if (ext.fontFamily) setFontFamily(ext.fontFamily);
+        if (ext.accentColor) setAccentColor(ext.accentColor);
+
+        try {
+          localStorage.setItem("folioveda_active_profile", JSON.stringify(ext));
+        } catch (e) {}
+
+        await handleSave({
+          name: cleanName,
+          headline: ext.headline,
+          bio: ext.bio,
+          skills: ext.skills,
+          location: ext.location,
+          experience: ext.experience,
+          education: ext.education,
+          certifications: ext.certifications,
+          projects: ext.projects,
+          socials: ext.contact,
+          themeId: chosenTheme,
+          fontFamily: ext.fontFamily || "sans",
+          accentColor: ext.accentColor || "emerald",
+        });
+
+        setIsPasteModalOpen(false);
+        setPastedResumeText("");
+        setAiNotice(`✓ Synthesized ${cleanName}'s authentic portfolio with Gemini AI!`);
+        setTimeout(() => setAiNotice(null), 4000);
+      }
+    } catch (err: any) {
+      setPasteExtractError(err.message || "Failed to extract career profile.");
+    } finally {
+      setIsExtractingPaste(false);
+    }
+  };
+
   // Save changes to backend
   const handleSave = async (overrides?: any) => {
     setSaveStatus("saving");
@@ -415,6 +507,7 @@ export default function PortfolioStudio() {
       themeId: overrides?.themeId || activeThemeId,
       theme: overrides?.theme || theme,
       accentColor: overrides?.accentColor || accentColor,
+      fontFamily: overrides?.fontFamily || fontFamily,
     };
 
     try {
@@ -632,6 +725,17 @@ export default function PortfolioStudio() {
               <span>{isImportingPdf ? "Parsing PDF..." : "Upload LinkedIn/Resume PDF"}</span>
             </label>
 
+            {/* Quick Paste Resume Text Button */}
+            <button
+              onClick={() => setIsPasteModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+              title="Paste your resume or LinkedIn profile text to auto-generate with Gemini AI"
+            >
+              <Sparkles size={13} />
+              <span className="hidden sm:inline">Paste Career Text</span>
+              <span className="sm:hidden">Paste</span>
+            </button>
+
             {/* Edit Content Button */}
             <button
               onClick={() => setIsEditModalOpen(true)}
@@ -641,6 +745,27 @@ export default function PortfolioStudio() {
               <Edit3 size={13} />
               <span className="hidden sm:inline">Edit Content</span>
             </button>
+
+            {/* Font Family Selector */}
+            <div className="flex items-center">
+              <select
+                value={fontFamily}
+                onChange={(e) => {
+                  const newFont = e.target.value;
+                  setFontFamily(newFont);
+                  handleSave({ fontFamily: newFont });
+                }}
+                className="text-xs bg-muted/80 text-foreground border border-border rounded-xl px-2 py-1.5 font-medium focus:outline-hidden focus:ring-1 focus:ring-emerald-500 cursor-pointer"
+                title="Select Typography Style"
+                aria-label="Select Typography"
+              >
+                <option value="sans">🔤 Sans (Clean Modern)</option>
+                <option value="serif">📰 Serif (Editorial & Executive)</option>
+                <option value="mono">💻 Monospace (Terminal Code)</option>
+                <option value="editorial">✨ Editorial (Bespoke Literary)</option>
+                <option value="display">🎨 Display (Bold Modern Grotesk)</option>
+              </select>
+            </div>
 
             {/* Color Swatches */}
             <div className="hidden lg:flex items-center gap-1 px-2 py-1 bg-muted/60 rounded-lg border border-border/50">
@@ -864,9 +989,77 @@ export default function PortfolioStudio() {
             content={normalizedContent}
             isDemo={false}
             hideBadge={true}
+            fontFamilyOverride={fontFamily}
+            accentColorOverride={accentColor}
           />
         </div>
       </main>
+
+      {/* Paste Resume / Career Text Modal */}
+      {isPasteModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-background border border-border p-6 rounded-3xl max-w-xl w-full space-y-4 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                  <Sparkles size={18} />
+                </span>
+                <div>
+                  <h3 className="text-sm font-extrabold text-foreground">Paste Resume or Career Text</h3>
+                  <p className="text-[11px] text-muted-foreground font-normal">
+                    Gemini AI will extract your real identity, craft your headline &amp; bio, and assign the best theme &amp; typography.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsPasteModalOpen(false)}
+                className="text-muted-foreground hover:text-foreground p-1 text-sm rounded-lg hover:bg-muted"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              <textarea
+                rows={8}
+                value={pastedResumeText}
+                onChange={(e) => setPastedResumeText(e.target.value)}
+                placeholder="Paste your resume, LinkedIn summary, career notes, or roles here... (e.g. Mohit Saini - Frontend & Flutter Developer...)"
+                className="w-full p-3.5 rounded-xl bg-muted/40 border border-border text-foreground text-xs leading-relaxed focus:border-emerald-500 focus:bg-background focus:outline-none"
+              />
+              {pasteExtractError && (
+                <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 text-xs font-medium">
+                  {pasteExtractError}
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between pt-2">
+              <span className="text-[10px] text-muted-foreground font-mono">
+                ⚡ Powered by Google Gemini AI
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsPasteModalOpen(false)}
+                  className="px-4 py-2 rounded-xl text-xs font-semibold hover:bg-muted text-muted-foreground transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleExtractPastedTextInStudio}
+                  disabled={isExtractingPaste || !pastedResumeText.trim()}
+                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md disabled:opacity-50"
+                >
+                  <Sparkles size={13} />
+                  <span>{isExtractingPaste ? "Synthesizing with Gemini AI..." : "⚡ Synthesize Portfolio"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Platform Branding Badge */}
       <div className="fixed bottom-4 left-4 z-30">

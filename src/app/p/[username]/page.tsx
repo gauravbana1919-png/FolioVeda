@@ -119,11 +119,23 @@ export default async function PublicPortfolioPage({ params, searchParams }: Page
 
   const theme = getThemeById(activeThemeId);
 
+  let userFontFamily: string | undefined = undefined;
+  let userAccentColor: string | undefined = undefined;
+  if (userRecord?.portfolio?.designPrefs) {
+    try {
+      const prefs = JSON.parse(userRecord.portfolio.designPrefs);
+      if (prefs.fontFamily) userFontFamily = prefs.fontFamily;
+      if (prefs.accentColor) userAccentColor = prefs.accentColor;
+    } catch {}
+  }
+
   return (
     <ThemeRenderer
       theme={theme}
       content={content}
       isDemo={isDemo}
+      fontFamilyOverride={userFontFamily}
+      accentColorOverride={userAccentColor}
     />
   );
 }

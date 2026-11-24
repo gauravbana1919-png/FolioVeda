@@ -585,6 +585,9 @@ export async function POST(req: Request) {
 
             if (response.text) {
               const extracted = JSON.parse(response.text);
+              if (extracted.name) {
+                extracted.name = extracted.name.replace(/[*_#`~]/g, "").trim();
+              }
               await persistExtractedUser(extracted);
               return NextResponse.json({
                 success: true,
@@ -658,7 +661,8 @@ export async function POST(req: Request) {
  */
 async function persistExtractedUser(extracted: any) {
   try {
-    const targetName = extracted.name || "Gaurav Shekhawat";
+    const rawTargetName = extracted.name || "Candidate";
+    const targetName = rawTargetName.replace(/[*_#`~]/g, "").trim() || "Candidate";
     const email = extracted.contact?.email || `${targetName.toLowerCase().replace(/[^a-z0-9]/g, "")}_${Date.now()}@folioveda.local`;
 
     // Locate existing user or create

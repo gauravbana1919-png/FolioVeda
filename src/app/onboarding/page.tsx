@@ -61,6 +61,7 @@ function SmartIntakeOnboardingContent() {
   const [linkedinUrl, setLinkedinUrl] = useState("https://linkedin.com/in/alex");
   const [portfolioUrl, setPortfolioUrl] = useState("");
   const [rawResumeText, setRawResumeText] = useState("");
+  const [intakeInputMode, setIntakeInputMode] = useState<"pdf" | "text">("pdf");
 
   const [isSyncingGithub, setIsSyncingGithub] = useState(false);
   const [githubSyncResult, setGithubSyncResult] = useState<string | null>(null);
@@ -155,8 +156,9 @@ function SmartIntakeOnboardingContent() {
           if (!res.ok) throw new Error(data.error || "Failed to parse PDF");
 
           if (data.extracted) {
-            if (data.extracted.name && data.extracted.name.trim().length > 1) {
-              setCandidateName(data.extracted.name.trim());
+            const cleanName = (data.extracted.name || "Candidate").replace(/[*_#`~]/g, "").trim();
+            if (cleanName.length > 1) {
+              setCandidateName(cleanName);
             }
             if (data.extracted.headline) setDraftHeadline(data.extracted.headline);
             if (data.extracted.bio) setDraftBio(data.extracted.bio);
@@ -186,37 +188,33 @@ function SmartIntakeOnboardingContent() {
             }
 
             // Infer profile type & recommendations from authentic extracted data
-            const titleLower = ((data.extracted.headline || "") + " " + (data.extracted.name || "")).toLowerCase();
-            if (titleLower.includes("design") || titleLower.includes("ux") || titleLower.includes("ui") || titleLower.includes("creative") || titleLower.includes("brand") || titleLower.includes("art")) {
-              setProfileType("designer");
-              setSelectedThemeId("rolan-gomes");
-              setRecommendedThemeIds(["rolan-gomes", "tanuja-design", "himanshu-singh"]);
-            } else if (titleLower.includes("manager") || titleLower.includes("product manager") || titleLower.includes("growth") || titleLower.includes("operations")) {
-              setProfileType("bba");
-              setSelectedThemeId("corporate-clean");
-              setRecommendedThemeIds(["corporate-clean", "tanuja-design", "luxe-creative"]);
+            if (data.extracted.recommendedTheme) {
+              setSelectedThemeId(data.extracted.recommendedTheme);
             } else {
-              setProfileType("tech");
-              setSelectedThemeId("sudarvel");
-              setRecommendedThemeIds(["sudarvel", "developer-terminal", "minimal-editorial"]);
-            }
-
-            if (data.extracted.headline) {
-              setTargetRoles([data.extracted.headline.split(/[•|&,-]/)[0].trim()]);
+              const titleLower = ((data.extracted.headline || "") + " " + cleanName).toLowerCase();
+              if (titleLower.includes("design") || titleLower.includes("ux") || titleLower.includes("ui") || titleLower.includes("creative") || titleLower.includes("brand") || titleLower.includes("art")) {
+                setProfileType("designer");
+                setSelectedThemeId("rolan-gomes");
+                setRecommendedThemeIds(["rolan-gomes", "tanuja-design", "himanshu-singh"]);
+              } else if (titleLower.includes("manager") || titleLower.includes("product manager") || titleLower.includes("growth") || titleLower.includes("operations")) {
+                setProfileType("bba");
+                setSelectedThemeId("corporate-clean");
+                setRecommendedThemeIds(["corporate-clean", "tanuja-design", "luxe-creative"]);
+              } else {
+                setProfileType("tech");
+                setSelectedThemeId("sudarvel");
+                setRecommendedThemeIds(["sudarvel", "developer-terminal", "minimal-editorial"]);
+              }
             }
 
             try {
               localStorage.setItem("folioveda_active_profile", JSON.stringify(data.extracted));
             } catch (e) {}
 
-            const rolesCount = data.extracted.experience?.length || 0;
-            const certsCount = data.extracted.certifications?.length || 0;
-            const eduCount = data.extracted.education?.length || 0;
+            const roleCount = data.extracted.experience?.length || 0;
             const projCount = data.extracted.projects?.length || 0;
-
-            setExtractSuccess(
-              `✓ Successfully parsed ${file.name}! Loaded ${data.extracted.name || "profile"}: ${rolesCount} roles, ${certsCount} credentials, ${eduCount} degrees & ${projCount} projects with authentic metrics.`
-            );
+            const certCount = data.extracted.certifications?.length || 0;
+            setExtractSuccess(`✓ Extracted ${cleanName}'s profile with ${roleCount} roles, ${projCount} projects & skills using Gemini AI!`);
           }
         } catch (fetchErr: any) {
           setExtractError(fetchErr.message || "Failed to process PDF with Gemini AI.");
@@ -336,8 +334,9 @@ function SmartIntakeOnboardingContent() {
       if (!res.ok) throw new Error(data.error || "Failed to extract");
 
       if (data.extracted) {
-        if (data.extracted.name && data.extracted.name.trim().length > 2) {
-          setCandidateName(data.extracted.name.trim());
+        const cleanName = (data.extracted.name || "Candidate").replace(/[*_#`~]/g, "").trim();
+        if (cleanName.length > 1) {
+          setCandidateName(cleanName);
         }
         if (data.extracted.headline) setDraftHeadline(data.extracted.headline);
         if (data.extracted.bio) setDraftBio(data.extracted.bio);
@@ -366,19 +365,23 @@ function SmartIntakeOnboardingContent() {
           setPortfolioUrl(data.extracted.contact.website);
         }
 
-        const titleLower = ((data.extracted.headline || "") + " " + (data.extracted.name || "")).toLowerCase();
-        if (titleLower.includes("design") || titleLower.includes("ux") || titleLower.includes("ui") || titleLower.includes("creative") || titleLower.includes("brand")) {
-          setProfileType("designer");
-          setSelectedThemeId("rolan-gomes");
-          setRecommendedThemeIds(["rolan-gomes", "tanuja-design", "himanshu-singh"]);
-        } else if (titleLower.includes("manager") || titleLower.includes("product") || titleLower.includes("growth")) {
-          setProfileType("bba");
-          setSelectedThemeId("corporate-clean");
-          setRecommendedThemeIds(["corporate-clean", "tanuja-design", "luxe-creative"]);
+        if (data.extracted.recommendedTheme) {
+          setSelectedThemeId(data.extracted.recommendedTheme);
         } else {
-          setProfileType("tech");
-          setSelectedThemeId("sudarvel");
-          setRecommendedThemeIds(["sudarvel", "developer-terminal", "minimal-editorial"]);
+          const titleLower = ((data.extracted.headline || "") + " " + cleanName).toLowerCase();
+          if (titleLower.includes("design") || titleLower.includes("ux") || titleLower.includes("ui") || titleLower.includes("creative") || titleLower.includes("brand")) {
+            setProfileType("designer");
+            setSelectedThemeId("rolan-gomes");
+            setRecommendedThemeIds(["rolan-gomes", "tanuja-design", "himanshu-singh"]);
+          } else if (titleLower.includes("manager") || titleLower.includes("product") || titleLower.includes("growth")) {
+            setProfileType("bba");
+            setSelectedThemeId("corporate-clean");
+            setRecommendedThemeIds(["corporate-clean", "tanuja-design", "luxe-creative"]);
+          } else {
+            setProfileType("tech");
+            setSelectedThemeId("sudarvel");
+            setRecommendedThemeIds(["sudarvel", "developer-terminal", "minimal-editorial"]);
+          }
         }
 
         try {
@@ -388,7 +391,7 @@ function SmartIntakeOnboardingContent() {
         const roleCount = data.extracted.experience?.length || 0;
         const projCount = data.extracted.projects?.length || 0;
         const certCount = data.extracted.certifications?.length || 0;
-        setExtractSuccess(`✓ Extracted ${roleCount} roles, ${projCount} projects, ${certCount} credentials & skills!`);
+        setExtractSuccess(`✓ Successfully synthesized ${cleanName}'s profile with ${roleCount} roles, ${projCount} projects & skills using Gemini AI!`);
       }
     } catch (err: any) {
       setExtractError(err.message || "Failed to extract career data.");
@@ -471,11 +474,10 @@ function SmartIntakeOnboardingContent() {
       if (res.ok) {
         const data = await res.json();
         if (data.draft) {
-          // Preserve extracted headline and bio from LinkedIn / Resume PDF
-          if (!draftHeadline || draftHeadline.length < 5) {
+          if (data.draft.suggestedHeadline) {
             setDraftHeadline(data.draft.suggestedHeadline);
           }
-          if (!draftBio || draftBio.length < 20) {
+          if (data.draft.suggestedBio) {
             setDraftBio(data.draft.suggestedBio);
           }
           if (data.draft.recommendedThemeIds && data.draft.recommendedThemeIds.length > 0) {
@@ -648,8 +650,8 @@ function SmartIntakeOnboardingContent() {
                   </p>
                 </div>
 
-                {/* 1-Click LinkedIn / Resume PDF Dropzone in Step 1 */}
-                <div className="p-6 rounded-3xl bg-gradient-to-br from-emerald-50 via-white to-blue-50/50 border-2 border-emerald-300 shadow-sm space-y-3">
+                {/* 1-Click LinkedIn / Resume PDF or Text Auto-Fill in Step 1 */}
+                <div className="p-6 rounded-3xl bg-gradient-to-br from-emerald-50 via-white to-blue-50/50 border-2 border-emerald-300 shadow-sm space-y-4">
                   <div className="flex items-center justify-between flex-wrap gap-2">
                     <div className="flex items-center gap-2">
                       <span className="p-2 rounded-xl bg-[#0077b5] text-white shadow-xs">
@@ -657,67 +659,125 @@ function SmartIntakeOnboardingContent() {
                       </span>
                       <div>
                         <h3 className="text-sm font-extrabold text-[#1E293B]">
-                          Drop your LinkedIn PDF or Resume to Auto-Fill Everything
+                          Auto-Fill with Your Authentic Resume / LinkedIn Data
                         </h3>
                         <p className="text-[11px] text-slate-500 font-normal">
-                          Instantly loads your exact name, headline, real companies, dates, credentials, and achievements.
+                          Loads your exact name, magnetic headline, real companies, dates, credentials, and achievements with Gemini AI.
                         </p>
                       </div>
                     </div>
                     <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-full border border-emerald-300">
-                      ⚡ Instant Trajectory Auto-Fill
+                      ⚡ Powered by Google Gemini AI
                     </span>
                   </div>
 
-                  <div
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                      setIsDraggingPdf(true);
-                    }}
-                    onDragLeave={(e) => {
-                      e.preventDefault();
-                      setIsDraggingPdf(false);
-                    }}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      setIsDraggingPdf(false);
-                      const file = e.dataTransfer.files?.[0];
-                      if (file) handlePdfUpload(file);
-                    }}
-                    onClick={() => document.getElementById("step1PdfUpload")?.click()}
-                    className={`p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center space-y-2 ${
-                      isDraggingPdf
-                        ? "border-emerald-500 bg-emerald-50 scale-[1.01] shadow-md"
-                        : "border-slate-300 hover:border-emerald-500 bg-white hover:bg-emerald-50/20"
-                    }`}
-                  >
-                    <input
-                      id="step1PdfUpload"
-                      type="file"
-                      accept=".pdf,application/pdf"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
+                  {/* Mode Tabs: PDF vs Raw Text */}
+                  <div className="flex items-center gap-2 p-1 bg-slate-100 rounded-2xl border border-slate-200 w-fit">
+                    <button
+                      type="button"
+                      onClick={() => setIntakeInputMode("pdf")}
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                        intakeInputMode === "pdf" ? "bg-white text-slate-900 shadow-xs" : "text-slate-500 hover:text-slate-900"
+                      }`}
+                    >
+                      <FileUp size={13} />
+                      <span>Upload PDF Resume</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIntakeInputMode("text")}
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                        intakeInputMode === "text" ? "bg-white text-slate-900 shadow-xs" : "text-slate-500 hover:text-slate-900"
+                      }`}
+                    >
+                      <Sparkles size={13} className="text-emerald-600" />
+                      <span>Paste Resume / LinkedIn Text</span>
+                    </button>
+                  </div>
+
+                  {intakeInputMode === "pdf" ? (
+                    <div
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        setIsDraggingPdf(true);
+                      }}
+                      onDragLeave={(e) => {
+                        e.preventDefault();
+                        setIsDraggingPdf(false);
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        setIsDraggingPdf(false);
+                        const file = e.dataTransfer.files?.[0];
                         if (file) handlePdfUpload(file);
                       }}
-                    />
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 text-[#173f32] flex items-center justify-center">
-                      <Upload size={18} />
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold text-slate-800 block">
-                        Drop LinkedIn PDF (Profile → More → Save to PDF) or Resume
-                      </span>
-                      <span className="text-[11px] text-slate-500 font-normal">
-                        or click to select .pdf file from your device
-                      </span>
-                    </div>
-                    {pdfFileName && (
-                      <div className="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 font-bold">
-                        Uploaded: {pdfFileName}
+                      onClick={() => document.getElementById("step1PdfUpload")?.click()}
+                      className={`p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center space-y-2 ${
+                        isDraggingPdf
+                          ? "border-emerald-500 bg-emerald-50 scale-[1.01] shadow-md"
+                          : "border-slate-300 hover:border-emerald-500 bg-white hover:bg-emerald-50/20"
+                      }`}
+                    >
+                      <input
+                        id="step1PdfUpload"
+                        type="file"
+                        accept=".pdf,application/pdf"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handlePdfUpload(file);
+                        }}
+                      />
+                      <div className="w-10 h-10 rounded-full bg-emerald-100 text-[#173f32] flex items-center justify-center">
+                        <Upload size={18} />
                       </div>
-                    )}
-                  </div>
+                      <div>
+                        <span className="text-xs font-bold text-slate-800 block">
+                          Drop LinkedIn PDF (Profile → More → Save to PDF) or Resume
+                        </span>
+                        <span className="text-[11px] text-slate-500 font-normal">
+                          or click to select .pdf file from your device
+                        </span>
+                      </div>
+                      {pdfFileName && (
+                        <div className="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 font-bold">
+                          Uploaded: {pdfFileName}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="space-y-3 p-4 bg-white rounded-2xl border border-slate-200 shadow-inner">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-slate-800">
+                          Paste your resume, LinkedIn summary, or career history:
+                        </span>
+                        <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">
+                          Zero-Hallucination Extraction
+                        </span>
+                      </div>
+                      <textarea
+                        rows={6}
+                        value={rawResumeText}
+                        onChange={(e) => setRawResumeText(e.target.value)}
+                        placeholder="Paste your raw career history, roles, projects, and skills here... (e.g. Mohit Saini - Frontend & Flutter Developer, Jaipur, India...)"
+                        className="w-full p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-[#1E293B] text-xs leading-relaxed focus:border-[#173f32] focus:bg-white focus:outline-none"
+                      />
+                      <div className="flex items-center justify-between flex-wrap gap-2">
+                        <span className="text-[11px] text-slate-500">
+                          Gemini AI extracts your genuine name, skills, and projects, choosing the optimal theme &amp; typography.
+                        </span>
+                        <button
+                          type="button"
+                          onClick={handleAutoExtract}
+                          disabled={isExtracting || !rawResumeText.trim()}
+                          className="px-5 py-2.5 rounded-full bg-[#173f32] hover:bg-[#13352a] text-white text-xs font-bold transition flex items-center gap-1.5 disabled:opacity-50 shadow-md shadow-[#173f32]/20"
+                        >
+                          <Sparkles size={14} />
+                          <span>{isExtracting ? "Synthesizing with Gemini AI..." : "⚡ Auto-Extract with Gemini AI"}</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
 
                   {isExtracting && (
                     <div className="p-3 rounded-xl bg-slate-900 text-white text-xs font-mono flex items-center gap-3 animate-pulse">

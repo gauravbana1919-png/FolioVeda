@@ -160,6 +160,7 @@ export async function POST(req: Request) {
       themeId,
       theme,
       accentColor,
+      fontFamily,
     } = body;
 
     let user = null;
@@ -249,8 +250,20 @@ export async function POST(req: Request) {
       });
     }
 
-    // Update or create Portfolio with themePackageId
+    // Update or create Portfolio with themePackageId & designPrefs
     const finalTemplateId = themeId || templateId || "sudarvel";
+    const existingPortfolio = await prisma.portfolio.findUnique({ where: { userId: user.id } });
+    let existingPrefs: any = {};
+    if (existingPortfolio?.designPrefs) {
+      try {
+        existingPrefs = JSON.parse(existingPortfolio.designPrefs);
+      } catch {}
+    }
+    const finalDesignPrefs = JSON.stringify({
+      accentColor: accentColor || existingPrefs.accentColor || "emerald",
+      fontFamily: fontFamily || existingPrefs.fontFamily || "sans",
+    });
+
     await prisma.portfolio.upsert({
       where: { userId: user.id },
       create: {
@@ -258,15 +271,13 @@ export async function POST(req: Request) {
         templateId: finalTemplateId,
         themePackageId: finalTemplateId,
         theme: theme || "system",
-        designPrefs: JSON.stringify({ accentColor: accentColor || "emerald" }),
+        designPrefs: finalDesignPrefs,
       },
       update: {
         templateId: finalTemplateId,
         themePackageId: finalTemplateId,
         ...(theme && { theme }),
-        ...(accentColor && {
-          designPrefs: JSON.stringify({ accentColor }),
-        }),
+        designPrefs: finalDesignPrefs,
       },
     });
 

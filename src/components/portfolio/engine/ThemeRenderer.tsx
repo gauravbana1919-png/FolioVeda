@@ -147,29 +147,69 @@ interface ThemeRendererProps {
   content: PortfolioContent;
   isDemo?: boolean;
   hideBadge?: boolean;
+  fontFamilyOverride?: "sans" | "serif" | "mono" | "editorial" | "display" | string;
+  accentColorOverride?: string;
 }
+
+const FONT_MAP: Record<string, { body: string; heading: string }> = {
+  sans: {
+    body: "var(--font-sans-main, 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif)",
+    heading: "var(--font-sans-main, 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif)",
+  },
+  serif: {
+    body: "'Playfair Display', 'Merriweather', 'Georgia', serif",
+    heading: "'Playfair Display', 'Merriweather', 'Georgia', serif",
+  },
+  mono: {
+    body: "'JetBrains Mono', 'Fira Code', 'Courier New', monospace",
+    heading: "'JetBrains Mono', 'Fira Code', 'Courier New', monospace",
+  },
+  editorial: {
+    body: "'Newsreader', 'EB Garamond', 'Times New Roman', serif",
+    heading: "'Newsreader', 'Playfair Display', serif",
+  },
+  display: {
+    body: "'Space Grotesk', 'Plus Jakarta Sans', sans-serif",
+    heading: "'Space Grotesk', 'Syne', sans-serif",
+  },
+};
+
+const ACCENT_COLOR_MAP: Record<string, { accent: string; hover: string }> = {
+  emerald: { accent: "#10B981", hover: "#059669" },
+  blue: { accent: "#3B82F6", hover: "#2563EB" },
+  purple: { accent: "#8B5CF6", hover: "#7C3AED" },
+  amber: { accent: "#F59E0B", hover: "#D97706" },
+  rose: { accent: "#F43F5E", hover: "#E11D48" },
+};
 
 export function ThemeRenderer({
   theme,
   content,
   isDemo = false,
   hideBadge = false,
+  fontFamilyOverride,
+  accentColorOverride,
 }: ThemeRendererProps) {
+  const selectedBodyFont = (fontFamilyOverride && FONT_MAP[fontFamilyOverride]?.body) || theme.tokens.typography.bodyFont;
+  const selectedHeadingFont = (fontFamilyOverride && FONT_MAP[fontFamilyOverride]?.heading) || theme.tokens.typography.headingFont;
+  const activeAccent = (accentColorOverride && ACCENT_COLOR_MAP[accentColorOverride]?.accent) || theme.tokens.colors.accent;
+  const activeAccentHover = (accentColorOverride && ACCENT_COLOR_MAP[accentColorOverride]?.hover) || theme.tokens.colors.accentHover;
+
   // Build inline CSS variables from ThemeTokens
   const styleVariables: CSSProperties = {
     backgroundColor: theme.tokens.colors.bg,
     color: theme.tokens.colors.text,
-    fontFamily: theme.tokens.typography.bodyFont,
+    fontFamily: selectedBodyFont,
     // Custom CSS vars
     ["--theme-bg" as any]: theme.tokens.colors.bg,
     ["--theme-surface" as any]: theme.tokens.colors.surface,
     ["--theme-text" as any]: theme.tokens.colors.text,
     ["--theme-text-muted" as any]: theme.tokens.colors.textMuted,
     ["--theme-border" as any]: theme.tokens.colors.border,
-    ["--theme-accent" as any]: theme.tokens.colors.accent,
-    ["--theme-accent-hover" as any]: theme.tokens.colors.accentHover,
-    ["--theme-font-heading" as any]: theme.tokens.typography.headingFont,
-    ["--theme-font-body" as any]: theme.tokens.typography.bodyFont,
+    ["--theme-accent" as any]: activeAccent,
+    ["--theme-accent-hover" as any]: activeAccentHover,
+    ["--theme-font-heading" as any]: selectedHeadingFont,
+    ["--theme-font-body" as any]: selectedBodyFont,
     ["--theme-radius-card" as any]: theme.tokens.radii.card,
     ["--theme-radius-button" as any]: theme.tokens.radii.button,
   };
