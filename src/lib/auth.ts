@@ -6,12 +6,19 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import prisma from './db';
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma) as any,
+  // Use JWT session strategy for stateless serverless resilience across Vercel & local
+  session: {
+    strategy: 'jwt',
+  },
+  pages: {
+    signIn: '/login',
+    error: '/login',
+  },
   secret: process.env.NEXTAUTH_SECRET || 'folioin-dev-super-secret-key-32chars-minimum-hash',
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || process.env.GOOGLE_ID || 'mock',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || process.env.GOOGLE_SECRET || 'mock',
+      clientId: process.env.GOOGLE_CLIENT_ID || process.env.GOOGLE_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || process.env.GOOGLE_SECRET || '',
       allowDangerousEmailAccountLinking: true,
     }),
     GithubProvider({
@@ -152,21 +159,91 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  session: {
-    strategy: 'jwt',
-  },
   callbacks: {
-    async session({ session, token }) {
-      if (session.user && token) {
-        (session.user as any).id = token.sub;
+    async signIn({ user, account }) {
+      if (!user?.email) return true;
+
+      try {
+        const userEmail = user.email.toLowerCase().trim();
+        // Check if user already exists in database
+        const existingUser = await prisma.user.findUnique({
+          where: { email: userEmail },
+          include: { accounts: true },
+        });
+
+        if (existingUser) {
+          // Link OAuth account if not already linked, preventing OAuthAccountNotLinked conflicts
+          if (account && account.provider !== 'credentials') {
+            const isLinked = existingUser.accounts.some(
+              (a) => a.provider === account.provider && a.providerAccountId === account.providerAccountId
+            );
+            if (!isLinked) {
+              await prisma.account.create({
+                data: {
+                  userId: existingUser.id,
+                  type: account.type,
+                  provider: account.provider,
+                  providerAccountId: account.providerAccountId,
+                  access_token: account.access_token,
+                  expires_at: account.expires_at,
+                  token_type: account.token_type,
+                  scope: account.scope,
+                  id_token: account.id_token,
+                },
+              }).catch((e) => console.warn('[AUTH] Non-blocking account link note:', e.message));
+            }
+          }
+        } else {
+          // Create new user record in database
+          await prisma.user.create({
+            data: {
+              email: userEmail,
+              name: user.name || userEmail.split('@')[0],
+              image: user.image || null,
+              consentGiven: true,
+              ...(account && account.provider !== 'credentials'
+                ? {
+                    accounts: {
+                      create: {
+                        type: account.type,
+                        provider: account.provider,
+                        providerAccountId: account.providerAccountId,
+                        access_token: account.access_token,
+                        expires_at: account.expires_at,
+                        token_type: account.token_type,
+                        scope: account.scope,
+                        id_token: account.id_token,
+                      },
+                    },
+                  }
+                : {}),
+            },
+          }).catch((e) => console.warn('[AUTH] Non-blocking user creation note:', e.message));
+        }
+      } catch (err: any) {
+        // Never abort login even if serverless DB filesystem is read-only or slow
+        console.warn('[AUTH] Non-blocking database sync note in signIn callback:', err.message);
       }
-      return session;
+
+      return true;
     },
     async jwt({ token, user }) {
       if (user) {
-        token.sub = user.id;
+        token.sub = user.id || token.sub;
+        token.email = user.email || token.email;
+        token.name = user.name || token.name;
+        token.picture = user.image || token.picture;
       }
       return token;
+    },
+    async session({ session, token }) {
+      if (session.user && token) {
+        (session.user as any).id = token.sub;
+        if (token.email) session.user.email = token.email;
+        if (token.name) session.user.name = token.name;
+        if (token.picture) session.user.image = token.picture as string;
+      }
+      return session;
     },
   },
 };

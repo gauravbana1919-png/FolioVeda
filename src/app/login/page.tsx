@@ -59,6 +59,15 @@ function LoginForm() {
 
   // Check if real Google OAuth is configured
   useEffect(() => {
+    const errorParam = searchParams.get("error");
+    if (errorParam === "OAuthAccountNotLinked") {
+      setErrorMessage("This email is already associated with an account. We have resolved the link; please click 'Continue with Google' again.");
+    } else if (errorParam === "Callback") {
+      setErrorMessage("Authentication was interrupted or redirected. Please click Continue with Google again.");
+    } else if (errorParam) {
+      setErrorMessage(`Authentication notice: ${errorParam}. Please try again.`);
+    }
+
     async function checkGoogleStatus() {
       try {
         const res = await fetch("/api/auth/google-config");

@@ -1,0 +1,10 @@
+<svg width="800" height="240" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(20, 10)">
+    <polygon points="22,18 42,14 42,82 22,76" fill="#064E3B" />
+    <polygon points="42,14 82,22 68,38 42,32" fill="#10B981" />
+    <polygon points="42,42 66,48 54,60 42,54" fill="#A7F3D0" />
+    <polygon points="82,22 52,86 42,82 68,38" fill="#047857" />
+    <polygon points="42,14 42,82 38,81 38,15" fill="rgba(0,0,0,0.25)" />
+  </g>
+  <text x="130" y="74" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="52" fill="#111827" letter-spacing="-1.5">Folio<tspan fill="#059669">In</tspan></text>
+</svg>
