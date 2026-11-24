@@ -196,7 +196,7 @@ export function TerminalNav({ content }: VariantProps) {
 // ─── Hero ───────────────────────────────────────────────────────────────────
 
 export function TerminalHero({ content }: VariantProps) {
-  const sshHost = `${content.name.toLowerCase().replace(/\s+/g, "")}@folioveda.live`;
+  const sshHost = `${content.name.toLowerCase().replace(/\s+/g, "")}@folioin.live`;
 
   return (
     <section className="max-w-5xl mx-auto px-4 py-12 font-mono">
@@ -580,7 +580,7 @@ export function TerminalContact({ content }: VariantProps) {
           <div>
             <Prompt />
             <span className="text-[#E6EDF3]">
-              curl -X POST https://folioveda.me/api/hire-me
+              curl -X POST https://folioin.me/api/hire-me
             </span>
           </div>
 

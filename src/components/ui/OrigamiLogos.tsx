@@ -140,7 +140,7 @@ export function OrigamiFolioWordmark({
       <OrigamiFolioMark palette={palette} size={m.icon} />
       <div className={`font-black tracking-tight ${m.text}`}>
         <span className="text-slate-900 dark:text-white">Folio</span>
-        <span style={{ color: theme.textAccent }}>Veda</span>
+        <span style={{ color: theme.textAccent }}>In</span>
       </div>
     </div>
   );

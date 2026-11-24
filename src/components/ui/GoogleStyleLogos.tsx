@@ -10,7 +10,7 @@ interface LogoProps {
 /**
  * GOOGLE-STYLE CONCEPT 1: "The Vibrant Geometric 'F' Mark"
  * Inspired by Google's multi-color 'G' icon:
- * - Simple, friendly, bold lettermark for "FolioVeda"
+ * - Simple, friendly, bold lettermark for "FolioIn"
  * - Segmented into 4 iconic vibrant colors:
  *   Coral Red (#EA4335), Sunshine Gold (#FBBC05), Emerald Green (#34A853), Electric Blue (#4285F4)
  * - Zero boring dull tones, instant friendly recognition, 100% original.
@@ -91,7 +91,7 @@ export function GoogleWorkspaceFoldLogo({ size = 56, className = "" }: LogoProps
  * GOOGLE-STYLE CONCEPT 3: "The Color-Loop Monogram (Fresh & Playful)"
  * Alternative modern startup palette:
  * - Electric Violet (#7C3AED), Radiant Tangerine (#F97316), Lime Green (#10B981), Cyber Cyan (#06B6D4)
- * - Continuous bold geometric loop shaping both F (Folio) and V (Veda)
+ * - Continuous bold geometric loop shaping both F (Folio) and V (In)
  * - Ultra-clean, cheerful, standout
  */
 export function ColorLoopMonogramLogo({ size = 56, className = "" }: LogoProps) {
@@ -135,9 +135,9 @@ export function ColorLoopMonogramLogo({ size = 56, className = "" }: LogoProps) 
 }
 
 /**
- * Main Google-Style FolioVeda Logo with Wordmark
+ * Main Google-Style FolioIn Logo with Wordmark
  */
-export function GoogleStyleFolioVedaLogo({
+export function GoogleStyleFolioInLogo({
   size = "md",
   className = "",
   variant = 1,

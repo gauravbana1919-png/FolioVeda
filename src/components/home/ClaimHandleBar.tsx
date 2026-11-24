@@ -53,7 +53,7 @@ export function ClaimHandleBar() {
       >
         <div className="flex-1 flex items-center pl-4 sm:pl-5 pr-2 py-1">
           <span className="text-xs sm:text-sm font-mono font-bold text-slate-400 select-none">
-            folioveda.me/
+            folioin.me/
           </span>
           <input
             type="text"

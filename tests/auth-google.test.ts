@@ -27,7 +27,7 @@ describe('Google Authentication Configuration & NextAuth Provider Suite', () => 
     expect(authOptions.callbacks?.session).toBeDefined();
     expect(authOptions.callbacks?.jwt).toBeDefined();
 
-    const dummyUser = { id: 'usr_test_123', email: 'test@folioveda.com', name: 'Test User' };
+    const dummyUser = { id: 'usr_test_123', email: 'test@folioin.com', name: 'Test User' };
     const dummyToken = { sub: 'usr_test_123' };
 
     // JWT callback test
@@ -40,7 +40,7 @@ describe('Google Authentication Configuration & NextAuth Provider Suite', () => 
 
     // Session callback test
     const sessionResult = await authOptions.callbacks!.session!({
-      session: { user: { name: 'Test User', email: 'test@folioveda.com' }, expires: '2099-01-01' },
+      session: { user: { name: 'Test User', email: 'test@folioin.com' }, expires: '2099-01-01' },
       token: jwtResult,
       user: dummyUser as any,
       newSession: null,

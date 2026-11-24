@@ -42,7 +42,7 @@ export function AnimatedCareerStory() {
     {
       id: 2,
       title: "Scene 3: The Eureka Moment",
-      subtitle: "Leo discovers Marcus's live portfolio URL and finds FolioVeda.",
+      subtitle: "Leo discovers Marcus's live portfolio URL and finds FolioIn.",
       badge: "The Transformation",
     },
     {
@@ -206,7 +206,7 @@ export function AnimatedCareerStory() {
           {currentScene === 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-4xl mx-auto w-full animate-fade-in">
               
-              {/* Leo: Without FolioVeda */}
+              {/* Leo: Without FolioIn */}
               <div className="p-6 sm:p-8 rounded-3xl bg-white border-2 border-slate-200 shadow-md space-y-5 relative">
                 <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 font-mono">
                   TRADITIONAL APPLICANT
@@ -256,10 +256,10 @@ export function AnimatedCareerStory() {
                 </div>
               </div>
 
-              {/* Marcus: With FolioVeda */}
+              {/* Marcus: With FolioIn */}
               <div className="p-6 sm:p-8 rounded-3xl bg-white border-2 border-[#173f32] shadow-xl space-y-5 relative ring-4 ring-[#173f32]/10">
                 <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono">
-                  FOLIOVEDA CREATOR
+                  FOLIOIN CREATOR
                 </span>
 
                 {/* Marcus Cartoon SVG (Confident / Smiling) */}
@@ -292,7 +292,7 @@ export function AnimatedCareerStory() {
                   </div>
                   <div className="flex items-center gap-2 text-slate-800 bg-emerald-50/60 p-2.5 rounded-xl border border-emerald-200 font-medium">
                     <CheckCircle2 size={15} className="text-emerald-600 shrink-0" />
-                    <span>Sub-50ms live portfolio: <code>folioveda.me/marcus</code></span>
+                    <span>Sub-50ms live portfolio: <code>folioin.me/marcus</code></span>
                   </div>
                   <div className="flex items-center gap-2 text-slate-800 bg-emerald-50/60 p-2.5 rounded-xl border border-emerald-200 font-medium">
                     <CheckCircle2 size={15} className="text-emerald-600 shrink-0" />
@@ -346,14 +346,14 @@ export function AnimatedCareerStory() {
                   {/* Right: Marcus's Scanner Triumph */}
                   <div className="p-5 rounded-2xl bg-slate-950/80 border border-emerald-500/40 space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-slate-300">Applicant: Marcus (FolioVeda)</span>
+                      <span className="text-xs font-bold text-slate-300">Applicant: Marcus (FolioIn)</span>
                       <span className="text-xs font-extrabold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/40">
                         SCORE: 99%
                       </span>
                     </div>
                     <div className="font-mono text-[11px] text-emerald-300 space-y-1 bg-emerald-950/30 p-3 rounded-xl border border-emerald-900/40">
                       <p>✓ All 18 skills matched standard taxonomies.</p>
-                      <p>✓ Verified live portfolio detected at folioveda.me/marcus.</p>
+                      <p>✓ Verified live portfolio detected at folioin.me/marcus.</p>
                       <p>✓ Fast-track candidate to hiring director.</p>
                     </div>
                     <p className="text-xs text-slate-400">
@@ -399,7 +399,7 @@ export function AnimatedCareerStory() {
                       Leo asks Marcus: &ldquo;How did you get 3 interview calls this week?!&rdquo;
                     </h4>
                     <p className="text-sm text-slate-600 font-normal">
-                      Marcus shares his secret: &ldquo;I ditched flat PDFs. FolioVeda connected my GitHub, generated an ATS-certified resume, and hosted my live portfolio in 120 seconds.&rdquo;
+                      Marcus shares his secret: &ldquo;I ditched flat PDFs. FolioIn connected my GitHub, generated an ATS-certified resume, and hosted my live portfolio in 120 seconds.&rdquo;
                     </p>
                   </div>
                 </div>
@@ -421,7 +421,7 @@ export function AnimatedCareerStory() {
                   <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                     <span className="w-6 h-6 rounded-full bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center">3</span>
                     <h5 className="font-extrabold text-sm text-[#1E293B]">Instant Live Domain</h5>
-                    <p className="text-xs text-slate-600 font-normal">Deployed to worldwide Edge CDN with sub-50ms latency at <code>folioveda.me/leo</code>.</p>
+                    <p className="text-xs text-slate-600 font-normal">Deployed to worldwide Edge CDN with sub-50ms latency at <code>folioin.me/leo</code>.</p>
                   </div>
                 </div>
 
@@ -495,7 +495,7 @@ export function AnimatedCareerStory() {
                     Don&apos;t Let A Flat PDF Cost You Your Dream Job.
                   </h4>
                   <p className="text-sm text-slate-600 font-normal leading-relaxed">
-                    Recruiters spend 6 seconds on a resume, but stay 4 minutes on a live FolioVeda portfolio. Stand out with verifiable code, flawless ATS parsing, and timeless editorial presentation.
+                    Recruiters spend 6 seconds on a resume, but stay 4 minutes on a live FolioIn portfolio. Stand out with verifiable code, flawless ATS parsing, and timeless editorial presentation.
                   </p>
                 </div>
 
@@ -504,7 +504,7 @@ export function AnimatedCareerStory() {
                     href="/onboarding"
                     className="shimmer-button bg-gradient-to-r from-[#173f32] via-[#10B981] to-[#173f32] hover:opacity-95 text-white font-bold text-sm px-8 py-3.5 rounded-full shadow-lg shadow-[#173f32]/30 hover:scale-105 transition-all flex items-center gap-2"
                   >
-                    <span>Build Your FolioVeda Now — Free</span>
+                    <span>Build Your FolioIn Now — Free</span>
                     <ArrowRight size={15} />
                   </Link>
 

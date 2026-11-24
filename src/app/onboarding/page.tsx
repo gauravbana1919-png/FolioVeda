@@ -27,7 +27,7 @@ import {
   FileUp,
   FileCheck
 } from "lucide-react";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 import Link from "next/link";
 import { ProfileType, TargetGoal, ToneOfVoice, PreferredMood, IntakeAnswersInput } from "@/types/intake";
 import { PERSONA_PROFILES } from "@/lib/personas";
@@ -78,8 +78,8 @@ function SmartIntakeOnboardingContent() {
       title: "Distributed Telemetry & Edge Pipeline",
       description: "Low-latency distributed caching and telemetry engine built with Next.js, Redis, and Prisma, serving 100k+ req/sec.",
       techStack: ["Next.js 15", "TypeScript", "Redis", "Docker", "PostgreSQL"],
-      liveUrl: "https://folioveda.dev/sample-pipeline",
-      githubUrl: "https://github.com/folioveda/sample-pipeline",
+      liveUrl: "https://folioin.dev/sample-pipeline",
+      githubUrl: "https://github.com/folioin/sample-pipeline",
       featured: true,
       metrics: "100k req/sec • sub-5ms P99",
       category: "Distributed Architecture",
@@ -208,7 +208,7 @@ function SmartIntakeOnboardingContent() {
             }
 
             try {
-              localStorage.setItem("folioveda_active_profile", JSON.stringify(data.extracted));
+              localStorage.setItem("folioin_active_profile", JSON.stringify(data.extracted));
             } catch (e) {}
 
             const roleCount = data.extracted.experience?.length || 0;
@@ -385,7 +385,7 @@ function SmartIntakeOnboardingContent() {
         }
 
         try {
-          localStorage.setItem("folioveda_active_profile", JSON.stringify(data.extracted));
+          localStorage.setItem("folioin_active_profile", JSON.stringify(data.extracted));
         } catch (e) {}
 
         const roleCount = data.extracted.experience?.length || 0;
@@ -537,12 +537,12 @@ function SmartIntakeOnboardingContent() {
         const data = await res.json();
         setPublishedUrl(data.liveUrl || `/p/${encodeURIComponent(candidateName)}`);
         try {
-          const cached = localStorage.getItem("folioveda_active_profile");
+          const cached = localStorage.getItem("folioin_active_profile");
           if (cached) {
             const parsed = JSON.parse(cached);
             parsed.recommendedTheme = selectedThemeId;
             parsed.themeId = selectedThemeId;
-            localStorage.setItem("folioveda_active_profile", JSON.stringify(parsed));
+            localStorage.setItem("folioin_active_profile", JSON.stringify(parsed));
           }
         } catch {}
       }
@@ -559,7 +559,7 @@ function SmartIntakeOnboardingContent() {
       <header className="border-b border-[#1E293B]/10 bg-[#F8F9FA]/90 backdrop-blur-xl px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <FolioVedaLogo size="sm" />
+            <FolioInLogo size="sm" />
             <span className="text-slate-400 text-xs font-medium">/ Smart Intake</span>
           </Link>
           <div className="flex items-center gap-3">
@@ -595,7 +595,7 @@ function SmartIntakeOnboardingContent() {
 
             <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-md max-w-md mx-auto flex items-center justify-between">
               <span className="font-mono text-xs text-[#173f32] font-bold truncate">
-                folioveda.me{publishedUrl}
+                folioin.me{publishedUrl}
               </span>
               <Link
                 href={publishedUrl}
@@ -1113,7 +1113,7 @@ function SmartIntakeOnboardingContent() {
                     Anchor your portfolio in real proof.
                   </h1>
                   <p className="text-xs text-slate-500 mt-1 font-normal">
-                    HARD RULE: FolioVeda never invents fake metrics or unverified jobs. All copy is generated strictly from what you provide below.
+                    HARD RULE: FolioIn never invents fake metrics or unverified jobs. All copy is generated strictly from what you provide below.
                   </p>
                 </div>
 
@@ -1646,7 +1646,7 @@ function SmartIntakeOnboardingContent() {
 
       {/* Footer */}
       <footer className="border-t border-slate-200 py-4 px-6 text-center text-xs text-slate-500 font-medium">
-        FolioVeda Smart Intake • Zero Hallucination Engine • Live Recruiter Proof
+        FolioIn Smart Intake • Zero Hallucination Engine • Live Recruiter Proof
       </footer>
     </div>
   );
@@ -1659,7 +1659,7 @@ export default function SmartIntakeOnboardingPage() {
         <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
             <div className="w-4 h-4 border-2 border-[#173f32] border-t-transparent rounded-full animate-spin" />
-            <span>Loading FolioVeda Smart Intake...</span>
+            <span>Loading FolioIn Smart Intake...</span>
           </div>
         </div>
       }

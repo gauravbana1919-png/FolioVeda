@@ -68,7 +68,7 @@ describe("Stage 8: Similarity Guard, Rate Controls & Takedown Form", () => {
 
   it("should validate TakedownReportInputSchema", () => {
     const valid = {
-      reportedUrl: "https://folioveda.me/p/alex",
+      reportedUrl: "https://folioin.me/p/alex",
       reporterEmail: "counsel@example.com",
       reason: "This portfolio improperly uses our registered trademark and bio verbatim.",
     };

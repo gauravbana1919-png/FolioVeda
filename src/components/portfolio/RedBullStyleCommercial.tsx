@@ -27,7 +27,7 @@ export function RedBullStyleCommercial() {
   // 4 Scenes mirroring classic Red Bull commercials:
   // 1. The Desperate Job Search (Buried in flat resumes, rejected by grumpy boss)
   // 2. The Flying Colleague (The guy with a live portfolio and ATS resume soars in with wings!)
-  // 3. The FolioVeda Spark (He gives him FolioVeda; GitHub syncs, sprouts wings)
+  // 3. The FolioIn Spark (He gives him FolioIn; GitHub syncs, sprouts wings)
   // 4. Soaring to the Dream Job (Both fly past the rejection shredder, hired on the spot!)
   const scenes = [
     {
@@ -41,21 +41,21 @@ export function RedBullStyleCommercial() {
       id: 1,
       title: "ACT 2: ENTER THE WINGED APPLICANT",
       tagline: "Along flies Walter with his live portfolio and ATS-tailored resume!",
-      audioText: "Narrator: But wait! Here comes Walter. Walter doesn't crawl through HR portals. Walter has a live interactive FolioVeda portfolio!",
+      audioText: "Narrator: But wait! Here comes Walter. Walter doesn't crawl through HR portals. Walter has a live interactive FolioIn portfolio!",
       soundEffect: "WHOOSH! FLAP FLAP! 🪽",
     },
     {
       id: 2,
-      title: "ACT 3: FOLIOVEDA GIVES YOU WIIINGS!",
-      tagline: "Arthur discovers FolioVeda. Connects GitHub in 120 seconds. SPROUTS WINGS!",
-      audioText: "Walter: 'Cheer up, Arthur! FolioVeda syncs your real code and gives your career wiiings!' *ZAAAP!*",
+      title: "ACT 3: FOLIOIN GIVES YOU WIIINGS!",
+      tagline: "Arthur discovers FolioIn. Connects GitHub in 120 seconds. SPROUTS WINGS!",
+      audioText: "Walter: 'Cheer up, Arthur! FolioIn syncs your real code and gives your career wiiings!' *ZAAAP!*",
       soundEffect: "ZAP! EUREKA! ⚡",
     },
     {
       id: 3,
       title: "ACT 4: SOARING STRAIGHT TO THE DREAM JOB!",
       tagline: "Both fly over the recruiter's desk. Jaw drops to the floor. Hired on the spot!",
-      audioText: "Recruiter: 'A live interactive portfolio?! Hired immediately!' Narrator: FolioVeda gives your career wiiings!",
+      audioText: "Recruiter: 'A live interactive portfolio?! Hired immediately!' Narrator: FolioIn gives your career wiiings!",
       soundEffect: "DING! HIRED! 🏆",
     },
   ];
@@ -113,7 +113,7 @@ export function RedBullStyleCommercial() {
         </div>
 
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#1E293B] leading-tight mb-3">
-          FolioVeda Gives Your Career Wiiings.
+          FolioIn Gives Your Career Wiiings.
         </h2>
         <p className="text-base text-slate-600 font-normal max-w-xl mx-auto">
           Watch our hand-drawn commercial: Why applying with a flat PDF gets you stuck, while a live portfolio lets you fly straight to the offer letter.
@@ -368,14 +368,14 @@ export function RedBullStyleCommercial() {
                     <g transform="translate(75, 125)">
                       <rect x="0" y="0" width="70" height="42" rx="4" fill="#0F172A" stroke="#1E293B" strokeWidth="2.5" />
                       <rect x="4" y="4" width="62" height="34" rx="2" fill="#1E293B" />
-                      <text x="8" y="16" fill="#34D399" fontSize="7" fontFamily="monospace" fontWeight="bold">folioveda.me</text>
+                      <text x="8" y="16" fill="#34D399" fontSize="7" fontFamily="monospace" fontWeight="bold">folioin.me</text>
                       <text x="8" y="26" fill="#F8FAFC" fontSize="6" fontFamily="monospace">✓ 99.9% ATS</text>
                       <path d="M-5 42 L75 42 L70 48 L-2 48 Z" fill="#CBD5E1" stroke="#1E293B" strokeWidth="2" />
                     </g>
                   </svg>
 
                   <span className="font-mono text-xs font-extrabold text-[#991B1B] uppercase tracking-wider">
-                    Walter (FolioVeda Pioneer with Wings)
+                    Walter (FolioIn Pioneer with Wings)
                   </span>
                 </div>
 
@@ -397,14 +397,14 @@ export function RedBullStyleCommercial() {
             )}
 
             {/* -------------------------------------------------------------------
-                ACT 3: ARTHUR DRINKS / ACTIVATES FOLIOVEDA & SPROUTS WINGS
+                ACT 3: ARTHUR DRINKS / ACTIVATES FOLIOIN & SPROUTS WINGS
                 ------------------------------------------------------------------- */}
             {currentFrame === 2 && (
               <div 
                 className="w-full max-w-2xl flex flex-col sm:flex-row items-center justify-around gap-8"
                 style={{ transform: `translate(${jitterX}px, ${jitterY}px)` }}
               >
-                {/* Walter handing FolioVeda to Arthur */}
+                {/* Walter handing FolioIn to Arthur */}
                 <div className="flex flex-col items-center text-center relative">
                   
                   {/* Energy Sparkle Blast */}
@@ -439,11 +439,11 @@ export function RedBullStyleCommercial() {
                     {/* Giant open mouth laughing */}
                     <path d="M98 102 C108 120, 122 120, 126 102 Z" fill="#991B1B" stroke="#1E293B" strokeWidth="2.5" />
 
-                    {/* Golden FolioVeda Can/Pill in hand */}
+                    {/* Golden FolioIn Can/Pill in hand */}
                     <g transform="translate(135, 120) rotate(-15)">
                       <rect x="0" y="0" width="22" height="38" rx="6" fill="#F59E0B" stroke="#1E293B" strokeWidth="2.5" />
                       <text x="3" y="16" fill="#FFFFFF" fontSize="6" fontWeight="bold">FOLIO</text>
-                      <text x="4" y="24" fill="#991B1B" fontSize="6" fontWeight="bold">VEDA</text>
+                      <text x="6" y="24" fill="#991B1B" fontSize="6" fontWeight="bold">IN</text>
                       <circle cx="11" cy="30" r="3" fill="#DC2626" />
                     </g>
                   </svg>
@@ -536,7 +536,7 @@ export function RedBullStyleCommercial() {
                 {/* Celebratory Stinger */}
                 <div className="space-y-2 max-w-lg">
                   <h4 className="text-2xl sm:text-3xl font-extrabold text-[#1E293B]">
-                    FolioVeda Gives Your Career Wiiings!
+                    FolioIn Gives Your Career Wiiings!
                   </h4>
                   <p className="text-sm text-slate-700 font-medium leading-relaxed">
                     Don&apos;t let your career get trapped under a 3-page generic PDF. Pair an ATS-optimized resume with a sub-50ms live portfolio domain and soar past the competition.
@@ -548,7 +548,7 @@ export function RedBullStyleCommercial() {
                     href="/onboarding"
                     className="shimmer-button bg-gradient-to-r from-[#991B1B] via-[#B91C1C] to-[#991B1B] hover:from-[#7F1D1D] hover:to-[#991B1B] text-white font-extrabold text-sm px-8 py-3.5 rounded-full shadow-lg shadow-[#991B1B]/30 hover:scale-105 transition-all flex items-center gap-2"
                   >
-                    <span>Get Your FolioVeda Wings — Free</span>
+                    <span>Get Your FolioIn Wings — Free</span>
                     <ArrowRight size={16} />
                   </Link>
 

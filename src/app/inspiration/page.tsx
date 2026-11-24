@@ -18,7 +18,7 @@ import {
   Info,
   ArrowRight
 } from "lucide-react";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 import { StyleProfile, ClosenessLevel } from "@/types/inspiration";
 import { ThemePackage } from "@/types/theme";
 import { ThemeRenderer } from "@/components/portfolio/engine/ThemeRenderer";
@@ -197,7 +197,7 @@ export default function InspirationPage() {
             </Link>
             <div className="h-4 w-[1px] bg-slate-200 hidden sm:block" />
             <Link href="/" className="hover:opacity-90 transition-opacity">
-              <FolioVedaLogo size="sm" />
+              <FolioInLogo size="sm" />
             </Link>
             <span className="text-slate-400 text-xs font-medium hidden md:inline">/ Inspiration Studio</span>
           </div>
@@ -252,7 +252,7 @@ export default function InspirationPage() {
               Clone Any Portfolio Layout &amp; Aesthetic
             </h1>
             <p className="text-sm text-slate-600 font-medium mt-1 max-w-2xl">
-              Paste any URL (Loveleen Pereira, Dribbble, or personal sites). FolioVeda synthesizes the exact visual structure, colors, and typography using <strong className="text-slate-900 font-bold">{normalizedContent.name}&apos;s verified career data</strong>.
+              Paste any URL (Loveleen Pereira, Dribbble, or personal sites). FolioIn synthesizes the exact visual structure, colors, and typography using <strong className="text-slate-900 font-bold">{normalizedContent.name}&apos;s verified career data</strong>.
             </p>
           </div>
 
@@ -536,7 +536,7 @@ export default function InspirationPage() {
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                     </div>
                     <span className="ml-2 text-slate-200">
-                      folioveda.me/{normalizedContent.name.toLowerCase().replace(/\s+/g, "")}
+                      folioin.me/{normalizedContent.name.toLowerCase().replace(/\s+/g, "")}
                     </span>
                   </div>
 

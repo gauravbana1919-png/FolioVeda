@@ -48,7 +48,7 @@ const GUIDE_STEPS: GuideStep[] = [
     route: "/onboarding",
     routeLabel: "Start Intake Flow ↗",
     indianContextHighlight: "Built for engineers in Bengaluru, Hyderabad & Pune: replaces generic college/mass-recruitment templates with verified GitHub proof.",
-    description: "Connect your GitHub or paste your technical profile. FolioVeda automatically analyzes your verified repositories, commit cadence, and language breakdown without hallucinating unproven claims.",
+    description: "Connect your GitHub or paste your technical profile. FolioIn automatically analyzes your verified repositories, commit cadence, and language breakdown without hallucinating unproven claims.",
     keyPoints: [
       "Connects directly to GitHub via public API or OAuth",
       "Calculates verified commit frequency and real throughput metrics",
@@ -82,7 +82,7 @@ const GUIDE_STEPS: GuideStep[] = [
     route: "/inspiration",
     routeLabel: "Try Inspiration Cloner ↗",
     indianContextHighlight: "Admire a high-end Silicon Valley site or Awwwards winner? Replicate its calm aesthetic without copyright infringement.",
-    description: "Paste any portfolio URL you love. FolioVeda's neural analyzer extracts the abstract color harmony, typographic scales, and negative spacing into a completely original, copyright-safe theme tailored to you.",
+    description: "Paste any portfolio URL you love. FolioIn's neural analyzer extracts the abstract color harmony, typographic scales, and negative spacing into a completely original, copyright-safe theme tailored to you.",
     keyPoints: [
       "Paste any portfolio link from Awwwards, Dribbble, or top engineers",
       "Adjust the Closeness Slider (Loose, Balanced, Close) to your taste",
@@ -99,7 +99,7 @@ const GUIDE_STEPS: GuideStep[] = [
     route: "/resume",
     routeLabel: "Tailor Your Resume ↗",
     indianContextHighlight: "99% ATS match rate for Workday, Greenhouse & Taleo used by Amazon India, Flipkart, Zomato, and global remote recruiters.",
-    description: "Paste any Job Description (JD). FolioVeda highlights skill gaps, aligns keywords from your verified experience, and exports single-column high-scoring ATS Markdown and visual PDF files.",
+    description: "Paste any Job Description (JD). FolioIn highlights skill gaps, aligns keywords from your verified experience, and exports single-column high-scoring ATS Markdown and visual PDF files.",
     keyPoints: [
       "Paste job descriptions from LinkedIn India, Naukri, or Instahyre",
       "Single-column ATS Markdown parses with 99%+ accuracy",
@@ -116,9 +116,9 @@ const GUIDE_STEPS: GuideStep[] = [
     route: "/hub",
     routeLabel: "Open Developer Studio Hub ↗",
     indianContextHighlight: "Blazing fast edge nodes in Mumbai (BOM), Delhi (DEL), and Chennai (MAA) ensuring sub-20ms loading speeds across India and worldwide.",
-    description: "Your portfolio is deployed instantly on a worldwide Edge CDN with automatic SSL and free hosting at folioveda.me/yourname. Test desktop and mobile responsive views inside our master Developer Hub.",
+    description: "Your portfolio is deployed instantly on a worldwide Edge CDN with automatic SSL and free hosting at folioin.me/yourname. Test desktop and mobile responsive views inside our master Developer Hub.",
     keyPoints: [
-      "Instant custom domain (folioveda.me/yourname or your own .dev / .in)",
+      "Instant custom domain (folioin.me/yourname or your own .dev / .in)",
       "Edge caching in Mumbai, Delhi, and Chennai for zero latency in India",
       "Real-time webhook simulator: pushing to GitHub automatically updates your live site",
       "Clean recruiter view (/p/alex) with zero distracting editor bars"
@@ -202,7 +202,7 @@ export function PlatformGuideSection() {
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#1E293B] leading-tight mb-4">
           How to Build a Tier-1 Career Engine <br />
           <span className="font-extrabold tracking-tight bg-gradient-to-r from-[#173f32] via-[#10B981] to-[#173f32] bg-clip-text text-transparent">
-            Step-by-Step with FolioVeda.
+            Step-by-Step with FolioIn.
           </span>
         </h2>
 
@@ -377,7 +377,7 @@ export function PlatformGuideSection() {
                 <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                <span className="font-mono text-[11px] text-slate-500 ml-2">folioveda.me{step.route}</span>
+                <span className="font-mono text-[11px] text-slate-500 ml-2">folioin.me{step.route}</span>
               </div>
               <span className="text-[10px] font-bold text-[#173f32] bg-emerald-50 px-2 py-0.5 rounded-md uppercase font-mono">
                 FUNCTION {step.stepNumber}
@@ -509,7 +509,7 @@ export function PlatformGuideSection() {
                   </div>
                 </div>
                 <div className="text-xs text-slate-600 font-medium">
-                  Instant free hosting at <code>folioveda.me/yourname</code> with global SSL.
+                  Instant free hosting at <code>folioin.me/yourname</code> with global SSL.
                 </div>
               </div>
             )}

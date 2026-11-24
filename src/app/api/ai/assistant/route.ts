@@ -1,26 +1,57 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 
+interface ActionItem {
+  label: string;
+  url?: string;
+  actionType?: "navigate" | "switch_tab" | "copy_text";
+  tab?: "learnhouse" | "shivam" | "kenji" | "randy" | "alsa";
+  payload?: string;
+  primary?: boolean;
+}
+
 const KNOWLEDGE_BASE = [
   {
     keywords: ["deploy", "github pages", "host", "publish", "github token", "pat"],
-    answer: "🚀 **How to deploy to GitHub Pages:**\n1. Click the **'Deploy Pages'** button in the top navigation bar.\n2. Enter your GitHub Personal Access Token (PAT) with `repo` and `workflow` permissions.\n3. Enter your desired repository name (e.g., `my-portfolio`).\n4. Click **'Build & Deploy'**.\nFolioVeda automatically compiles your portfolio, commits `index.html`, and configures GitHub Pages live at `https://<username>.github.io/<repo>/`!"
+    answer: "🚀 **How to deploy to GitHub Pages:**\n1. Click the **'Deploy Pages'** button in the top navigation bar or launch the builder.\n2. Enter your GitHub Personal Access Token (PAT) with `repo` and `workflow` permissions.\n3. Enter your repository name (e.g. `my-portfolio`).\n4. Click **'Build & Deploy'**.\nFolioIn automatically compiles your portfolio, commits `index.html`, and configures GitHub Pages live at `https://<username>.github.io/<repo>/`!",
+    actions: [
+      { label: "🚀 Open Deployment Hub", url: "/portfolio/preview", primary: true },
+      { label: "📄 Read Deployment Guide", url: "/hub" }
+    ]
   },
   {
     keywords: ["import", "github repos", "fetch repos", "auto populate", "github"],
-    answer: "🔄 **How to Auto-Import from GitHub:**\n1. Open the Portfolio Editor or click **'Import GitHub'** in the top bar.\n2. Enter your GitHub username (e.g. `aarav-dev` or any GitHub handle).\n3. FolioVeda automatically pulls your public repositories, stars, language tech badges, bio, and avatar!"
+    answer: "🔄 **How to Auto-Import from GitHub:**\n1. Open the Portfolio Builder or click **'Import GitHub'**.\n2. Enter your GitHub handle (e.g. `torvalds` or your own username).\n3. FolioIn automatically pulls your public repositories, star counts, primary languages, avatar, and commit activity!",
+    actions: [
+      { label: "🐙 Auto-Import From GitHub", url: "/onboarding", primary: true },
+      { label: "⚡ View Live Preview", url: "/portfolio/preview" }
+    ]
   },
   {
     keywords: ["export", "download", "zip", "html", "readme", "pdf"],
-    answer: "📦 **FolioVeda supports 4 instant export formats:**\n• **Standalone HTML**: A single portable `.html` file with embedded styles you can double-click or drag onto Netlify/Vercel.\n• **Project ZIP**: Full source code ZIP archive.\n• **GitHub Profile README**: Auto-generates Markdown for your `username/username` repository.\n• **Printable PDF Resume**: Clean formatted resume sheet."
+    answer: "📦 **FolioIn supports 4 instant export formats:**\n• **Standalone HTML**: A single portable `.html` file with embedded styles you can open offline or drag onto Netlify/Vercel.\n• **Project ZIP**: Full Next.js/Tailwind source code archive.\n• **GitHub Profile README**: Auto-generated Markdown for your `username/username` repository.\n• **Printable ATS PDF Resume**: Machine-parseable PDF resume matching top FlowCV standards.",
+    actions: [
+      { label: "📥 Export Portfolio (HTML/ZIP)", url: "/portfolio/preview", primary: true },
+      { label: "📄 Open Resume PDF Studio", url: "/resume" }
+    ]
   },
   {
     keywords: ["templates", "archetypes", "styles", "design", "recommend"],
-    answer: "🎨 **FolioVeda Archetypes & Templates:**\n• **Neo-Brutalist**: High-contrast borders, offset solid shadows, and 90s retro pop accents.\n• **Glassmorphic**: Frosted glass cards with translucent glow.\n• **Claymorphic 3D**: Soft 3D inset shadows with tactile rounded cards.\n• **Craft Desk (Rolan Gomes style)**: Cutting mat grid, physical stamps, and craft stickers.\n• **Wall Showcase (Sudarvel style)**: Telemetry badges, index counters, and metric drawers.\n• **Editorial Studio (Himanshu Singh style)**: Editorial typography with narrative storytelling.\n• **Luxe Creative (Loveleen Pereira style)**: Luxury minimalism, architectural white space, and brand world case studies."
+    answer: "🎨 **FolioIn Curated Archetypes:**\n• **Learn@House**: EdTech & SaaS platform with 5.0-star review proof.\n• **Shivam Kaushal**: Warm cream canvas with tactile 3D burnt-orange clay coils.\n• **Kenji Sato**: Deep ocean cyan with 3D chibi mascot & editorial book covers.\n• **Randy Fahmi**: Vibrant amber ochre with visual photography & 4K cinema tables.\n• **Alsa Yunita**: Pastel lilac & warm peach with TikTok & pitch presentation slides.",
+    actions: [
+      { label: "🎨 Switch to Shivam (3D Clay)", actionType: "switch_tab", tab: "shivam", primary: true },
+      { label: "🎨 Switch to Kenji (3D Mascot)", actionType: "switch_tab", tab: "kenji" },
+      { label: "🎨 Switch to Learn@House", actionType: "switch_tab", tab: "learnhouse" },
+      { label: "🚀 Start Building Now", url: "/onboarding" }
+    ]
   },
   {
     keywords: ["linkedin", "resume", "pdf upload", "parse"],
-    answer: "📄 **LinkedIn & Resume PDF Parser:**\nOn LinkedIn, go to your profile, click **More (...) → Save to PDF**, and drop that file into FolioVeda. Our engine automatically parses your real experience, companies, credentials, and achievements!"
+    answer: "📄 **LinkedIn & Resume PDF Parser:**\nExport your LinkedIn profile to PDF (**More (...) → Save to PDF**) and drop it into FolioIn. Our engine automatically parses your verified experience, roles, credentials, and achievements without hallucinations!",
+    actions: [
+      { label: "📄 Open 14+ FlowCV Resume Studio", url: "/resume", primary: true },
+      { label: "🚀 Build Portfolio from Resume", url: "/onboarding" }
+    ]
   }
 ];
 
@@ -34,180 +65,207 @@ export async function POST(req: NextRequest) {
 
     const lowerQuery = query.toLowerCase().trim();
     const updates: Record<string, any> = {};
+    const actions: ActionItem[] = [];
 
-    // 1. Direct Action Pattern Matching (Instant live updates)
-    if (lowerQuery.includes("neo-brutalist") || lowerQuery.includes("neobrutalist") || lowerQuery.includes("brutalist")) {
-      updates.themeId = "neo-brutalist";
+    // ── 1. PORTFOLIO CREATION & ONBOARDING ACTIONS ──
+    if (
+      lowerQuery.includes("build") ||
+      lowerQuery.includes("create portfolio") ||
+      lowerQuery.includes("start portfolio") ||
+      lowerQuery.includes("make portfolio") ||
+      lowerQuery.includes("new portfolio") ||
+      lowerQuery.startsWith("i am a") ||
+      lowerQuery.startsWith("i'm a")
+    ) {
+      // Extract potential name or role
+      let targetName = "";
+      const forMatch = lowerQuery.match(/(?:for|name is|i am|i'm)\s+([a-zA-Z\s]+)/i);
+      if (forMatch && forMatch[1]) {
+        targetName = forMatch[1].trim().split(" ")[0];
+      }
+
+      const buildUrl = targetName ? `/onboarding?name=${encodeURIComponent(targetName)}` : `/onboarding`;
+
       return NextResponse.json({
-        reply: "⚡ Switched your portfolio to the **Neo-Brutalist Pop** template! Check out the bold high-contrast borders and yellow accents.",
-        updates,
-        source: "action",
+        reply: `🚀 **Ready to build your standout portfolio!**\n\nI've configured your onboarding pipeline with zero hallucinations and real GitHub/resume verification.\n\nClick below to launch the builder with your custom setup:`,
+        actions: [
+          { label: targetName ? `🚀 Build ${targetName}'s Portfolio →` : "🚀 Launch Portfolio Builder →", url: buildUrl, primary: true },
+          { label: "💡 Clone an Inspiration Website", url: "/inspiration" },
+          { label: "📄 Open Resume Builder", url: "/resume" },
+        ],
+        source: "action_builder",
       });
     }
 
-    if (lowerQuery.includes("bento") || lowerQuery.includes("bentofolio") || (lowerQuery.includes("modular") && lowerQuery.includes("grid"))) {
-      updates.themeId = "bento-grid";
+    // ── 2. RESUME TAILORING & FLOWCV TEMPLATES ACTIONS ──
+    if (
+      lowerQuery.includes("resume") ||
+      lowerQuery.includes("cv") ||
+      lowerQuery.includes("flowcv") ||
+      lowerQuery.includes("job tailor")
+    ) {
       return NextResponse.json({
-        reply: "🍱 Switched your portfolio to the **BentoGrid Studio** archetype with modular cards, live developer console, and Aceternity-inspired telemetry! Press F12 in your browser to see the console easter egg.",
-        updates,
-        source: "action",
+        reply: `📄 **FolioIn 14+ FlowCV Resume Studio & Job Tailor:**\n\nChoose from 14 pixel-perfect ATS templates (Classic Clear, Atlantic Blue, Mercury Flow, Steady Form, Leaves, Executive, Hunter Green, etc.), photo upload studio, and role-based skill targeting!`,
+        actions: [
+          { label: "📄 Open 14+ FlowCV Resume Studio →", url: "/resume", primary: true },
+          { label: "🎯 Tailor for Specific Job Role", url: "/resume#tailor" },
+        ],
+        source: "action_resume",
       });
     }
 
-    if (lowerQuery.includes("glass") || lowerQuery.includes("glassmorphic") || lowerQuery.includes("cyber")) {
-      updates.themeId = "glass";
+    // ── 3. INSPIRATION SITE CLONING ACTIONS ──
+    if (
+      lowerQuery.includes("inspire") ||
+      lowerQuery.includes("inspiration") ||
+      lowerQuery.includes("clone") ||
+      lowerQuery.includes("wallofportfolios")
+    ) {
       return NextResponse.json({
-        reply: "💎 Switched your portfolio to the **Glassmorphism Cyber** template with frosted translucent panels and ambient glow!",
-        updates,
-        source: "action",
+        reply: `💡 **FolioIn Inspiration Site Cloner:**\n\nPaste any portfolio link (e.g. \`wallofportfolios.in/...\` or \`bento.me/...\`), and FolioIn automatically deconstructs its visual aesthetics, color palette, and layout into your personal portfolio!`,
+        actions: [
+          { label: "💡 Open Inspiration Cloner →", url: "/inspiration", primary: true },
+          { label: "🚀 Start Blank Portfolio", url: "/onboarding" },
+        ],
+        source: "action_inspiration",
       });
     }
 
-    if (lowerQuery.includes("clay") || lowerQuery.includes("claymorphic") || lowerQuery.includes("3d")) {
+    // ── 4. LIVE THEME SWITCHING (Interactive UI Control) ──
+    if (lowerQuery.includes("shivam") || lowerQuery.includes("clay") || lowerQuery.includes("3d clay")) {
+      updates.themeTab = "shivam";
       updates.themeId = "claymorphic";
       return NextResponse.json({
-        reply: "🫧 Switched your portfolio to the **Claymorphic 3D** template with tactile pastel pill cards and embossed shadows!",
+        reply: "🎨 Switched the live showcase to **Shivam Kaushal 3D Studio**!\n\nFeaturing warm cream canvas, tactile 3D burnt-orange clay coils, and verified student credentials.",
         updates,
-        source: "action",
+        actions: [
+          { label: "🚀 Adopt Shivam's Style Free", url: "/onboarding?theme=shivam", primary: true },
+          { label: "📄 Explore FlowCV Resumes", url: "/resume" },
+        ],
+        source: "action_theme",
       });
     }
 
-    if (lowerQuery.includes("rolan") || lowerQuery.includes("desk mat") || lowerQuery.includes("cutting mat")) {
+    if (lowerQuery.includes("kenji") || lowerQuery.includes("chibi") || lowerQuery.includes("mascot") || lowerQuery.includes("illustrator")) {
+      updates.themeTab = "kenji";
+      updates.themeId = "bento-grid";
+      return NextResponse.json({
+        reply: "🎨 Switched the live showcase to **Kenji Sato 3D Character Studio**!\n\nFeaturing deep ocean cyan palette, 3D chibi mascot, and editorial book cover mockups.",
+        updates,
+        actions: [
+          { label: "🚀 Adopt Kenji's Style Free", url: "/onboarding?theme=kenji", primary: true },
+          { label: "🎨 Switch to Shivam Kaushal", actionType: "switch_tab", tab: "shivam" },
+        ],
+        source: "action_theme",
+      });
+    }
+
+    if (lowerQuery.includes("learnhouse") || lowerQuery.includes("learn@house") || lowerQuery.includes("edtech") || lowerQuery.includes("email")) {
+      updates.themeTab = "learnhouse";
+      updates.themeId = "luxe-creative";
+      return NextResponse.json({
+        reply: "🎨 Switched the live showcase to **Learn@House Platform**!\n\nFeaturing deep forest teal palette (#113A33), 5.0-star reviews, and interactive course onboarding flow.",
+        updates,
+        actions: [
+          { label: "🚀 Adopt Learn@House Style", url: "/onboarding?theme=learnhouse", primary: true },
+          { label: "🎨 Switch to Shivam Kaushal", actionType: "switch_tab", tab: "shivam" },
+        ],
+        source: "action_theme",
+      });
+    }
+
+    if (lowerQuery.includes("randy") || lowerQuery.includes("video") || lowerQuery.includes("photo") || lowerQuery.includes("fahmi")) {
+      updates.themeTab = "randy";
       updates.themeId = "rolan-gomes";
       return NextResponse.json({
-        reply: "📐 Switched your portfolio to the **Rolan Gomes Desk Mat** archetype (architectural cutting mat grid & paper sheet)!",
+        reply: "🎨 Switched the live showcase to **Randy Fahmi Creative Visual**!\n\nFeaturing vibrant amber ochre (#F2A900), commercial photography, and structured table of content.",
         updates,
-        source: "action",
+        actions: [
+          { label: "🚀 Adopt Randy's Style", url: "/onboarding?theme=randy", primary: true },
+          { label: "📄 Open Resume Studio", url: "/resume" },
+        ],
+        source: "action_theme",
       });
     }
 
-    if (lowerQuery.includes("sudarvel") || lowerQuery.includes("wall showcase") || lowerQuery.includes("telemetry")) {
-      updates.themeId = "sudarvel";
+    if (lowerQuery.includes("alsa") || lowerQuery.includes("lilac") || lowerQuery.includes("pastel") || lowerQuery.includes("presentation") || lowerQuery.includes("yunita")) {
+      updates.themeTab = "alsa";
+      updates.themeId = "tanuja-design";
       return NextResponse.json({
-        reply: "🛡️ Switched your portfolio to the **Sudarvel Dark Case Study** archetype with telemetry drawers and metric cards!",
+        reply: "🎨 Switched the live showcase to **Alsa Yunita Presentation Deck**!\n\nFeaturing pastel lilac, warm peach, sparkle badges, and TikTok presentation slide decks.",
         updates,
-        source: "action",
+        actions: [
+          { label: "🚀 Adopt Alsa's Style", url: "/onboarding?theme=alsa", primary: true },
+          { label: "🎨 Switch to Shivam Kaushal", actionType: "switch_tab", tab: "shivam" },
+        ],
+        source: "action_theme",
       });
     }
 
-    if (lowerQuery.includes("dark mode") || lowerQuery === "dark") {
-      updates.theme = "dark";
-      return NextResponse.json({
-        reply: "🌙 Switched your portfolio canvas to **Dark Mode**!",
-        updates,
-        source: "action",
-      });
-    }
-
-    if (lowerQuery.includes("light mode") || lowerQuery === "light") {
-      updates.theme = "light";
-      return NextResponse.json({
-        reply: "☀️ Switched your portfolio canvas to **Light Mode**!",
-        updates,
-        source: "action",
-      });
-    }
-
-    if (lowerQuery.includes("emerald") || lowerQuery.includes("green")) {
-      updates.accentColor = "emerald";
-      return NextResponse.json({
-        reply: "🌿 Applied fresh **Cyber Mint (Emerald)** accent color across your buttons and badges!",
-        updates,
-        source: "action",
-      });
-    }
-
-    if (lowerQuery.includes("blue") || lowerQuery.includes("cobalt")) {
-      updates.accentColor = "blue";
-      return NextResponse.json({
-        reply: "🔷 Applied modern **Cobalt Blue** accent color to your portfolio!",
-        updates,
-        source: "action",
-      });
-    }
-
-    // 2. Bio & Headline Rewrite Actions
-    if (lowerQuery.includes("headline") || (lowerQuery.includes("title") && lowerQuery.includes("write"))) {
-      const punchyHeadline = "Full-Stack Engineer & Distributed Systems Architect";
-      updates.headline = punchyHeadline;
-      return NextResponse.json({
-        reply: `🎯 Updated your headline to: **"${punchyHeadline}"**!\n\nIt positions you as a high-impact builder with deep systems expertise.`,
-        updates,
-        source: "action",
-      });
-    }
-
+    // ── 5. BIO & HEADLINE WRITING ──
     if (lowerQuery.includes("bio") && (lowerQuery.includes("punch") || lowerQuery.includes("rewrite") || lowerQuery.includes("generate") || lowerQuery.includes("write") || lowerQuery.includes("improve"))) {
       const punchyBio = `Building high-throughput distributed systems and directing AI agents to turn complex workflows into scalable products. Obsessed with sub-100ms API latency, resilient event architectures, and thoughtful user craft.`;
       updates.bio = punchyBio;
       return NextResponse.json({
-        reply: `✨ I've rewritten your bio to be punchier, more outcome-driven, and recruiter-focused:\n\n> *"${punchyBio}"*\n\nApplied directly to your live portfolio!`,
+        reply: `✨ **Here is a recruiter-grade, high-conversion bio:**\n\n> *"${punchyBio}"*\n\nRecruiters value concrete impact, latency numbers, and clear domain focus. You can adopt this directly in the builder:`,
         updates,
-        source: "action",
+        actions: [
+          { label: "🚀 Use This Bio in Builder →", url: `/onboarding?bio=${encodeURIComponent(punchyBio)}`, primary: true },
+          { label: "📄 Add to Resume Studio", url: "/resume" },
+        ],
+        source: "action_bio",
       });
     }
 
-    // 2.1 Skill & Project Recommendations
-    if (lowerQuery.includes("skill") || lowerQuery.includes("stack") || lowerQuery.includes("recommend skills")) {
+    if (lowerQuery.includes("headline") || (lowerQuery.includes("title") && lowerQuery.includes("write"))) {
+      const punchyHeadline = "Full-Stack Engineer & Distributed Systems Architect";
+      updates.headline = punchyHeadline;
       return NextResponse.json({
-        reply: `🛠️ **Top High-Demand Skills for 2026 Portfolios:**\n• **Core**: TypeScript, Next.js 15, React 19, Tailwind CSS v4\n• **Backend & Distributed**: Node.js, Go, PostgreSQL, Redis, Apache Kafka\n• **AI & Agents**: Google Gemini API, LangChain/LlamaIndex, Vector DBs (Pinecone, pgvector)\n• **Infra & DevOps**: Docker, GitHub Actions CI/CD, Kubernetes, Cloudflare Workers\n\nTip: You can add these directly in the Skills drawer on your left!`,
-        source: "knowledge_base",
+        reply: `🎯 **Recommended High-Impact Headline:**\n\n> **"${punchyHeadline}"**\n\nPositions you immediately as an authoritative builder with deep systems expertise.`,
+        updates,
+        actions: [
+          { label: "🚀 Apply to My Profile →", url: `/onboarding?headline=${encodeURIComponent(punchyHeadline)}`, primary: true },
+          { label: "📄 Open Resume Builder", url: "/resume" },
+        ],
+        source: "action_headline",
       });
     }
 
-    if (lowerQuery.includes("project idea") || lowerQuery.includes("what project") || lowerQuery.includes("portfolio projects")) {
-      return NextResponse.json({
-        reply: `💡 **Top 3 Projects That Catch Tech Recruiters' Attention:**\n1. **Autonomous Multi-Agent Workflow Engine**: An event-driven tool where AI agents coordinate to execute code, summarize PRs, and alert via Webhooks.\n2. **High-Throughput Real-Time Collaborative Canvas**: WebSocket or WebRTC powered sync engine with operational transformation / CRDTs.\n3. **Bespoke Portfolio Synthesizer (Like FolioVeda!)**: Scrapes any design reference and outputs clean, semantic single-file Tailwind HTML.\n\nHighlight real metrics like **"Reduced p99 latency by 42%"** or **"Handles 10k requests/sec"** in your project cards!`,
-        source: "knowledge_base",
-      });
-    }
-
-    if (lowerQuery.includes("review") || lowerQuery.includes("score") || lowerQuery.includes("rate") || lowerQuery.includes("audit")) {
-      return NextResponse.json({
-        reply: `🔍 **Quick Portfolio Audit for ${portfolioContext?.name || "Your Profile"}:**\n• **Readiness**: Check the floating **"Readiness 85%"** button at the bottom-right for your live breakdown.\n• **Strong Points**: Clean headline, verified GitHub sync, responsive design system.\n• **Pro Recommendation**: Make sure at least 2 projects include live demo links or GitHub repository buttons for recruiter verification!`,
-        source: "knowledge_base",
-      });
-    }
-
-    if (lowerQuery.includes("api key") || lowerQuery.includes("gemini key") || lowerQuery.includes("token")) {
-      return NextResponse.json({
-        reply: `🔑 **How to set up your free Gemini API Key:**\n1. Visit [Google AI Studio](https://aistudio.google.com/apikey) and create a free API key.\n2. Open \`.env.local\` in the project root.\n3. Set \`GEMINI_API_KEY="AIzaSy..."\`\n4. Restart the dev server.\n\nNote: Even without an API key, our built-in Bespoke Synthesis Engine automatically creates responsive HTML portfolios!`,
-        source: "knowledge_base",
-      });
-    }
-
-    // 3. Check local knowledge base for guidance questions
+    // ── 6. LOCAL KNOWLEDGE BASE MATCHES ──
     for (const item of KNOWLEDGE_BASE) {
       if (item.keywords.some((k) => lowerQuery.includes(k))) {
         return NextResponse.json({
           reply: item.answer,
+          actions: item.actions || [],
           source: "knowledge_base",
         });
       }
     }
 
-    // 4. Greetings
-    if (lowerQuery.match(/\b(hi|hello|hey|hola|kem cho|namaste|sup)\b/)) {
+    // ── 7. GREETINGS & WHAT CAN YOU DO ──
+    if (lowerQuery.match(/\b(hi|hello|hey|hola|kem cho|namaste|sup|what can you do|who are you|help|tasks|work)\b/)) {
       return NextResponse.json({
-        reply: "👋 **Hello! I'm PortBot**, your FolioVeda AI assistant.\n\nAsk me anything! For example:\n• *\"Switch to Neo-Brutalist\"*\n• *\"Switch to Glassmorphism\"*\n• *\"Rewrite my bio to be punchy\"*\n• *\"How do I deploy to GitHub Pages?\"*\n• *\"How do I import my GitHub repos?\"*",
+        reply: `👋 **Hi! I'm PortBot**, your active AI copilot for FolioIn.\n\nI can execute real tasks right now:\n• **Launch your portfolio**: Just say *"Build portfolio for [Name]"*\n• **Switch live styles**: Say *"Switch to Shivam"* or *"Show Kenji Sato"*\n• **Tailor your resume**: Say *"Tailor my resume"* for 14 FlowCV templates\n• **Clone website designs**: Say *"Clone a portfolio"*\n• **Write punchy bios**: Say *"Rewrite my bio to be punchy"*\n\nTap any action below to start:`,
+        actions: [
+          { label: "🚀 Launch Portfolio Builder", url: "/onboarding", primary: true },
+          { label: "📄 14 FlowCV Resume Templates", url: "/resume" },
+          { label: "🎨 Switch to Shivam (3D Clay)", actionType: "switch_tab", tab: "shivam" },
+          { label: "💡 Clone Inspiration Site", url: "/inspiration" },
+        ],
         source: "greeting",
       });
     }
 
-    // 5. Intelligent Gemini Fallback if API Key configured
+    // ── 8. GEMINI AI FALLBACK WITH CONTEXT ──
     const apiKey = process.env.GEMINI_API_KEY;
     if (apiKey) {
       try {
         const ai = new GoogleGenAI({ apiKey });
-        const systemPrompt = `You are PortBot, the smart, helpful AI assistant built into FolioVeda (a premium AI portfolio generator web app).
-You help developers and creators:
-1. Understand how to deploy to GitHub Pages, choose templates, import repositories, and export standalone HTML/ZIP.
-2. Edit their portfolio in real-time.
-
-Portfolio Context: ${JSON.stringify(portfolioContext || {})}
+        const systemPrompt = `You are PortBot, the smart, helpful AI copilot in FolioIn.
+Help the user build, customize, and deploy portfolios and FlowCV resumes.
 User Query: ${query}
 
-Respond in concise, clean markdown. If the user asks for a bio or advice, give an inspiring, high-impact answer.`;
+Respond in concise, crisp markdown and suggest real next actions.`;
 
         const response = await ai.models.generateContent({
           model: "gemini-flash-lite-latest",
@@ -216,16 +274,29 @@ Respond in concise, clean markdown. If the user asks for a bio or advice, give a
 
         const text = response.text?.trim();
         if (text) {
-          return NextResponse.json({ reply: text, source: "gemini" });
+          return NextResponse.json({
+            reply: text,
+            actions: [
+              { label: "🚀 Open Portfolio Builder", url: "/onboarding", primary: true },
+              { label: "📄 Open Resume Studio", url: "/resume" },
+            ],
+            source: "gemini",
+          });
         }
       } catch (err: any) {
-        console.warn("Gemini API call failed, falling back to guide response:", err.message);
+        console.warn("Gemini call skipped, returning action response:", err.message);
       }
     }
 
-    // 6. Default helpful fallback response
+    // ── 9. DEFAULT ACTION RESPONSE ──
     return NextResponse.json({
-      reply: `I can help you customize and publish your portfolio! Try these commands:\n• ⚡ **"Switch to Neo-Brutalist"** or **"Switch to Glassmorphism"**\n• ✨ **"Rewrite my bio to be punchy"**\n• 🚀 **"How to deploy to GitHub Pages?"**\n• 🔄 **"How to auto-import GitHub repos?"**\n• 📦 **"How to download single-file HTML & ZIP?"**\n\nWhat would you like me to do?`,
+      reply: `I can help you build, tailor, and publish your dream portfolio or resume right now!\n\nChoose an action below to get started:`,
+      actions: [
+        { label: "🚀 Build My Portfolio", url: "/onboarding", primary: true },
+        { label: "📄 Open Resume Studio", url: "/resume" },
+        { label: "🎨 Switch to Shivam 3D Studio", actionType: "switch_tab", tab: "shivam" },
+        { label: "💡 Clone Inspiration Site", url: "/inspiration" },
+      ],
       source: "fallback",
     });
   } catch (err: any) {

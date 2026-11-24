@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ShieldAlert, CheckCircle2, Send, Scale, FileText } from "lucide-react";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 
 export default function TakedownReportPage() {
   const [reportedUrl, setReportedUrl] = useState("");
@@ -55,7 +55,7 @@ export default function TakedownReportPage() {
               <ArrowLeft size={14} /> Hub
             </Link>
             <div className="h-4 w-[1px] bg-white/[0.1]" />
-            <FolioVedaLogo size="sm" showBadge={false} />
+            <FolioInLogo size="sm" showBadge={false} />
             <span className="text-xs font-mono text-slate-400">/ DMCA & Takedown</span>
           </div>
           <Link
@@ -98,7 +98,7 @@ export default function TakedownReportPage() {
                 Submit an Originality or Takedown Notice
               </h1>
               <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                If you believe a live portfolio hosted on FolioVeda infringes your copyright or uses your proprietary branding without authorization, please complete the form below.
+                If you believe a live portfolio hosted on FolioIn infringes your copyright or uses your proprietary branding without authorization, please complete the form below.
               </p>
             </div>
 
@@ -111,7 +111,7 @@ export default function TakedownReportPage() {
                   type="url"
                   value={reportedUrl}
                   onChange={(e) => setReportedUrl(e.target.value)}
-                  placeholder="https://folioveda.me/p/username"
+                  placeholder="https://folioin.me/p/username"
                   className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-white/[0.08] text-white text-xs font-mono focus:border-red-500 focus:outline-none"
                   required
                 />
@@ -175,7 +175,7 @@ export default function TakedownReportPage() {
       </main>
 
       <footer className="border-t border-white/[0.08] py-8 px-6 text-center text-xs text-slate-500 font-mono">
-        FolioVeda Legal & Compliance • Takedown Processing Unit
+        FolioIn Legal & Compliance • Takedown Processing Unit
       </footer>
     </div>
   );

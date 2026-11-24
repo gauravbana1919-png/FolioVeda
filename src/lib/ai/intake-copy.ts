@@ -137,7 +137,7 @@ export async function generateIntakeCopyWithAI(
   }
 
   const prompt = `
-    You are an elite executive portfolio creative director and career architect for FolioVeda.
+    You are an elite executive portfolio creative director and career architect for FolioIn.
     Your mission: Transform this candidate's authentic career background into an award-winning, recruiter-grade portfolio narrative.
 
     HARD RULES:

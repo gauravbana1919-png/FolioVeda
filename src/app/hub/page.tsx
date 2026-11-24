@@ -19,7 +19,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { Terminal, BookOpen } from "lucide-react";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 
 interface ViewTab {
   id: string;
@@ -214,7 +214,7 @@ export default function MasterAllInOneHub() {
             className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white hover:bg-slate-50 border border-[#1E293B]/10 shadow-2xs transition-all"
             title="Return to Main Landing Page"
           >
-            <FolioVedaLogo size="sm" />
+            <FolioInLogo size="sm" />
             <span className="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-full font-bold hidden sm:inline">
               Master Hub
             </span>
@@ -324,7 +324,7 @@ export default function MasterAllInOneHub() {
                 <Sparkles size={13} /> PLATFORM DIRECTORY
               </div>
               <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E293B]">
-                FolioVeda Master Directory
+                FolioIn Master Directory
               </h1>
               <p className="text-sm text-slate-600 font-normal">
                 Click any workspace card below to load it into the live master viewer or test its features.

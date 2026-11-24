@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "FolioVeda Brand & Logo Studio",
-  description: "Explore and configure the original vector logos, brand colors, and visual identity for FolioVeda.",
+  title: "FolioIn Brand & Logo Studio",
+  description: "Explore and configure the original vector logos, brand colors, and visual identity for FolioIn.",
 };
 
 export default function BrandPage() {
@@ -20,7 +20,7 @@ export default function BrandPage() {
         </Link>
 
         <span className="text-xs text-emerald-400 font-medium">
-          FolioVeda Design System &bull; v2.0
+          FolioIn Design System &bull; v2.0
         </span>
       </div>
 

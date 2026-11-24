@@ -461,7 +461,7 @@ export function CraftDeskContact({ content }: VariantProps) {
         </div>
 
         <div className="pt-6 border-t border-slate-200 flex items-center justify-between text-xs font-mono text-slate-500">
-          <p>© {new Date().getFullYear()} {content.name}. Built with FolioVeda.</p>
+          <p>© {new Date().getFullYear()} {content.name}. Built with FolioIn.</p>
           <span className="text-[11px] font-bold text-[#095848]">
             Wall of Portfolios • Craft Desk Standard
           </span>

@@ -64,273 +64,273 @@ export interface ResumeShowcaseItem {
 
 const FIVE_BEST_RESUMES: ResumeShowcaseItem[] = [
   {
-    id: "elena-vance",
-    name: "Elena Vance",
-    role: "Brand & Web Designer",
-    category: "creative",
-    categoryLabel: "Brand & Editorial Design",
-    avatarText: "EV",
-    badge: "Pentagram Fellow • Cannes Grand Prix",
+    id: "learn-house",
+    name: "Learn@House Studio",
+    role: "Full-Stack EdTech & Web Architect",
+    category: "engineering",
+    categoryLabel: "EdTech & Web Platform",
+    avatarText: "LH",
+    badge: "★ 5.0 Star (1.5k+ Reviews) • 20M+ Users",
     threadLength: 90,
     threadOffset: "top-4",
-    accentColor: "#173f32",
+    accentColor: "#113A33",
     cardBg: "from-white to-emerald-50/50",
-    image: "/images/portfolios/portfolio-1.png",
-    livePreviewUrl: "/p/Elena%20Vance?theme=not-your-college",
-    themeTag: "NYC Editorial Standard",
+    image: "/images/portfolios/portfolio-learn-house.jpg",
+    livePreviewUrl: "/p/David%20Vance?theme=luxe-creative",
+    themeTag: "Email & Growth Engine",
     metrics: [
-      { label: "Design Awards", value: "24 Cannes & D&AD" },
-      { label: "Type Precision", value: "100% Bespoke" },
-      { label: "Spatial Systems", value: "12 Global Sites" },
+      { label: "Active Learners", value: "20M+ Global" },
+      { label: "Masterclasses", value: "160+ Courses" },
+      { label: "Platform Rating", value: "5.0 ★ (1.5k)" },
     ],
-    summary: "Crafting timeless, high-whitespace spatial environments, brand design monographs, and serene corporate identity systems.",
-    skills: ["Brand Architecture", "Editorial Typography", "Homepage Layouts", "Spatial Design", "Figma", "Art Direction"],
+    summary: "Because Email Is Complicated Enough. Building high-conversion SaaS web applications, lead databases, and interactive learning platforms with seamless micro-animations.",
+    skills: ["SaaS Architecture", "Next.js", "Lead Engine", "Tailwind CSS", "TypeScript", "EdTech Systems", "Stripe Checkout"],
     experience: [
       {
-        role: "Design Director & Spatial Lead",
-        company: "Pentagram",
-        period: "2021 — Present",
-        description: "Led holistic spatial rebrand and museum identity for Kamakura Architectural Pavilion and Nordic Heritage Institute.",
-        metrics: "Honored with Cannes Design Grand Prix and Awwwards Annual Trophy."
+        role: "Lead Platform Architect",
+        company: "Learn@House",
+        period: "2022 — Present",
+        description: "Spearheaded full redesign of learner onboarding and email lead generation database, driving 24 Lakh active enrolments.",
+        metrics: "Scaled platform across 120+ countries with 99.98% uptime."
       },
       {
-        role: "Senior Visual Designer",
-        company: "Apple Design Studio",
-        period: "2018 — 2021",
-        description: "Engineered typographic scaling systems for spatial computing interfaces and editorial hardware keynotes.",
-        metrics: "Filed 4 design patents on dynamic optical font weight interpolation."
+        role: "Senior Frontend Engineer",
+        company: "Snov.io Labs",
+        period: "2019 — 2022",
+        description: "Engineered high-throughput email finder Chrome extension and automated drip campaign editor.",
+        metrics: "Cut client-side latency by 42% for 2M daily queries."
       }
     ],
     education: {
-      degree: "Bachelor of Fine Arts (Graphic & Spatial Design)",
-      school: "Rhode Island School of Design (RISD)",
-      year: "2014 — 2018"
+      degree: "B.S. in Computer Science & Interactive Media",
+      school: "University of Washington",
+      year: "2015 — 2019"
     },
     recommendation: {
-      author: "Marcus Lindqvist",
-      title: "Senior Partner, Pentagram New York",
-      quote: "Elena possesses a rare gift for negative space and architectural discipline. Her portfolios convert top-tier museum and enterprise patrons effortlessly."
+      author: "Elena Rostova",
+      title: "VP of Product, Learn@House",
+      quote: "David transformed our email learning portal into an award-winning, friction-free web experience that converts over 24% of cold traffic."
     },
     liveProject: {
-      title: "The Kamakura Monograph",
-      description: "Custom editorial portfolio archive with tactile micro-interactions and dual-grid layout engine.",
-      tag: "Cannes Grand Prix 2024"
+      title: "LeadFinder Autonomous Engine",
+      description: "Real-time email verification and lead intelligence dashboard with instant domain lookup.",
+      tag: "20M+ Queries Served"
     }
   },
   {
-    id: "kaito-tanaka",
-    name: "Kaito Tanaka",
-    role: "Principal UI/UX & Design Systems Lead",
+    id: "shivam-kaushal",
+    name: "Shivam Kaushal",
+    role: "Graphic & Web Designer",
     category: "design",
-    categoryLabel: "UI/UX & Product Design",
-    avatarText: "KT",
-    badge: "ex-Figma & Linear • Design Systems",
+    categoryLabel: "Graphic & Web Design",
+    avatarText: "SK",
+    badge: "3D Clay & Web Designer • Pursuing B.Sc",
     threadLength: 125,
     threadOffset: "top-12",
-    accentColor: "#2563EB",
-    cardBg: "from-white to-blue-50/40",
-    image: "/images/portfolios/portfolio-2.png",
-    livePreviewUrl: "/p/Kaito%20Tanaka?theme=editorial",
-    themeTag: "Modern Product Systems",
+    accentColor: "#E05A2B",
+    cardBg: "from-white to-amber-50/40",
+    image: "/images/portfolios/portfolio-shivam-kaushal.jpg",
+    livePreviewUrl: "/p/Shivam%20Kaushal?theme=not-your-college",
+    themeTag: "Warm Clay & Editorial",
     metrics: [
-      { label: "Design Systems", value: "100+ Components" },
-      { label: "Site of the Year", value: "8x Awwwards" },
-      { label: "Conversion Lift", value: "+38% UX Metric" },
+      { label: "Languages", value: "Hindi (100%) • Eng (70%)" },
+      { label: "Design Tools", value: "Ps, Canva, Ai, Picsart" },
+      { label: "AI Integration", value: "ChatGPT & Gemini" },
     ],
-    summary: "Synthesizing intuitive UI/UX hierarchies, atomic design tokens, and delightful micro-interactions into world-class digital products.",
-    skills: ["UI/UX Design", "Figma Systems", "Interaction Design", "Prototyping", "Design Tokens", "User Research"],
+    summary: "Aspiring graphic designer with a strong mindset for creativity and digital art; skilled in top design tools like Photoshop and Illustrator to create engaging visuals, branding, and modern responsive web layouts.",
+    skills: ["Photoshop", "Illustrator", "Canva", "Alight Motion", "KineMaster", "Picsart", "ChatGPT", "Google Gemini", "Branding", "UI/UX Design"],
     experience: [
       {
-        role: "Principal UI/UX Architect",
-        company: "Linear",
-        period: "2021 — Present",
-        description: "Designed keyboard-first navigation patterns, fluid command menus, and dark-mode data visualizations.",
-        metrics: "Streamlined task completion speed by 44% across 80,000 engineering teams."
+        role: "Student Service Portal Executive",
+        company: "Dr. Bhim Rao Ambedkar University, Agra",
+        period: "10 Months",
+        description: "Managed student queries, portal operations, and data verification on official university services portal.",
+        metrics: "Ensured 100% smooth daily operations across 50,000+ student profiles."
       },
       {
-        role: "Senior Design Systems Designer",
-        company: "Figma",
-        period: "2018 — 2021",
-        description: "Created foundational auto-layout tokens, multi-platform component variants, and interactive documentation.",
-        metrics: "Adopted by 4,000+ enterprise design organizations globally."
+        role: "Medical Field Professional",
+        company: "Healthcare Services",
+        period: "1.5 Years",
+        description: "Assisted in patient care, record systems, and hospital administrative support with high accuracy.",
+        metrics: "Developed deep empathetic communication and organized workflows."
       }
     ],
     education: {
-      degree: "B.A. in Human-Computer Interaction",
-      school: "Tokyo University of the Arts & Keio HCI",
+      degree: "Pursuing B.Sc (Bachelor of Science) & Diploma in CS",
+      school: "Government Leather Institute (2019-2022) & University",
+      year: "2019 — Present"
+    },
+    recommendation: {
+      author: "Rahul Sharma",
+      title: "Creative Lead, DesignStudio India",
+      quote: "Shivam blends tactile 3D visual language with exceptional work ethic. His graphic layouts and branding communicate instantly with modern audiences."
+    },
+    liveProject: {
+      title: "Tactile Clay & Web Design Series",
+      description: "Comprehensive branding, social media posts, label design, and poster campaign with 3D clay aesthetics.",
+      tag: "Best Student Portfolio Award"
+    }
+  },
+  {
+    id: "kenji-sato",
+    name: "Kenji Sato",
+    role: "3D Character & Editorial Illustrator",
+    category: "creative",
+    categoryLabel: "3D Illustration & Visual Identity",
+    avatarText: "KS",
+    badge: "3D Chibi Mascot • Book Cover & Editorial",
+    threadLength: 80,
+    threadOffset: "top-2",
+    accentColor: "#164654",
+    cardBg: "from-white to-cyan-50/40",
+    image: "/images/portfolios/portfolio-3d-illustrator.jpg",
+    livePreviewUrl: "/p/Kenji%20Sato?theme=bento-grid",
+    themeTag: "Deep Cyan 3D Monograph",
+    metrics: [
+      { label: "Mockup Units", value: "14 Project Modules" },
+      { label: "Brand Books", value: "35+ Cover Designs" },
+      { label: "Feed Curation", value: "500k+ Impressions" },
+    ],
+    summary: "Creating whimsical 3D character illustrations, editorial book covers, packaging jar labels, brand profiles, and cohesive social feed campaigns with distinct artistic direction.",
+    skills: ["3D Character Design", "Blender", "Editorial Book Covers", "Jar Label Packaging", "Digital Imaging", "Typography", "Vector Art", "Brand Identity"],
+    experience: [
+      {
+        role: "Lead 3D Illustrator & Art Director",
+        company: "Studio Kumo",
+        period: "2021 — Present",
+        description: "Created signature 3D chibi mascot, book cover series, and full brand book design portfolios for global lifestyle clients.",
+        metrics: "Illustrated over 40 published books and 12 merchandise packaging series."
+      },
+      {
+        role: "Graphic & Feed Designer",
+        company: "Neon Tokyo Creative",
+        period: "2018 — 2021",
+        description: "Designed interactive social media feed grids, vector assets, and exhibition booth spatial renders.",
+        metrics: "Achieved 300% growth in client social media engagement."
+      }
+    ],
+    education: {
+      degree: "Bachelor of Arts in Digital Arts & Animation",
+      school: "Kyoto Seika University",
       year: "2014 — 2018"
     },
     recommendation: {
-      author: "Karri Saarinen",
-      title: "Co-Founder & CEO, Linear",
-      quote: "Kaito builds digital tools that feel like physical precision instruments. His taste in UI/UX architecture is unmatched."
+      author: "Aoi Takahashi",
+      title: "Creative Producer, Shueisha Media",
+      quote: "Kenji's 3D characters breathe life and joy into every medium—from editorial covers to digital packaging."
     },
     liveProject: {
-      title: "Quantum Design Kit",
-      description: "Complete Figma design system with automated token syncing and dark-mode token transformers.",
-      tag: "Used by 12,000 Designers"
+      title: "Chibi Chronicle Book Cover Series",
+      description: "Multi-volume illustrated book cover design and bespoke typography monographs.",
+      tag: "Featured in Tokyo Art Expo"
     }
   },
   {
-    id: "marcus-chen",
-    name: "Dr. Marcus Chen",
-    role: "Nova Persona AI Scientist & Webflow Architect",
-    category: "ai",
-    categoryLabel: "Nova Persona & AI Architecture",
-    avatarText: "MC",
-    badge: "DeepMind Fellow • 14 NeurIPS Papers",
-    threadLength: 80,
-    threadOffset: "top-2",
-    accentColor: "#0284C7",
-    cardBg: "from-white to-sky-50/40",
-    image: "/images/portfolios/portfolio-3.png",
-    livePreviewUrl: "/p/Marcus%20Vance?theme=developer-terminal",
-    themeTag: "AI & Distributed Systems",
-    metrics: [
-      { label: "NeurIPS & ICML", value: "14 First-Author" },
-      { label: "Inference Speedup", value: "4.8x Distillation" },
-      { label: "Open Citations", value: "18,400+ Citations" },
-    ],
-    summary: "Architecting parameter-efficient LLM inference, speculative token decoders, and clean minimalist personal academic showcase portfolios.",
-    skills: ["Deep Learning", "Nova Persona", "Webflow", "PyTorch", "CUDA Kernels", "LLM Quantization", "Minimal Design"],
-    experience: [
-      {
-        role: "Staff Research Scientist",
-        company: "Google DeepMind",
-        period: "2021 — Present",
-        description: "Principal investigator on sub-quadratic attention kernels and multi-token speculation frameworks.",
-        metrics: "Delivered 4.8x wall-clock inference speedups for trillion-token production deployments."
-      },
-      {
-        role: "AI Research Scientist",
-        company: "Meta AI (FAIR)",
-        period: "2019 — 2021",
-        description: "Researched sparse mixture-of-experts (MoE) routing algorithms and cross-lingual representation alignment.",
-        metrics: "Published 6 peer-reviewed papers at NeurIPS, ICML, and ICLR."
-      }
-    ],
-    education: {
-      degree: "Ph.D. in Computer Science & Artificial Intelligence",
-      school: "Massachusetts Institute of Technology (MIT)",
-      year: "2015 — 2019"
-    },
-    recommendation: {
-      author: "Prof. Sarah Jenkins",
-      title: "Director of Cognitive Computation, MIT",
-      quote: "Marcus's algorithmic breakthroughs in transformer distillation are fundamental to the future of decentralized edge intelligence."
-    },
-    liveProject: {
-      title: "Nova Persona Academic Template",
-      description: "Clean typography-focused personal portfolio layout engineered for research scientists and technical fellows.",
-      tag: "Adopted by 8 AI Labs"
-    }
-  },
-  {
-    id: "alex-rivera",
-    name: "Alex Rivera",
-    role: "Staff Distributed Systems Engineer",
-    category: "engineering",
-    categoryLabel: "Modern Tech Webflow Engineer",
-    avatarText: "AR",
-    badge: "ex-Stripe • 400M Events/Day",
+    id: "randy-fahmi",
+    name: "Randy Fahmi",
+    role: "Creative Visual Director & Media Producer",
+    category: "creative",
+    categoryLabel: "Creative Visual & Videography",
+    avatarText: "RF",
+    badge: "Graphic Design • Photo & Video Producer",
     threadLength: 115,
     threadOffset: "top-10",
-    accentColor: "#10B981",
-    cardBg: "from-slate-900 to-slate-950",
-    image: "/images/portfolios/portfolio-4.png",
-    livePreviewUrl: "/p/Chloe%20Moreau?theme=luxe-creative",
-    themeTag: "Luxe Obsidian Glow",
+    accentColor: "#F2A900",
+    cardBg: "from-white to-amber-50/50",
+    image: "/images/portfolios/portfolio-randy-fahmi.jpg",
+    livePreviewUrl: "/p/Randy%20Fahmi?theme=rolan-gomes",
+    themeTag: "Editorial Ochre & Tactile Grid",
     metrics: [
-      { label: "Throughput", value: "400M Events/Day" },
-      { label: "P99 Latency", value: "11.4 ms" },
-      { label: "Verified SLA", value: "99.999%" },
+      { label: "Commercial Shoots", value: "120+ Productions" },
+      { label: "Design Systems", value: "Pr, Ai, Ps, Lr, CapCut" },
+      { label: "Client Ratings", value: "99.4% CSAT" },
     ],
-    summary: "Architect of mission-critical financial consensus protocols, dark modern engineer portfolios, and high-throughput streaming systems.",
-    skills: ["Go", "Rust", "Modern Webflow", "Kubernetes", "Kafka", "Distributed Systems", "gRPC", "eBPF"],
+    summary: "Self-taught graphic designer & IT professional with over 9 years of experience. Crafting bold visual identities, photography, commercial videography, and structured table-of-content portfolios.",
+    skills: ["Graphic Design", "Photographer", "Videographer", "Premiere Pro", "Illustrator", "Photoshop", "Lightroom", "CapCut", "Figma", "VS Code"],
     experience: [
       {
-        role: "Staff Infrastructure Engineer",
-        company: "Stripe",
-        period: "2022 — Present",
-        description: "Spearheaded core multi-region ledger engine processing over $2.8B in daily global transaction volume with zero dropouts.",
-        metrics: "Cut inter-region ingress/egress transit costs by 34% ($1.2M annual savings)."
+        role: "IT Supervisor & Graphic Design Lead",
+        company: "PT Indo Prima Visual",
+        period: "2020 — Present",
+        description: "Spearhead multi-channel video campaigns, brand brochures, company profiles, and technical IT infrastructure.",
+        metrics: "Directed 85+ successful brand commercial launches and social campaigns."
       },
       {
-        role: "Senior Distributed Systems Engineer",
-        company: "Datadog",
-        period: "2019 — 2022",
-        description: "Built custom Raft-based time-series metadata index powering 10M+ concurrent telemetry queries.",
-        metrics: "Reduced query tail latency by 4.2x under peak Black Friday load."
+        role: "Graphic Designer & Content Creator",
+        company: "Creative Media Nusantara",
+        period: "2017 — 2020",
+        description: "Produced high-impact photography, social media assets, and commercial video editing for enterprise brands.",
+        metrics: "Boosted client conversion rates by 52% across digital channels."
       }
     ],
     education: {
-      degree: "B.S. & M.S. in Computer Science",
-      school: "Stanford University",
-      year: "2015 — 2019"
+      degree: "Informatics Engineering (B.Eng)",
+      school: "State Polytechnic of Informatics",
+      year: "2012 — 2016"
     },
     recommendation: {
-      author: "David Vance",
-      title: "VP of Core Infrastructure, ex-Stripe",
-      quote: "Alex is in the top 1% of distributed systems architects I have worked with. His verified architecture maps are textbook standards."
+      author: "Budi Santoso",
+      title: "Managing Director, PT Indo Prima",
+      quote: "Randy combines technical informatics precision with raw artistic instinct. His visual portfolios speak with undeniable authority."
     },
     liveProject: {
-      title: "ConsensusRaft-Core",
-      description: "High-performance Raft implementation in pure Rust with deterministic fuzz testing harness.",
-      tag: "14.2k GitHub Stars"
+      title: "Visual Storyteller Table of Contents",
+      description: "Modular multi-disciplinary portfolio spanning graphic design, commercial photography, and 4K cinema.",
+      tag: "Award of Creative Excellence"
     }
   },
   {
-    id: "sophia-al-mansoor",
-    name: "Sophia Al-Mansoor",
-    role: "VP of Product & Fintech Growth",
+    id: "alsa-yunita",
+    name: "Alsa Yunita",
+    role: "Creative Presentation & Social Media Designer",
     category: "product",
-    categoryLabel: "Framer Business & Services Template",
-    avatarText: "SA",
-    badge: "ex-Revolut • $0 → $400M ARR",
+    categoryLabel: "Presentation & Social Media",
+    avatarText: "AY",
+    badge: "Pastel Lilac & Peach • Social Media Lead",
     threadLength: 95,
     threadOffset: "top-5",
-    accentColor: "#D97706",
-    cardBg: "from-white to-amber-50/40",
-    image: "/images/portfolios/portfolio-5.png",
-    livePreviewUrl: "/p/Julian%20Vance?theme=corporate",
-    themeTag: "Executive Venture Showcase",
+    accentColor: "#8B5CF6",
+    cardBg: "from-white to-purple-50/40",
+    image: "/images/portfolios/portfolio-alsa-yunita.jpg",
+    livePreviewUrl: "/p/Alsa%20Yunita?theme=tanuja-design",
+    themeTag: "Lilac Dream & Sparkle Presentation",
     metrics: [
-      { label: "ARR Scaled", value: "$400M Global" },
-      { label: "Active Users", value: "18M Customers" },
-      { label: "Retention D30", value: "78.4% Top Decile" },
+      { label: "Social Reach", value: "1.2M+ Monthly" },
+      { label: "Presentation Decks", value: "90+ Pitch Decks" },
+      { label: "Campaigns", value: "35+ Brand Launches" },
     ],
-    summary: "Architecting product-led viral growth loops, modern Framer business sections, and cross-border treasury infrastructure.",
-    skills: ["Product Strategy", "Framer Business Layouts", "PLG Architecture", "Fintech Compliance", "Unit Economics"],
+    summary: "Designing whimsical pastel presentations, TikTok & Instagram viral content strategies, social brand aesthetics, and engaging portfolio slides that win pitches.",
+    skills: ["Creative Presentation", "Social Media Design", "Canva", "CapCut", "TikTok Strategy", "Brand Aesthetics", "Pastel Layouts", "Pitch Decks"],
     experience: [
       {
-        role: "VP of Product, Global Expansion",
-        company: "Revolut",
-        period: "2020 — 2025",
-        description: "Spearheaded expansion into 28 international territories; built friction-free localized KYC flow.",
-        metrics: "Grew organic referral flywheel by 310% YoY, driving $400M in net annual platform run-rate."
+        role: "Lead Social Media Designer & Strategist",
+        company: "Aura Creative Studio",
+        period: "2022 — Present",
+        description: "Manage end-to-end visual content production across TikTok and Instagram for beauty, lifestyle, and Gen Z consumer brands.",
+        metrics: "Generated over 4.8M organic video impressions and 250k+ new followers."
       },
       {
-        role: "Head of Core Growth",
-        company: "Monzo",
-        period: "2017 — 2020",
-        description: "Designed instant peer-to-peer split payment loops and automated micro-savings algorithms.",
-        metrics: "Scaled user base from 450,000 to 5.2M verified retail accounts."
+        role: "Brand Presentation Specialist",
+        company: "Glow Media",
+        period: "2020 — 2022",
+        description: "Designed custom pitch decks, investor presentations, and cohesive social media launch kits.",
+        metrics: "Helped seed-stage startups close over $3.5M in funding with visual decks."
       }
     ],
     education: {
-      degree: "MBA in Finance & General Management",
-      school: "Harvard Business School",
-      year: "2015 — 2017"
+      degree: "Bachelor of Communication & Visual Media",
+      school: "Faculty of Creative Arts & Design",
+      year: "2017 — 2021"
     },
     recommendation: {
-      author: "Nikolay Storonsky",
-      title: "Co-Founder & CEO, Revolut",
-      quote: "Sophia possesses an uncanny mastery of product levers and quantitative growth velocity. She builds generational fintech engines."
+      author: "Siti Rahma",
+      title: "Chief Marketing Officer, Glow Media",
+      quote: "Alsa's presentations don't just inform—they enchant. Her color palettes and typography create an immediate emotional connection."
     },
     liveProject: {
-      title: "Borderless Treasury Engine",
-      description: "Multi-currency algorithmic liquidity router managing foreign exchange risk in sub-second clearing windows.",
-      tag: "$4.2B Monthly Volume"
+      title: "Pastel Dream Presentation Kit",
+      description: "Modular multi-slide presentation system featuring dynamic cards, project showcases, and contact flows.",
+      tag: "Downloaded 18,000+ Times"
     }
   }
 ];
@@ -414,43 +414,13 @@ export function HangingResumesGallery() {
     >
       
       {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto mb-16 relative z-10">
-        
-        {/* Category Kicker */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#1E293B]/10 shadow-2xs mb-4">
-          <span className="w-2 h-2 rounded-full bg-[#173f32] animate-pulse" />
-          <span className="font-extrabold uppercase tracking-wider text-[10px] text-[#173f32]">
-            Interactive Showcase
-          </span>
-          <span className="text-slate-300">•</span>
-          <span className="text-slate-600 font-semibold">Tied With Flexible Threads</span>
-        </div>
-
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#1E293B] leading-tight mb-4">
-          Our Five Premier Portfolios, <br />
+      <div className="text-center max-w-3xl mx-auto mb-10 relative z-10">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#1E293B] leading-tight">
+          Five Premier Portfolios, <br />
           <span className="font-extrabold tracking-tight bg-gradient-to-r from-[#173f32] via-[#10B981] to-[#173f32] bg-clip-text text-transparent">
-            Suspended Live in Pure Precision.
+            Suspended in Pure Precision.
           </span>
         </h2>
-
-        <p className="text-sm sm:text-base text-slate-600 font-normal max-w-2xl mx-auto leading-relaxed">
-          Scroll down to see them drop into place. Move your cursor to sway their flexible threads. <strong className="text-[#1E293B] font-bold">Hover on any portfolio card</strong> to immediately expand the full design and verified ATS resume on the front page.
-        </p>
-
-        {/* Reset / Replay Animation Button */}
-        <div className="mt-4 flex items-center justify-center gap-2">
-          <button
-            onClick={() => {
-              setHasFallen(false);
-              setTimeout(() => setHasFallen(true), 150);
-            }}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-[#173f32] transition-colors bg-white px-3 py-1 rounded-full border border-slate-200 shadow-2xs cursor-pointer"
-            title="Replay the drop-down thread animation"
-          >
-            <RotateCcw size={12} />
-            <span>Replay Drop Animation</span>
-          </button>
-        </div>
       </div>
 
       {/* =========================================================================
@@ -527,20 +497,20 @@ export function HangingResumesGallery() {
                   </svg>
                 </div>
 
-                {/* Hanging Resume Card Chassis */}
+                {/* Hanging Resume Card Chassis - PURE IMAGE POSTER (NO TEXT) */}
                 <div
                   onMouseEnter={() => setHoveredCardId(resume.id)}
                   onMouseMove={(e) => handleCardMouseMove(e, resume.id)}
                   onMouseLeave={() => handleCardMouseLeave(resume.id)}
                   onClick={() => setExpandedResume(resume)}
-                  className={`w-full rounded-3xl bg-white border cursor-pointer relative transition-all duration-300 transform-gpu overflow-hidden ${
+                  className={`w-full h-[400px] sm:h-[460px] md:h-[500px] rounded-2xl sm:rounded-3xl bg-slate-950 border cursor-pointer relative transition-all duration-300 transform-gpu overflow-hidden group ${
                     hasFallen 
                       ? "opacity-100 translate-y-0" 
                       : "opacity-0 -translate-y-48 pointer-events-none"
                   } ${
                     isHovered
-                      ? "border-[#173f32] shadow-2xl scale-[1.05] z-30 ring-4 ring-[#173f32]/15"
-                      : "border-[#1E293B]/10 shadow-lg hover:shadow-xl hover:border-slate-300"
+                      ? "border-[#173f32] shadow-[0_25px_50px_-12px_rgba(23,63,50,0.35)] scale-[1.04] z-30 ring-4 ring-[#173f32]/20"
+                      : "border-black/10 shadow-xl hover:shadow-2xl hover:border-slate-400"
                   } ${
                     hasFallen && !isHovered
                       ? index % 2 === 0 ? "animate-pendulum-slow" : "animate-pendulum-delayed"
@@ -553,119 +523,13 @@ export function HangingResumesGallery() {
                       : undefined,
                   }}
                 >
-                  {/* Card Header Top Accent Tag */}
-                  <div className="p-4 pb-2.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700 font-mono">
-                      0{index + 1} • {resume.categoryLabel}
-                    </span>
-                    <span className="w-2 h-2 rounded-full bg-[#173f32] animate-pulse" />
-                  </div>
-
-                  {/* Crisp Real Portfolio Photo Preview */}
-                  <div className="p-3 pb-0">
-                    <div className="relative w-full h-44 sm:h-48 overflow-hidden rounded-2xl bg-slate-950 border border-slate-200/50 shadow-md group/thumb select-none">
-                      
-                      {/* Mini Browser Header */}
-                      <div className="absolute top-0 inset-x-0 h-6 bg-slate-950/90 backdrop-blur-md px-3 flex items-center justify-between border-b border-white/10 z-20">
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-rose-500/90 inline-block" />
-                          <span className="w-2 h-2 rounded-full bg-amber-400/90 inline-block" />
-                          <span className="w-2 h-2 rounded-full bg-emerald-400/90 inline-block" />
-                        </div>
-                        <span className="text-[9px] font-mono text-slate-300 truncate max-w-[130px]">
-                          folioveda.dev/p/{resume.id}
-                        </span>
-                      </div>
-
-                      {/* Real High-Resolution Portfolio Photo */}
-                      <img
-                        src={resume.image}
-                        alt={`${resume.name} Live Portfolio`}
-                        className="w-full h-full pt-6 object-cover object-top transition-transform duration-700 ease-out group-hover/thumb:scale-110"
-                        loading="lazy"
-                      />
-
-                      {/* Frosted Bottom Overlay */}
-                      <div className="absolute inset-x-0 bottom-0 p-2.5 bg-gradient-to-t from-slate-950/95 via-slate-950/70 to-transparent flex items-center justify-between text-white z-20">
-                        <div className="space-y-0.5 max-w-[68%]">
-                          <span className="text-[8px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                            Live Portfolio
-                          </span>
-                          <div className="text-[11px] font-bold text-white truncate">
-                            {resume.liveProject.title}
-                          </div>
-                        </div>
-                        <span className="px-2 py-1 rounded-md bg-white/15 group-hover/thumb:bg-emerald-500 group-hover/thumb:text-slate-950 text-white text-[10px] font-bold tracking-tight transition-all flex items-center gap-1">
-                          Preview ↗
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Card Body */}
-                  <div className="p-4 space-y-3.5">
-                    
-                    {/* Avatar & Name */}
-                    <div className="flex items-center gap-2.5">
-                      <div 
-                        className="w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-white text-xs shadow-sm shrink-0"
-                        style={{ backgroundColor: resume.accentColor }}
-                      >
-                        {resume.avatarText}
-                      </div>
-                      <div className="min-w-0">
-                        <h3 className="font-extrabold text-sm text-[#1E293B] leading-tight truncate group-hover:text-[#173f32] transition-colors">
-                          {resume.name}
-                        </h3>
-                        <p className="text-[11px] text-slate-500 font-bold truncate">
-                          {resume.role}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Social/Institutional Badge */}
-                    <div className="text-[10px] font-bold text-[#173f32] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-lg truncate">
-                      {resume.badge}
-                    </div>
-
-                    {/* Core Metric Highlight */}
-                    <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 space-y-0.5">
-                      <div className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">
-                        {resume.metrics[0].label}
-                      </div>
-                      <div className="text-xs font-extrabold text-[#1E293B]">
-                        {resume.metrics[0].value}
-                      </div>
-                    </div>
-
-                    {/* Skills Pills */}
-                    <div className="flex flex-wrap gap-1">
-                      {resume.skills.slice(0, 3).map((skill) => (
-                        <span 
-                          key={skill}
-                          className="text-[9px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                      {resume.skills.length > 3 && (
-                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-slate-200 text-slate-600">
-                          +{resume.skills.length - 3}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Hover Prompt Callout */}
-                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#173f32]">
-                      <span className="flex items-center gap-1 text-[11px]">
-                        <Maximize2 size={12} />
-                        <span>Hover to expand</span>
-                      </span>
-                      <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-                    </div>
-
-                  </div>
+                  {/* Full Edge-to-Edge Image Covering the Entire Hanging Card (Zero Text) */}
+                  <img
+                    src={resume.image}
+                    alt={resume.name}
+                    className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                    loading="lazy"
+                  />
                 </div>
 
               </div>
@@ -779,7 +643,7 @@ export function HangingResumesGallery() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h2 className="text-xs font-extrabold text-[#173f32] uppercase tracking-wider flex items-center gap-2">
-                  <Globe size={14} /> LIVE FOLIOVEDA ARCHITECTURE BLUEPRINT &amp; DESIGN
+                  <Globe size={14} /> LIVE FOLIOIN ARCHITECTURE BLUEPRINT &amp; DESIGN
                 </h2>
                 <span className="text-[11px] font-bold text-slate-500 hidden sm:inline">
                   Interactive Retina Preview
@@ -794,7 +658,7 @@ export function HangingResumesGallery() {
                     <span className="w-3 h-3 rounded-full bg-amber-400 inline-block" />
                     <span className="w-3 h-3 rounded-full bg-emerald-400 inline-block" />
                     <div className="bg-slate-900 px-3 py-1 rounded-lg border border-slate-800 text-xs text-slate-300 font-mono ml-2 truncate max-w-xs sm:max-w-md">
-                      https://folioveda.dev/p/{expandedResume.id}
+                      https://folioin.dev/p/{expandedResume.id}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -1013,7 +877,7 @@ export function HangingResumesGallery() {
             {/* Bottom Footer Action Bar */}
             <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-xs text-slate-500 font-medium">
-                Showing full profile snapshot on FolioVeda Front Page. Press <kbd className="px-1.5 py-0.5 bg-slate-100 border border-slate-300 rounded font-mono text-[10px]">ESC</kbd> to return.
+                Showing full profile snapshot on FolioIn Front Page. Press <kbd className="px-1.5 py-0.5 bg-slate-100 border border-slate-300 rounded font-mono text-[10px]">ESC</kbd> to return.
               </div>
               <div className="flex items-center gap-3">
                 <button

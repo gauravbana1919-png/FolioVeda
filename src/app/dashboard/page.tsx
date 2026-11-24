@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 import { SimulateWebhookButton } from "@/components/dashboard/SimulateWebhookButton";
 import { GitHubSyncControl } from "@/components/dashboard/GitHubSyncControl";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 
 interface DashboardPageProps {
   searchParams?: Promise<{ user?: string }>;
@@ -74,7 +74,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     user = await prisma.user.create({
       data: {
         name: "Alex Developer",
-        email: "alex@folioveda.dev",
+        email: "alex@folioin.dev",
         profile: {
           create: {
             bio: "Full-Stack Engineer building high-throughput distributed systems and interactive portfolios.",
@@ -126,7 +126,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
           <div className="flex items-center gap-4">
             <Link href="/" className="hover:opacity-90 transition-opacity">
-              <FolioVedaLogo size="md" />
+              <FolioInLogo size="md" />
             </Link>
             <div className="border-l border-slate-200 pl-4 hidden sm:block">
               <div className="flex items-center gap-2">
@@ -259,7 +259,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight">
-              folioveda.me/{userSlug}
+              folioin.me/{userSlug}
             </h2>
             <p className="text-xs text-slate-300 max-w-xl">
               Backed by SQLite Prisma records. Visitors see verified GitHub commits, custom design tokens, and zero hallucinations.
@@ -329,7 +329,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                       </span>
                     </div>
                     <p className="text-xs text-slate-600 max-w-2xl leading-relaxed font-normal">
-                      {project.description || "Production repository synced to FolioVeda."}
+                      {project.description || "Production repository synced to FolioIn."}
                     </p>
                     {project.techStack && (
                       <div className="text-[11px] font-mono text-[#173f32] font-semibold pt-0.5">

@@ -40,7 +40,7 @@ export function DeployModal({ isOpen, onClose, theme, content }: DeployModalProp
       logMessage("Generating standalone production portfolio bundle...");
       const htmlString = getStandaloneHtml(theme, content);
 
-      logMessage("Sending deployment payload to FolioVeda deployment pipeline...");
+      logMessage("Sending deployment payload to FolioIn deployment pipeline...");
       const res = await fetch("/api/github/deploy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -123,7 +123,7 @@ export function DeployModal({ isOpen, onClose, theme, content }: DeployModalProp
                     Personal Access Token (PAT)
                   </label>
                   <a
-                    href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=FolioVeda+Pages+Deployer"
+                    href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=FolioIn+Pages+Deployer"
                     target="_blank"
                     rel="noreferrer"
                     className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 font-medium"

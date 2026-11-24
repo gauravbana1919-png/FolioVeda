@@ -11,8 +11,8 @@ interface IconicLogoProps {
 
 /**
  * 1. THE INFINITY MÖBIUS LOOP (Inspired by Meta & Antigravity)
- * A continuous unbroken aerodynamic ribbon looping through infinity (Veda/Wisdom)
- * while shaping the dynamic flow of an 'F' and 'V' (FolioVeda).
+ * A continuous unbroken aerodynamic ribbon looping through infinity (Insight)
+ * while shaping the dynamic flow of an 'F' and 'V' (FolioIn).
  * Single continuous silhouette, universally recognizable at any scale.
  */
 export function InfinityLoopIcon({
@@ -69,9 +69,9 @@ export function InfinityLoopIcon({
 }
 
 /**
- * 2. THE VEDA SPARK / DUAL FOLIO (Inspired by Google Gemini & Claude)
+ * 2. THE IN SPARK / DUAL FOLIO (Inspired by Google Gemini & Claude)
  * A clean 4-pointed hypocycloid celestial spark where the internal curves
- * represent an enlightened star (Veda) and layered pages of a folio.
+ * represent an enlightened star (In) and layered pages of a folio.
  * Zero clutter, instantly iconic, sublime simplicity.
  */
 export function GeminiSparkIcon({
@@ -131,7 +131,7 @@ export function GeminiSparkIcon({
  * 3. THE 6-FOLD ROSETTE KNOT (Inspired by ChatGPT / OpenAI)
  * Mathematically perfect rotational symmetry:
  * 6 overlapping continuous rounded petals rotating seamlessly around a central node.
- * Looks like an enlightened sacred geometric lotus (Veda) and open digital leaves (Folio).
+ * Looks like an enlightened sacred geometric lotus (In) and open digital leaves (Folio).
  * Crisp, iconic, impossible to forget.
  */
 export function RosetteKnotIcon({

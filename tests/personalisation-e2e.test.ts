@@ -119,7 +119,7 @@ describe("Stage 9: Comprehensive End-to-End Personalisation & Accessibility Test
       const ratio = getContrastRatio(bg, text);
 
       // WCAG AA requires at least 4.5:1 for body text (or 3:1 for large text)
-      // All FolioVeda high-contrast themes must achieve >= 4.5:1
+      // All FolioIn high-contrast themes must achieve >= 4.5:1
       expect(
         ratio,
         `Theme ${theme.id} failed WCAG contrast check. BG: ${bg}, Text: ${text}, Ratio: ${ratio.toFixed(2)}`

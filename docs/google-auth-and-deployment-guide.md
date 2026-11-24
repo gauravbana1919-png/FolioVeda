@@ -1,6 +1,6 @@
-# FolioVeda — Google OAuth & Production Deployment Guide
+# FolioIn — Google OAuth & Production Deployment Guide
 
-This guide provides the exact URLs and configuration needed to connect Google Authentication and deploy FolioVeda to Vercel.
+This guide provides the exact URLs and configuration needed to connect Google Authentication and deploy FolioIn to Vercel.
 
 ---
 
@@ -11,14 +11,14 @@ When setting up Google OAuth in the [Google Cloud Console](https://console.cloud
 1. Go to **APIs & Services** > **Credentials**.
 2. Click **Create Credentials** > **OAuth Client ID**.
 3. Application Type: **Web application**.
-4. Name: `FolioVeda`.
+4. Name: `FolioIn`.
 
 ### The Two Exact URLs You Need to Paste:
 
 #### A. Authorized JavaScript Origins
 Add both your local development origin and your live Vercel production domain:
 - **Local:** `http://localhost:3000`
-- **Production (Vercel):** `https://YOUR-APP-NAME.vercel.app` *(or your custom domain, e.g. `https://folioveda.dev`)*
+- **Production (Vercel):** `https://YOUR-APP-NAME.vercel.app` *(or your custom domain, e.g. `https://folioin.dev`)*
 
 #### B. Authorized Redirect URIs
 Add both your local callback URI and your live Vercel callback URI:
@@ -41,7 +41,7 @@ GOOGLE_CLIENT_SECRET="your-client-secret"
 
 # NextAuth Configuration
 NEXTAUTH_URL="http://localhost:3000"              # In Vercel: https://YOUR-APP-NAME.vercel.app
-NEXTAUTH_SECRET="folioveda-dev-super-secret-key-32chars-minimum-hash"
+NEXTAUTH_SECRET="folioin-dev-super-secret-key-32chars-minimum-hash"
 
 # Gemini AI (for resume tailoring & intake extraction)
 GEMINI_API_KEY="your-gemini-api-key"

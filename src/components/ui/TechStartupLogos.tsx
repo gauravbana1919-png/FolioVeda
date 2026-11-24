@@ -81,7 +81,7 @@ export function SiliconProcessorIcon({ size = 48, className = "", dark = true }:
  * STARTUP CONCEPT 2: "The Linear Monolith (SaaS Minimalist Monomark)"
  * Inspired by Linear.app, Vercel, Supabase, and Stripe:
  * - Pure negative space and bold geometric polygons
- * - Two interlocking architectural slabs: 'F' (Folio) and 'V' (Veda)
+ * - Two interlocking architectural slabs: 'F' (Folio) and 'V' (In)
  * - 100% Flat vector, perfectly legible down to 14px favicon
  */
 export function LinearMonolithIcon({ size = 48, className = "", dark = true }: LogoProps) {

@@ -26,10 +26,11 @@ import {
   Mail,
   Lock,
 } from "lucide-react";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 import { HangingResumesGallery } from "@/components/portfolio/HangingResumesGallery";
 import { CuratedArtworksGallery } from "@/components/portfolio/CuratedArtworksGallery";
 import { FolioTreeHeroAnimation } from "@/components/portfolio/FolioTreeHeroAnimation";
+import ArtShowcaseHeroCard from "@/components/portfolio/ArtShowcaseHeroCard";
 import { AiAgentWidget } from "@/components/portfolio/AiAgentWidget";
 import { SignInModal } from "@/components/auth/SignInModal";
 import {
@@ -116,84 +117,119 @@ export default function NotYourCollegeHomePage() {
   const { data: session } = useSession();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [handleInput, setHandleInput] = useState("");
-  const [activeTab, setActiveTab] = useState<"loveleen" | "bento" | "rolan" | "sudar" | "himanshu" | "tanuja">("loveleen");
+  const [activeTab, setActiveTab] = useState<"learnhouse" | "shivam" | "kenji" | "randy" | "alsa">("learnhouse");
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
 
   const showcaseThemes = {
-    loveleen: {
-      name: "Elena Rostova Studio Mat",
-      subtitle: "Iconic dusty-pink physical desk ground (#A47F7F), cream paper sheet, yellow Caveat handwriting stickies, and orange cursor tag.",
-      accent: "#F2643A",
-      badge: "ELENA ROSTOVA • DUSTY PINK DESK",
-      previewUrl: "/p/Elena%20Rostova?theme=luxe-creative",
-      bgClass: "bg-[#A47F7F] text-white",
-      cardBorder: "border-white/20",
-      image: "/images/portfolios/portfolio-1.png",
-    },
-    bento: {
-      name: "BentoGrid Studio",
-      subtitle: "Aceternity-style modular 3D cards, live developer terminal console, and interactive tech stack orbit.",
-      accent: "#38BDF8",
-      badge: "BENTOFOLIO • ACETERNITY BENTO",
-      previewUrl: "/p/Aarav%20Sharma?theme=bento-grid",
-      bgClass: "bg-[#090A0F] text-white",
-      cardBorder: "border-sky-500/30",
-      image: "/images/portfolios/portfolio-3.png",
-    },
-    rolan: {
-      name: "Marcus Vance Architect Desk",
-      subtitle: "Exact architect green cutting mat, floating tactile paper sheet, yellow sticky notes, and accredited credentials.",
-      accent: "#095848",
-      badge: "MARCUS VANCE • ARCHITECT DESK",
-      previewUrl: "/p/Marcus%20Vance?theme=rolan-gomes",
-      bgClass: "bg-[#095848] text-white",
-      cardBorder: "border-[#14735f]",
-      image: "/images/styles/design-formal.jpg",
-    },
-    sudar: {
-      name: "Kaelen Frost Dark Case Study",
-      subtitle: "Deep graphite tactical layout, case study breakdown drawers, real outcome telemetry, and problem-solution architecture.",
+    learnhouse: {
+      name: "Learn@House Platform",
+      subtitle: "Deep forest teal SaaS lead engine (#113A33), 5.0-star reviews, and interactive course onboarding.",
       accent: "#10B981",
-      badge: "KAELEN FROST • TACTICAL CASE STUDIES",
-      previewUrl: "/p/Kaelen%20Frost?theme=sudarvel",
-      bgClass: "bg-[#0c0d0e] text-[#f4f4f5]",
-      cardBorder: "border-white/10",
-      image: "/images/portfolios/portfolio-4.png",
+      badge: "LEARN@HOUSE • SAAS & EDTECH",
+      previewUrl: "/p/David%20Vance?theme=luxe-creative",
+      bgClass: "bg-[#0c241f] text-[#e8f5f0]",
+      cardBorder: "border-emerald-500/30",
+      image: "/images/portfolios/portfolio-learn-house.jpg",
+      unit1Title: "LeadFinder Autonomous Engine",
+      unit1Desc: "Real-time email verification and lead database with instant domain lookup serving 20M+ queries.",
+      unit1Tag: "20M+ Users • Verified",
+      unit2Title: "Interactive Course Flow",
+      unit2Desc: "Friction-free onboarding and interactive learning modules across 160+ masterclasses.",
+      unit2Tag: "160+ Masterclasses",
+      unit3Title: "SaaS Growth Flywheel",
+      unit3Desc: "Dual-funnel conversion engine delivering 24% cold traffic conversion.",
+      unit3Tag: "5.0 ★ Rating",
     },
-    himanshu: {
-      name: "Julian Reed Forest Studio",
-      subtitle: "Deep forest studio mat, visual storytelling cards, branding, art direction, and storyboard sequences.",
-      accent: "#c6d457",
-      badge: "JULIAN REED • VISUAL STORYTELLER",
-      previewUrl: "/p/Julian%20Reed?theme=himanshu-singh",
-      bgClass: "bg-[#021a13] text-[#eef3c8]",
-      cardBorder: "border-[#c6d457]/30",
-      image: "/images/styles/creative-playful.jpg",
+    shivam: {
+      name: "Shivam Kaushal 3D Studio",
+      subtitle: "Warm cream ground with tactile 3D burnt orange clay coils (#E05A2B), software skill meters, and academic credentials.",
+      accent: "#E05A2B",
+      badge: "SHIVAM KAUSHAL • GRAPHIC & 3D CLAY",
+      previewUrl: "/p/Shivam%20Kaushal?theme=not-your-college",
+      bgClass: "bg-[#241710] text-[#fbf5ed]",
+      cardBorder: "border-orange-500/30",
+      image: "/images/portfolios/portfolio-shivam-kaushal.jpg",
+      unit1Title: "Tactile 3D Clay Identity",
+      unit1Desc: "Sculpted clay ribbons and warm editorial typography for modern brands.",
+      unit1Tag: "Photoshop & Illustrator",
+      unit2Title: "Multi-App Design Workflow",
+      unit2Desc: "Unified creation stack combining Canva, Alight Motion, Picsart, and AI generation.",
+      unit2Tag: "ChatGPT & Gemini",
+      unit3Title: "Verified Student Portal",
+      unit3Desc: "10 months university portal executive management for 50,000+ students.",
+      unit3Tag: "CS Diploma • Pursuing B.Sc",
     },
-    tanuja: {
-      name: "Maya Chen Enterprise Product",
-      subtitle: "Crisp modern enterprise product canvas, AI integration workflows, FOX Icons, and structured product lifecycle.",
-      accent: "#2563EB",
-      badge: "MAYA CHEN • ENTERPRISE AI & PRODUCT",
-      previewUrl: "/p/Maya%20Chen?theme=tanuja-design",
-      bgClass: "bg-white text-slate-900",
-      cardBorder: "border-slate-300",
-      image: "/images/portfolios/portfolio-2.png",
+    kenji: {
+      name: "Kenji Sato 3D Character Studio",
+      subtitle: "Deep cyan ocean steel palette (#164654), 3D chibi mascot, book cover spreads, and packaging jar design.",
+      accent: "#06B6D4",
+      badge: "KENJI SATO • 3D ILLUSTRATOR",
+      previewUrl: "/p/Kenji%20Sato?theme=bento-grid",
+      bgClass: "bg-[#0a232b] text-[#e0f7fa]",
+      cardBorder: "border-cyan-500/30",
+      image: "/images/portfolios/portfolio-3d-illustrator.jpg",
+      unit1Title: "3D Chibi Mascot Universe",
+      unit1Desc: "Whimsical character illustrations, 3D modeling, and signature editorial style.",
+      unit1Tag: "Blender & Vector Art",
+      unit2Title: "Book Cover & Monograph",
+      unit2Desc: "35+ published book cover designs, typography spreads, and digital imaging.",
+      unit2Tag: "14 Project Modules",
+      unit3Title: "Packaging & Brand Identity",
+      unit3Desc: "Bespoke jar labels, brand profiles, and cohesive social feed curation.",
+      unit3Tag: "500k+ Impressions",
+    },
+    randy: {
+      name: "Randy Fahmi Creative Visual",
+      subtitle: "Vibrant amber ochre (#F2A900) & dark slate, commercial photography, 4K videography, and structured table of content.",
+      accent: "#F59E0B",
+      badge: "RANDY FAHMI • CREATIVE VISUAL",
+      previewUrl: "/p/Randy%20Fahmi?theme=rolan-gomes",
+      bgClass: "bg-[#1f1d16] text-[#fffbeb]",
+      cardBorder: "border-amber-500/30",
+      image: "/images/portfolios/portfolio-randy-fahmi.jpg",
+      unit1Title: "Visual Table of Content",
+      unit1Desc: "Multi-disciplinary portfolio system categorizing design, photography, and video.",
+      unit1Tag: "Informatics Engineering",
+      unit2Title: "4K Cinema & Video Editing",
+      unit2Desc: "Commercial video production with Premiere Pro, CapCut, and Lightroom color grading.",
+      unit2Tag: "120+ Shoots",
+      unit3Title: "IT & Design Leadership",
+      unit3Desc: "9+ years bridging technical IT supervision with high-impact visual design.",
+      unit3Tag: "99.4% CSAT",
+    },
+    alsa: {
+      name: "Alsa Yunita Presentation Deck",
+      subtitle: "Pastel lilac (#8B5CF6) & warm peach, sparkle badges, TikTok & social strategy, and modular presentation slides.",
+      accent: "#A78BFA",
+      badge: "ALSA YUNITA • SOCIAL & PRESENTATION",
+      previewUrl: "/p/Alsa%20Yunita?theme=tanuja-design",
+      bgClass: "bg-[#1c142b] text-[#f3e8ff]",
+      cardBorder: "border-purple-500/30",
+      image: "/images/portfolios/portfolio-alsa-yunita.jpg",
+      unit1Title: "Pastel Dream Presentation",
+      unit1Desc: "Modular presentation decks engineered for aesthetic pitch presentations.",
+      unit1Tag: "90+ Pitch Decks",
+      unit2Title: "Social Media Growth Strategy",
+      unit2Desc: "Short-form video concepts, TikTok virality, and cohesive aesthetic curation.",
+      unit2Tag: "1.2M+ Monthly Reach",
+      unit3Title: "Brand Launch Campaigns",
+      unit3Desc: "35+ successful product launch kits with interactive visual slides.",
+      unit3Tag: "35+ Brand Launches",
     },
   };
 
   const faqs = [
     {
-      q: "How does FolioVeda prevent fake credentials and hallucinations?",
-      a: "Unlike generic AI writers that invent fake job titles and metrics, FolioVeda uses a strict factual anchor model. We only synthesize headlines, bullet points, and portfolios from your real GitHub repositories, uploaded resume notes, and verified work history.",
+      q: "How does FolioIn prevent fake credentials and hallucinations?",
+      a: "Unlike generic AI writers that invent fake job titles and metrics, FolioIn uses a strict factual anchor model. We only synthesize headlines, bullet points, and portfolios from your real GitHub repositories, uploaded resume notes, and verified work history.",
     },
     {
       q: "Can I share my portfolio on LinkedIn, Twitter, and job applications?",
-      a: "Yes! Every portfolio gets an instant shareable link like folioveda.me/p/[your-name], fully responsive on mobile, tablet, and desktop with open-graph cards for social sharing.",
+      a: "Yes! Every portfolio gets an instant shareable link like folioin.me/p/[your-name], fully responsive on mobile, tablet, and desktop with open-graph cards for social sharing.",
     },
     {
       q: "How does the ATS Resume Tailor work?",
-      a: "You paste your base resume and any job description. FolioVeda analyzes keyword overlap, reorganizes your real experience to match the employer's requirements, and exports a high-resolution, machine-parseable PDF.",
+      a: "You paste your base resume and any job description. FolioIn analyzes keyword overlap, reorganizes your real experience to match the employer's requirements, and exports a high-resolution, machine-parseable PDF.",
     },
     {
       q: "Can I switch themes without losing my data?",
@@ -220,9 +256,9 @@ export default function NotYourCollegeHomePage() {
       <header className="sticky top-0 z-50 bg-[#f7f4eb]/90 backdrop-blur-md border-b border-[#173f32]/15 transition-all">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 h-20 flex items-center justify-between">
           
-          {/* Official FolioVeda Logo */}
+          {/* Official FolioIn Logo */}
           <Link href="/" className="flex items-center group">
-            <FolioVedaLogo size="md" subtitle="Where Builders Launch" />
+            <FolioInLogo size="md" subtitle="Where Builders Launch" />
           </Link>
 
           {/* Navigation Links - Exactly 4 One-Word Elements */}
@@ -254,13 +290,12 @@ export default function NotYourCollegeHomePage() {
                 <span>Logout</span>
               </button>
             ) : (
-              <button
-                type="button"
-                onClick={() => setIsAuthModalOpen(true)}
+              <Link
+                href="/login"
                 className="hidden sm:inline-flex px-4 py-2 rounded-full border border-[#173f32]/20 hover:bg-white text-xs font-bold text-[#222e26] transition-all cursor-pointer"
               >
                 Sign In
-              </button>
+              </Link>
             )}
             <Link
               href="/portfolio/preview"
@@ -349,7 +384,7 @@ export default function NotYourCollegeHomePage() {
 
           {/* Subheading */}
           <p className="text-base sm:text-xl text-[#3d4d42] max-w-2xl sm:mx-auto leading-relaxed font-normal">
-            College syllabi hand you generic degrees. FolioVeda turns your shipped code, live projects, and real achievements into an award-winning portfolio and ATS-tailored resume.
+            College syllabi hand you generic degrees. FolioIn turns your shipped code, live projects, and real achievements into an award-winning portfolio and ATS-tailored resume.
           </p>
 
           {/* ── ADVANCED ANIMATION 4: REAL-TIME DYNAMIC TERMINAL TYPER WITH LEDS & BLINKING CARET ── */}
@@ -362,7 +397,7 @@ export default function NotYourCollegeHomePage() {
             <div className="inline-flex items-center">
               <LiveTerminalTyper
                 commands={[
-                  "folioveda --build --theme=architect-desk",
+                  "folioin --build --theme=architect-desk",
                   "git log --verify-commits: 100% genuine",
                   "ats-tailor --match=senior-frontend-engineer",
                   "deploy --provider=github-pages --status=live",
@@ -411,109 +446,12 @@ export default function NotYourCollegeHomePage() {
             </MagneticPillBadge>
           </div>
 
-          {/* Claim Handle Bar */}
-          <div className="pt-4 max-w-xl sm:mx-auto">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const input = handleInput.trim();
-                if (!input) {
-                  window.location.href = `/onboarding?name=alex`;
-                  return;
-                }
-                // Check if user entered an inspiration URL or portfolio link
-                if (
-                  input.startsWith("http://") || 
-                  input.startsWith("https://") || 
-                  input.includes("wallofportfolios.in") || 
-                  input.includes(".com") || 
-                  input.includes(".in/") || 
-                  input.includes(".design") ||
-                  input.includes(".me")
-                ) {
-                  window.location.href = `/inspiration?url=${encodeURIComponent(input)}`;
-                  return;
-                }
-                window.location.href = `/onboarding?name=${encodeURIComponent(input)}`;
-              }}
-              className="p-2 bg-white rounded-full border-2 border-[#173f32]/25 shadow-md flex items-center gap-2"
-            >
-              <div className="pl-4 pr-1 text-xs font-mono font-bold text-[#5a6b60] shrink-0 select-none hidden sm:block">
-                folioveda.me/p/
-              </div>
-              <input
-                type="text"
-                value={handleInput}
-                onChange={(e) => setHandleInput(e.target.value)}
-                placeholder="your-handle-or-name"
-                className="w-full bg-transparent px-3 py-2 text-sm font-bold text-[#222e26] focus:outline-none placeholder:text-slate-400"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 rounded-full bg-[#173f32] hover:bg-[#16382c] text-[#f7f4eb] text-xs font-bold uppercase tracking-wider shrink-0 transition-all flex items-center gap-1.5 shadow-sm cursor-pointer"
-              >
-                <span>Claim &amp; Build</span>
-                <ArrowRight size={13} />
-              </button>
-            </form>
-
-            {/* ── ADVANCED ANIMATION 5: BINARY DATA STREAM TICKER ── */}
-            <div className="flex justify-center pt-2 select-none">
-              <BinaryDataStreamer />
-            </div>
-
-            {/* Micro badges below form */}
-            <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-[#5a6b60] pt-3">
-              <span className="flex items-center gap-1">
-                <CheckCircle2 size={13} className="text-[#173f32]" /> 100% Free to Start
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1">
-                <CheckCircle2 size={13} className="text-[#173f32]" /> Zero Hallucinations
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1">
-                <CheckCircle2 size={13} className="text-[#173f32]" /> 1-Click GitHub Pages Deploy
-              </span>
-            </div>
-
-            {/* New Features Showcase Strip */}
-            <div className="mt-8 p-3.5 rounded-2xl bg-white/90 border-2 border-[#173f32]/20 shadow-md flex flex-wrap items-center justify-center gap-2.5 text-xs">
-              <span className="font-extrabold uppercase text-[#173f32] text-[11px] tracking-wider flex items-center gap-1.5">
-                <Sparkles size={14} className="text-amber-500" />
-                <span>NEW POWERS:</span>
-                {/* ── ADVANCED ANIMATION 13: LIVE AI ACTIVITY SOUNDWAVE EQUALIZER ── */}
-                <SoundwaveEqualizer color="#10B981" barCount={5} />
-              </span>
-
-              {/* ── ADVANCED ANIMATION 40: TOKEN VELOCITY TICKER ── */}
-              <TokenVelocityTicker />
-
-              <Link href="/portfolio/preview" className="px-3 py-1 rounded-full bg-[#173f32] text-white font-bold hover:scale-105 transition-all">
-                🚀 GitHub Pages Deployer
-              </Link>
-              <Link href="/portfolio/preview" className="px-3 py-1 rounded-full bg-cyan-100 text-cyan-900 border border-cyan-400 font-bold hover:scale-105 transition-all">
-                🤖 PortBot AI Assistant
-              </Link>
-              <Link href="/portfolio/preview" className="px-3 py-1 rounded-full bg-yellow-300 text-black border-2 border-black font-black hover:scale-105 transition-all">
-                ⚡ Neo-Brutalist &amp; Clay 3D
-              </Link>
-              <Link href="/portfolio/preview" className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-900 border border-indigo-300 font-bold hover:scale-105 transition-all">
-                📦 Single HTML &amp; ZIP Download
-              </Link>
-            </div>
-          </div>
-
-          {/* ── ADVANCED ANIMATION 19: LIVE CODE SYNTAX STREAMER ── */}
-          <div className="max-w-md mx-auto pt-4">
-            <LiveCodeSyntaxStreamer />
-          </div>
-
-          {/* Interactive FolioTree Animation */}
-          <div className="pt-6 relative">
-            {/* ── ADVANCED ANIMATION 3: QUANTUM CIRCUIT TRACER ── */}
-            <QuantumCircuitTracer className="top-0 right-4 hidden md:block" />
-            <FolioTreeHeroAnimation />
+          {/* ── HERO FINE-ART BANNER WITH INTEGRATED CLAIM & BUILD ── */}
+          <div className="pt-6 sm:pt-8">
+            <ArtShowcaseHeroCard
+              handleInput={handleInput}
+              setHandleInput={setHandleInput}
+            />
           </div>
         </div>
       </section>
@@ -521,7 +459,7 @@ export default function NotYourCollegeHomePage() {
       {/* ── ADVANCED ANIMATION 26: ENERGY BEAM SEPARATOR ── */}
       <EnergyBeamSeparator />
 
-      {/* ── TWO REALITIES: THE COLLEGE GAP VS THE FOLIOVEDA STANDARD ── */}
+      {/* ── TWO REALITIES: THE COLLEGE GAP VS THE FOLIOIN STANDARD ── */}
       <section id="why-proof" className="py-20 px-6 sm:px-10 bg-[#faf8f1] border-y border-[#173f32]/15 relative overflow-hidden">
         {/* ── ADVANCED ANIMATION 14: ORGANIC FLUID SVG BLOB MORPHING ── */}
         <div className="absolute top-10 right-10 pointer-events-none opacity-40">
@@ -578,7 +516,7 @@ export default function NotYourCollegeHomePage() {
               </TiltSpotlightCard>
             </BorderCornerReticle>
 
-            {/* The FolioVeda Standard (NYC Deep Forest Green Card) */}
+            {/* The FolioIn Standard (NYC Deep Forest Green Card) */}
             {/* ── ADVANCED ANIMATION 18: BORDER CORNER RETICLE HUD ── */}
             <BorderCornerReticle>
               <TiltSpotlightCard className="rounded-3xl h-full">
@@ -594,7 +532,7 @@ export default function NotYourCollegeHomePage() {
                   <div className="space-y-4 relative z-10">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div className="inline-block px-3.5 py-1 rounded-full bg-[#ebd800] text-[#173f32] text-xs font-bold uppercase tracking-wider border border-[#ebd800]">
-                        The FolioVeda Standard
+                        The FolioIn Standard
                       </div>
                       {/* ── ADVANCED ANIMATION 16: TEXT SCRAMBLE DECRYPTION ── */}
                       <TextScrambleDecryption finalWord="AUTHENTICATED" />
@@ -721,13 +659,13 @@ export default function NotYourCollegeHomePage() {
               <InteractiveAudioSpectrum />
             </div>
             <div className="flex flex-wrap gap-2">
-              {(["loveleen", "bento", "rolan", "sudar", "himanshu", "tanuja"] as const).map((key) => {
+              {(["learnhouse", "shivam", "kenji", "randy", "alsa"] as const).map((key) => {
                 const active = activeTab === key;
                 return (
                   <button
                     key={key}
                     onClick={() => setActiveTab(key)}
-                    className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
+                    className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
                       active
                         ? "bg-[#173f32] text-[#f7f4eb] shadow-xs"
                         : "bg-[#fffdf8] text-[#222e26] border border-[#173f32]/20 hover:bg-white"
@@ -798,7 +736,7 @@ export default function NotYourCollegeHomePage() {
                         <SatelliteOrbitRadar size={24} />
                       </div>
                       <span className="text-[10px] font-mono text-slate-400 ml-1">
-                        folioveda.dev/p/showcase/{activeTab}
+                        folioin.dev/p/showcase/{activeTab}
                       </span>
                     </div>
                     <span className="text-[10px] font-mono font-bold text-emerald-400 flex items-center gap-2">
@@ -844,13 +782,13 @@ export default function NotYourCollegeHomePage() {
                         <span>FEATURED UNIT_01</span>
                         <span className="text-[10px] text-amber-300">Click to flip ↷</span>
                       </div>
-                      <h4 className="text-lg font-bold mt-2">Distributed Edge Cache</h4>
+                      <h4 className="text-lg font-bold mt-2">{showcaseThemes[activeTab].unit1Title}</h4>
                       <p className="text-xs opacity-75 leading-relaxed mt-1">
-                        A low-latency distributed caching layer built with Rust and Redis, serving 100k+ req/sec with sub-5ms p99.
+                        {showcaseThemes[activeTab].unit1Desc}
                       </p>
                     </div>
-                    <div className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 inline-block self-start">
-                      100k req/sec • Verified
+                    <div className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 inline-block self-start">
+                      {showcaseThemes[activeTab].unit1Tag}
                     </div>
                   </div>
                 }
@@ -863,11 +801,10 @@ export default function NotYourCollegeHomePage() {
                       </div>
                       <pre className="text-[11px] text-slate-200 mt-2 overflow-x-auto leading-relaxed">
 {`{
-  "id": "unit_01",
-  "engine": "Rust + Redis",
-  "p99_latency": "4.8ms",
-  "rps": 104200,
-  "verified": true
+  "theme": "${activeTab}",
+  "title": "${showcaseThemes[activeTab].unit1Title}",
+  "verified": true,
+  "telemetry": "Active Render"
 }`}
                       </pre>
                     </div>
@@ -883,14 +820,14 @@ export default function NotYourCollegeHomePage() {
                     <span className="text-[11px] font-mono font-bold opacity-60">FEATURED UNIT_02</span>
                     <DynamicPieDonutChart percent={94} />
                   </div>
-                  <h4 className="text-lg font-bold mt-2">AI Synthesis Engine</h4>
+                  <h4 className="text-lg font-bold mt-2">{showcaseThemes[activeTab].unit2Title}</h4>
                   <p className="text-xs opacity-75 leading-relaxed mt-1">
-                    Interactive real-time collaboration canvas with LLM-powered diagram generation and markdown previewing.
+                    {showcaseThemes[activeTab].unit2Desc}
                   </p>
                 </div>
                 <div className="flex items-center justify-between pt-2 border-t border-current/10">
-                  <div className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 inline-block">
-                    12k Active Monthly Users
+                  <div className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 inline-block">
+                    {showcaseThemes[activeTab].unit2Tag}
                   </div>
                   <SkillProgressLiquidRings value={94} />
                 </div>
@@ -903,14 +840,14 @@ export default function NotYourCollegeHomePage() {
                     <span className="text-[11px] font-mono font-bold opacity-60">FEATURED UNIT_03</span>
                     <NumberRollCounter target="99.9" />
                   </div>
-                  <h4 className="text-lg font-bold mt-1">Zero-Hallucination Core</h4>
+                  <h4 className="text-lg font-bold mt-1">{showcaseThemes[activeTab].unit3Title}</h4>
                   <p className="text-xs opacity-75 leading-relaxed mt-1">
-                    Live portfolio and resume tailor system ensuring zero hallucinated metrics or fabricated job titles.
+                    {showcaseThemes[activeTab].unit3Desc}
                   </p>
                 </div>
                 <div className="pt-2 border-t border-current/10 flex items-center justify-between gap-2">
-                  <div className="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500/10 text-rose-600 inline-block">
-                    Production Deployed
+                  <div className="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 inline-block">
+                    {showcaseThemes[activeTab].unit3Tag}
                   </div>
                   <CommitActivityHeatmap />
                 </div>
@@ -934,7 +871,7 @@ export default function NotYourCollegeHomePage() {
               {/* ── ADVANCED ANIMATION 44: MORPHING SVG ICON ── */}
               <MorphingSvgIcon />
               <span className="text-xs font-bold text-[#173f32] uppercase tracking-wider block">
-                [ 03 // HOW FOLIOVEDA WORKS ]
+                [ 03 // HOW FOLIOIN WORKS ]
               </span>
               {/* ── ADVANCED ANIMATION 8: DATA PACKET PULSE ── */}
               <DataPacketPulse length={80} />
@@ -942,7 +879,7 @@ export default function NotYourCollegeHomePage() {
 
             {/* ── ADVANCED ANIMATION 43: SPLIT TEXT CASCADE REVEAL ── */}
             <div className="py-2">
-              <SplitTextCascadeReveal words={["Everything", "about", "FolioVeda,", "in", "4", "simple", "steps."]} />
+              <SplitTextCascadeReveal words={["Everything", "about", "FolioIn,", "in", "4", "simple", "steps."]} />
             </div>
 
             <p className="text-[#5a6b60] text-sm sm:text-base font-normal">
@@ -973,7 +910,7 @@ export default function NotYourCollegeHomePage() {
               {
                 step: "04",
                 title: "Instant Live URL & ATS PDF",
-                desc: "Share your live link at folioveda.me/p/[you] and download a publication-grade, machine-readable ATS resume PDF.",
+                desc: "Share your live link at folioin.me/p/[you] and download a publication-grade, machine-readable ATS resume PDF.",
                 badge: "ONE-CLICK LAUNCH",
               },
             ].map((item, i) => (
@@ -1019,7 +956,7 @@ export default function NotYourCollegeHomePage() {
       <section className="py-14 px-6 border-b border-[#173f32]/15 bg-[#f7f4eb] overflow-hidden">
         <div className="max-w-6xl mx-auto text-center space-y-6">
           <p className="text-xs font-bold uppercase tracking-wider text-[#5a6b60]">
-            Engineers &amp; builders creating with FolioVeda join teams at
+            Engineers &amp; builders creating with FolioIn join teams at
           </p>
           <InfiniteMarqueeRibbon
             items={[
@@ -1097,7 +1034,7 @@ export default function NotYourCollegeHomePage() {
           </div>
           <AccordionSpringMorph
             title="Explore Distributed Edge Synthesis &amp; Zero-Hallucination Guarantees"
-            content="FolioVeda operates an isolated edge synthesis pipeline running sub-5ms P99 responses with zero hallucination enforcement. Every milestone, job role, and verified commit is cryptographically anchored against real inputs and versioned in SQLite Edge storage."
+            content="FolioIn operates an isolated edge synthesis pipeline running sub-5ms P99 responses with zero hallucination enforcement. Every milestone, job role, and verified commit is cryptographically anchored against real inputs and versioned in SQLite Edge storage."
           />
           <AccordionSpringMorph
             title="ATS Compliance Engine: Verified PDF/A Parsing with Machine Tags"
@@ -1163,17 +1100,17 @@ export default function NotYourCollegeHomePage() {
             {/* Left 5 Cols: Brand + Description + Live Telemetry */}
             <div className="lg:col-span-5 space-y-4">
               <Link href="/" className="inline-block">
-                <FolioVedaLogo size="md" subtitle="The Verified Portfolio Engine" />
+                <FolioInLogo size="md" subtitle="The Verified Portfolio Engine" />
               </Link>
               <p className="text-xs sm:text-sm text-[#4a5d52] max-w-md leading-relaxed">
-                FolioVeda transforms raw engineer commits, design artifacts, and verified work trajectory into award-winning, zero-hallucination portfolios and ATS-proven resumes.
+                FolioIn transforms raw engineer commits, design artifacts, and verified work trajectory into award-winning, zero-hallucination portfolios and ATS-proven resumes.
               </p>
               
               {/* Live Production Telemetry Pill */}
               <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-2 text-[11px] font-mono text-[#173f32]">
                 <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-[#173f32]/10 border border-[#173f32]/20 font-bold">
                   <ConcentricRadarPing color="#10B981" size={14} />
-                  <span>FolioVeda Core Engine: ONLINE</span>
+                  <span>FolioIn Core Engine: ONLINE</span>
                 </div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#173f32]/15 text-slate-700">
                   <ShieldCheck size={13} className="text-[#10B981]" />
@@ -1394,7 +1331,7 @@ export default function NotYourCollegeHomePage() {
           <div className="pt-8 border-t border-[#173f32]/15 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#5a6b60]">
             
             <div className="flex flex-wrap items-center gap-3 text-center md:text-left">
-              <span className="font-extrabold text-[#173f32]">FolioVeda Technologies</span>
+              <span className="font-extrabold text-[#173f32]">FolioIn Technologies</span>
               <span>•</span>
               <span>© {new Date().getFullYear()} All rights reserved.</span>
               <span>•</span>
@@ -1404,7 +1341,7 @@ export default function NotYourCollegeHomePage() {
             {/* Social & Community Links */}
             <div className="flex items-center gap-4 text-xs font-bold text-[#173f32]">
               <a 
-                href="https://github.com/folioveda" 
+                href="https://github.com/folioin" 
                 target="_blank" 
                 rel="noreferrer" 
                 className="hover:text-black transition-colors flex items-center gap-1.5"
@@ -1413,7 +1350,7 @@ export default function NotYourCollegeHomePage() {
                 <span>GitHub Org</span>
               </a>
               <a 
-                href="https://www.linkedin.com/company/folioveda" 
+                href="https://www.linkedin.com/company/folioin" 
                 target="_blank" 
                 rel="noreferrer" 
                 className="hover:text-sky-700 transition-colors flex items-center gap-1.5"
@@ -1439,7 +1376,16 @@ export default function NotYourCollegeHomePage() {
       <FloatingActionIsland />
 
       {/* ── LIVE INTERACTIVE PORTBOT AI ASSISTANT & DESIGN COPILOT ── */}
-      <AiAgentWidget />
+      <AiAgentWidget
+        portfolioContext={{ activeShowcase: activeTab }}
+        onUpdate={(updates) => {
+          if (updates.themeTab) {
+            setActiveTab(updates.themeTab);
+            const el = document.getElementById("showcase");
+            el?.scrollIntoView({ behavior: "smooth" });
+          }
+        }}
+      />
 
       {/* ── AUTH SIGN-IN MODAL ── */}
       <SignInModal

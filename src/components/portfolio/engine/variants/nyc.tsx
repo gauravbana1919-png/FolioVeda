@@ -519,7 +519,7 @@ export function NYCContact({ content }: VariantProps) {
         </div>
 
         <p className="text-xs text-[#f7f4eb]/60 pt-6">
-          © {new Date().getFullYear()} {content.name} • Verified on FolioVeda (NYC Editorial Standard).
+          © {new Date().getFullYear()} {content.name} • Verified on FolioIn (NYC Editorial Standard).
         </p>
       </div>
     </section>

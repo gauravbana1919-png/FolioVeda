@@ -708,7 +708,7 @@ export function WallContact({ content }: VariantProps) {
 
         {/* Bottom Colophon */}
         <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-400">
-          <p>© {new Date().getFullYear()} {content.name}. Built with FolioVeda.</p>
+          <p>© {new Date().getFullYear()} {content.name}. Built with FolioIn.</p>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
             <span>Wall of Portfolios Standard</span>

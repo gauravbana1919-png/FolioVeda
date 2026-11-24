@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const decoded = decodeURIComponent(username);
 
   return {
-    title: `${decoded}'s Portfolio | Built with FolioVeda`,
+    title: `${decoded}'s Portfolio | Built with FolioIn`,
     description: `Check out ${decoded}'s verified professional portfolio, projects, and work experience.`,
     openGraph: {
       title: `${decoded} - Professional Portfolio`,

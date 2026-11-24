@@ -192,7 +192,7 @@ export function NeoBrutalistExperience({ theme, content }: { theme: ThemePackage
 export function NeoBrutalistContact({ theme, content }: { theme: ThemePackage; content: PortfolioContent }) {
   return (
     <footer className="mt-16 pt-8 border-t-4 border-black text-center font-mono font-bold uppercase text-xs pb-12 max-w-5xl mx-auto px-6">
-      <p>Designed with Bold Precision on FolioVeda</p>
+      <p>Designed with Bold Precision on FolioIn</p>
     </footer>
   );
 }

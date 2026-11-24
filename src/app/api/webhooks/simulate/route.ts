@@ -45,7 +45,7 @@ export async function POST(req: Request) {
         activeUser = await prisma.user.create({
           data: {
             name: 'Alex Developer',
-            email: 'demo@folioveda.dev',
+            email: 'demo@folioin.dev',
           },
           include: { accounts: true },
         });

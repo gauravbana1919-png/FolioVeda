@@ -182,7 +182,7 @@ export async function POST(req: Request) {
         user = await prisma.user.create({
           data: {
             name: targetName,
-            email: `${targetName.toLowerCase().replace(/[^a-z0-9]/g, '')}_${Date.now()}@folioveda.local`,
+            email: `${targetName.toLowerCase().replace(/[^a-z0-9]/g, '')}_${Date.now()}@folioin.local`,
           },
         });
       }

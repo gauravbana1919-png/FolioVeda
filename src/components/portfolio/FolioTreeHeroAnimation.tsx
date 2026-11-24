@@ -101,7 +101,7 @@ export function FolioTreeHeroAnimation() {
         <div className="flex items-center gap-2.5">
           <span className="w-3 h-3 rounded-full bg-[#173f32] animate-ping" />
           <h3 className="font-extrabold text-base sm:text-lg text-[#1E293B] tracking-tight">
-            How FolioVeda Cultivates Your Career
+            How FolioIn Cultivates Your Career
           </h3>
           <span className="text-slate-300 hidden sm:inline">•</span>
           <span className="text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:inline">
@@ -583,7 +583,7 @@ export function FolioTreeHeroAnimation() {
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     </div>
                     <span className="text-xs font-mono font-bold text-slate-500">
-                      https://folioveda.me/alex
+                      https://folioin.me/alex
                     </span>
                   </div>
                 </div>
@@ -653,7 +653,7 @@ export function FolioTreeHeroAnimation() {
               {/* Bottom Footer Actions */}
               <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
                 <span className="text-slate-600 font-medium text-center sm:text-left">
-                  Your seeds of skills and fertilizer of experience bear real, verified fruit with FolioVeda.
+                  Your seeds of skills and fertilizer of experience bear real, verified fruit with FolioIn.
                 </span>
 
                 <div className="flex items-center gap-2">
@@ -684,7 +684,7 @@ export function FolioTreeHeroAnimation() {
           <div className="flex items-center gap-2">
             <span className="text-slate-400">Current Phase:</span>
             <span className="text-[#173f32] font-extrabold">
-              {phase === 0 && "1. Stickman Plants the FolioVeda Seed into Soil"}
+              {phase === 0 && "1. Stickman Plants the FolioIn Seed into Soil"}
               {phase === 1 && "2. Adding Career Catalyst Fertilizer (Golden Nutrients Seep into Earth)"}
               {phase === 2 && "3. Watering with Identity, Skills, Code & Verified Milestones"}
               {phase === 3 && "4. Structured Architectural Apple Tree Grows with Deep Roots"}

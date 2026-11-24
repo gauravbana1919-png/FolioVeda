@@ -6,7 +6,7 @@
 
 declare global {
   interface Window {
-    folioveda?: {
+    folioin?: {
       info: () => void;
       projects: () => void;
       skills: () => void;
@@ -36,7 +36,7 @@ export function initConsoleEasterEgg(userData?: {
   ██╔══╝  ██║   ██║██║     ██║██║   ██║╚██╗ ██╔╝██╔══╝  ██║  ██║██╔══██║
   ██║     ╚██████╔╝███████╗██║╚██████╔╝ ╚████╔╝ ███████╗██████╔╝██║  ██║
   ╚═╝      ╚═════╝ ╚══════╝╚═╝ ╚═════╝   ╚═══╝  ╚══════╝╚═════╝ ╚═╝  ╚═╝
-  ⚡ Portfolio of ${name} • Synthesized via FolioVeda
+  ⚡ Portfolio of ${name} • Synthesized via FolioIn
   `;
 
   const styles = {
@@ -54,14 +54,14 @@ export function initConsoleEasterEgg(userData?: {
     if (userData?.email) console.log(`%c✉️ Email: ${userData.email}`, styles.accent);
     console.log(
       `%c\n💡 DevTools Easter Egg Enabled! Try typing:\n` +
-      ` • window.folioveda.info()\n` +
-      ` • window.folioveda.projects()\n` +
-      ` • window.folioveda.skills()\n` +
-      ` • window.folioveda.contact()`,
+      ` • window.folioin.info()\n` +
+      ` • window.folioin.projects()\n` +
+      ` • window.folioin.skills()\n` +
+      ` • window.folioin.contact()`,
       styles.cmd
     );
 
-    window.folioveda = {
+    window.folioin = {
       info: () => {
         console.log(`%c👨‍💻 Developer Profile: ${name}`, styles.title);
         console.log(`%cHeadline: ${headline}`, styles.info);
@@ -82,7 +82,7 @@ export function initConsoleEasterEgg(userData?: {
         console.log(`%c GitHub: ${userData?.github || "N/A"}`, styles.info);
       },
       deploy: () => {
-        console.log(`%c🚀 FolioVeda 1-Click Deployment active!`, styles.accent);
+        console.log(`%c🚀 FolioIn 1-Click Deployment active!`, styles.accent);
       },
     };
   } catch (e) {

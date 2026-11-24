@@ -73,7 +73,7 @@ export function generateThemeFromStyleProfile(
   let accent = profile.accentColor || "#10B981";
 
   // Closeness Level Modulation:
-  // - "loose": Pulls colors back toward FolioVeda balanced slate/neutral baselines.
+  // - "loose": Pulls colors back toward FolioIn balanced slate/neutral baselines.
   // - "medium": Adopts extracted harmony with comfortable spacing.
   // - "close": Keeps extracted mood, but guarantees original component execution.
   if (closeness === "loose") {

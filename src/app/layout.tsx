@@ -23,7 +23,7 @@ const mono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FolioVeda | Award-Winning Portfolio Engine",
+  title: "FolioIn | Award-Winning Portfolio Engine",
   description: "Create an exceptional portfolio website that gets you noticed. Award-winning design, zero-hallucination intake, and instant custom domains.",
   icons: {
     icon: [

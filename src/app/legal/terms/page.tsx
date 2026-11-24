@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck, FileText, AlertTriangle, Scale } from "lucide-react";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 
 export default function TermsOfServicePage() {
   return (
@@ -16,7 +16,7 @@ export default function TermsOfServicePage() {
               <ArrowLeft size={14} /> Hub
             </Link>
             <div className="h-4 w-[1px] bg-white/[0.1]" />
-            <FolioVedaLogo size="sm" showBadge={false} />
+            <FolioInLogo size="sm" showBadge={false} />
             <span className="text-xs font-mono text-slate-400">/ Legal & Terms</span>
           </div>
           <Link
@@ -34,7 +34,7 @@ export default function TermsOfServicePage() {
             <Scale size={13} /> Institutional Compliance
           </span>
           <h1 className="text-3xl sm:text-4xl font-black text-white">
-            FolioVeda Terms of Service & Inspiration Safe-Use Policy
+            FolioIn Terms of Service & Inspiration Safe-Use Policy
           </h1>
           <p className="text-xs font-mono text-slate-400 mt-2">
             Last Updated: October 2026 • Effective Worldwide
@@ -63,7 +63,7 @@ export default function TermsOfServicePage() {
             "Inspired designs are original creations. Do not use others' text, images, or branding."
           </p>
           <p className="text-xs text-slate-300 leading-relaxed">
-            FolioVeda provides an aesthetic translation engine. Users are strictly prohibited from submitting, publishing, or claiming ownership of third-party copyrighted text, trademarks, logos, client case studies, or photography.
+            FolioIn provides an aesthetic translation engine. Users are strictly prohibited from submitting, publishing, or claiming ownership of third-party copyrighted text, trademarks, logos, client case studies, or photography.
           </p>
         </div>
 
@@ -72,7 +72,7 @@ export default function TermsOfServicePage() {
           <section className="space-y-2">
             <h3 className="text-lg font-bold text-white">1. Abstract Aesthetic Extraction vs. Proprietary Code</h3>
             <p>
-              When a user submits an external website URL to the FolioVeda Inspiration Link Engine, our automated sandboxed parser extracts only abstract, high-level design parameters:
+              When a user submits an external website URL to the FolioIn Inspiration Link Engine, our automated sandboxed parser extracts only abstract, high-level design parameters:
             </p>
             <ul className="list-disc list-inside space-y-1 pl-2 text-xs text-slate-400">
               <li>Overall spatial density (compact, comfortable, spacious).</li>
@@ -81,14 +81,14 @@ export default function TermsOfServicePage() {
               <li>Section ordering rhythm (e.g. projects prior to experience).</li>
             </ul>
             <p className="text-xs text-slate-400">
-              FolioVeda <strong>never</strong> downloads, mirrors, copies, or stores source HTML, CSS rules, JavaScript scripts, exact font binaries, raster images, SVG illustrations, or personal identifying information of the target site owner.
+              FolioIn <strong>never</strong> downloads, mirrors, copies, or stores source HTML, CSS rules, JavaScript scripts, exact font binaries, raster images, SVG illustrations, or personal identifying information of the target site owner.
             </p>
           </section>
 
           <section className="space-y-2">
             <h3 className="text-lg font-bold text-white">2. Open-Source Font Substitution</h3>
             <p>
-              FolioVeda does not utilize or mirror proprietary font files from analyzed sites. All synthesized themes reference strictly licensed Google Fonts and open-source system font stacks.
+              FolioIn does not utilize or mirror proprietary font files from analyzed sites. All synthesized themes reference strictly licensed Google Fonts and open-source system font stacks.
             </p>
           </section>
 
@@ -102,14 +102,14 @@ export default function TermsOfServicePage() {
           <section className="space-y-2">
             <h3 className="text-lg font-bold text-white">4. Zero-Hallucination & Factual Accuracy</h3>
             <p>
-              Users retain sole responsibility for the factual truth of all accomplishments, metrics, employers, and degrees listed in their portfolio. FolioVeda’s AI copy engine operates under a zero-hallucination mandate, generating wording solely anchored in user-submitted proof.
+              Users retain sole responsibility for the factual truth of all accomplishments, metrics, employers, and degrees listed in their portfolio. FolioIn’s AI copy engine operates under a zero-hallucination mandate, generating wording solely anchored in user-submitted proof.
             </p>
           </section>
 
           <section className="space-y-2">
             <h3 className="text-lg font-bold text-white">5. Takedown & Copyright Infringement Claims</h3>
             <p>
-              FolioVeda respects the intellectual property rights of all creators and engineers. If you believe any live portfolio hosted on our platform infringes upon your copyrighted materials, please submit a notice via our dedicated{" "}
+              FolioIn respects the intellectual property rights of all creators and engineers. If you believe any live portfolio hosted on our platform infringes upon your copyrighted materials, please submit a notice via our dedicated{" "}
               <Link href="/legal/takedown" className="text-emerald-400 underline font-semibold">
                 Takedown Portal
               </Link>
@@ -120,7 +120,7 @@ export default function TermsOfServicePage() {
       </main>
 
       <footer className="border-t border-white/[0.08] py-8 px-6 text-center text-xs text-slate-500 font-mono">
-        FolioVeda Legal & Compliance • Institutional Architecture • 2026
+        FolioIn Legal & Compliance • Institutional Architecture • 2026
       </footer>
     </div>
   );

@@ -180,7 +180,7 @@ export function GlassExperience({ theme, content }: { theme: ThemePackage; conte
 export function GlassContact({ theme, content }: { theme: ThemePackage; content: PortfolioContent }) {
   return (
     <footer className="mt-20 pt-8 border-t border-white/10 text-center text-xs text-slate-400 pb-12 max-w-5xl mx-auto px-6">
-      <p>Rendered with Glassmorphism Engine &bull; FolioVeda</p>
+      <p>Rendered with Glassmorphism Engine &bull; FolioIn</p>
     </footer>
   );
 }

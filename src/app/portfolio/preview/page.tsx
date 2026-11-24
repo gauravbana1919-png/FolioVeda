@@ -34,7 +34,7 @@ import {
   DownloadCloud
 } from "lucide-react";
 import { AiAgentWidget } from "@/components/portfolio/AiAgentWidget";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 import { getThemeById, getAllSystemThemes, mapUserToPortfolioContent } from "@/lib/themes/registry";
 import { ThemeRenderer } from "@/components/portfolio/engine/ThemeRenderer";
 import { PERSONA_PROFILES } from "@/lib/personas";
@@ -133,7 +133,7 @@ export default function PortfolioStudio() {
       socials: JSON.stringify({
         github: "https://github.com/gauravbana1919-png",
         linkedin: "https://www.linkedin.com/in/gaurav-shekhawat-a24644398/",
-        website: "https://folioveda.dev"
+        website: "https://folioin.dev"
       })
     },
     projects: [
@@ -162,10 +162,10 @@ export default function PortfolioStudio() {
         solution: "Built a collaborative canvas that streams LLM structured JSON into real-time interactive diagrams with sub-100ms render speeds."
       },
       {
-        title: "FolioVeda — Autonomous Portfolio Compiler",
+        title: "FolioIn — Autonomous Portfolio Compiler",
         description: "Autonomous career architecture compiler with zero-hallucination intake, dynamic Wall of Portfolios archetypes, and live ATS keyword auditing.",
         techStack: ["Next.js", "Prisma", "SQLite", "Framer Motion", "Tailwind CSS"],
-        liveUrl: "https://folioveda.dev",
+        liveUrl: "https://folioin.dev",
         githubUrl: "https://github.com/gauravbana1919-png",
         featured: false,
         category: "Full-Stack SaaS Platform",
@@ -181,7 +181,7 @@ export default function PortfolioStudio() {
 
     // 1. Check if user recently extracted a PDF or Text in Onboarding
     try {
-      const cached = localStorage.getItem("folioveda_active_profile");
+      const cached = localStorage.getItem("folioin_active_profile");
       if (cached) {
         const ext = JSON.parse(cached);
         if (ext && ext.name) {
@@ -218,7 +218,7 @@ export default function PortfolioStudio() {
         let cachedTheme = "";
         let cachedFont = "";
         try {
-          const c = localStorage.getItem("folioveda_active_profile");
+          const c = localStorage.getItem("folioin_active_profile");
           if (c) {
             const parsed = JSON.parse(c);
             if (parsed?.name) cachedName = parsed.name.replace(/[*_#`~]/g, "").trim();
@@ -364,7 +364,7 @@ export default function PortfolioStudio() {
             setActiveThemeId(adaptedTheme);
 
             try {
-              localStorage.setItem("folioveda_active_profile", JSON.stringify(ext));
+              localStorage.setItem("folioin_active_profile", JSON.stringify(ext));
             } catch (e) {}
 
             // Save immediately to backend SQLite so /p/[username] is in sync
@@ -462,7 +462,7 @@ export default function PortfolioStudio() {
         if (ext.accentColor) setAccentColor(ext.accentColor);
 
         try {
-          localStorage.setItem("folioveda_active_profile", JSON.stringify(ext));
+          localStorage.setItem("folioin_active_profile", JSON.stringify(ext));
         } catch (e) {}
 
         await handleSave({
@@ -523,13 +523,13 @@ export default function PortfolioStudio() {
       if (res.ok) {
         setSaveStatus("saved");
         try {
-          const c = localStorage.getItem("folioveda_active_profile");
+          const c = localStorage.getItem("folioin_active_profile");
           const parsed = c ? JSON.parse(c) : {};
           parsed.recommendedTheme = payload.themeId;
           parsed.themeId = payload.themeId;
           parsed.fontFamily = payload.fontFamily;
           parsed.accentColor = payload.accentColor;
-          localStorage.setItem("folioveda_active_profile", JSON.stringify(parsed));
+          localStorage.setItem("folioin_active_profile", JSON.stringify(parsed));
         } catch {}
       } else {
         setSaveStatus("unsaved");
@@ -598,7 +598,7 @@ export default function PortfolioStudio() {
               <ArrowLeft size={14} /> Hub
             </Link>
             <div className="h-4 w-[1px] bg-border hidden sm:block" />
-            <FolioVedaLogo size="xs" showBadge={false} />
+            <FolioInLogo size="xs" showBadge={false} />
           </div>
 
           {/* Center: Flagship 4 Archetypes + Full Dropdown */}
@@ -1078,7 +1078,7 @@ export default function PortfolioStudio() {
       <div className="fixed bottom-4 left-4 z-30">
         <span className="px-3 py-1.5 bg-background/90 backdrop-blur-md border border-border text-foreground text-[11px] font-medium rounded-md shadow-md flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-emerald-500" />
-          FolioVeda Engine • <strong>{selectedThemePackage.name}</strong>
+          FolioIn Engine • <strong>{selectedThemePackage.name}</strong>
         </span>
       </div>
 

@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     const headers = {
       Authorization: `token ${pat.trim()}`,
       Accept: "application/vnd.github.v3+json",
-      "User-Agent": "FolioVeda-Portfolio-Engine",
+      "User-Agent": "FolioIn-Portfolio-Engine",
     };
 
     // 1. Verify user authentication
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
       headers,
       body: JSON.stringify({
         name: cleanRepoName,
-        description: "Portfolio website generated and published by FolioVeda",
+        description: "Portfolio website generated and published by FolioIn",
         homepage: `https://${owner}.github.io/${cleanRepoName}/`,
         private: false,
         auto_init: true,
@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
         method: "PUT",
         headers,
         body: JSON.stringify({
-          message: "Deploy Portfolio via FolioVeda Engine",
+          message: "Deploy Portfolio via FolioIn Engine",
           content: base64Content,
           sha: sha,
           branch: defaultBranch,

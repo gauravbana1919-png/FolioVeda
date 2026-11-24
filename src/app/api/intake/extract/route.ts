@@ -478,7 +478,7 @@ export async function POST(req: Request) {
       try {
         const ai = new GoogleGenAI({ apiKey });
         const prompt = `
-          You are an expert career trajectory parser and portfolio architect for FolioVeda.
+          You are an expert career trajectory parser and portfolio architect for FolioIn.
           Analyze the provided document (LinkedIn PDF export, resume, or profile text) and extract accurate, structured professional data to compile an elite, award-winning portfolio.
           
           RULES & STANDARDS:
@@ -680,7 +680,7 @@ async function persistExtractedUser(extracted: any, session: any = null) {
     }
 
     if (!user) {
-      const email = extracted.contact?.email || `${targetName.toLowerCase().replace(/[^a-z0-9]/g, "")}_${Date.now()}@folioveda.local`;
+      const email = extracted.contact?.email || `${targetName.toLowerCase().replace(/[^a-z0-9]/g, "")}_${Date.now()}@folioin.local`;
       user = await prisma.user.findFirst({
         where: {
           OR: [

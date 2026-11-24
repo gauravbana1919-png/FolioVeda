@@ -4,7 +4,7 @@ import { CheckCircle, AlertTriangle, ShieldCheck, ArrowLeft } from "lucide-react
 import { useEffect, useState } from "react";
 import DOMPurify from 'isomorphic-dompurify';
 import Link from "next/link";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 
 export default function SecurityReportPage() {
   const [loading, setLoading] = useState(true);
@@ -24,7 +24,7 @@ export default function SecurityReportPage() {
   return (
     <div className="max-w-4xl mx-auto p-6 pt-12 font-sans text-foreground space-y-6">
       <div className="flex items-center justify-between pb-4 border-b border-border">
-        <FolioVedaLogo size="sm" showBadge={true} />
+        <FolioInLogo size="sm" showBadge={true} />
         <Link 
           href="/" 
           className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-2.5 py-1 rounded-lg bg-secondary/60 hover:bg-secondary"

@@ -243,7 +243,7 @@ export function markdownFromRecord(record: any): string {
   }
 
   const email = clean(contact.email || socials.email || record.email);
-  const publicEmail = email.includes("@folioveda.local") ? "" : email;
+  const publicEmail = email.includes("@folioin.local") ? "" : email;
 
   return buildResumeMarkdown({
     name: record.name || profile.name,

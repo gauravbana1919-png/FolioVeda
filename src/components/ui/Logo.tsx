@@ -39,7 +39,7 @@ export function LogoProvider({ children }: { children: React.ReactNode }) {
   const [activeVariant, setActiveVariant] = useState<LogoVariant>("origami");
 
   useEffect(() => {
-    const saved = localStorage.getItem("folioveda_logo_variant") as LogoVariant | null;
+    const saved = localStorage.getItem("folioin_logo_variant") as LogoVariant | null;
     if (saved && (saved === "origami" || saved === "lotus" || saved === "monogram" || saved === "quill")) {
       setActiveVariant(saved);
     }
@@ -47,7 +47,7 @@ export function LogoProvider({ children }: { children: React.ReactNode }) {
 
   const updateVariant = (v: LogoVariant) => {
     setActiveVariant(v);
-    localStorage.setItem("folioveda_logo_variant", v);
+    localStorage.setItem("folioin_logo_variant", v);
   };
 
   return (
@@ -63,7 +63,7 @@ export function useLogoVariant() {
 
 /**
  * OFFICIAL BRAND IDENTITY: The Origami Folio Fold (Cyber Mint & Deep Jade)
- * Physically folds 'F' (Folio) and 'V' (Veda) from a single sheet of digital paper.
+ * Physically folds 'F' (Folio) and 'V' (In) from a single sheet of digital paper.
  */
 export function OrigamiCyberMintIcon({ size = 36, className = "" }: { size?: number; className?: string }) {
   return (
@@ -99,9 +99,9 @@ export const MonogramIcon = OrigamiCyberMintIcon;
 export const QuillIcon = OrigamiCyberMintIcon;
 
 /**
- * Main FolioVeda Logo with typography
+ * Main FolioIn Logo with typography
  */
-export function FolioVedaLogo({
+export function FolioInLogo({
   variant = "origami",
   size = "md",
   showText = true,
@@ -124,7 +124,7 @@ export function FolioVedaLogo({
                 Folio
               </span>
               <span className="text-[#059669]">
-                Veda
+                In
               </span>
             </span>
 
@@ -145,4 +145,5 @@ export function FolioVedaLogo({
   );
 }
 
-export default FolioVedaLogo;
+export default FolioInLogo;
+export const FolioVedaLogo = FolioInLogo;

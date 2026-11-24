@@ -1,10 +1,10 @@
-# FolioVeda Personalisation Module & Legal Counsel Brief
+# FolioIn Personalisation Module & Legal Counsel Brief
 
 ---
 
 ## 1. Executive Summary & Architecture Overview
 
-The **Portfolio Personalisation Module** transforms FolioVeda from a static template builder into a decoupled, design-token-driven portfolio engine. It enables users to:
+The **Portfolio Personalisation Module** transforms FolioIn from a static template builder into a decoupled, design-token-driven portfolio engine. It enables users to:
 1. **Pick from 8+ distinct architectural styles** while guaranteeing **zero data loss** (content is strictly decoupled from presentation).
 2. **Complete a 2-minute Smart Profile Intake** that automatically orders sections and drafts tone-calibrated headlines and bios under a **strict Zero-Hallucination mandate**.
 3. **Generate an original custom theme inspired by any public portfolio URL** ("Make Mine Feel Like This") through abstract design token extraction, licensed Google Fonts substitution, and an automated mathematical **Similarity Guard**.
@@ -17,7 +17,7 @@ The **Portfolio Personalisation Module** transforms FolioVeda from a static temp
                                     │ Renders identically across
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│                    FolioVeda Style Engine (Tokens)                     │
+│                    FolioIn Style Engine (Tokens)                     │
 ├───────────────────────────────────┬────────────────────────────────────┤
 │ 8 Built-in Themes                 │ Custom Inspired Themes             │
 │ • developer-terminal (Tech)       │ • Extracted Abstract StyleProfile  │
@@ -71,7 +71,7 @@ All 8 themes implement `ThemePackageSchema`:
 ## 3. Legal Counsel Memorandum (Pre-Launch Review)
 
 **TO:** General Counsel & Intellectual Property Legal Advisory  
-**FROM:** FolioVeda Engineering Architecture Team  
+**FROM:** FolioIn Engineering Architecture Team  
 **DATE:** October 2026  
 **SUBJECT:** Intellectual Property, Copyright, and Fair-Use Compliance Analysis of the "Make Mine Feel Like This" Inspiration Engine  
 
@@ -82,14 +82,14 @@ Under both U.S. Copyright Law (17 U.S.C. § 102(b)) and Indian Copyright Law (Co
 3. Raw color palettes or functional typographic classifications (*Alberto-Culver Co. v. Andrea Dumon, Inc.*).
 
 ### 3.2 Technical Safeguards Enforcing Copyright Compliance
-FolioVeda’s Inspiration Link Engine is architected to ensure that no copyrightable expression is ever reproduced:
+FolioIn’s Inspiration Link Engine is architected to ensure that no copyrightable expression is ever reproduced:
 * **Zero Asset Copying:** The system **never** copies, stores, mirrors, or hotlinks:
   - HTML, CSS stylesheets, or JavaScript bundles.
   - Image assets (PNG, JPEG, WebP, SVG illustrations, or icons).
   - Video or audio files.
   - 3D models or animations.
-* **Proprietary Font Protection:** Analyzed pages often use expensive proprietary font binaries (e.g., Circular, Neue Haas Grotesk). FolioVeda **never** downloads or references these binaries. Instead, it classifies the type category (`modern-grotesk`, `editorial-serif`, `monospace-code`) and substitutes licensed, open-source Google Fonts (`Plus Jakarta Sans`, `Playfair Display`, `JetBrains Mono`).
-* **Original Layout Execution:** The output is rendered exclusively through FolioVeda’s own component library (`ThemeRenderer`). We do not mirror external DOM trees or classes.
+* **Proprietary Font Protection:** Analyzed pages often use expensive proprietary font binaries (e.g., Circular, Neue Haas Grotesk). FolioIn **never** downloads or references these binaries. Instead, it classifies the type category (`modern-grotesk`, `editorial-serif`, `monospace-code`) and substitutes licensed, open-source Google Fonts (`Plus Jakarta Sans`, `Playfair Display`, `JetBrains Mono`).
+* **Original Layout Execution:** The output is rendered exclusively through FolioIn’s own component library (`ThemeRenderer`). We do not mirror external DOM trees or classes.
 * **Automated Similarity Guard:** To prevent near-identical look-and-feel issues, any output with a composite similarity index above `0.78` is automatically diversified before reaching the user.
 * **Zero Scraped Personal Data:** The system ignores personal data (names, biographies, email addresses) of the analyzed site owner. The portfolio is populated strictly with the requesting user’s own data.
 

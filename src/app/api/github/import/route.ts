@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     const userRes = await fetch(`https://api.github.com/users/${cleanUsername}`, {
       headers: {
         Accept: "application/vnd.github.v3+json",
-        "User-Agent": "FolioVeda-Portfolio-Engine",
+        "User-Agent": "FolioIn-Portfolio-Engine",
       },
     });
 
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       {
         headers: {
           Accept: "application/vnd.github.v3+json",
-          "User-Agent": "FolioVeda-Portfolio-Engine",
+          "User-Agent": "FolioIn-Portfolio-Engine",
         },
       }
     );
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
       if (repo.topics) repo.topics.forEach((t) => languageSet.add(t));
     });
 
-    // Map projects into FolioVeda schema
+    // Map projects into FolioIn schema
     const mappedProjects = originalRepos.map((repo, idx) => ({
       id: `gh-${repo.id}`,
       title: repo.name.replace(/[-_]/g, " "),

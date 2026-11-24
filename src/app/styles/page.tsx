@@ -20,7 +20,7 @@ import {
   X,
   Image as ImageIcon
 } from "lucide-react";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 import { getAllSystemThemes, mapUserToPortfolioContent } from "@/lib/themes/registry";
 import { getThemeRecommendations } from "@/lib/themes/recommendations";
 import { ThemeRenderer } from "@/components/portfolio/engine/ThemeRenderer";
@@ -130,7 +130,7 @@ export default function StyleGalleryPage() {
             </Link>
             <div className="h-4 w-[1px] bg-slate-200 hidden sm:block" />
             <Link href="/" className="hover:opacity-90 transition-opacity">
-              <FolioVedaLogo size="sm" />
+              <FolioInLogo size="sm" />
             </Link>
             <span className="text-slate-400 text-xs font-medium hidden md:inline">/ Style Gallery</span>
           </div>
@@ -242,7 +242,7 @@ export default function StyleGalleryPage() {
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#173f32] animate-pulse" />
               <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                FolioVeda Signature Archetypes:
+                FolioIn Signature Archetypes:
               </span>
             </div>
             <span className="text-[11px] text-slate-500 hidden sm:inline">
@@ -479,7 +479,7 @@ export default function StyleGalleryPage() {
                           <span className="w-2 h-2 rounded-full bg-amber-500/90"></span>
                           <span className="w-2 h-2 rounded-full bg-emerald-500/90"></span>
                         </div>
-                        <span>folioveda.me/{normalizedContent.name.toLowerCase().replace(/\s+/g, "")}</span>
+                        <span>folioin.me/{normalizedContent.name.toLowerCase().replace(/\s+/g, "")}</span>
                       </div>
 
                       {/* Miniature Theme Viewport */}
@@ -617,7 +617,7 @@ export default function StyleGalleryPage() {
                   {lightboxPin.title || "Curated Portfolio Architectural Blueprint"}
                 </p>
                 <span className="font-mono text-[11px] text-slate-500">
-                  FolioVeda Style Matrix
+                  FolioIn Style Matrix
                 </span>
               </div>
             </div>

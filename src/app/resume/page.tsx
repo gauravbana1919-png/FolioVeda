@@ -5,7 +5,7 @@ import * as Diff from "diff";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
 import Link from "next/link";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 import { convertStructuredToMarkdown } from "@/app/api/resume/parse/route";
 import { 
   FileText, 
@@ -309,7 +309,7 @@ export default function ResumeBuilderStudio() {
   // Auto-sync initial profile from localStorage or database if available
   useEffect(() => {
     try {
-      const cached = localStorage.getItem("folioveda_active_profile");
+      const cached = localStorage.getItem("folioin_active_profile");
       if (cached) {
         const ext = JSON.parse(cached);
         if (ext?.name) {
@@ -2088,7 +2088,7 @@ export default function ResumeBuilderStudio() {
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 px-6 h-16 flex items-center justify-between shadow-2xs print:hidden">
         <div className="flex items-center gap-3">
           <Link href="/" className="hover:opacity-90 transition-opacity">
-            <FolioVedaLogo size="sm" />
+            <FolioInLogo size="sm" />
           </Link>
           <span className="text-slate-300">/</span>
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-bold">

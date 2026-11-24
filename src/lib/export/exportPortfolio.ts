@@ -267,7 +267,7 @@ export function getStandaloneHtml(theme: ThemePackage, content: PortfolioContent
 
     <footer>
       ${contactLinks.length > 0 ? `<div class="social-links">${contactLinks.join("")}</div>` : ""}
-      <p>Created with <strong>FolioVeda</strong> — AI Portfolio Engine</p>
+      <p>Created with <strong>FolioIn</strong> — AI Portfolio Engine</p>
     </footer>
   </div>
 </body>
@@ -334,7 +334,7 @@ export function generateProfileReadme(content: PortfolioContent): string {
   }
 
   md.push("---");
-  md.push("*Generated with [FolioVeda](https://folioveda.com)*");
+  md.push("*Generated with [FolioIn](https://folioin.com)*");
 
   return md.join("\n");
 }

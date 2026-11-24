@@ -5,7 +5,7 @@ import {
   LotusIcon, 
   MonogramIcon, 
   QuillIcon, 
-  FolioVedaLogo, 
+  FolioInLogo, 
   useLogoVariant, 
   LogoVariant 
 } from "./Logo";
@@ -24,13 +24,13 @@ import {
   GoogleStyleFLogo, 
   GoogleWorkspaceFoldLogo, 
   ColorLoopMonogramLogo, 
-  GoogleStyleFolioVedaLogo 
+  GoogleStyleFolioInLogo 
 } from "./GoogleStyleLogos";
 import { 
   OrigamiFolioLogo, 
   AcidPageTurnLogo, 
   IsometricStageLogo, 
-  UniqueFolioVedaWordmark 
+  UniqueFolioInWordmark 
 } from "./UniqueLogos";
 import { 
   OrigamiFolioMark, 
@@ -60,7 +60,7 @@ export function LogoShowcase() {
       title: "Concept 1: The Vedic Geometric Lotus & Folio",
       subtitle: "Sacred geometry merged with dynamic digital portfolio layers",
       symbolism:
-        "Blossoming lotus petals represent purity of knowledge (Veda) and enlightenment, layered like pages of a digital portfolio (Folio). The central diamond nexus radiates intelligence.",
+        "Blossoming lotus petals represent purity of knowledge (In) and enlightenment, layered like pages of a digital portfolio (Folio). The central diamond nexus radiates intelligence.",
       palette: ["#818CF8", "#4F46E5", "#22D3EE", "#38BDF8"],
       Component: LotusIcon,
     },
@@ -69,7 +69,7 @@ export function LogoShowcase() {
       title: "Concept 2: The Prismatic 'FV' Isometric Monogram",
       subtitle: "Precision-engineered 3D isometric ribbon folding 'F' and 'V'",
       symbolism:
-        "The left isometric pillar and horizontal shelves form the letter 'F' (Folio). The descending dynamic chevron creates the sharp angle of 'V' (Veda). Architectural, authoritative, high-end SaaS feel.",
+        "The left isometric pillar and horizontal shelves form the letter 'F' (Folio). The descending dynamic chevron creates the sharp angle of 'V' (In). Architectural, authoritative, high-end SaaS feel.",
       palette: ["#10B981", "#06B6D4", "#3B82F6", "#8B5CF6"],
       Component: MonogramIcon,
     },
@@ -137,7 +137,7 @@ export function LogoShowcase() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `folioveda-logo-${variant}.svg`;
+    link.download = `folioin-logo-${variant}.svg`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -159,12 +159,12 @@ export function LogoShowcase() {
               <span>100% Original Intellectual Property &bull; Zero Copyright Risk</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-              FolioVeda Brand Identity &amp; Logo Studio
+              FolioIn Brand Identity &amp; Logo Studio
             </h1>
             <p className="text-slate-300 text-sm md:text-base mt-2 max-w-2xl leading-relaxed">
               Explore 3 mathematically engineered vector identities tailored to the union of 
               <strong className="text-white"> Folio</strong> (digital creator layers) and 
-              <strong className="text-indigo-300"> Veda</strong> (radiant wisdom). Pick your preferred active mark below.
+              <strong className="text-indigo-300"> In</strong> (radiant wisdom). Pick your preferred active mark below.
             </p>
           </div>
 
@@ -207,7 +207,7 @@ export function LogoShowcase() {
                 <span>Selected Direction: The Origami Folio Fold</span>
               </div>
               <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-                Pick Your Favorite Colorway for FolioVeda
+                Pick Your Favorite Colorway for FolioIn
               </h2>
               <p className="text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
                 You liked the <strong>Origami Folio Fold</strong>! Here are 5 completely different, premium color systems designed specifically for this mark. None of them use Google colors or generic AI gradients.
@@ -317,7 +317,7 @@ export function LogoShowcase() {
 
             <div className="bg-stone-950/90 border border-stone-800 p-4 rounded-2xl flex flex-col items-center justify-center shrink-0">
               <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider mb-2">Signature Brand Lockup</span>
-              <UniqueFolioVedaWordmark variant={1} size="sm" />
+              <UniqueFolioInWordmark variant={1} size="sm" />
             </div>
           </div>
         </div>
@@ -333,7 +333,7 @@ export function LogoShowcase() {
             >
               <OrigamiFolioLogo size={96} className="transition-transform duration-300 group-hover:scale-105" />
               <div className="mt-5 text-center">
-                <UniqueFolioVedaWordmark variant={1} size="sm" />
+                <UniqueFolioInWordmark variant={1} size="sm" />
                 <span className="block text-[10px] text-stone-400 tracking-widest uppercase font-mono mt-1">
                   TACTILE ORIGAMI FOLD (F &amp; V)
                 </span>
@@ -378,7 +378,7 @@ export function LogoShowcase() {
             >
               <AcidPageTurnLogo size={96} dark={previewTheme === "dark"} className="transition-transform duration-300 group-hover:scale-105" />
               <div className="mt-5 text-center">
-                <UniqueFolioVedaWordmark variant={2} size="sm" />
+                <UniqueFolioInWordmark variant={2} size="sm" />
                 <span className="block text-[10px] text-stone-400 tracking-widest uppercase font-mono mt-1">
                   EDITORIAL CREATIVE-TECH
                 </span>
@@ -422,7 +422,7 @@ export function LogoShowcase() {
             >
               <IsometricStageLogo size={96} className="transition-transform duration-300 group-hover:scale-105" />
               <div className="mt-5 text-center">
-                <UniqueFolioVedaWordmark variant={3} size="sm" />
+                <UniqueFolioInWordmark variant={3} size="sm" />
                 <span className="block text-[10px] text-stone-400 tracking-widest uppercase font-mono mt-1">
                   ARCHITECTURAL MONOLITH
                 </span>
@@ -471,7 +471,7 @@ export function LogoShowcase() {
                 <span>Google-Inspired System &bull; Clean, Simple &amp; Multi-Colored</span>
               </div>
               <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-                Simple &amp; Attractive Lettermarks for FolioVeda
+                Simple &amp; Attractive Lettermarks for FolioIn
               </h2>
               <p className="text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
                 Like Google&apos;s iconic multi-color &apos;G&apos;, these marks are built on <strong>pure simplicity, friendly curved geometry, and cheerful vibrant primary colors</strong> (Red, Yellow, Green, Blue) — zero boring gradients, zero direct AI clones.
@@ -480,7 +480,7 @@ export function LogoShowcase() {
 
             <div className="bg-slate-950/80 border border-slate-800 p-4 rounded-2xl flex flex-col items-center justify-center shrink-0">
               <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2">Wordmark Preview</span>
-              <GoogleStyleFolioVedaLogo size="md" variant={1} />
+              <GoogleStyleFolioInLogo size="md" variant={1} />
             </div>
           </div>
         </div>
@@ -496,7 +496,7 @@ export function LogoShowcase() {
             >
               <GoogleStyleFLogo size={96} className="transition-transform duration-300 group-hover:scale-105" />
               <div className="mt-5 text-center">
-                <GoogleStyleFolioVedaLogo size="sm" variant={1} />
+                <GoogleStyleFolioInLogo size="sm" variant={1} />
                 <span className="block text-[10px] text-slate-400 tracking-widest uppercase font-mono mt-1">
                   CONCEPT 1 &bull; THE GOOGLE &apos;G&apos; EQUIVALENT
                 </span>
@@ -537,7 +537,7 @@ export function LogoShowcase() {
             >
               <GoogleWorkspaceFoldLogo size={96} className="transition-transform duration-300 group-hover:scale-105" />
               <div className="mt-5 text-center">
-                <GoogleStyleFolioVedaLogo size="sm" variant={2} />
+                <GoogleStyleFolioInLogo size="sm" variant={2} />
                 <span className="block text-[10px] text-slate-400 tracking-widest uppercase font-mono mt-1">
                   CONCEPT 2 &bull; WORKSPACE ORIGAMI FOLD
                 </span>
@@ -551,7 +551,7 @@ export function LogoShowcase() {
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono">WORKSPACE</span>
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Inspired by Google Drive and Docs. Geometric ribbons folding into both the letter <strong>F</strong> (Folio) and an angled <strong>V</strong> (Veda) with crisp color-blocking.
+                  Inspired by Google Drive and Docs. Geometric ribbons folding into both the letter <strong>F</strong> (Folio) and an angled <strong>V</strong> (In) with crisp color-blocking.
                 </p>
                 <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-1">
                   <span className="font-semibold text-slate-200">Why it works:</span> Tactile, dynamic, modern productivity SaaS feel.
@@ -574,7 +574,7 @@ export function LogoShowcase() {
             >
               <ColorLoopMonogramLogo size={96} className="transition-transform duration-300 group-hover:scale-105" />
               <div className="mt-5 text-center">
-                <GoogleStyleFolioVedaLogo size="sm" variant={3} />
+                <GoogleStyleFolioInLogo size="sm" variant={3} />
                 <span className="block text-[10px] text-slate-400 tracking-widest uppercase font-mono mt-1">
                   CONCEPT 3 &bull; FRESH STARTUP PALETTE
                 </span>
@@ -665,7 +665,7 @@ export function LogoShowcase() {
               />
               <div className="mt-4 text-center">
                 <span className="text-base font-black tracking-tight">
-                  Folio<span className="text-blue-500">Veda</span>
+                  Folio<span className="text-blue-500">In</span>
                 </span>
                 <span className="block text-[9px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
                   THE INFINITE M&Ouml;BIUS
@@ -680,7 +680,7 @@ export function LogoShowcase() {
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-mono">META STYLE</span>
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Continuous aerodynamic ribbon looping through infinity (&infin; for Veda/Wisdom) while shaping the dynamic flow of an <strong>F</strong> and <strong>V</strong>.
+                  Continuous aerodynamic ribbon looping through infinity (radiant Insight) while shaping the dynamic flow of an <strong>F</strong> and <strong>V</strong>.
                 </p>
               </div>
               <div className="pt-2 border-t border-slate-800 text-[11px] text-emerald-400 font-medium">
@@ -704,7 +704,7 @@ export function LogoShowcase() {
               />
               <div className="mt-4 text-center">
                 <span className="text-base font-black tracking-tight">
-                  Folio<span className="text-blue-500">Veda</span>
+                  Folio<span className="text-blue-500">In</span>
                 </span>
                 <span className="block text-[9px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
                   4-POINT CELESTIAL SPARK
@@ -715,7 +715,7 @@ export function LogoShowcase() {
             <div className="p-5 bg-slate-900/95 flex-1 flex flex-col justify-between space-y-3 border-t border-slate-800">
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-white text-sm">2. The Veda Spark</h3>
+                  <h3 className="font-bold text-white text-sm">2. The In Spark</h3>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-mono">GEMINI STYLE</span>
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
@@ -743,7 +743,7 @@ export function LogoShowcase() {
               />
               <div className="mt-4 text-center">
                 <span className="text-base font-black tracking-tight">
-                  Folio<span className="text-blue-500">Veda</span>
+                  Folio<span className="text-blue-500">In</span>
                 </span>
                 <span className="block text-[9px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
                   ROTATIONAL HARMONY
@@ -782,7 +782,7 @@ export function LogoShowcase() {
               />
               <div className="mt-4 text-center">
                 <span className="text-base font-black tracking-tight">
-                  Folio<span className="text-blue-500">Veda</span>
+                  Folio<span className="text-blue-500">In</span>
                 </span>
                 <span className="block text-[9px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
                   CHIRAL ASCENT ORBIT
@@ -841,7 +841,7 @@ export function LogoShowcase() {
               <SiliconProcessorIcon size={88} dark={previewTheme === "dark"} />
               <div className="mt-4 text-center">
                 <span className="text-lg font-black tracking-tight">
-                  Folio<span className="text-blue-500">Veda</span>
+                  Folio<span className="text-blue-500">In</span>
                 </span>
                 <span className="block text-[10px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
                   CORE SILICON ARCHITECTURE
@@ -880,7 +880,7 @@ export function LogoShowcase() {
               <LinearMonolithIcon size={88} dark={previewTheme === "dark"} />
               <div className="mt-4 text-center">
                 <span className="text-lg font-black tracking-tight">
-                  Folio<span className="text-blue-500">Veda</span>
+                  Folio<span className="text-blue-500">In</span>
                 </span>
                 <span className="block text-[10px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
                   SAAS MONOLITH MARK
@@ -895,7 +895,7 @@ export function LogoShowcase() {
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-mono">MINIMALIST</span>
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Interlocking solid geometric slabs. The monolithic vertical spine and horizontal tiers form <strong>F</strong> (Folio), while a 45&deg; high-speed wedge forms <strong>V</strong> (Veda).
+                  Interlocking solid geometric slabs. The monolithic vertical spine and horizontal tiers form <strong>F</strong> (Folio), while a 45&deg; high-speed wedge forms <strong>V</strong> (In).
                 </p>
                 <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-1">
                   <span className="font-semibold text-slate-200">Vibe:</span> Linear.app, Vercel, Supabase, Stripe.
@@ -919,7 +919,7 @@ export function LogoShowcase() {
               <LogicCircuitIcon size={88} dark={previewTheme === "dark"} />
               <div className="mt-4 text-center">
                 <span className="text-lg font-black tracking-tight">
-                  Folio<span className="text-blue-500">Veda</span>
+                  Folio<span className="text-blue-500">In</span>
                 </span>
                 <span className="block text-[10px] text-slate-400 tracking-widest uppercase font-mono mt-0.5">
                   CIRCUIT DATA MATRIX
@@ -999,7 +999,7 @@ export function LogoShowcase() {
                 </div>
 
                 <div className="relative z-10 mt-3 text-center">
-                  <FolioVedaLogo
+                  <FolioInLogo
                     variant={concept.id}
                     size="lg"
                     showBadge={true}
@@ -1089,7 +1089,7 @@ export function LogoShowcase() {
           <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col items-center justify-center gap-2">
             <span className="text-[11px] text-slate-400 font-semibold">16px Favicon</span>
             <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center shadow-inner">
-              <FolioVedaLogo size="xs" showText={false} />
+              <FolioInLogo size="xs" showText={false} />
             </div>
             <span className="text-[10px] text-emerald-400">&check; Crisp pixel alignment</span>
           </div>
@@ -1098,7 +1098,7 @@ export function LogoShowcase() {
           <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col items-center justify-center gap-2">
             <span className="text-[11px] text-slate-400 font-semibold">32px Navbar</span>
             <div className="h-8 flex items-center">
-              <FolioVedaLogo size="sm" showText={true} />
+              <FolioInLogo size="sm" showText={true} />
             </div>
             <span className="text-[10px] text-emerald-400">&check; High legibility</span>
           </div>
@@ -1107,7 +1107,7 @@ export function LogoShowcase() {
           <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col items-center justify-center gap-2">
             <span className="text-[11px] text-slate-400 font-semibold">48px Header</span>
             <div className="h-12 flex items-center">
-              <FolioVedaLogo size="lg" showText={true} showBadge={true} />
+              <FolioInLogo size="lg" showText={true} showBadge={true} />
             </div>
             <span className="text-[10px] text-emerald-400">&check; Balanced hierarchy</span>
           </div>
@@ -1116,7 +1116,7 @@ export function LogoShowcase() {
           <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col items-center justify-center gap-2">
             <span className="text-[11px] text-slate-400 font-semibold">96px App Icon</span>
             <div className="h-24 flex items-center justify-center">
-              <FolioVedaLogo size="2xl" showText={false} glow={true} />
+              <FolioInLogo size="2xl" showText={false} glow={true} />
             </div>
             <span className="text-[10px] text-emerald-400">&check; Radiant depth</span>
           </div>

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { X, ShieldCheck, Sparkles, Check, ArrowRight, Loader2, Info, ChevronDown, UserCheck, Mail } from "lucide-react";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 
 interface SignInModalProps {
   isOpen: boolean;
@@ -166,7 +166,7 @@ export function SignInModal({
     >
       <div className="relative w-full max-w-md bg-[#F8F9FA] border border-[#1E293B]/15 rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-8 animate-in zoom-in-95 duration-200">
         
-        {/* Top FolioVeda Accent Gradient Streak */}
+        {/* Top FolioIn Accent Gradient Streak */}
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#173f32] via-[#10B981] to-[#ebd800]" />
 
         {/* Close Button */}
@@ -181,11 +181,11 @@ export function SignInModal({
         {/* Modal Header */}
         <div className="text-center space-y-2 pt-2">
           <div className="inline-flex justify-center mb-1">
-            <FolioVedaLogo size="md" showBadge={false} />
+            <FolioInLogo size="md" showBadge={false} />
           </div>
 
           <h2 id="signin-modal-title" className="text-2xl font-black text-[#1E293B] tracking-tight">
-            Sign In to FolioVeda
+            Sign In to FolioIn
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-xs mx-auto leading-relaxed">
             Access your live portfolio, ATS-tailored resumes, and AI design studio in seconds.

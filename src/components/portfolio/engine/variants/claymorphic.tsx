@@ -174,7 +174,7 @@ export function ClaymorphicExperience({ theme, content }: { theme: ThemePackage;
 export function ClaymorphicContact({ theme, content }: { theme: ThemePackage; content: PortfolioContent }) {
   return (
     <footer className="mt-16 pt-8 border-t border-indigo-100 text-center text-xs font-bold text-slate-400 pb-12 max-w-5xl mx-auto px-6">
-      <p>Crafted in 3D Claymorphism &bull; FolioVeda</p>
+      <p>Crafted in 3D Claymorphism &bull; FolioIn</p>
     </footer>
   );
 }

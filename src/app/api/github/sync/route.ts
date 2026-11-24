@@ -45,7 +45,7 @@ export async function POST(req: Request) {
     try {
       const ghRes = await fetch(`https://api.github.com/users/${encodeURIComponent(cleanUsername)}/repos?sort=updated&per_page=6`, {
         headers: {
-          'User-Agent': 'FolioVeda-Portfolio-Sync/1.0',
+          'User-Agent': 'FolioIn-Portfolio-Sync/1.0',
           'Accept': 'application/vnd.github.v3+json',
         },
       });
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
           description: `High-throughput distributed backend pipeline and real-time APIs built by ${user.name}.`,
           language: 'TypeScript',
           html_url: `https://github.com/${cleanUsername}/${cleanUsername.toLowerCase()}-core-systems`,
-          homepage: `https://folioveda.me/${encodeURIComponent(user.name || cleanUsername)}`,
+          homepage: `https://folioin.me/${encodeURIComponent(user.name || cleanUsername)}`,
         },
         {
           name: `pf-edge-cache`,
@@ -79,7 +79,7 @@ export async function POST(req: Request) {
           description: `Zero-hallucination interactive web architecture with live theme switcher and ATS tailor.`,
           language: 'Next.js',
           html_url: `https://github.com/${cleanUsername}/portfolio-engine-v2`,
-          homepage: `https://folioveda.me`,
+          homepage: `https://folioin.me`,
         },
       ];
     }

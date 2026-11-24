@@ -111,10 +111,10 @@ export function enforceSimilarityGuard(
   }
 
   // Push design further away:
-  // 1. Shift accent color toward distinct FolioVeda hue
+  // 1. Shift accent color toward distinct FolioIn hue
   const safeAccent = theme.tokens.colors.accent === "#10B981" ? "#0284C7" : "#10B981";
 
-  // 2. Modulate background tone to FolioVeda slate canvas
+  // 2. Modulate background tone to FolioIn slate canvas
   const safeBg =
     theme.tokens.colors.bg === "#000000" || theme.tokens.colors.bg === "#09090B"
       ? "#0F172A"

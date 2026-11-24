@@ -207,7 +207,7 @@ export function InfiniteMarqueeRibbon({
  */
 export function LiveTerminalTyper({
   commands = [
-    "folioveda --analyze ./portfolio",
+    "folioin --analyze ./portfolio",
     "git commit -m 'verified credentials'",
     "deploy --target github-pages",
     "zero-hallucinations: 100% verified",
@@ -549,7 +549,7 @@ export function Flip3DCard({
  * 🌟 ANIMATION 16: Cyber Matrix Telemetry Stream
  */
 export function MatrixRainStream({ height = 120 }: { height?: number }) {
-  const chars = "01FOLIOVEDA_AST_VERIFIED_77".split("");
+  const chars = "01FOLIOIN_AST_VERIFIED_77".split("");
   const columns = [
     { left: "10%", delay: 0 },
     { left: "30%", delay: 0.6 },

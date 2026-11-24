@@ -136,7 +136,7 @@ export function IsometricStageLogo({ size = 56, className = "" }: UniqueLogoProp
 /**
  * Wordmark for the Unique Collections
  */
-export function UniqueFolioVedaWordmark({
+export function UniqueFolioInWordmark({
   variant = 1,
   size = "md",
   className = "",
@@ -160,7 +160,7 @@ export function UniqueFolioVedaWordmark({
         <OrigamiFolioLogo size={m.icon} />
         <div className={`font-black tracking-tight ${m.text}`}>
           <span className="text-white">Folio</span>
-          <span className="text-[#E2583E]">Veda</span>
+          <span className="text-[#E2583E]">In</span>
         </div>
       </div>
     );
@@ -173,7 +173,7 @@ export function UniqueFolioVedaWordmark({
         <AcidPageTurnLogo size={m.icon} dark={true} />
         <div className={`font-black tracking-tight ${m.text}`}>
           <span className="text-white">FOLIO</span>
-          <span className="text-[#CCFF00]">VEDA</span>
+          <span className="text-[#CCFF00]">IN</span>
         </div>
       </div>
     );
@@ -185,7 +185,7 @@ export function UniqueFolioVedaWordmark({
       <IsometricStageLogo size={m.icon} />
       <div className={`font-black tracking-tight ${m.text}`}>
         <span className="text-[#E8D5B5]">Folio</span>
-        <span className="text-[#FF6B6B]">Veda</span>
+        <span className="text-[#FF6B6B]">In</span>
       </div>
     </div>
   );

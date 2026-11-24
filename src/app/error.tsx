@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { AlertCircle, RefreshCw, Home } from "lucide-react";
-import { FolioVedaLogo } from "@/components/ui/Logo";
+import { FolioInLogo } from "@/components/ui/Logo";
 
 export default function ErrorBoundary({
   error,
@@ -21,7 +21,7 @@ export default function ErrorBoundary({
       <header className="w-full border-b border-slate-200 bg-white/90 backdrop-blur-md px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/" className="hover:opacity-90 transition-opacity">
-            <FolioVedaLogo size="sm" />
+            <FolioInLogo size="sm" />
           </Link>
           <Link
             href="/"
@@ -70,7 +70,7 @@ export default function ErrorBoundary({
       </main>
 
       <footer className="border-t border-slate-200 py-4 px-6 text-center text-xs text-slate-500 font-medium">
-        FolioVeda Error Recovery Engine
+        FolioIn Error Recovery Engine
       </footer>
     </div>
   );
