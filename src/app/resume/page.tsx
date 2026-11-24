@@ -118,6 +118,17 @@ export default function ResumeBuilderStudio() {
   const [selectedTemplate, setSelectedTemplate] = useState<ResumeTemplateId>("atlantic-blue");
   const [templateCategory, setTemplateCategory] = useState<ResumeTemplateCategory>("all");
 
+  // Read template from query param on initial load (e.g. /resume?template=cobalt-edge)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tmpl = urlParams.get("template") as ResumeTemplateId | null;
+      if (tmpl) {
+        setSelectedTemplate(tmpl);
+      }
+    }
+  }, []);
+
   // Local Photo Upload Ref & Handler
   const photoInputRef = useRef<HTMLInputElement | null>(null);
 
