@@ -193,11 +193,16 @@ export async function POST(req: Request) {
         console.warn("[INTAKE API] Serverless database write warning (non-blocking fallback):", dbErr.message);
       }
 
-      const publicSlug = encodeURIComponent(user?.name || targetName || "alex");
+      let cleanSlugName = (user?.name || targetName || "Candidate").trim();
+      if (/\b(summary|profile|experience|skills|resume|cv)\b/i.test(cleanSlugName)) {
+        cleanSlugName = "Candidate";
+      }
+      const publicSlug = encodeURIComponent(cleanSlugName);
+      const themeParam = finalThemeId ? `?theme=${encodeURIComponent(finalThemeId)}` : "";
 
       return NextResponse.json({
         success: true,
-        liveUrl: `/p/${publicSlug}`,
+        liveUrl: `/p/${publicSlug}${themeParam}`,
         message: "Profile intake approved and live portfolio generated with verified copy!",
       });
     }

@@ -45,20 +45,77 @@ function extractProfileFromText(rawText: string) {
   // followed by Main content (Name, Headline, Location, Summary, Experience, Education).
   const sectionKeywords = [
     "contact",
+    "contact info",
+    "contact details",
     "top skills",
     "skills",
+    "technical skills",
+    "core competencies",
     "languages",
     "certifications",
     "licenses & certifications",
     "summary",
+    "professional summary",
+    "executive summary",
+    "profile summary",
+    "career summary",
+    "summary of qualifications",
+    "profile",
     "about",
+    "about me",
     "experience",
     "work experience",
+    "work history",
+    "employment history",
+    "professional experience",
     "education",
+    "academic background",
     "projects",
+    "personal projects",
+    "key projects",
     "honors-awards",
+    "awards",
     "publications",
+    "curriculum vitae",
+    "resume",
+    "cv",
+    "objective",
+    "career objective",
   ];
+
+  const isForbiddenName = (str: string): boolean => {
+    const s = str.trim().toLowerCase();
+    const forbiddenPatterns = [
+      /\bsummary\b/i,
+      /\bprofile\b/i,
+      /\bexperience\b/i,
+      /\beducation\b/i,
+      /\bprojects?\b/i,
+      /\bskills?\b/i,
+      /\bcontact\b/i,
+      /\bobjective\b/i,
+      /\bresume\b/i,
+      /\bcurriculum\b/i,
+      /\bvitae\b/i,
+      /\bengineer\b/i,
+      /\bdeveloper\b/i,
+      /\bdesigner\b/i,
+      /\bmanager\b/i,
+      /\bspecialist\b/i,
+      /\barchitect\b/i,
+      /\btechnolog/i,
+      /\bcertification/i,
+      /\baward/i,
+      /\bpublication/i,
+      /\bhistory\b/i,
+      /\bstatement\b/i,
+      /\boverview\b/i,
+      /\bdeclaration\b/i,
+      /\breference\b/i,
+      /\bpage \d/i,
+    ];
+    return forbiddenPatterns.some((pattern) => pattern.test(s));
+  };
 
   let name = "";
   let headline = "";
@@ -69,6 +126,7 @@ function extractProfileFromText(rawText: string) {
     for (let i = 0; i < lines.length; i++) {
       const l = lines[i];
       if (l.includes("@") || l.includes("http") || l.includes(".com") || l.length > 40) continue;
+      if (isForbiddenName(l)) continue;
       const lower = l.toLowerCase();
       const matchesToken = slugTokens.some((tok) => lower.includes(tok));
       if (matchesToken) {
@@ -112,6 +170,7 @@ function extractProfileFromText(rawText: string) {
       const lower = l.toLowerCase();
       if (
         sectionKeywords.includes(lower) ||
+        isForbiddenName(l) ||
         lower.startsWith("contact") ||
         lower.startsWith("page") ||
         l.includes("@") ||
@@ -645,14 +704,19 @@ export async function POST(req: Request) {
 
     const extracted = extractProfileFromText(textToParse);
 
+    if (!extracted.name || /\b(summary|profile|experience|skills|resume|cv)\b/i.test(extracted.name)) {
+      extracted.name = "Candidate";
+    }
+
     // Persist immediately to SQLite so the user's authentic portfolio is instantly live
     await persistExtractedUser(extracted, session);
 
+    const recommendedTheme = (extracted as any).recommendedTheme || "sudarvel";
     return NextResponse.json({
       success: true,
       extracted,
       username: extracted.name,
-      liveUrl: `/p/${encodeURIComponent(extracted.name)}`,
+      liveUrl: `/p/${encodeURIComponent(extracted.name)}?theme=${encodeURIComponent(recommendedTheme)}`,
       source: "trajectory-engine",
     });
   } catch (error: any) {
@@ -671,7 +735,10 @@ export async function POST(req: Request) {
 async function persistExtractedUser(extracted: any, session: any = null) {
   try {
     const rawTargetName = extracted.name || "Candidate";
-    const targetName = rawTargetName.replace(/[*_#`~]/g, "").trim() || "Candidate";
+    let targetName = rawTargetName.replace(/[*_#`~]/g, "").trim() || "Candidate";
+    if (/\b(summary|profile|experience|skills|resume|cv)\b/i.test(targetName)) {
+      targetName = "Candidate";
+    }
     
     // Locate existing user by authenticated session first, or by name/email
     let user = null;

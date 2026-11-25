@@ -159,13 +159,19 @@ export default async function PublicPortfolioPage({ params, searchParams }: Page
       })
     : null;
 
+  let cleanFallbackName = decodedUsername;
+  if (
+    /\b(summary|profile|experience|skills|resume|cv)\b/i.test(cleanFallbackName) ||
+    cleanFallbackName === "demo" ||
+    cleanFallbackName === "alex"
+  ) {
+    cleanFallbackName = "Candidate";
+  }
+
   // Convert to standardized PortfolioContent
   const content = matchedPersona
     ? matchedPersona.content
-    : mapUserToPortfolioContent(
-        userRecord,
-        decodedUsername === "demo" || decodedUsername === "alex" ? "Alex Developer" : decodedUsername
-      );
+    : mapUserToPortfolioContent(userRecord, cleanFallbackName);
 
   // Determine active theme (search param override > user portfolio themePackageId > matched persona default > sudarvel)
   const activeThemeId =

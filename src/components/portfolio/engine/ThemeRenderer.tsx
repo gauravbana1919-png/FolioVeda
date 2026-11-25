@@ -6,6 +6,7 @@ import { ThemePackage } from "@/types/theme";
 import { PortfolioContent } from "@/types/content";
 import { OrigamiCyberMintIcon } from "@/components/ui/Logo";
 import { AiAgentWidget } from "@/components/portfolio/AiAgentWidget";
+import { getThemeById } from "@/lib/themes/registry";
 
 // Variants
 import {
@@ -183,13 +184,56 @@ const ACCENT_COLOR_MAP: Record<string, { accent: string; hover: string }> = {
 };
 
 export function ThemeRenderer({
-  theme,
-  content,
+  theme: initialTheme,
+  content: initialContent,
   isDemo = false,
   hideBadge = false,
   fontFamilyOverride,
   accentColorOverride,
 }: ThemeRendererProps) {
+  const [content, setContent] = React.useState<PortfolioContent>(initialContent);
+  const [theme, setTheme] = React.useState<ThemePackage>(initialTheme);
+
+  React.useEffect(() => {
+    try {
+      const cached = localStorage.getItem("folioin_active_profile");
+      if (cached) {
+        const ext = JSON.parse(cached);
+        if (ext && (ext.headline || ext.bio || ext.skills || (ext.experience && ext.experience.length > 0))) {
+          const rawName = (ext.name || "").replace(/[*_#`~]/g, "").trim();
+          const cleanName = /\b(summary|profile|experience|skills|resume|cv)\b/i.test(rawName) ? "" : rawName;
+
+          setContent((prev) => ({
+            ...prev,
+            name: cleanName || (prev.name && !/\b(summary|profile)\b/i.test(prev.name) ? prev.name : "Candidate"),
+            headline: ext.headline || prev.headline,
+            bio: ext.bio || prev.bio,
+            skills: Array.isArray(ext.skills) ? ext.skills : (ext.skills ? ext.skills.split(", ") : prev.skills),
+            location: ext.location || prev.location,
+            availability: ext.availability || prev.availability,
+            experience: ext.experience && ext.experience.length > 0 ? ext.experience : prev.experience,
+            education: ext.education && ext.education.length > 0 ? ext.education : prev.education,
+            certifications: ext.certifications && ext.certifications.length > 0 ? ext.certifications : prev.certifications,
+            projects: ext.projects && ext.projects.length > 0 ? ext.projects : prev.projects,
+          }));
+
+          const params = new URLSearchParams(window.location.search);
+          const urlTheme = params.get("theme") || ext.themeId || ext.recommendedTheme;
+          if (urlTheme && urlTheme !== initialTheme.id) {
+            const resolved = getThemeById(urlTheme);
+            if (resolved) setTheme(resolved);
+          }
+        }
+      } else {
+        const params = new URLSearchParams(window.location.search);
+        const urlTheme = params.get("theme");
+        if (urlTheme && urlTheme !== initialTheme.id) {
+          const resolved = getThemeById(urlTheme);
+          if (resolved) setTheme(resolved);
+        }
+      }
+    } catch (e) {}
+  }, [initialTheme.id]);
   const selectedBodyFont = (fontFamilyOverride && FONT_MAP[fontFamilyOverride]?.body) || theme.tokens.typography.bodyFont;
   const selectedHeadingFont = (fontFamilyOverride && FONT_MAP[fontFamilyOverride]?.heading) || theme.tokens.typography.headingFont;
   const activeAccent = (accentColorOverride && ACCENT_COLOR_MAP[accentColorOverride]?.accent) || theme.tokens.colors.accent;

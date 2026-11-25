@@ -173,7 +173,10 @@ function SmartIntakeOnboardingContent() {
           if (!res.ok) throw new Error(data?.error || "Failed to parse PDF");
 
           if (data.extracted) {
-            const cleanName = (data.extracted.name || "Candidate").replace(/[*_#`~]/g, "").trim();
+            let cleanName = (data.extracted.name || "Candidate").replace(/[*_#`~]/g, "").trim();
+            if (/\b(summary|profile|experience|skills|resume|cv)\b/i.test(cleanName)) {
+              cleanName = "Candidate";
+            }
             if (cleanName.length > 1) {
               setCandidateName(cleanName);
             }
@@ -351,7 +354,10 @@ function SmartIntakeOnboardingContent() {
       if (!res.ok) throw new Error(data.error || "Failed to extract");
 
       if (data.extracted) {
-        const cleanName = (data.extracted.name || "Candidate").replace(/[*_#`~]/g, "").trim();
+        let cleanName = (data.extracted.name || "Candidate").replace(/[*_#`~]/g, "").trim();
+        if (/\b(summary|profile|experience|skills|resume|cv)\b/i.test(cleanName)) {
+          cleanName = "Candidate";
+        }
         if (cleanName.length > 1) {
           setCandidateName(cleanName);
         }
@@ -550,17 +556,23 @@ function SmartIntakeOnboardingContent() {
         }),
       });
 
+      let cleanCandidateName = (candidateName || "Candidate").replace(/[*_#`~]/g, "").trim();
+      if (/\b(summary|profile|experience|skills|resume|cv)\b/i.test(cleanCandidateName)) {
+        cleanCandidateName = "Candidate";
+      }
+      const themeSuffix = selectedThemeId ? `?theme=${encodeURIComponent(selectedThemeId)}` : "";
+
       if (res.ok) {
         const data = await res.json();
-        setPublishedUrl(data.liveUrl || `/p/${encodeURIComponent(candidateName || "Candidate")}`);
+        setPublishedUrl(data.liveUrl || `/p/${encodeURIComponent(cleanCandidateName)}${themeSuffix}`);
       } else {
         // Fallback for serverless preview resilience: Never block candidate from previewing their portfolio
-        setPublishedUrl(`/p/${encodeURIComponent(candidateName || "Candidate")}?theme=${encodeURIComponent(selectedThemeId)}`);
+        setPublishedUrl(`/p/${encodeURIComponent(cleanCandidateName)}${themeSuffix}`);
       }
 
       try {
         const fullProfile = {
-          name: candidateName,
+          name: cleanCandidateName,
           headline: draftHeadline,
           bio: draftBio,
           skills: topStrengths,
@@ -575,8 +587,13 @@ function SmartIntakeOnboardingContent() {
       } catch {}
     } catch (err) {
       console.error("Failed to approve and publish:", err);
+      let cleanCandidateName = (candidateName || "Candidate").replace(/[*_#`~]/g, "").trim();
+      if (/\b(summary|profile|experience|skills|resume|cv)\b/i.test(cleanCandidateName)) {
+        cleanCandidateName = "Candidate";
+      }
+      const themeSuffix = selectedThemeId ? `?theme=${encodeURIComponent(selectedThemeId)}` : "";
       // Fallback: Launch live portfolio directly
-      setPublishedUrl(`/p/${encodeURIComponent(candidateName || "Candidate")}?theme=${encodeURIComponent(selectedThemeId)}`);
+      setPublishedUrl(`/p/${encodeURIComponent(cleanCandidateName)}${themeSuffix}`);
     } finally {
       setIsSubmitting(false);
     }
