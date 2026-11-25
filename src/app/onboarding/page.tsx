@@ -132,6 +132,12 @@ function SmartIntakeOnboardingContent() {
       return;
     }
 
+    // Guard against Vercel 4.5MB serverless payload limit
+    if (file.size > 4 * 1024 * 1024) {
+      setExtractError("This PDF exceeds the 4MB cloud limit. Please upload a smaller PDF or paste your profile text directly in the 'Paste Resume / LinkedIn Text' tab.");
+      return;
+    }
+
     setPdfFileName(file.name);
     setIsExtracting(true);
     setExtractError(null);
@@ -152,8 +158,19 @@ function SmartIntakeOnboardingContent() {
             }),
           });
 
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || "Failed to parse PDF");
+          let data: any = null;
+          const contentType = res.headers.get("content-type") || "";
+          if (contentType.includes("application/json")) {
+            data = await res.json();
+          } else {
+            const rawRespText = await res.text();
+            if (res.status === 413 || rawRespText.toLowerCase().includes("request entity too large") || rawRespText.toLowerCase().includes("payload too large")) {
+              throw new Error("This PDF exceeds Vercel's cloud payload limit. Please upload a compressed PDF (<3.5MB) or paste your resume text in the 'Paste Resume / LinkedIn Text' tab.");
+            }
+            throw new Error(rawRespText.slice(0, 120) || `Server error (${res.status})`);
+          }
+
+          if (!res.ok) throw new Error(data?.error || "Failed to parse PDF");
 
           if (data.extracted) {
             const cleanName = (data.extracted.name || "Candidate").replace(/[*_#`~]/g, "").trim();
@@ -535,19 +552,31 @@ function SmartIntakeOnboardingContent() {
 
       if (res.ok) {
         const data = await res.json();
-        setPublishedUrl(data.liveUrl || `/p/${encodeURIComponent(candidateName)}`);
-        try {
-          const cached = localStorage.getItem("folioin_active_profile");
-          if (cached) {
-            const parsed = JSON.parse(cached);
-            parsed.recommendedTheme = selectedThemeId;
-            parsed.themeId = selectedThemeId;
-            localStorage.setItem("folioin_active_profile", JSON.stringify(parsed));
-          }
-        } catch {}
+        setPublishedUrl(data.liveUrl || `/p/${encodeURIComponent(candidateName || "Candidate")}`);
+      } else {
+        // Fallback for serverless preview resilience: Never block candidate from previewing their portfolio
+        setPublishedUrl(`/p/${encodeURIComponent(candidateName || "Candidate")}?theme=${encodeURIComponent(selectedThemeId)}`);
       }
+
+      try {
+        const fullProfile = {
+          name: candidateName,
+          headline: draftHeadline,
+          bio: draftBio,
+          skills: topStrengths,
+          experience: experienceList,
+          education: educationList,
+          certifications: certificationsList,
+          projects: projectsList,
+          recommendedTheme: selectedThemeId,
+          themeId: selectedThemeId,
+        };
+        localStorage.setItem("folioin_active_profile", JSON.stringify(fullProfile));
+      } catch {}
     } catch (err) {
       console.error("Failed to approve and publish:", err);
+      // Fallback: Launch live portfolio directly
+      setPublishedUrl(`/p/${encodeURIComponent(candidateName || "Candidate")}?theme=${encodeURIComponent(selectedThemeId)}`);
     } finally {
       setIsSubmitting(false);
     }

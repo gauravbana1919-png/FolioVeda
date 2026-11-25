@@ -4,6 +4,8 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/db";
 
+export const maxDuration = 60;
+
 /**
  * Helper to capitalize names properly: "GAURAV shekhawat" -> "Gaurav Shekhawat"
  */
@@ -573,7 +575,7 @@ export async function POST(req: Request) {
           });
         }
 
-        const models = ["gemini-flash-lite-latest", "gemini-3.5-flash-lite", "gemini-3.8-flash"];
+        const models = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-flash-lite-latest"];
         for (const model of models) {
           try {
             const response = await ai.models.generateContent({

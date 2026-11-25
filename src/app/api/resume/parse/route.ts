@@ -2,10 +2,9 @@ import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 
 const MODEL_CHAIN = [
+  "gemini-2.0-flash",
+  "gemini-1.5-flash",
   "gemini-flash-lite-latest",
-  "gemini-3.1-flash-lite-preview",
-  "gemini-3.8-flash",
-  "gemini-flash-latest",
 ];
 
 export async function POST(req: Request) {
@@ -134,25 +133,170 @@ ${rawText}
   }
 }
 
+function cleanField(str: string): string {
+  if (!str) return "";
+  return str
+    .replace(/^[•\*\-\s\d\.\)\:]+/, "")
+    .replace(/^(full\s*name|name|candidate\s*name|current\s*role|target\s*role|target\s*headline|role|title|headline|designation|email|phone|mobile|location|address)[\s\:\.\-]+/i, "")
+    .replace(/[*#_~`]/g, "")
+    .trim();
+}
+
 function fallbackLocalParse(rawText: string) {
   const email = rawText.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/i)?.[1] || null;
   const phone = rawText.match(/(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/)?.[0] || null;
   const linkedin = rawText.match(/(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/([a-zA-Z0-9_-]+)/i)?.[0] || null;
   const github = rawText.match(/(?:https?:\/\/)?(?:www\.)?github\.com\/([a-zA-Z0-9_-]+)/i)?.[0] || null;
   
-  const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const rawLines = rawText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  
+  // Extract candidate name and headline cleanly
   let name = "Candidate";
-  if (lines.length > 0) {
-    const first = lines[0].replace(/[*#_]/g, "").trim();
-    if (first.length > 2 && first.length < 50 && !first.includes("@")) {
-      name = first;
+  let headline = "Software Engineer";
+  let summary = "";
+
+  for (let i = 0; i < Math.min(rawLines.length, 6); i++) {
+    const l = rawLines[i];
+    if (l.includes("@") || l.includes("http") || l.includes(".com")) continue;
+    
+    const cleaned = cleanField(l);
+    if (!cleaned) continue;
+
+    if (name === "Candidate") {
+      // Check if line looks like a name (2 to 4 words, no long sentences)
+      const words = cleaned.split(/\s+/).filter(Boolean);
+      if (words.length >= 1 && words.length <= 4 && cleaned.length < 40) {
+        name = cleaned;
+        continue;
+      }
     }
+
+    if (name !== "Candidate" && headline === "Software Engineer") {
+      if (cleaned.length < 70 && !/^(summary|experience|skills|education)/i.test(cleaned)) {
+        headline = cleaned;
+        continue;
+      }
+    }
+  }
+
+  // Section segmentation
+  const sections: { [key: string]: string[] } = {};
+  let currentSection = "general";
+  sections[currentSection] = [];
+
+  for (const line of rawLines) {
+    const lower = line.toLowerCase().replace(/^[•\*\-\s\d\.\)\:]+/, "").trim();
+    if (/^(work\s*)?experience|employment\s*history|professional\s*experience/i.test(lower)) {
+      currentSection = "experience";
+      sections[currentSection] = [];
+    } else if (/^(key\s*)?skills|core\s*competencies|technical\s*skills/i.test(lower)) {
+      currentSection = "skills";
+      sections[currentSection] = [];
+    } else if (/^projects|selected\s*projects|academic\s*projects/i.test(lower)) {
+      currentSection = "projects";
+      sections[currentSection] = [];
+    } else if (/^education|academic\s*qualifications|degrees/i.test(lower)) {
+      currentSection = "education";
+      sections[currentSection] = [];
+    } else if (/^summary|profile|about\s*me|executive\s*summary/i.test(lower)) {
+      currentSection = "summary";
+      sections[currentSection] = [];
+    } else if (/^certifications|licenses|accreditations/i.test(lower)) {
+      currentSection = "certifications";
+      sections[currentSection] = [];
+    } else {
+      sections[currentSection].push(line);
+    }
+  }
+
+  // Parse Summary
+  if (sections["summary"] && sections["summary"].length > 0) {
+    summary = sections["summary"].map(cleanField).filter(Boolean).join(" ");
+  }
+
+  // Parse Skills
+  const parsedSkills: string[] = [];
+  if (sections["skills"] && sections["skills"].length > 0) {
+    for (const sLine of sections["skills"]) {
+      const cleaned = cleanField(sLine);
+      const split = cleaned.split(/[,|•·;]+/).map(s => s.trim()).filter(s => s.length > 1 && s.length < 35);
+      parsedSkills.push(...split);
+    }
+  }
+  const skills = parsedSkills.length > 0 ? Array.from(new Set(parsedSkills)).slice(0, 15) : ["TypeScript", "React", "Node.js", "Git", "REST APIs"];
+
+  // Parse Experience
+  const experience: any[] = [];
+  if (sections["experience"] && sections["experience"].length > 0) {
+    let currentExp: any = null;
+    for (const expLine of sections["experience"]) {
+      const isBullet = /^[•\*\-\d\.]/.test(expLine);
+      const cleaned = cleanField(expLine);
+      if (!cleaned) continue;
+
+      if (!isBullet && (expLine.includes("—") || expLine.includes("-") || expLine.includes("|") || !currentExp)) {
+        if (currentExp) experience.push(currentExp);
+        const parts = cleaned.split(/[-—|]+/).map(p => p.trim());
+        currentExp = {
+          role: parts[0] || "Software Engineer",
+          company: parts[1] || "Technology Co.",
+          period: parts[2] || "2023 - Present",
+          location: "Remote / On-site",
+          highlights: [],
+        };
+      } else if (currentExp) {
+        currentExp.highlights.push(cleaned);
+      }
+    }
+    if (currentExp) experience.push(currentExp);
+  }
+
+  // Parse Education
+  const education: any[] = [];
+  if (sections["education"] && sections["education"].length > 0) {
+    for (const eduLine of sections["education"]) {
+      const cleaned = cleanField(eduLine);
+      if (cleaned.length > 4) {
+        const parts = cleaned.split(/[-—|,]+/).map(p => p.trim());
+        education.push({
+          degree: parts[0] || "B.Tech / Bachelor's Degree",
+          institution: parts[1] || "University / College",
+          year: parts[2] || "2024",
+          gpa: "",
+        });
+      }
+    }
+  }
+
+  // Parse Projects
+  const projects: any[] = [];
+  if (sections["projects"] && sections["projects"].length > 0) {
+    let currentProj: any = null;
+    for (const projLine of sections["projects"]) {
+      const isBullet = /^[•\*\-\d\.]/.test(projLine);
+      const cleaned = cleanField(projLine);
+      if (!cleaned) continue;
+
+      if (!isBullet || !currentProj) {
+        if (currentProj) projects.push(currentProj);
+        const parts = cleaned.split(/[-—|:]+/).map(p => p.trim());
+        currentProj = {
+          title: parts[0] || "Web Application",
+          techStack: parts[1] || "TypeScript, Next.js",
+          description: parts[2] || cleaned,
+          link: "",
+        };
+      } else if (currentProj) {
+        currentProj.description += " " + cleaned;
+      }
+    }
+    if (currentProj) projects.push(currentProj);
   }
 
   return {
     personal: {
       name,
-      headline: lines[1] && lines[1].length < 80 ? lines[1] : "Professional",
+      headline,
       email,
       phone,
       location: "Remote / Open to Relocation",
@@ -160,11 +304,11 @@ function fallbackLocalParse(rawText: string) {
       github,
       website: null,
     },
-    summary: lines.slice(1, 4).join(" "),
-    experience: [],
-    education: [],
-    skills: ["TypeScript", "React", "Node.js", "System Architecture", "Git"],
-    projects: [],
+    summary: summary || `Experienced ${headline} specializing in building reliable, scalable software solutions.`,
+    experience: experience.slice(0, 5),
+    education: education.slice(0, 3),
+    skills,
+    projects: projects.slice(0, 4),
     certifications: [],
   };
 }
